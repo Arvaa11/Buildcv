@@ -1,12 +1,20 @@
-import { useEffect, useMemo, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom"
 
 import BuilderSteps, {
   BUILDER_STEPS,
 } from "../components/BuilderSteps"
 
 const STORAGE_KEY = "buildcv-form-data"
-const TEMPLATE_STORAGE_KEY = "buildcv-selected-template"
+const TEMPLATE_STORAGE_KEY =
+  "buildcv-selected-template"
 
 // =====================================================
 // ID GENERATOR
@@ -26,7 +34,7 @@ function createId() {
 }
 
 // =====================================================
-// DEFAULT DATA
+// DEFAULT FORM DATA
 // =====================================================
 
 function createDefaultFormData() {
@@ -80,7 +88,7 @@ function createDefaultFormData() {
 }
 
 // =====================================================
-// NORMALIZE SAVED DATA
+// NORMALIZE FORM DATA
 // =====================================================
 
 function normalizeFormData(data) {
@@ -101,12 +109,15 @@ function normalizeFormData(data) {
       data.education.length > 0
         ? data.education.map((item) => ({
             id: item.id || createId(),
-            institution: item.institution || "",
+            institution:
+              item.institution || "",
             degree: item.degree || "",
             field: item.field || "",
-            startDate: item.startDate || "",
+            startDate:
+              item.startDate || "",
             endDate: item.endDate || "",
-            description: item.description || "",
+            description:
+              item.description || "",
           }))
         : defaults.education,
 
@@ -117,9 +128,11 @@ function normalizeFormData(data) {
             id: item.id || createId(),
             company: item.company || "",
             position: item.position || "",
-            startDate: item.startDate || "",
+            startDate:
+              item.startDate || "",
             endDate: item.endDate || "",
-            description: item.description || "",
+            description:
+              item.description || "",
           }))
         : defaults.experience,
 
@@ -133,7 +146,8 @@ function normalizeFormData(data) {
         ? data.projects.map((item) => ({
             id: item.id || createId(),
             name: item.name || "",
-            description: item.description || "",
+            description:
+              item.description || "",
             technologies:
               item.technologies || "",
             link: item.link || "",
@@ -169,7 +183,7 @@ function loadFormData() {
 }
 
 // =====================================================
-// GET TEMPLATE ID
+// TEMPLATE ID
 // =====================================================
 
 function getTemplateId(value) {
@@ -202,24 +216,6 @@ function Builder() {
   const navigate = useNavigate()
 
   // ===================================================
-  // TEMPLATE
-  // ===================================================
-
-  const selectedTemplate = useMemo(() => {
-    const stateTemplate =
-      location.state?.selectedTemplate
-
-    const savedTemplate =
-      localStorage.getItem(
-        TEMPLATE_STORAGE_KEY
-      )
-
-    return getTemplateId(
-      stateTemplate || savedTemplate || "modern"
-    )
-  }, [location.state])
-
-  // ===================================================
   // FORM DATA
   // ===================================================
 
@@ -232,6 +228,26 @@ function Builder() {
 
   const [activeStep, setActiveStep] =
     useState("personal")
+
+  // ===================================================
+  // SELECTED TEMPLATE
+  // ===================================================
+
+  const selectedTemplate = useMemo(() => {
+    const stateTemplate =
+      location.state?.selectedTemplate
+
+    const savedTemplate =
+      localStorage.getItem(
+        TEMPLATE_STORAGE_KEY
+      )
+
+    return getTemplateId(
+      stateTemplate ||
+        savedTemplate ||
+        "modern"
+    )
+  }, [location.state])
 
   // ===================================================
   // SAVE TEMPLATE
@@ -252,7 +268,7 @@ function Builder() {
   }, [selectedTemplate])
 
   // ===================================================
-  // SAVE FORM
+  // SAVE FORM DATA
   // ===================================================
 
   useEffect(() => {
@@ -270,10 +286,13 @@ function Builder() {
   }, [formData])
 
   // ===================================================
-  // PERSONAL
+  // PERSONAL INFORMATION
   // ===================================================
 
-  const updatePersonal = (field, value) => {
+  const updatePersonal = (
+    field,
+    value
+  ) => {
     setFormData((current) => ({
       ...current,
 
@@ -285,233 +304,24 @@ function Builder() {
   }
 
   // ===================================================
-  // EDUCATION
+  // STEP INDEX
   // ===================================================
 
-  const updateEducation = (
-    id,
-    field,
-    value
-  ) => {
-    setFormData((current) => ({
-      ...current,
-
-      education: current.education.map(
-        (item) =>
-          item.id === id
-            ? {
-                ...item,
-                [field]: value,
-              }
-            : item
-      ),
-    }))
-  }
-
-  const addEducation = () => {
-    setFormData((current) => ({
-      ...current,
-
-      education: [
-        ...current.education,
-
-        {
-          id: createId(),
-          institution: "",
-          degree: "",
-          field: "",
-          startDate: "",
-          endDate: "",
-          description: "",
-        },
-      ],
-    }))
-  }
-
-  const removeEducation = (id) => {
-    setFormData((current) => ({
-      ...current,
-
-      education:
-        current.education.length > 1
-          ? current.education.filter(
-              (item) => item.id !== id
-            )
-          : current.education,
-    }))
-  }
-
-  // ===================================================
-  // EXPERIENCE
-  // ===================================================
-
-  const updateExperience = (
-    id,
-    field,
-    value
-  ) => {
-    setFormData((current) => ({
-      ...current,
-
-      experience:
-        current.experience.map((item) =>
-          item.id === id
-            ? {
-                ...item,
-                [field]: value,
-              }
-            : item
-        ),
-    }))
-  }
-
-  const addExperience = () => {
-    setFormData((current) => ({
-      ...current,
-
-      experience: [
-        ...current.experience,
-
-        {
-          id: createId(),
-          company: "",
-          position: "",
-          startDate: "",
-          endDate: "",
-          description: "",
-        },
-      ],
-    }))
-  }
-
-  const removeExperience = (id) => {
-    setFormData((current) => ({
-      ...current,
-
-      experience:
-        current.experience.length > 1
-          ? current.experience.filter(
-              (item) => item.id !== id
-            )
-          : current.experience,
-    }))
-  }
-
-  // ===================================================
-  // PROJECTS
-  // ===================================================
-
-  const updateProject = (
-    id,
-    field,
-    value
-  ) => {
-    setFormData((current) => ({
-      ...current,
-
-      projects: current.projects.map(
-        (item) =>
-          item.id === id
-            ? {
-                ...item,
-                [field]: value,
-              }
-            : item
-      ),
-    }))
-  }
-
-  const addProject = () => {
-    setFormData((current) => ({
-      ...current,
-
-      projects: [
-        ...current.projects,
-
-        {
-          id: createId(),
-          name: "",
-          description: "",
-          technologies: "",
-          link: "",
-        },
-      ],
-    }))
-  }
-
-  const removeProject = (id) => {
-    setFormData((current) => ({
-      ...current,
-
-      projects:
-        current.projects.length > 1
-          ? current.projects.filter(
-              (item) => item.id !== id
-            )
-          : current.projects,
-    }))
-  }
-
-  // ===================================================
-  // SKILLS
-  // ===================================================
-
-  const updateSkills = (value) => {
-    const skills = value
-      .split(",")
-      .map((skill) => skill.trim())
-      .filter(Boolean)
-
-    setFormData((current) => ({
-      ...current,
-      skills,
-    }))
-  }
-
-  // ===================================================
-  // RESET
-  // ===================================================
-
-  const resetBuilder = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to clear your resume?"
-    )
-
-    if (!confirmed) return
-
-    localStorage.removeItem(STORAGE_KEY)
-
-    setFormData(createDefaultFormData())
-
-    setActiveStep("personal")
-  }
-
-  // ===================================================
-  // TEMPLATE
-  // ===================================================
-
-  const changeTemplate = () => {
-    navigate("/templates")
-  }
-
-  // ===================================================
-  // STEP NAVIGATION
-  // ===================================================
-
-  const currentStepIndex =
+  const currentStepIndex = Math.max(
+    0,
     BUILDER_STEPS.findIndex(
       (step) => step.id === activeStep
     )
+  )
 
-  const safeStepIndex =
-    currentStepIndex >= 0
-      ? currentStepIndex
-      : 0
+  // ===================================================
+  // NEXT STEP
+  // ===================================================
 
-  const goToNextStep = () => {
+  const goNext = () => {
     const nextIndex = Math.min(
-      BUILDER_STEPS.length - 1,
-      safeStepIndex + 1
+      currentStepIndex + 1,
+      BUILDER_STEPS.length - 1
     )
 
     setActiveStep(
@@ -519,10 +329,14 @@ function Builder() {
     )
   }
 
-  const goToPreviousStep = () => {
+  // ===================================================
+  // PREVIOUS STEP
+  // ===================================================
+
+  const goPrevious = () => {
     const previousIndex = Math.max(
-      0,
-      safeStepIndex - 1
+      currentStepIndex - 1,
+      0
     )
 
     setActiveStep(
@@ -531,11 +345,19 @@ function Builder() {
   }
 
   // ===================================================
+  // CHANGE TEMPLATE
+  // ===================================================
+
+  const changeTemplate = () => {
+    navigate("/templates")
+  }
+
+  // ===================================================
   // RENDER
   // ===================================================
 
   return (
-    <main className="min-h-screen bg-buildcv-background text-buildcv-text">
+    <main className="min-h-screen bg-[#080D1A] text-[#F8FAFC]">
 
       {/* =================================================
           HEADER
@@ -545,10 +367,10 @@ function Builder() {
         className="
           sticky
           top-0
-          z-40
+          z-50
           border-b
-          border-buildcv-border
-          bg-buildcv-background/95
+          border-[#1E293B]
+          bg-[#080D1A]/95
           backdrop-blur-xl
         "
       >
@@ -556,67 +378,72 @@ function Builder() {
           className="
             mx-auto
             flex
-            max-w-[1600px]
+            h-[72px]
+            max-w-[1800px]
             items-center
             justify-between
-            gap-4
-            px-4
-            py-4
-            sm:px-6
+            px-5
             lg:px-8
           "
         >
-          <div className="min-w-0">
-            <p
-              className="
-                text-xs
-                font-bold
-                uppercase
-                tracking-[0.15em]
-                text-buildcv-indigo-400
-              "
-            >
-              BuildCV
-            </p>
 
-            <h1
+          {/* BRAND */}
+
+          <div className="flex items-center gap-3">
+
+            <div
               className="
-                truncate
-                font-display
-                text-xl
-                font-extrabold
-                tracking-tight
-                sm:text-2xl
+                flex
+                h-9
+                w-9
+                items-center
+                justify-center
+                rounded-xl
+                bg-[#6366F1]
+                text-sm
+                font-black
+                text-white
+                shadow-lg
+                shadow-[#6366F1]/20
               "
             >
-              Resume Builder
-            </h1>
+              B
+            </div>
+
+            <div>
+              <p className="text-sm font-black tracking-tight">
+                BuildCV
+              </p>
+
+              <p className="text-[11px] text-[#64748B]">
+                Resume Builder
+              </p>
+            </div>
+
           </div>
 
-          <div className="hidden items-center gap-3 sm:flex">
-            <div className="text-right">
+          {/* TEMPLATE */}
+
+          <div className="flex items-center gap-4">
+
+            <div className="hidden text-right sm:block">
+
               <p
                 className="
                   text-[10px]
                   font-bold
                   uppercase
-                  tracking-wider
-                  text-buildcv-text-muted
+                  tracking-[0.12em]
+                  text-[#64748B]
                 "
               >
                 Current template
               </p>
 
-              <p
-                className="
-                  text-sm
-                  font-bold
-                  capitalize
-                  text-buildcv-text
-                "
-              >
+              <p className="mt-0.5 text-sm font-bold capitalize text-[#F8FAFC]">
                 {selectedTemplate}
               </p>
+
             </div>
 
             <button
@@ -625,836 +452,651 @@ function Builder() {
               className="
                 rounded-xl
                 border
-                border-buildcv-border
-                bg-buildcv-navy
+                border-[#1E293B]
+                bg-[#111827]
                 px-4
                 py-2.5
                 text-sm
                 font-bold
-                text-buildcv-text
+                text-[#CBD5E1]
                 transition
-                hover:border-buildcv-indigo
-                hover:bg-buildcv-indigo
+                hover:border-[#6366F1]
+                hover:bg-[#6366F1]
                 hover:text-white
               "
             >
               Change Template
             </button>
+
           </div>
+
         </div>
       </header>
 
+
       {/* =================================================
-          BUILDER
+          WORKSPACE
       ================================================= */}
 
       <div
         className="
           mx-auto
-          max-w-[1600px]
+          max-w-[1800px]
           px-4
-          py-6
+          py-5
           sm:px-6
           lg:px-8
         "
       >
+
         <div
           className="
             grid
-            gap-6
-            lg:grid-cols-[300px_minmax(0,1fr)]
+            gap-5
+            lg:grid-cols-[220px_minmax(420px,1fr)_minmax(400px,520px)]
           "
         >
-          {/* =================================================
-              LEFT — BUILDER STEPS
-          ================================================= */}
-
-          <BuilderSteps
-            activeStep={activeStep}
-            onStepChange={setActiveStep}
-            steps={BUILDER_STEPS}
-          />
 
           {/* =================================================
-              RIGHT — CONTENT
+              LEFT — STEPS
           ================================================= */}
 
-          <div className="min-w-0">
+          <aside className="hidden lg:block">
 
-            {/* =================================================
-                PERSONAL
-            ================================================= */}
+            <div
+              className="
+                sticky
+                top-[92px]
+                rounded-2xl
+                border
+                border-[#1E293B]
+                bg-[#0D1424]
+                p-4
+              "
+            >
 
-            {activeStep === "personal" && (
-              <section className="rounded-3xl border border-buildcv-border bg-buildcv-background p-5 shadow-buildcv-sm sm:p-7">
-
-                <SectionHeader
-                  title="Personal Information"
-                  description="Add the information employers need to contact you."
-                />
-
-                <div className="mt-6 grid gap-5 sm:grid-cols-2">
-
-                  <Input
-                    label="Full Name"
-                    value={
-                      formData.personal.fullName
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "fullName",
-                        value
-                      )
-                    }
-                    placeholder="John Doe"
-                  />
-
-                  <Input
-                    label="Job Title"
-                    value={
-                      formData.personal.jobTitle
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "jobTitle",
-                        value
-                      )
-                    }
-                    placeholder="Frontend Developer"
-                  />
-
-                  <Input
-                    label="Email"
-                    type="email"
-                    value={
-                      formData.personal.email
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "email",
-                        value
-                      )
-                    }
-                    placeholder="john@example.com"
-                  />
-
-                  <Input
-                    label="Phone"
-                    value={
-                      formData.personal.phone
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "phone",
-                        value
-                      )
-                    }
-                    placeholder="+92 300 1234567"
-                  />
-
-                  <Input
-                    label="Location"
-                    value={
-                      formData.personal.location
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "location",
-                        value
-                      )
-                    }
-                    placeholder="Lahore, Pakistan"
-                  />
-
-                  <Input
-                    label="LinkedIn"
-                    value={
-                      formData.personal.linkedin
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "linkedin",
-                        value
-                      )
-                    }
-                    placeholder="linkedin.com/in/username"
-                  />
-
-                  <Input
-                    label="GitHub"
-                    value={
-                      formData.personal.github
-                    }
-                    onChange={(value) =>
-                      updatePersonal(
-                        "github",
-                        value
-                      )
-                    }
-                    placeholder="github.com/username"
-                  />
-
-                </div>
-
-                <div className="mt-5">
-                  <label className="text-sm font-bold text-buildcv-text">
-                    Professional Summary
-                  </label>
-
-                  <textarea
-                    value={
-                      formData.personal.summary
-                    }
-                    onChange={(event) =>
-                      updatePersonal(
-                        "summary",
-                        event.target.value
-                      )
-                    }
-                    rows={6}
-                    placeholder="Write a short professional summary..."
-                    className="
-                      mt-2
-                      w-full
-                      resize-none
-                      rounded-xl
-                      border
-                      border-buildcv-border
-                      bg-buildcv-indigo-50
-                      px-4
-                      py-3
-                      text-sm
-                      text-buildcv-text
-                      outline-none
-                      transition
-                      placeholder:text-buildcv-text-muted
-                      focus:border-buildcv-indigo
-                      focus:ring-2
-                      focus:ring-buildcv-indigo/20
-                    "
-                  />
-                </div>
-              </section>
-            )}
-
-            {/* =================================================
-                EDUCATION
-            ================================================= */}
-
-            {activeStep === "education" && (
-              <section className="rounded-3xl border border-buildcv-border bg-buildcv-background p-5 shadow-buildcv-sm sm:p-7">
-
-                <SectionHeader
-                  title="Education"
-                  description="Add your academic background."
-                />
-
-                <div className="mt-6 space-y-5">
-                  {formData.education.map(
-                    (education, index) => (
-                      <div
-                        key={education.id}
-                        className="
-                          rounded-2xl
-                          border
-                          border-buildcv-border
-                          bg-buildcv-indigo-50
-                          p-5
-                        "
-                      >
-                        <div className="mb-5 flex items-center justify-between">
-                          <h3 className="font-bold">
-                            Education {index + 1}
-                          </h3>
-
-                          {formData.education
-                            .length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeEducation(
-                                  education.id
-                                )
-                              }
-                              className="
-                                text-xs
-                                font-bold
-                                text-red-400
-                                hover:text-red-300
-                              "
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="grid gap-5 sm:grid-cols-2">
-                          <Input
-                            label="Institution"
-                            value={
-                              education.institution
-                            }
-                            onChange={(value) =>
-                              updateEducation(
-                                education.id,
-                                "institution",
-                                value
-                              )
-                            }
-                            placeholder="University Name"
-                          />
-
-                          <Input
-                            label="Degree"
-                            value={
-                              education.degree
-                            }
-                            onChange={(value) =>
-                              updateEducation(
-                                education.id,
-                                "degree",
-                                value
-                              )
-                            }
-                            placeholder="BS Computer Science"
-                          />
-
-                          <Input
-                            label="Field"
-                            value={
-                              education.field
-                            }
-                            onChange={(value) =>
-                              updateEducation(
-                                education.id,
-                                "field",
-                                value
-                              )
-                            }
-                            placeholder="Computer Science"
-                          />
-
-                          <Input
-                            label="Start Date"
-                            value={
-                              education.startDate
-                            }
-                            onChange={(value) =>
-                              updateEducation(
-                                education.id,
-                                "startDate",
-                                value
-                              )
-                            }
-                            placeholder="2023"
-                          />
-
-                          <Input
-                            label="End Date"
-                            value={
-                              education.endDate
-                            }
-                            onChange={(value) =>
-                              updateEducation(
-                                education.id,
-                                "endDate",
-                                value
-                              )
-                            }
-                            placeholder="2027"
-                          />
-                        </div>
-
-                        <textarea
-                          value={
-                            education.description
-                          }
-                          onChange={(event) =>
-                            updateEducation(
-                              education.id,
-                              "description",
-                              event.target.value
-                            )
-                          }
-                          rows={4}
-                          placeholder="Description..."
-                          className="
-                            mt-5
-                            w-full
-                            resize-none
-                            rounded-xl
-                            border
-                            border-buildcv-border
-                            bg-buildcv-background
-                            px-4
-                            py-3
-                            text-sm
-                            text-buildcv-text
-                            outline-none
-                            focus:border-buildcv-indigo
-                          "
-                        />
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <AddButton
-                  label="+ Add Education"
-                  onClick={addEducation}
-                />
-              </section>
-            )}
-
-            {/* =================================================
-                EXPERIENCE
-            ================================================= */}
-
-            {activeStep === "experience" && (
-              <section className="rounded-3xl border border-buildcv-border bg-buildcv-background p-5 shadow-buildcv-sm sm:p-7">
-
-                <SectionHeader
-                  title="Experience"
-                  description="Show employers what you have accomplished."
-                />
-
-                <div className="mt-6 space-y-5">
-                  {formData.experience.map(
-                    (experience, index) => (
-                      <div
-                        key={experience.id}
-                        className="
-                          rounded-2xl
-                          border
-                          border-buildcv-border
-                          bg-buildcv-navy
-                          p-5
-                        "
-                      >
-                        <div className="mb-5 flex items-center justify-between">
-                          <h3 className="font-bold">
-                            Experience {index + 1}
-                          </h3>
-
-                          {formData.experience
-                            .length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeExperience(
-                                  experience.id
-                                )
-                              }
-                              className="
-                                text-xs
-                                font-bold
-                                text-red-400
-                                hover:text-red-300
-                              "
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="grid gap-5 sm:grid-cols-2">
-                          <Input
-                            label="Company"
-                            value={
-                              experience.company
-                            }
-                            onChange={(value) =>
-                              updateExperience(
-                                experience.id,
-                                "company",
-                                value
-                              )
-                            }
-                            placeholder="Company Name"
-                          />
-
-                          <Input
-                            label="Position"
-                            value={
-                              experience.position
-                            }
-                            onChange={(value) =>
-                              updateExperience(
-                                experience.id,
-                                "position",
-                                value
-                              )
-                            }
-                            placeholder="Frontend Developer"
-                          />
-
-                          <Input
-                            label="Start Date"
-                            value={
-                              experience.startDate
-                            }
-                            onChange={(value) =>
-                              updateExperience(
-                                experience.id,
-                                "startDate",
-                                value
-                              )
-                            }
-                            placeholder="2024"
-                          />
-
-                          <Input
-                            label="End Date"
-                            value={
-                              experience.endDate
-                            }
-                            onChange={(value) =>
-                              updateExperience(
-                                experience.id,
-                                "endDate",
-                                value
-                              )
-                            }
-                            placeholder="Present"
-                          />
-                        </div>
-
-                        <textarea
-                          value={
-                            experience.description
-                          }
-                          onChange={(event) =>
-                            updateExperience(
-                              experience.id,
-                              "description",
-                              event.target.value
-                            )
-                          }
-                          rows={5}
-                          placeholder="Describe your responsibilities and achievements..."
-                          className="
-                            mt-5
-                            w-full
-                            resize-none
-                            rounded-xl
-                            border
-                            border-buildcv-border
-                            bg-buildcv-background
-                            px-4
-                            py-3
-                            text-sm
-                            text-buildcv-text
-                            outline-none
-                            focus:border-buildcv-indigo
-                          "
-                        />
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <AddButton
-                  label="+ Add Experience"
-                  onClick={addExperience}
-                />
-              </section>
-            )}
-
-            {/* =================================================
-                SKILLS
-            ================================================= */}
-
-            {activeStep === "skills" && (
-              <section className="rounded-3xl border border-buildcv-border bg-buildcv-background p-5 shadow-buildcv-sm sm:p-7">
-
-                <SectionHeader
-                  title="Skills"
-                  description="Add your most relevant technical and professional skills."
-                />
-
-                <div className="mt-6">
-                  <label className="text-sm font-bold">
-                    Skills
-                  </label>
-
-                  <textarea
-                    value={formData.skills.join(
-                      ", "
-                    )}
-                    onChange={(event) =>
-                      updateSkills(
-                        event.target.value
-                      )
-                    }
-                    rows={5}
-                    placeholder="React, JavaScript, TypeScript, Tailwind CSS, Git"
-                    className="
-                      mt-2
-                      w-full
-                      resize-none
-                      rounded-xl
-                      border
-                      border-buildcv-border
-                      bg-buildcv-navy
-                      px-4
-                      py-3
-                      text-sm
-                      text-buildcv-text
-                      outline-none
-                      focus:border-buildcv-indigo
-                    "
-                  />
-
-                  <p className="mt-2 text-xs text-buildcv-text-muted">
-                    Separate each skill with a comma.
-                  </p>
-
-                  {formData.skills.length > 0 && (
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {formData.skills.map(
-                        (skill, index) => (
-                          <span
-                            key={`${skill}-${index}`}
-                            className="
-                              rounded-full
-                              border
-                              border-buildcv-indigo/30
-                              bg-buildcv-indigo/10
-                              px-3
-                              py-1.5
-                              text-xs
-                              font-bold
-                              text-buildcv-indigo-400
-                            "
-                          >
-                            {skill}
-                          </span>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              </section>
-            )}
-
-            {/* =================================================
-                PROJECTS
-            ================================================= */}
-
-            {activeStep === "projects" && (
-              <section className="rounded-3xl border border-buildcv-border bg-buildcv-background p-5 shadow-buildcv-sm sm:p-7">
-
-                <SectionHeader
-                  title="Projects"
-                  description="Showcase projects that demonstrate your skills."
-                />
-
-                <div className="mt-6 space-y-5">
-                  {formData.projects.map(
-                    (project, index) => (
-                      <div
-                        key={project.id}
-                        className="
-                          rounded-2xl
-                          border
-                          border-buildcv-border
-                          bg-buildcv-navy
-                          p-5
-                        "
-                      >
-                        <div className="mb-5 flex items-center justify-between">
-                          <h3 className="font-bold">
-                            Project {index + 1}
-                          </h3>
-
-                          {formData.projects
-                            .length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeProject(
-                                  project.id
-                                )
-                              }
-                              className="
-                                text-xs
-                                font-bold
-                                text-red-400
-                                hover:text-red-300
-                              "
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="grid gap-5 sm:grid-cols-2">
-                          <Input
-                            label="Project Name"
-                            value={project.name}
-                            onChange={(value) =>
-                              updateProject(
-                                project.id,
-                                "name",
-                                value
-                              )
-                            }
-                            placeholder="BuildCV"
-                          />
-
-                          <Input
-                            label="Project Link"
-                            value={project.link}
-                            onChange={(value) =>
-                              updateProject(
-                                project.id,
-                                "link",
-                                value
-                              )
-                            }
-                            placeholder="https://..."
-                          />
-
-                          <div className="sm:col-span-2">
-                            <Input
-                              label="Technologies"
-                              value={
-                                project.technologies
-                              }
-                              onChange={(value) =>
-                                updateProject(
-                                  project.id,
-                                  "technologies",
-                                  value
-                                )
-                              }
-                              placeholder="React, Tailwind CSS, GSAP"
-                            />
-                          </div>
-                        </div>
-
-                        <textarea
-                          value={
-                            project.description
-                          }
-                          onChange={(event) =>
-                            updateProject(
-                              project.id,
-                              "description",
-                              event.target.value
-                            )
-                          }
-                          rows={5}
-                          placeholder="Describe your project..."
-                          className="
-                            mt-5
-                            w-full
-                            resize-none
-                            rounded-xl
-                            border
-                            border-buildcv-border
-                            bg-buildcv-background
-                            px-4
-                            py-3
-                            text-sm
-                            text-buildcv-text
-                            outline-none
-                            focus:border-buildcv-indigo
-                          "
-                        />
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <AddButton
-                  label="+ Add Project"
-                  onClick={addProject}
-                />
-              </section>
-            )}
-
-            {/* =================================================
-                NAVIGATION
-            ================================================= */}
-
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <button
-                type="button"
-                disabled={safeStepIndex === 0}
-                onClick={goToPreviousStep}
+              <p
                 className="
-                  rounded-xl
-                  border
-                  border-buildcv-border
-                  px-5
-                  py-3
-                  text-sm
-                  font-bold
-                  text-buildcv-text
-                  transition
-                  hover:border-buildcv-indigo
-                  disabled:cursor-not-allowed
-                  disabled:opacity-40
+                  mb-4
+                  px-2
+                  text-[10px]
+                  font-black
+                  uppercase
+                  tracking-[0.16em]
+                  text-[#64748B]
                 "
               >
-                ← Previous
-              </button>
+                Build your resume
+              </p>
+
+              <BuilderSteps
+                activeStep={activeStep}
+                onStepChange={setActiveStep}
+                steps={BUILDER_STEPS}
+              />
+
+            </div>
+
+          </aside>
+
+
+          {/* =================================================
+              CENTER — FORM
+          ================================================= */}
+
+          <section className="min-w-0">
+
+            <div
+              className="
+                overflow-hidden
+                rounded-2xl
+                border
+                border-[#1E293B]
+                bg-[#111827]
+              "
+            >
+
+              {/* FORM HEADER */}
+
+              <div
+                className="
+                  border-b
+                  border-[#1E293B]
+                  px-6
+                  py-6
+                "
+              >
+
+                <p
+                  className="
+                    text-[11px]
+                    font-black
+                    uppercase
+                    tracking-[0.15em]
+                    text-[#818CF8]
+                  "
+                >
+                  Step{" "}
+                  {String(
+                    currentStepIndex + 1
+                  ).padStart(2, "0")}
+                </p>
+
+                <h1
+                  className="
+                    mt-1
+                    text-2xl
+                    font-black
+                    tracking-tight
+                    text-[#F8FAFC]
+                  "
+                >
+                  {
+                    BUILDER_STEPS[
+                      currentStepIndex
+                    ]?.title
+                  }
+                </h1>
+
+                <p className="mt-2 text-sm text-[#94A3B8]">
+                  Add the information you want
+                  to show on your resume.
+                </p>
+
+              </div>
+
+
+              {/* =================================================
+                  PERSONAL FORM
+              ================================================= */}
+
+              {activeStep === "personal" && (
+                <div className="space-y-8 p-6">
+
+                  {/* BASIC INFORMATION */}
+
+                  <div>
+
+                    <div className="mb-5">
+
+                      <h2 className="text-base font-bold text-[#F8FAFC]">
+                        Basic Information
+                      </h2>
+
+                      <p className="mt-1 text-xs text-[#64748B]">
+                        Start with your name and
+                        professional title.
+                      </p>
+
+                    </div>
+
+                    <div className="grid gap-5 sm:grid-cols-2">
+
+                      <BuilderInput
+                        label="Full Name"
+                        value={
+                          formData.personal
+                            .fullName
+                        }
+                        placeholder="Alex Morgan"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "fullName",
+                            value
+                          )
+                        }
+                      />
+
+                      <BuilderInput
+                        label="Job Title"
+                        value={
+                          formData.personal
+                            .jobTitle
+                        }
+                        placeholder="Frontend Developer"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "jobTitle",
+                            value
+                          )
+                        }
+                      />
+
+                    </div>
+
+                  </div>
+
+
+                  {/* CONTACT */}
+
+                  <div className="border-t border-[#1E293B] pt-7">
+
+                    <div className="mb-5">
+
+                      <h2 className="text-base font-bold text-[#F8FAFC]">
+                        Contact Information
+                      </h2>
+
+                      <p className="mt-1 text-xs text-[#64748B]">
+                        Add the details employers
+                        can use to reach you.
+                      </p>
+
+                    </div>
+
+                    <div className="grid gap-5 sm:grid-cols-2">
+
+                      <BuilderInput
+                        label="Email"
+                        type="email"
+                        value={
+                          formData.personal
+                            .email
+                        }
+                        placeholder="alex@email.com"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "email",
+                            value
+                          )
+                        }
+                      />
+
+                      <BuilderInput
+                        label="Phone"
+                        value={
+                          formData.personal
+                            .phone
+                        }
+                        placeholder="+92 300 1234567"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "phone",
+                            value
+                          )
+                        }
+                      />
+
+                      <BuilderInput
+                        label="Location"
+                        value={
+                          formData.personal
+                            .location
+                        }
+                        placeholder="Lahore, Pakistan"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "location",
+                            value
+                          )
+                        }
+                      />
+
+                      <BuilderInput
+                        label="LinkedIn"
+                        value={
+                          formData.personal
+                            .linkedin
+                        }
+                        placeholder="linkedin.com/in/username"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "linkedin",
+                            value
+                          )
+                        }
+                      />
+
+                      <BuilderInput
+                        label="GitHub"
+                        value={
+                          formData.personal
+                            .github
+                        }
+                        placeholder="github.com/username"
+                        onChange={(value) =>
+                          updatePersonal(
+                            "github",
+                            value
+                          )
+                        }
+                      />
+
+                    </div>
+
+                  </div>
+
+
+                  {/* SUMMARY */}
+
+                  <div className="border-t border-[#1E293B] pt-7">
+
+                    <div className="mb-5">
+
+                      <h2 className="text-base font-bold text-[#F8FAFC]">
+                        Professional Summary
+                      </h2>
+
+                      <p className="mt-1 text-xs text-[#64748B]">
+                        Write a short introduction
+                        that highlights your
+                        professional strengths.
+                      </p>
+
+                    </div>
+
+                    <textarea
+                      value={
+                        formData.personal
+                          .summary
+                      }
+                      onChange={(event) =>
+                        updatePersonal(
+                          "summary",
+                          event.target.value
+                        )
+                      }
+                      rows={6}
+                      placeholder="Frontend developer passionate about creating responsive and user-friendly web experiences."
+                      className="
+                        w-full
+                        resize-none
+                        rounded-xl
+                        border
+                        border-[#1E293B]
+                        bg-[#0D1424]
+                        px-4
+                        py-3.5
+                        text-sm
+                        leading-6
+                        text-[#F8FAFC]
+                        outline-none
+                        transition
+                        placeholder:text-[#475569]
+                        hover:border-[#334155]
+                        focus:border-[#6366F1]
+                        focus:ring-4
+                        focus:ring-[#6366F1]/10
+                      "
+                    />
+
+                    <div className="mt-2 flex justify-end">
+
+                      <span className="text-[11px] text-[#475569]">
+                        {
+                          formData.personal
+                            .summary.length
+                        }{" "}
+                        characters
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              )}
+
+
+              {/* =================================================
+                  OTHER STEPS — TEMPORARY
+              ================================================= */}
+
+              {activeStep !== "personal" && (
+                <div className="p-6">
+
+                  <div
+                    className="
+                      rounded-xl
+                      border
+                      border-dashed
+                      border-[#334155]
+                      bg-[#0D1424]
+                      p-10
+                      text-center
+                    "
+                  >
+
+                    <p className="text-sm font-bold text-[#F8FAFC]">
+                      {
+                        BUILDER_STEPS[
+                          currentStepIndex
+                        ]?.title
+                      }
+                    </p>
+
+                    <p className="mt-2 text-xs text-[#64748B]">
+                      This section will be
+                      added next.
+                    </p>
+
+                  </div>
+
+                </div>
+              )}
+
+
+              {/* =================================================
+                  NAVIGATION
+              ================================================= */}
+
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  border-t
+                  border-[#1E293B]
+                  px-6
+                  py-4
+                "
+              >
+
+                <button
+                  type="button"
+                  onClick={goPrevious}
+                  disabled={
+                    currentStepIndex === 0
+                  }
+                  className="
+                    rounded-xl
+                    border
+                    border-[#1E293B]
+                    bg-[#0D1424]
+                    px-4
+                    py-2.5
+                    text-sm
+                    font-bold
+                    text-[#CBD5E1]
+                    transition
+                    hover:border-[#334155]
+                    hover:text-white
+                    disabled:cursor-not-allowed
+                    disabled:opacity-40
+                  "
+                >
+                  ← Back
+                </button>
+
+                <button
+                  type="button"
+                  onClick={goNext}
+                  disabled={
+                    currentStepIndex ===
+                    BUILDER_STEPS.length - 1
+                  }
+                  className="
+                    rounded-xl
+                    bg-[#6366F1]
+                    px-5
+                    py-2.5
+                    text-sm
+                    font-bold
+                    text-white
+                    shadow-lg
+                    shadow-[#6366F1]/20
+                    transition
+                    hover:bg-[#4F46E5]
+                    hover:-translate-y-0.5
+                    disabled:cursor-not-allowed
+                    disabled:opacity-40
+                  "
+                >
+                  Continue →
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* =================================================
+              RIGHT — LIVE PREVIEW
+          ================================================= */}
+
+          <aside className="min-w-0">
+
+            <div className="sticky top-[92px]">
+
+              {/* PREVIEW HEADER */}
+
+              <div className="mb-3 flex items-center justify-between">
+
+                <div>
+
+                  <p
+                    className="
+                      text-[11px]
+                      font-black
+                      uppercase
+                      tracking-[0.15em]
+                      text-[#818CF8]
+                    "
+                  >
+                    Live Preview
+                  </p>
+
+                  <p className="mt-1 text-xs text-[#64748B]">
+                    {selectedTemplate} template
+                  </p>
+
+                </div>
+
+                <div className="flex items-center gap-2">
+
+                  <span className="h-2 w-2 rounded-full bg-[#6366F1]" />
+
+                  <span className="text-[11px] font-bold text-[#94A3B8]">
+                    Live
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              {/* RESUME CANVAS */}
+
+              <div
+                className="
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  border-[#1E293B]
+                  bg-[#0D1424]
+                  p-4
+                  shadow-2xl
+                "
+              >
+
+                <div
+                  className="
+                    aspect-[210/297]
+                    w-full
+                    overflow-hidden
+                    rounded-sm
+                    bg-white
+                    shadow-xl
+                  "
+                >
+
+                  {/*
+
+                    STEP 3:
+
+                    The actual selected template
+                    will be rendered here.
+
+                  */}
+
+                  <div className="flex h-full items-center justify-center text-center">
+
+                    <div>
+
+                      <p className="text-sm font-bold text-[#111827]">
+                        {selectedTemplate}
+                      </p>
+
+                      <p className="mt-1 text-xs text-[#6B7280]">
+                        Live preview
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              {/* DOWNLOAD */}
 
               <button
                 type="button"
-                disabled={
-                  safeStepIndex ===
-                  BUILDER_STEPS.length - 1
-                }
-                onClick={goToNextStep}
                 className="
+                  mt-4
+                  flex
+                  w-full
+                  items-center
+                  justify-center
+                  gap-2
                   rounded-xl
-                  bg-buildcv-indigo
+                  bg-[#6366F1]
                   px-5
-                  py-3
+                  py-3.5
                   text-sm
                   font-bold
                   text-white
-                  shadow-md
+                  shadow-lg
+                  shadow-[#6366F1]/20
                   transition
+                  hover:bg-[#4F46E5]
                   hover:-translate-y-0.5
-                  hover:bg-buildcv-indigo-600
-                  disabled:cursor-not-allowed
-                  disabled:opacity-40
                 "
               >
-                Next →
+                Download Resume
               </button>
+
             </div>
 
-            {/* Reset */}
+          </aside>
 
-            <button
-              type="button"
-              onClick={resetBuilder}
-              className="
-                mt-5
-                text-xs
-                font-semibold
-                text-buildcv-text-muted
-                hover:text-red-400
-              "
-            >
-              Clear all resume data
-            </button>
-          </div>
         </div>
+
       </div>
+
     </main>
   )
 }
 
 // =====================================================
-// INPUT
+// BUILDER INPUT
 // =====================================================
 
-function Input({
+function BuilderInput({
   label,
   value,
   onChange,
@@ -1463,99 +1105,47 @@ function Input({
 }) {
   return (
     <div>
-      <label className="text-sm font-bold text-buildcv-text">
+
+      <label
+        className="
+          mb-2
+          block
+          text-xs
+          font-bold
+          text-[#CBD5E1]
+        "
+      >
         {label}
       </label>
 
       <input
         type={type}
         value={value ?? ""}
+        placeholder={placeholder}
         onChange={(event) =>
           onChange(event.target.value)
         }
-        placeholder={placeholder}
         className="
-          mt-2
           w-full
           rounded-xl
           border
-          border-buildcv-border
-          bg-buildcv-navy
+          border-[#1E293B]
+          bg-[#0D1424]
           px-4
-          py-3
+          py-3.5
           text-sm
-          text-buildcv-text
+          text-[#F8FAFC]
           outline-none
           transition
-          placeholder:text-buildcv-text-muted
-          focus:border-buildcv-indigo
-          focus:ring-2
-          focus:ring-buildcv-indigo/20
+          placeholder:text-[#475569]
+          hover:border-[#334155]
+          focus:border-[#6366F1]
+          focus:ring-4
+          focus:ring-[#6366F1]/10
         "
       />
+
     </div>
-  )
-}
-
-// =====================================================
-// SECTION HEADER
-// =====================================================
-
-function SectionHeader({
-  title,
-  description,
-}) {
-  return (
-    <div>
-      <h2
-        className="
-          font-display
-          text-2xl
-          font-extrabold
-          tracking-tight
-        "
-      >
-        {title}
-      </h2>
-
-      <p className="mt-2 text-sm leading-6 text-buildcv-text-secondary">
-        {description}
-      </p>
-    </div>
-  )
-}
-
-// =====================================================
-// ADD BUTTON
-// =====================================================
-
-function AddButton({
-  label,
-  onClick,
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="
-        mt-5
-        rounded-xl
-        border
-        border-buildcv-indigo/30
-        bg-buildcv-indigo/10
-        px-5
-        py-3
-        text-sm
-        font-bold
-        text-buildcv-indigo-400
-        transition
-        hover:border-buildcv-indigo
-        hover:bg-buildcv-indigo
-        hover:text-white
-      "
-    >
-      {label}
-    </button>
   )
 }
 
