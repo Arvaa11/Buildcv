@@ -1,82 +1,176 @@
 function ModernPreview({ formData = {} }) {
-  const {
-    fullName = "Alex Morgan",
-    jobTitle = "Frontend Developer",
-    email = "alex@email.com",
-    phone = "+1 234 567",
-    location = "New York",
-    linkedin = "linkedin.com/alex",
-    github = "github.com/alex",
-    summary =
-      "Frontend developer passionate about creating responsive and user-friendly web experiences.",
-    skills = [],
-    experience = [],
-    education = [],
-    projects = [],
-  } = formData
+  // =====================================================
+  // PERSONAL DATA
+  // =====================================================
 
-  // -------------------------------------------------------
-  // FALLBACK DATA FOR TEMPLATE PREVIEW
-  // -------------------------------------------------------
+  const personal = formData.personal || {}
+
+  const {
+    fullName = "",
+    jobTitle = "",
+    email = "",
+    phone = "",
+    location = "",
+    linkedin = "",
+    github = "",
+    summary = "",
+    profileImage = "",
+  } = personal
+
+  // =====================================================
+  // OTHER DATA
+  // =====================================================
+
+  const skills = Array.isArray(formData.skills)
+    ? formData.skills
+    : []
+
+  const experience = Array.isArray(formData.experience)
+    ? formData.experience
+    : []
+
+  const education = Array.isArray(formData.education)
+    ? formData.education
+    : []
+
+  const projects = Array.isArray(formData.projects)
+    ? formData.projects
+    : []
+
+  // =====================================================
+  // CHECK WHETHER RESUME IS EMPTY
+  // =====================================================
+
+  const hasResumeData =
+    fullName.trim() ||
+    jobTitle.trim() ||
+    email.trim() ||
+    phone.trim() ||
+    location.trim() ||
+    linkedin.trim() ||
+    github.trim() ||
+    summary.trim() ||
+    profileImage ||
+    skills.length > 0 ||
+    experience.length > 0 ||
+    education.length > 0 ||
+    projects.length > 0
+
+  // =====================================================
+  // SAMPLE DATA
+  // Only used when the resume has no information yet.
+  // =====================================================
+
+  const displayPersonal = hasResumeData
+    ? {
+        fullName,
+        jobTitle,
+        email,
+        phone,
+        location,
+        linkedin,
+        github,
+        summary,
+        profileImage,
+      }
+    : {
+        fullName: "Alex Morgan",
+        jobTitle: "Frontend Developer",
+        email: "alex@email.com",
+        phone: "+1 234 567",
+        location: "New York",
+        linkedin: "linkedin.com/alex",
+        github: "github.com/alex",
+        summary:
+          "Frontend developer passionate about creating responsive and user-friendly web experiences.",
+        profileImage: "",
+      }
 
   const displaySkills =
     skills.length > 0
       ? skills
-      : ["React", "JavaScript", "TypeScript", "Git", "CSS"]
+      : hasResumeData
+        ? []
+        : [
+            "React",
+            "JavaScript",
+            "TypeScript",
+            "Git",
+            "CSS",
+          ]
 
   const displayExperience =
     experience.length > 0
       ? experience
-      : [
-          {
-            jobTitle: "Frontend Developer",
-            company: "Tech Company",
-            startDate: "2023",
-            endDate: "Present",
-            description:
-              "Developed responsive interfaces and reusable React components for modern web applications.",
-          },
-          {
-            jobTitle: "Web Developer",
-            company: "Creative Studio",
-            startDate: "2021",
-            endDate: "2023",
-            description:
-              "Built interactive websites using JavaScript, CSS, and modern frontend technologies.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-experience-1",
+              position: "Frontend Developer",
+              company: "Tech Company",
+              startDate: "2023",
+              endDate: "Present",
+              description:
+                "Developed responsive interfaces and reusable React components for modern web applications.",
+            },
+            {
+              id: "sample-experience-2",
+              position: "Web Developer",
+              company: "Creative Studio",
+              startDate: "2021",
+              endDate: "2023",
+              description:
+                "Built interactive websites using JavaScript, CSS, and modern frontend technologies.",
+            },
+          ]
 
   const displayEducation =
     education.length > 0
       ? education
-      : [
-          {
-            degree: "BS Computer Science",
-            institution: "University of Technology",
-            startDate: "2019",
-            endDate: "2023",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-education-1",
+              degree: "BS Computer Science",
+              institution: "University of Technology",
+              field: "",
+              startDate: "2019",
+              endDate: "2023",
+              description: "",
+            },
+          ]
 
   const displayProjects =
     projects.length > 0
       ? projects
-      : [
-          {
-            name: "Portfolio Website",
-            technologies: "React • Tailwind CSS • JavaScript",
-            description:
-              "Designed and developed a responsive portfolio website with animations and interactive components.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-project-1",
+              name: "Portfolio Website",
+              technologies:
+                "React • Tailwind CSS • JavaScript",
+              description:
+                "Designed and developed a responsive portfolio website with animations and interactive components.",
+              link: "",
+            },
+          ]
 
-  // -------------------------------------------------------
-  // HELPER
-  // -------------------------------------------------------
+  // =====================================================
+  // HELPERS
+  // =====================================================
 
   function getValue(item, keys, fallback = "") {
     for (const key of keys) {
-      if (item?.[key]) {
+      if (
+        item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        String(item[key]).trim() !== ""
+      ) {
         return item[key]
       }
     }
@@ -84,332 +178,590 @@ function ModernPreview({ formData = {} }) {
     return fallback
   }
 
+  function getSkillName(skill) {
+    if (typeof skill === "string") {
+      return skill
+    }
+
+    return getValue(
+      skill,
+      ["name", "skill", "title"],
+      ""
+    )
+  }
+
+  // =====================================================
+  // RENDER
+  // =====================================================
+
   return (
-    <div className="h-full w-full overflow-hidden bg-white p-5 text-slate-900">
-
-      {/* =====================================================
+    <div
+      className="
+        min-h-[1123px]
+        w-full
+        overflow-hidden
+        bg-white
+        p-8
+        text-slate-900
+      "
+    >
+      {/* =================================================
           HEADER
-      ====================================================== */}
+      ================================================= */}
 
-      <div className="flex items-start justify-between gap-3">
+      <header>
+        <div className="flex items-start justify-between gap-5">
 
-        <div className="min-w-0">
+          <div className="min-w-0 flex-1">
 
-          <h2 className="truncate text-[15px] font-extrabold tracking-tight">
-            {fullName}
-          </h2>
+            {displayPersonal.fullName && (
+              <h1
+                className="
+                  break-words
+                  text-[25px]
+                  font-extrabold
+                  leading-tight
+                  tracking-tight
+                  text-slate-900
+                "
+              >
+                {displayPersonal.fullName}
+              </h1>
+            )}
 
-          <p className="mt-1 truncate text-[7px] font-bold uppercase tracking-[0.12em] text-buildcv-violet">
-            {jobTitle}
-          </p>
+            {displayPersonal.jobTitle && (
+              <p
+                className="
+                  mt-2
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.16em]
+                  text-buildcv-violet
+                "
+              >
+                {displayPersonal.jobTitle}
+              </p>
+            )}
+
+          </div>
+
+          {/* PROFILE IMAGE / INITIALS */}
+
+          {displayPersonal.profileImage ? (
+            <img
+              src={displayPersonal.profileImage}
+              alt=""
+              className="
+                h-16
+                w-16
+                shrink-0
+                rounded-full
+                object-cover
+              "
+            />
+          ) : (
+            <div
+              className="
+                flex
+                h-16
+                w-16
+                shrink-0
+                items-center
+                justify-center
+                rounded-full
+                bg-buildcv-violet-50
+                text-[14px]
+                font-bold
+                text-buildcv-violet
+              "
+            >
+              {getInitials(
+                displayPersonal.fullName
+              )}
+            </div>
+          )}
 
         </div>
 
-        {/* INITIALS */}
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-buildcv-violet-50 text-[8px] font-bold text-buildcv-violet">
-          {getInitials(fullName)}
+        {/* =================================================
+            CONTACT
+        ================================================= */}
+
+        <div
+          className="
+            mt-4
+            flex
+            flex-wrap
+            gap-x-4
+            gap-y-1.5
+            text-[7px]
+            text-slate-500
+          "
+        >
+          {displayPersonal.email && (
+            <span>{displayPersonal.email}</span>
+          )}
+
+          {displayPersonal.phone && (
+            <span>{displayPersonal.phone}</span>
+          )}
+
+          {displayPersonal.location && (
+            <span>{displayPersonal.location}</span>
+          )}
+
+          {displayPersonal.linkedin && (
+            <span>{displayPersonal.linkedin}</span>
+          )}
+
+          {displayPersonal.github && (
+            <span>{displayPersonal.github}</span>
+          )}
         </div>
 
-      </div>
+        <div className="my-5 h-px bg-slate-200" />
+      </header>
 
-      {/* =====================================================
-          CONTACT
-      ====================================================== */}
-
-      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5.5px] text-slate-500">
-
-        {email && <span>{email}</span>}
-
-        {phone && <span>{phone}</span>}
-
-        {location && <span>{location}</span>}
-
-        {linkedin && <span>{linkedin}</span>}
-
-        {github && <span>{github}</span>}
-
-      </div>
-
-      <div className="my-3 h-px bg-slate-200" />
-
-      {/* =====================================================
+      {/* =================================================
           PROFILE
-      ====================================================== */}
+      ================================================= */}
 
-      {summary && (
+      {displayPersonal.summary && (
         <section>
-
           <PreviewSectionTitle>
             Profile
           </PreviewSectionTitle>
 
-          <p className="mt-1.5 text-[6.5px] leading-[1.5] text-slate-500">
-            {summary}
+          <p
+            className="
+              mt-2
+              text-[8px]
+              leading-[1.6]
+              text-slate-600
+            "
+          >
+            {displayPersonal.summary}
           </p>
-
         </section>
       )}
 
-      {/* =====================================================
+      {/* =================================================
           EXPERIENCE
-      ====================================================== */}
+      ================================================= */}
 
       {displayExperience.length > 0 && (
-        <section className="mt-4">
+        <section className="mt-6">
 
           <PreviewSectionTitle>
             Experience
           </PreviewSectionTitle>
 
-          <div className="mt-2 space-y-3">
+          <div className="mt-3 space-y-4">
 
-            {displayExperience.slice(0, 3).map((item, index) => {
+            {displayExperience
+              .slice(0, 4)
+              .map((item, index) => {
 
-              const title = getValue(
-                item,
-                ["jobTitle", "position", "title", "role"],
-                "Frontend Developer"
-              )
+                const title = getValue(
+                  item,
+                  [
+                    "position",
+                    "jobTitle",
+                    "title",
+                    "role",
+                  ]
+                )
 
-              const company = getValue(
-                item,
-                ["company", "organization", "employer"],
-                "Tech Company"
-              )
+                const company = getValue(
+                  item,
+                  [
+                    "company",
+                    "organization",
+                    "employer",
+                  ]
+                )
 
-              const startDate = getValue(
-                item,
-                ["startDate", "start", "from"],
-                "2023"
-              )
+                const startDate = getValue(
+                  item,
+                  [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]
+                )
 
-              const endDate = getValue(
-                item,
-                ["endDate", "end", "to"],
-                "Present"
-              )
+                const endDate = getValue(
+                  item,
+                  [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]
+                )
 
-              const description = getValue(
-                item,
-                ["description", "details", "responsibilities"],
-                "Developed responsive interfaces and reusable components for modern web applications."
-              )
+                const description =
+                  getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                      "responsibilities",
+                    ]
+                  )
 
-              return (
-                <div key={item.id || index}>
+                return (
+                  <div
+                    key={item.id || index}
+                  >
 
-                  <div className="flex justify-between gap-2">
+                    <div className="flex justify-between gap-5">
 
-                    <div className="min-w-0">
+                      <div className="min-w-0">
 
-                      <p className="truncate text-[7px] font-bold">
-                        {title}
-                      </p>
+                        {title && (
+                          <p
+                            className="
+                              break-words
+                              text-[9px]
+                              font-bold
+                              text-slate-900
+                            "
+                          >
+                            {title}
+                          </p>
+                        )}
 
-                      <p className="truncate text-[5.5px] text-buildcv-violet">
-                        {company}
-                      </p>
+                        {company && (
+                          <p
+                            className="
+                              mt-0.5
+                              break-words
+                              text-[7px]
+                              font-semibold
+                              text-buildcv-violet
+                            "
+                          >
+                            {company}
+                          </p>
+                        )}
+
+                      </div>
+
+                      {(startDate || endDate) && (
+                        <p
+                          className="
+                            shrink-0
+                            whitespace-nowrap
+                            text-[6.5px]
+                            text-slate-400
+                          "
+                        >
+                          {startDate}
+                          {startDate && endDate
+                            ? " — "
+                            : ""}
+                          {endDate}
+                        </p>
+                      )}
 
                     </div>
 
-                    <p className="shrink-0 text-[5px] text-slate-400">
-                      {startDate} — {endDate}
-                    </p>
+                    {description && (
+                      <p
+                        className="
+                          mt-1.5
+                          text-[7px]
+                          leading-[1.6]
+                          text-slate-600
+                        "
+                      >
+                        {description}
+                      </p>
+                    )}
 
                   </div>
-
-                  {description && (
-                    <p className="mt-1 text-[5.5px] leading-[1.5] text-slate-500">
-                      {description}
-                    </p>
-                  )}
-
-                </div>
-              )
-            })}
+                )
+              })}
 
           </div>
-
         </section>
       )}
 
-      {/* =====================================================
+      {/* =================================================
           EDUCATION
-      ====================================================== */}
+      ================================================= */}
 
       {displayEducation.length > 0 && (
-        <section className="mt-4">
+        <section className="mt-6">
 
           <PreviewSectionTitle>
             Education
           </PreviewSectionTitle>
 
-          <div className="mt-2 space-y-2">
+          <div className="mt-3 space-y-3">
 
-            {displayEducation.slice(0, 2).map((item, index) => {
+            {displayEducation
+              .slice(0, 3)
+              .map((item, index) => {
 
-              const degree = getValue(
-                item,
-                ["degree", "qualification", "title", "program"],
-                "BS Computer Science"
-              )
+                const degree = getValue(
+                  item,
+                  [
+                    "degree",
+                    "qualification",
+                    "title",
+                    "program",
+                  ]
+                )
 
-              const institution = getValue(
-                item,
-                ["institution", "school", "university", "college"],
-                "University of Technology"
-              )
+                const field = getValue(
+                  item,
+                  ["field", "major", "specialization"]
+                )
 
-              const startDate = getValue(
-                item,
-                ["startDate", "start", "from"],
-                "2019"
-              )
+                const institution = getValue(
+                  item,
+                  [
+                    "institution",
+                    "school",
+                    "university",
+                    "college",
+                  ]
+                )
 
-              const endDate = getValue(
-                item,
-                ["endDate", "end", "to"],
-                "2023"
-              )
+                const startDate = getValue(
+                  item,
+                  [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]
+                )
 
-              return (
-                <div
-                  key={item.id || index}
-                  className="flex justify-between gap-2"
-                >
+                const endDate = getValue(
+                  item,
+                  [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]
+                )
 
-                  <div className="min-w-0">
+                return (
+                  <div
+                    key={item.id || index}
+                    className="flex justify-between gap-5"
+                  >
 
-                    <p className="truncate text-[7px] font-bold">
-                      {degree}
-                    </p>
+                    <div className="min-w-0">
 
-                    <p className="mt-0.5 truncate text-[5.5px] text-slate-500">
-                      {institution}
-                    </p>
+                      {degree && (
+                        <p
+                          className="
+                            break-words
+                            text-[9px]
+                            font-bold
+                            text-slate-900
+                          "
+                        >
+                          {degree}
+                          {field
+                            ? ` — ${field}`
+                            : ""}
+                        </p>
+                      )}
+
+                      {institution && (
+                        <p
+                          className="
+                            mt-0.5
+                            break-words
+                            text-[7px]
+                            text-slate-600
+                          "
+                        >
+                          {institution}
+                        </p>
+                      )}
+
+                    </div>
+
+                    {(startDate || endDate) && (
+                      <p
+                        className="
+                          shrink-0
+                          whitespace-nowrap
+                          text-[6.5px]
+                          text-slate-400
+                        "
+                      >
+                        {startDate}
+                        {startDate && endDate
+                          ? " — "
+                          : ""}
+                        {endDate}
+                      </p>
+                    )}
 
                   </div>
-
-                  <p className="shrink-0 text-[5px] text-slate-400">
-                    {startDate} — {endDate}
-                  </p>
-
-                </div>
-              )
-            })}
+                )
+              })}
 
           </div>
-
         </section>
       )}
 
-      {/* =====================================================
+      {/* =================================================
           PROJECTS
-      ====================================================== */}
+      ================================================= */}
 
       {displayProjects.length > 0 && (
-        <section className="mt-4">
+        <section className="mt-6">
 
           <PreviewSectionTitle>
             Projects
           </PreviewSectionTitle>
 
-          <div className="mt-2 space-y-2">
+          <div className="mt-3 space-y-3">
 
-            {displayProjects.slice(0, 2).map((item, index) => {
+            {displayProjects
+              .slice(0, 3)
+              .map((item, index) => {
 
-              const name = getValue(
-                item,
-                ["name", "projectName", "title"],
-                "Portfolio Website"
-              )
+                const name = getValue(
+                  item,
+                  [
+                    "name",
+                    "projectName",
+                    "title",
+                  ]
+                )
 
-              const technologies = getValue(
-                item,
-                ["technologies", "technology", "techStack", "stack"],
-                "React • Tailwind CSS • JavaScript"
-              )
+                const technologies =
+                  getValue(
+                    item,
+                    [
+                      "technologies",
+                      "technology",
+                      "techStack",
+                      "stack",
+                    ]
+                  )
 
-              const description = getValue(
-                item,
-                ["description", "details"],
-                "Designed and developed a responsive portfolio website."
-              )
+                const description =
+                  getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                    ]
+                  )
 
-              return (
-                <div key={item.id || index}>
+                return (
+                  <div
+                    key={item.id || index}
+                  >
 
-                  <p className="text-[7px] font-bold">
-                    {name}
-                  </p>
+                    {name && (
+                      <p
+                        className="
+                          break-words
+                          text-[9px]
+                          font-bold
+                          text-slate-900
+                        "
+                      >
+                        {name}
+                      </p>
+                    )}
 
-                  {technologies && (
-                    <p className="mt-0.5 text-[5.5px] text-buildcv-violet">
-                      {Array.isArray(technologies)
-                        ? technologies.join(" • ")
-                        : technologies}
-                    </p>
-                  )}
+                    {technologies && (
+                      <p
+                        className="
+                          mt-0.5
+                          break-words
+                          text-[7px]
+                          font-semibold
+                          text-buildcv-violet
+                        "
+                      >
+                        {Array.isArray(
+                          technologies
+                        )
+                          ? technologies.join(
+                              " • "
+                            )
+                          : technologies}
+                      </p>
+                    )}
 
-                  {description && (
-                    <p className="mt-1 text-[5.5px] leading-[1.5] text-slate-500">
-                      {description}
-                    </p>
-                  )}
+                    {description && (
+                      <p
+                        className="
+                          mt-1
+                          text-[7px]
+                          leading-[1.6]
+                          text-slate-600
+                        "
+                      >
+                        {description}
+                      </p>
+                    )}
 
-                </div>
-              )
-            })}
+                  </div>
+                )
+              })}
 
           </div>
-
         </section>
       )}
 
-      {/* =====================================================
+      {/* =================================================
           SKILLS
-      ====================================================== */}
+      ================================================= */}
 
       {displaySkills.length > 0 && (
-        <section className="mt-4">
+        <section className="mt-6">
 
           <PreviewSectionTitle>
             Skills
           </PreviewSectionTitle>
 
-          <div className="mt-2 flex flex-wrap gap-1">
+          <div className="mt-3 flex flex-wrap gap-1.5">
 
-            {displaySkills.slice(0, 10).map((skill, index) => {
+            {displaySkills
+              .slice(0, 15)
+              .map((skill, index) => {
 
-              const skillName =
-                typeof skill === "string"
-                  ? skill
-                  : getValue(
-                      skill,
-                      ["name", "skill", "title"],
-                      "Skill"
-                    )
+                const skillName =
+                  getSkillName(skill)
 
-              return (
-                <span
-                  key={skill.id || index}
-                  className="
-                    rounded
-                    bg-buildcv-violet-50
-                    px-1.5
-                    py-1
-                    text-[5.5px]
-                    font-semibold
-                    text-buildcv-violet-600
-                  "
-                >
-                  {skillName}
-                </span>
-              )
-            })}
+                if (!skillName) {
+                  return null
+                }
+
+                return (
+                  <span
+                    key={
+                      skill?.id || index
+                    }
+                    className="
+                      rounded
+                      bg-buildcv-violet-50
+                      px-2
+                      py-1
+                      text-[6.5px]
+                      font-semibold
+                      text-buildcv-violet-600
+                    "
+                  >
+                    {skillName}
+                  </span>
+                )
+              })}
 
           </div>
-
         </section>
       )}
 
@@ -417,45 +769,57 @@ function ModernPreview({ formData = {} }) {
   )
 }
 
-
-/* =========================================================
-   INITIALS
-========================================================= */
+// =====================================================
+// INITIALS
+// =====================================================
 
 function getInitials(name = "") {
-  const words = name.trim().split(/\s+/).filter(Boolean)
+  const words = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
 
   if (words.length === 0) {
-    return "AM"
+    return "CV"
   }
 
   if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase()
+    return words[0]
+      .slice(0, 2)
+      .toUpperCase()
   }
 
   return (
-    words[0][0] + words[words.length - 1][0]
+    words[0][0] +
+    words[words.length - 1][0]
   ).toUpperCase()
 }
 
-
-/* =========================================================
-   SECTION TITLE
-========================================================= */
+// =====================================================
+// SECTION TITLE
+// =====================================================
 
 function PreviewSectionTitle({ children }) {
   return (
     <div className="flex items-center gap-2">
 
-      <h3 className="shrink-0 text-[6.5px] font-bold uppercase tracking-[0.12em] text-slate-900">
+      <h2
+        className="
+          shrink-0
+          text-[8px]
+          font-bold
+          uppercase
+          tracking-[0.14em]
+          text-slate-900
+        "
+      >
         {children}
-      </h3>
+      </h2>
 
       <div className="h-px flex-1 bg-slate-200" />
 
     </div>
   )
 }
-
 
 export default ModernPreview

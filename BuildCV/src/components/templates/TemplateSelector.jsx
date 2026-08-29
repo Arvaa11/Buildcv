@@ -4,10 +4,6 @@ import gsap from "gsap"
 
 import { templates } from "../../data/templates"
 import TemplatePreview from "./TemplatePreveiw"
-import ExecutivePreview from "./previews/ExecutivePreview"
-import ClassicPreview from "./previews/ClassicPreview"
-import ElegantPreview from "./previews/ElegantPreview"
-import CreativePreview from "./previews/CreativePreview"
 
 function TemplateSelector({
   selectedTemplate,
@@ -16,15 +12,18 @@ function TemplateSelector({
 }) {
   const navigate = useNavigate()
 
-  const [activeCategory, setActiveCategory] = useState("All")
-  const [showRecommendation, setShowRecommendation] = useState(false)
+  const [activeCategory, setActiveCategory] =
+    useState("All")
+
+  const [showRecommendation, setShowRecommendation] =
+    useState(false)
 
   const gridRef = useRef(null)
   const isFirstRender = useRef(true)
 
-  /* =========================================================
-     CATEGORIES
-  ========================================================= */
+  // =====================================================
+  // CATEGORIES
+  // =====================================================
 
   const categories = useMemo(() => {
     const uniqueCategories = [
@@ -38,9 +37,9 @@ function TemplateSelector({
     return ["All", ...uniqueCategories]
   }, [])
 
-  /* =========================================================
-     FILTERED TEMPLATES
-  ========================================================= */
+  // =====================================================
+  // FILTERED TEMPLATES
+  // =====================================================
 
   const filteredTemplates = useMemo(() => {
     if (activeCategory === "All") {
@@ -48,52 +47,48 @@ function TemplateSelector({
     }
 
     return templates.filter(
-      (template) => template.category === activeCategory
+      (template) =>
+        template.category === activeCategory
     )
   }, [activeCategory])
 
-  /* =========================================================
-     SELECT TEMPLATE
-  ========================================================= */
+  // =====================================================
+  // SELECT TEMPLATE
+  // =====================================================
 
   const handleSelect = (templateId) => {
     if (!templateId) return
 
-    console.log("Selected template:", templateId)
-
-    // Update parent state
     setSelectedTemplate(templateId)
 
-    // Save template
     localStorage.setItem(
       "buildcv-selected-template",
       templateId
     )
+  }
 
-    /*
-      If parent provided onContinue,
-      send the selected template to parent.
-    */
+  // =====================================================
+  // CONTINUE
+  // =====================================================
+
+  const handleContinue = () => {
+    if (!selectedTemplate) return
+
     if (typeof onContinue === "function") {
-      onContinue(templateId)
+      onContinue(selectedTemplate)
       return
     }
 
-    /*
-      Fallback:
-      If this component is used without onContinue,
-      go directly to Builder.
-    */
     navigate("/builder", {
       state: {
-        selectedTemplate: templateId,
+        selectedTemplate,
       },
     })
   }
 
-  /* =========================================================
-     CATEGORY ANIMATION
-  ========================================================= */
+  // =====================================================
+  // CATEGORY ANIMATION
+  // =====================================================
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -129,9 +124,9 @@ function TemplateSelector({
   return (
     <section className="min-w-0 space-y-8 p-7">
 
-      {/* =====================================================
+      {/* =================================================
           HERO
-      ===================================================== */}
+      ================================================= */}
 
       <div
         className="
@@ -141,11 +136,9 @@ function TemplateSelector({
           border
           border-buildcv-border
           bg-buildcv-background
-          px-10
-          py-8
+          px-8
+          py-10
           shadow-buildcv-sm
-          sm:px-8
-          sm:py-10
           lg:px-10
           lg:py-12
         "
@@ -160,20 +153,6 @@ function TemplateSelector({
             w-72
             rounded-full
             bg-buildcv-indigo/10
-            blur-3xl
-          "
-        />
-
-        <div
-          className="
-            pointer-events-none
-            absolute
-            -bottom-32
-            -left-24
-            h-72
-            w-72
-            rounded-full
-            bg-buildcv-indigo/5
             blur-3xl
           "
         />
@@ -196,7 +175,7 @@ function TemplateSelector({
               font-bold
               uppercase
               tracking-[0.15em]
-              text-buildcv-indigo-400
+              text-buildcv-indigo
             "
           >
             <span
@@ -204,8 +183,6 @@ function TemplateSelector({
                 h-2
                 w-2
                 rounded-full
-                border
-                border-buildcv-indigo
                 bg-buildcv-indigo
               "
             />
@@ -223,7 +200,6 @@ function TemplateSelector({
               tracking-tight
               text-buildcv-text
               sm:text-5xl
-              lg:text-6xl
             "
           >
             Build a resume that
@@ -242,11 +218,13 @@ function TemplateSelector({
               sm:text-lg
             "
           >
-            Choose a professionally designed template and create a
-            resume that looks polished, modern, and professional.
+            Choose a professionally designed template
+            and create a resume that looks polished,
+            modern, and professional.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
+
             <StatCard
               label="Templates"
               value={`${templates.length}+ Designs`}
@@ -261,38 +239,26 @@ function TemplateSelector({
               label="Switching"
               value="Change Anytime"
             />
-          </div>
 
+          </div>
         </div>
       </div>
 
-      {/* =====================================================
-          RECOMMENDATION
-      ===================================================== */}
+      {/* =================================================
+          FIND YOUR TEMPLATE
+      ================================================= */}
 
       <div
         className="
           relative
           overflow-hidden
           rounded-3xl
-          bg-buildcv-ink
-          shadow-[0_20px_50px_rgba(0,0,0,0.25)]
+          border
+          border-buildcv-indigo/20
+          bg-white
+          shadow-buildcv-sm
         "
       >
-        <div
-          className="
-            pointer-events-none
-            absolute
-            -right-16
-            -top-20
-            h-64
-            w-64
-            rounded-full
-            bg-buildcv-indigo/10
-            blur-3xl
-          "
-        />
-
         <div
           className="
             relative
@@ -318,27 +284,26 @@ function TemplateSelector({
                 items-center
                 justify-center
                 rounded-2xl
-                border
-                border-buildcv-indigo/20
                 bg-buildcv-indigo/10
                 text-2xl
-                text-buildcv-indigo-400
+                text-buildcv-indigo
               "
             >
               ✦
             </div>
 
             <div>
+
               <p
                 className="
                   font-display
                   text-lg
                   font-bold
-                  text-buildcv-violet
+                  text-buildcv-text
                   sm:text-xl
                 "
               >
-                Not sure which design fits you?
+                Not sure which template to choose?
               </p>
 
               <p
@@ -347,19 +312,23 @@ function TemplateSelector({
                   max-w-xl
                   text-sm
                   leading-6
-                  text-buildcv-white
+                  text-buildcv-text-secondary
                 "
               >
-                Answer three quick questions and we'll recommend
-                the best template for your role and experience.
+                Answer three quick questions and
+                we'll recommend the best template
+                for your role, experience, and style.
               </p>
+
             </div>
 
           </div>
 
           <button
             type="button"
-            onClick={() => setShowRecommendation(true)}
+            onClick={() =>
+              setShowRecommendation(true)
+            }
             className="
               inline-flex
               shrink-0
@@ -367,8 +336,6 @@ function TemplateSelector({
               justify-center
               gap-2
               rounded-xl
-              border
-              border-buildcv-indigo
               bg-buildcv-indigo
               px-6
               py-3.5
@@ -388,9 +355,9 @@ function TemplateSelector({
         </div>
       </div>
 
-      {/* =====================================================
+      {/* =================================================
           FILTERS
-      ===================================================== */}
+      ================================================= */}
 
       <div
         className="
@@ -415,11 +382,11 @@ function TemplateSelector({
               border-buildcv-border
               bg-buildcv-background
               p-1.5
-              shadow-buildcv-sm
             "
           >
 
             {categories.map((category) => {
+
               const isActive =
                 activeCategory === category
 
@@ -437,10 +404,10 @@ function TemplateSelector({
                     text-sm
                     font-semibold
                     transition-all
-                    duration-200
-                    ${isActive
-                      ? "bg-buildcv-indigo text-white shadow-md"
-                      : "text-buildcv-text-secondary hover:bg-buildcv-border hover:text-buildcv-text"
+                    ${
+                      isActive
+                        ? "bg-buildcv-indigo text-white shadow-md"
+                        : "text-buildcv-text-secondary hover:bg-buildcv-border hover:text-buildcv-text"
                     }
                   `}
                 >
@@ -450,19 +417,20 @@ function TemplateSelector({
             })}
 
           </div>
+
         </div>
 
         <div
           className="
             rounded-full
             border
-            border-buildcv-border
+            border-buildcv-indigo
             bg-buildcv-indigo
             px-4
             py-3
             text-sm
             font-medium
-            text-buildcv-white
+            text-white
           "
         >
           Showing{" "}
@@ -476,9 +444,9 @@ function TemplateSelector({
 
       </div>
 
-      {/* =====================================================
+      {/* =================================================
           TEMPLATE GRID
-      ===================================================== */}
+      ================================================= */}
 
       <div
         ref={gridRef}
@@ -496,14 +464,11 @@ function TemplateSelector({
           const isSelected =
             selectedTemplate === template.id
 
-          const isRecommended = template.id === "modern"
-
           return (
             <TemplateCard
               key={template.id}
               template={template}
               isSelected={isSelected}
-              isRecommended={isRecommended}
               onSelect={() =>
                 handleSelect(template.id)
               }
@@ -513,63 +478,49 @@ function TemplateSelector({
 
       </div>
 
-      {/* =====================================================
-          BOTTOM MESSAGE
-      ===================================================== */}
+      {/* =================================================
+          CONTINUE BUTTON
+      ================================================= */}
 
-      <div
-        className="
-          flex
-          items-start
-          gap-4
-          rounded-2xl
-          border
-          border-buildcv-indigo/20
-          bg-buildcv-indigo/5
-          px-5
-          py-5
-        "
-      >
+      {selectedTemplate && (
         <div
           className="
+            sticky
+            bottom-4
+            z-30
             flex
-            h-9
-            w-9
-            shrink-0
-            items-center
-            justify-center
-            rounded-full
-            bg-buildcv-indigo/15
-            text-sm
-            font-bold
-            text-buildcv-indigo-400
+            justify-end
           "
         >
-          ✓
-        </div>
-
-        <div>
-          <p className="text-sm font-bold text-buildcv-text">
-            Your design isn't permanent.
-          </p>
-
-          <p
+          <button
+            type="button"
+            onClick={handleContinue}
             className="
-              mt-1
+              rounded-xl
+              bg-buildcv-indigo
+              px-7
+              py-3.5
               text-sm
-              leading-6
-              text-buildcv-text-secondary
+              font-bold
+              text-white
+              shadow-xl
+              transition
+              hover:bg-buildcv-indigo-600
             "
           >
-            You can switch templates later without losing your
-            resume information.
-          </p>
+            Continue with{" "}
+            {templates.find(
+              (template) =>
+                template.id === selectedTemplate
+            )?.name || "Template"}
+            →
+          </button>
         </div>
-      </div>
+      )}
 
-      {/* =====================================================
+      {/* =================================================
           RECOMMENDATION MODAL
-      ===================================================== */}
+      ================================================= */}
 
       {showRecommendation && (
         <TemplateRecommendation
@@ -578,6 +529,13 @@ function TemplateSelector({
           }
           onSelect={(templateId) => {
             handleSelect(templateId)
+            setShowRecommendation(false)
+
+            if (
+              typeof onContinue === "function"
+            ) {
+              onContinue(templateId)
+            }
           }}
         />
       )}
@@ -600,10 +558,6 @@ function StatCard({ label, value }) {
         bg-buildcv-background
         px-5
         py-4
-        transition-all
-        duration-200
-        hover:border-buildcv-indigo
-        hover:shadow-md
       "
     >
       <p
@@ -639,7 +593,6 @@ function StatCard({ label, value }) {
 function TemplateCard({
   template,
   isSelected,
-  isRecommended,
   onSelect,
 }) {
   return (
@@ -654,37 +607,13 @@ function TemplateCard({
         bg-buildcv-background
         transition-all
         duration-300
-        ${isSelected
-          ? "border-buildcv-indigo shadow-[0_20px_55px_rgba(99,102,241,0.20)]"
-          : "border-buildcv-border shadow-buildcv-sm hover:-translate-y-2 hover:border-buildcv-indigo/50"
+        ${
+          isSelected
+            ? "border-buildcv-indigo shadow-[0_20px_55px_rgba(99,102,241,0.20)]"
+            : "border-buildcv-border shadow-buildcv-sm hover:-translate-y-2 hover:border-buildcv-indigo/50"
         }
       `}
     >
-
-      {isRecommended && (
-        <div
-          className="
-      absolute
-      left-4
-      top-4
-      z-20
-      rounded-full
-      border
-      border-buildcv-violet-300
-      bg-white
-      px-3
-      py-1.5
-      text-[10px]
-      font-bold
-      uppercase
-      tracking-wider
-      text-buildcv-violet
-      shadow-md
-    "
-        >
-          ✦ Popular
-        </div>
-      )}
 
       {isSelected && (
         <div
@@ -702,29 +631,16 @@ function TemplateCard({
             uppercase
             tracking-wider
             text-white
-            shadow-lg
           "
         >
           ✓ Selected
         </div>
       )}
 
-      {/* =====================================================
-          PREVIEW
-      ===================================================== */}
-
       <button
         type="button"
         onClick={onSelect}
-        className="
-          block
-          w-full
-          text-left
-          focus:outline-none
-          focus-visible:ring-2
-          focus-visible:ring-buildcv-indigo
-        "
-        aria-label={`Use ${template.name} template`}
+        className="block w-full text-left"
       >
 
         <div
@@ -733,14 +649,10 @@ function TemplateCard({
             overflow-hidden
             border-b
             border-buildcv-border
-            bg-gradient-to-br
-            from-[#f4f6f9]
-            via-[#cac5fa]
-            to-[#e4dbf8]
+            bg-[#F8FAFC]
             px-4
             pb-10
             pt-10
-            sm:px-6
           "
         >
 
@@ -753,8 +665,8 @@ function TemplateCard({
               overflow-hidden
               rounded-md
               bg-white
-              shadow-[0_15px_40px_rgba(0,0,0,0.35)]
-              transition-all
+              shadow-[0_15px_40px_rgba(0,0,0,0.18)]
+              transition-transform
               duration-500
               group-hover:scale-[1.035]
             "
@@ -766,45 +678,11 @@ function TemplateCard({
               />
             </div>
 
-            <div
-              className="
-                pointer-events-none
-                absolute
-                inset-0
-                flex
-                items-center
-                justify-center
-                bg-[#080d1a]/55
-                opacity-0
-                backdrop-blur-[2px]
-                transition-all
-                duration-300
-                group-hover:opacity-100
-              "
-            >
-              <span
-                className="
-                  rounded-full
-                  bg-white
-                  px-5
-                  py-2.5
-                  text-xs
-                  font-bold
-                  text-[#111827]
-                  shadow-xl
-                "
-              >
-                Use this template →
-              </span>
-            </div>
-
           </div>
-        </div>
-      </button>
 
-      {/* =====================================================
-          CONTENT
-      ===================================================== */}
+        </div>
+
+      </button>
 
       <div className="bg-buildcv-background p-6">
 
@@ -844,7 +722,7 @@ function TemplateCard({
                 rounded-full
                 border
                 border-buildcv-border
-                bg-buildcv-violet-100
+                bg-buildcv-indigo/5
                 px-3
                 py-1.5
                 text-[10px]
@@ -863,24 +741,26 @@ function TemplateCard({
         {template.features?.length > 0 && (
           <div className="mt-5 flex flex-wrap gap-2">
 
-            {template.features.map((feature) => (
-              <span
-                key={feature}
-                className="
-                  rounded-full
-                  border
-                  border-buildcv-border
-                  bg-buildcv-violet-100
-                  px-3
-                  py-1.5
-                  text-[10px]
-                  font-semibold
-                  text-buildcv-text-secondary
-                "
-              >
-                {feature}
-              </span>
-            ))}
+            {template.features.map(
+              (feature) => (
+                <span
+                  key={feature}
+                  className="
+                    rounded-full
+                    border
+                    border-buildcv-border
+                    bg-buildcv-indigo/5
+                    px-3
+                    py-1.5
+                    text-[10px]
+                    font-semibold
+                    text-buildcv-text-secondary
+                  "
+                >
+                  {feature}
+                </span>
+              )
+            )}
 
           </div>
         )}
@@ -901,10 +781,10 @@ function TemplateCard({
               text-sm
               font-bold
               transition-all
-              duration-200
-              ${isSelected
-                ? "bg-buildcv-indigo text-white shadow-md"
-                : "bg-buildcv-violet-100 text-buildcv-text hover:bg-buildcv-indigo hover:text-white"
+              ${
+                isSelected
+                  ? "bg-buildcv-indigo text-white"
+                  : "bg-buildcv-indigo/5 text-buildcv-text hover:bg-buildcv-indigo hover:text-white"
               }
             `}
           >
@@ -949,7 +829,8 @@ function TemplateRecommendation({
   const questions = [
     {
       id: "role",
-      title: "What type of role are you applying for?",
+      title:
+        "What type of role are you applying for?",
       options: [
         {
           value: "technology",
@@ -969,13 +850,15 @@ function TemplateRecommendation({
         },
       ],
     },
+
     {
       id: "experience",
-      title: "What's your experience level?",
+      title:
+        "What's your experience level?",
       options: [
         {
           value: "student",
-          label: "Student",
+          label: "Student / Fresh Graduate",
         },
         {
           value: "entry-level",
@@ -991,9 +874,11 @@ function TemplateRecommendation({
         },
       ],
     },
+
     {
       id: "style",
-      title: "What style do you prefer?",
+      title:
+        "What resume style do you prefer?",
       options: [
         {
           value: "modern",
@@ -1011,7 +896,12 @@ function TemplateRecommendation({
     },
   ]
 
-  const currentQuestion = questions[step - 1]
+  const currentQuestion =
+    questions[step - 1]
+
+  // =====================================================
+  // MODAL ANIMATION
+  // =====================================================
 
   useEffect(() => {
     const previousOverflow =
@@ -1020,6 +910,7 @@ function TemplateRecommendation({
     document.body.style.overflow = "hidden"
 
     const ctx = gsap.context(() => {
+
       gsap.fromTo(
         backdropRef.current,
         { opacity: 0 },
@@ -1044,6 +935,7 @@ function TemplateRecommendation({
           ease: "power3.out",
         }
       )
+
     })
 
     const handleKeyDown = (event) => {
@@ -1070,6 +962,10 @@ function TemplateRecommendation({
     }
   }, [onClose])
 
+  // =====================================================
+  // QUESTION ANIMATION
+  // =====================================================
+
   useEffect(() => {
     const question =
       panelRef.current?.querySelector(
@@ -1093,6 +989,10 @@ function TemplateRecommendation({
     )
   }, [step])
 
+  // =====================================================
+  // ANSWER
+  // =====================================================
+
   const handleAnswer = (value) => {
     const nextAnswers = {
       ...answers,
@@ -1102,12 +1002,16 @@ function TemplateRecommendation({
     setAnswers(nextAnswers)
 
     if (step < questions.length) {
-      setStep((current) => current + 1)
+      setStep(
+        (current) => current + 1
+      )
       return
     }
 
     const recommendedTemplate =
-      getRecommendedTemplate(nextAnswers)
+      getRecommendedTemplate(
+        nextAnswers
+      )
 
     onSelect(recommendedTemplate)
   }
@@ -1116,7 +1020,10 @@ function TemplateRecommendation({
     <div
       ref={backdropRef}
       onClick={(event) => {
-        if (event.target === backdropRef.current) {
+        if (
+          event.target ===
+          backdropRef.current
+        ) {
           onClose()
         }
       }}
@@ -1127,7 +1034,7 @@ function TemplateRecommendation({
         flex
         items-center
         justify-center
-        bg-[#080d1a]/80
+        bg-[#111827]/70
         p-4
         backdrop-blur-md
       "
@@ -1145,10 +1052,12 @@ function TemplateRecommendation({
           rounded-3xl
           border
           border-buildcv-border
-          bg-buildcv-background
-          shadow-[0_30px_80px_rgba(0,0,0,0.5)]
+          bg-white
+          shadow-[0_30px_80px_rgba(0,0,0,0.25)]
         "
       >
+
+        {/* HEADER */}
 
         <div
           className="
@@ -1163,21 +1072,30 @@ function TemplateRecommendation({
         >
 
           <div>
+
             <p
               className="
                 text-[11px]
                 font-bold
                 uppercase
                 tracking-[0.15em]
-                text-buildcv-indigo-400
+                text-buildcv-indigo
               "
             >
               Find My Template
             </p>
 
-            <p className="mt-1 text-sm text-buildcv-text-muted">
-              Question {step} of {questions.length}
+            <p
+              className="
+                mt-1
+                text-sm
+                text-buildcv-text-muted
+              "
+            >
+              Question {step} of{" "}
+              {questions.length}
             </p>
+
           </div>
 
           <button
@@ -1190,7 +1108,7 @@ function TemplateRecommendation({
               items-center
               justify-center
               rounded-full
-              bg-buildcv-violet-100
+              bg-buildcv-indigo/5
               text-xl
               text-buildcv-text-secondary
               hover:bg-buildcv-indigo
@@ -1202,7 +1120,10 @@ function TemplateRecommendation({
 
         </div>
 
-        <div className="h-1.5 bg-buildcv-background">
+        {/* PROGRESS */}
+
+        <div className="h-1.5 bg-[#F8FAFC]">
+
           <div
             className="
               h-full
@@ -1211,11 +1132,17 @@ function TemplateRecommendation({
               duration-300
             "
             style={{
-              width: `${(step / questions.length) * 100
-                }%`,
+              width: `${
+                (step /
+                  questions.length) *
+                100
+              }%`,
             }}
           />
+
         </div>
+
+        {/* QUESTION */}
 
         <div
           data-quiz-question
@@ -1243,7 +1170,8 @@ function TemplateRecommendation({
               text-buildcv-text-secondary
             "
           >
-            Choose the option that best describes you.
+            Choose the option that best
+            describes you.
           </p>
 
           <div className="mt-7 space-y-3">
@@ -1254,7 +1182,9 @@ function TemplateRecommendation({
                   key={option.value}
                   type="button"
                   onClick={() =>
-                    handleAnswer(option.value)
+                    handleAnswer(
+                      option.value
+                    )
                   }
                   className="
                     group
@@ -1265,16 +1195,17 @@ function TemplateRecommendation({
                     rounded-2xl
                     border
                     border-buildcv-border
-                    bg-buildcv-violet-100
+                    bg-[#F8FAFC]
                     px-5
                     py-4
                     text-left
                     transition-all
                     hover:-translate-y-0.5
                     hover:border-buildcv-indigo
-                    hover:bg-buildcv-indigo/10
+                    hover:bg-buildcv-indigo/5
                   "
                 >
+
                   <span
                     className="
                       text-sm
@@ -1289,11 +1220,12 @@ function TemplateRecommendation({
                     className="
                       text-lg
                       text-buildcv-text-muted
-                      group-hover:text-buildcv-indigo-400
+                      group-hover:text-buildcv-indigo
                     "
                   >
                     →
                   </span>
+
                 </button>
               )
             )}
@@ -1304,14 +1236,17 @@ function TemplateRecommendation({
             <button
               type="button"
               onClick={() =>
-                setStep((current) => current - 1)
+                setStep(
+                  (current) =>
+                    current - 1
+                )
               }
               className="
                 mt-6
                 text-xs
                 font-semibold
                 text-buildcv-text-muted
-                hover:text-buildcv-text
+                hover:text-buildcv-indigo
               "
             >
               ← Back
@@ -1319,159 +1254,86 @@ function TemplateRecommendation({
           )}
 
         </div>
+
       </div>
     </div>
   )
 }
 
 /* =========================================================
-   RECOMMENDATION LObGIC
+   RECOMMENDATION LOGIC
 ========================================================= */
 
 function getRecommendedTemplate(answers) {
-  // ==========================================
-  // TECHNOLOGY
-  // ==========================================
 
+  // TECHNOLOGY
   if (answers.role === "technology") {
-    if (answers.style === "minimal") {
+
+    if (
+      answers.style === "minimal"
+    ) {
       return "tech-pro"
     }
 
     return "developer"
   }
 
-  // ==========================================
-  // DESIGN / CREATIVE
-  // ==========================================
-
+  // DESIGN
   if (answers.role === "design") {
     return "creative"
   }
 
-  // ==========================================
-  // BUSINESS
-  // ==========================================
+  // EDUCATION
+  if (answers.role === "education") {
+    return "academic"
+  }
 
+  // BUSINESS
   if (answers.role === "business") {
-    if (answers.experience === "executive") {
+
+    if (
+      answers.experience ===
+      "executive"
+    ) {
       return "executive"
     }
 
-    if (answers.style === "minimal") {
+    if (
+      answers.style === "minimal"
+    ) {
       return "minimal"
     }
 
     return "professional"
   }
 
-  // ==========================================
-  // ACADEMIC
-  // ==========================================
-
-  if (answers.role === "education") {
-    return "academic"
-  }
-
-  // ==========================================
-  // STARTUP
-  // ==========================================
-
-  if (answers.role === "startup") {
-    return "startup"
-  }
-
-  // ==========================================
-  // ATS PRIORITY
-  // ==========================================
-
-  if (answers.style === "ats") {
-    return "ats-focus"
-  }
-
-  // ==========================================
   // EXECUTIVE
-  // ==========================================
-
-  if (answers.experience === "executive") {
+  if (
+    answers.experience === "executive"
+  ) {
     return "executive"
   }
 
-  // ==========================================
-  // STYLE PREFERENCE
-  // ==========================================
-
-  if (answers.style === "modern") {
+  // STYLE
+  if (
+    answers.style === "modern"
+  ) {
     return "modern"
   }
 
-  if (answers.style === "professional") {
+  if (
+    answers.style === "professional"
+  ) {
     return "professional"
   }
 
-  if (answers.style === "minimal") {
+  if (
+    answers.style === "minimal"
+  ) {
     return "minimal"
   }
-
-  if (answers.style === "elegant") {
-    return "elegant"
-  }
-
-  if (answers.style === "classic") {
-    return "classic"
-  }
-
-  // ==========================================
-  // DEFAULT
-  // ==========================================
 
   return "modern"
 }
 
 export default TemplateSelector
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

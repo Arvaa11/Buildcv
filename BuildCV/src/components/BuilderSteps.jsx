@@ -49,69 +49,16 @@ function getStepState(index, activeIndex) {
 }
 
 // =====================================================
-// BUILDCV — PREMIUM LIGHT UI
-// =====================================================
-
-const styles = {
-  connector: {
-    completed: "bg-buildcv-violet/30",
-    active: "bg-buildcv-border",
-    upcoming: "bg-buildcv-border-soft",
-  },
-
-  button: {
-    completed:
-      "border-transparent bg-transparent hover:border-buildcv-border hover:bg-buildcv-background-soft",
-
-    active:
-      "border-buildcv-border-violet bg-buildcv-background-violet shadow-buildcv-xs",
-
-    upcoming:
-      "border-transparent bg-transparent hover:border-buildcv-border hover:bg-buildcv-background-soft",
-  },
-
-  indicator: {
-    completed:
-      "border-buildcv-violet bg-buildcv-violet text-buildcv-white shadow-[0_2px_6px_rgba(124,58,237,0.16)]",
-
-    active:
-      "border-buildcv-violet bg-buildcv-violet text-buildcv-white shadow-[0_0_0_4px_rgba(124,58,237,0.08)]",
-
-    upcoming:
-      "border-buildcv-border bg-buildcv-card text-buildcv-text-muted group-hover:border-buildcv-violet-300 group-hover:bg-buildcv-background-violet group-hover:text-buildcv-violet",
-  },
-
-  title: {
-    completed:
-      "text-buildcv-ink-900",
-
-    active:
-      "text-buildcv-violet-600",
-
-    upcoming:
-      "text-buildcv-ink-800 group-hover:text-buildcv-violet-600",
-  },
-
-  description: {
-    completed:
-      "text-buildcv-text-secondary",
-
-    active:
-      "text-buildcv-violet-600/70",
-
-    upcoming:
-      "text-buildcv-text-muted",
-  },
-}
-
-// =====================================================
 // PROGRESS RING
 // =====================================================
 
 const RING_SIZE = 44
 const RING_STROKE = 3
-const RING_RADIUS = (RING_SIZE - RING_STROKE) / 2
-const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS
+const RING_RADIUS =
+  (RING_SIZE - RING_STROKE) / 2
+
+const RING_CIRCUMFERENCE =
+  2 * Math.PI * RING_RADIUS
 
 // =====================================================
 // COMPONENT
@@ -126,29 +73,31 @@ function BuilderSteps({
   const ringRef = useRef(null)
   const isFirstRender = useRef(true)
 
-  // =====================================================
-  // FIND CURRENT STEP
-  // =====================================================
+  // ===================================================
+  // CURRENT STEP
+  // ===================================================
 
   const currentStepIndex = steps.findIndex(
     (step) => step.id === activeStep
   )
 
   const safeStepIndex =
-    currentStepIndex >= 0 ? currentStepIndex : 0
+    currentStepIndex >= 0
+      ? currentStepIndex
+      : 0
 
-  // =====================================================
+  // ===================================================
   // PROGRESS
-  // =====================================================
+  // ===================================================
 
   const progress =
     steps.length > 0
       ? ((safeStepIndex + 1) / steps.length) * 100
       : 0
 
-  // =====================================================
-  // CHANGE STEP
-  // =====================================================
+  // ===================================================
+  // STEP CHANGE
+  // ===================================================
 
   const handleStepChange = (stepId) => {
     if (typeof onStepChange === "function") {
@@ -161,9 +110,9 @@ function BuilderSteps({
     })
   }
 
-  // =====================================================
-  // STEP ENTRANCE ANIMATION
-  // =====================================================
+  // ===================================================
+  // ENTRANCE ANIMATION
+  // ===================================================
 
   useEffect(() => {
     const items =
@@ -171,31 +120,43 @@ function BuilderSteps({
         "[data-step-item]"
       )
 
-    if (!items || items.length === 0) return
+    if (!items || items.length === 0) {
+      return
+    }
 
-    gsap.from(items, {
-      opacity: 0,
-      x: -8,
-      duration: 0.4,
-      stagger: 0.04,
-      ease: "power2.out",
-    })
+    gsap.fromTo(
+      items,
+      {
+        opacity: 0,
+        x: -8,
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.4,
+        stagger: 0.04,
+        ease: "power2.out",
+      }
+    )
 
     return () => {
       gsap.killTweensOf(items)
     }
   }, [])
 
-  // =====================================================
-  // PROGRESS RING ANIMATION
-  // =====================================================
+  // ===================================================
+  // PROGRESS RING
+  // ===================================================
 
   useEffect(() => {
-    if (!ringRef.current) return
+    if (!ringRef.current) {
+      return
+    }
 
     const offset =
       RING_CIRCUMFERENCE -
-      (progress / 100) * RING_CIRCUMFERENCE
+      (progress / 100) *
+        RING_CIRCUMFERENCE
 
     if (isFirstRender.current) {
       isFirstRender.current = false
@@ -214,39 +175,41 @@ function BuilderSteps({
     })
   }, [progress])
 
-  // =====================================================
+  // ===================================================
   // RENDER
-  // =====================================================
+  // ===================================================
 
   return (
-    <aside className="w-full lg:sticky lg:top-6 lg:self-start">
+    <aside className="w-full">
+
       <div
         className="
           overflow-hidden
-          rounded-buildcv-2xl
+          rounded-2xl
           border
-          border-buildcv-border
-          bg-buildcv-background
-          shadow-buildcv-md
+          border-[#E2E8F0]
+          bg-white
+          shadow-sm
         "
       >
 
-        {/* =====================================================
+        {/* =================================================
             HEADER
-        ====================================================== */}
+        ================================================= */}
 
         <div
           className="
             border-b
-            border-buildcv-border
-            bg-buildcv-border-violet
+            border-[#E2E8F0]
+            bg-white
             px-5
             py-5
           "
         >
+
           <div className="flex items-start justify-between gap-4">
 
-            {/* Header */}
+            {/* HEADER CONTENT */}
 
             <div className="min-w-0">
 
@@ -258,7 +221,7 @@ function BuilderSteps({
                     w-1.5
                     shrink-0
                     rounded-full
-                    bg-buildcv-violet
+                    bg-[#6366F1]
                   "
                 />
 
@@ -268,7 +231,7 @@ function BuilderSteps({
                     font-bold
                     uppercase
                     tracking-[0.18em]
-                    text-buildcv-violet-600
+                    text-[#6366F1]
                   "
                 >
                   Resume Builder
@@ -279,11 +242,10 @@ function BuilderSteps({
               <h2
                 className="
                   mt-2
-                  font-display
                   text-lg
-                  font-bold
+                  font-black
                   tracking-tight
-                  text-buildcv-ink-900
+                  text-[#111827]
                 "
               >
                 Build your resume
@@ -295,14 +257,15 @@ function BuilderSteps({
                   max-w-[190px]
                   text-xs
                   leading-5
-                  text-buildcv-text-secondary
+                  text-[#64748B]
                 "
               >
-                Complete each section to create a
-                professional resume.
+                Complete each section to create
+                a professional resume.
               </p>
 
             </div>
+
 
             {/* =================================================
                 PROGRESS RING
@@ -328,7 +291,7 @@ function BuilderSteps({
                 aria-hidden="true"
               >
 
-                {/* Track */}
+                {/* TRACK */}
 
                 <circle
                   cx={RING_SIZE / 2}
@@ -336,10 +299,10 @@ function BuilderSteps({
                   r={RING_RADIUS}
                   fill="none"
                   strokeWidth={RING_STROKE}
-                  className="stroke-buildcv-violet-100"
+                  className="stroke-[#E0E7FF]"
                 />
 
-                {/* Progress */}
+                {/* PROGRESS */}
 
                 <circle
                   ref={ringRef}
@@ -349,8 +312,10 @@ function BuilderSteps({
                   fill="none"
                   strokeWidth={RING_STROKE}
                   strokeLinecap="round"
-                  strokeDasharray={RING_CIRCUMFERENCE}
-                  className="stroke-buildcv-violet"
+                  strokeDasharray={
+                    RING_CIRCUMFERENCE
+                  }
+                  className="stroke-[#6366F1]"
                 />
 
               </svg>
@@ -358,9 +323,9 @@ function BuilderSteps({
               <span
                 className="
                   absolute
-                  text-[11px]
-                  font-bold
-                  text-buildcv-violet-600
+                  text-[10px]
+                  font-black
+                  text-[#4F46E5]
                 "
               >
                 {Math.round(progress)}%
@@ -369,18 +334,20 @@ function BuilderSteps({
             </div>
 
           </div>
+
         </div>
 
-        {/* =====================================================
+
+        {/* =================================================
             STEPS
-        ====================================================== */}
+        ================================================= */}
 
         <nav
           ref={navRef}
           className="
             relative
             space-y-1
-            bg-buildcv-background
+            bg-white
             p-3
           "
           aria-label="Resume builder steps"
@@ -393,8 +360,11 @@ function BuilderSteps({
               safeStepIndex
             )
 
-            const isActive = state === "active"
-            const isCompleted = state === "completed"
+            const isActive =
+              state === "active"
+
+            const isCompleted =
+              state === "completed"
 
             return (
               <div
@@ -403,7 +373,9 @@ function BuilderSteps({
                 className="relative"
               >
 
-                {/* Connector */}
+                {/* =================================================
+                    CONNECTOR
+                ================================================= */}
 
                 {index < steps.length - 1 && (
                   <span
@@ -412,17 +384,24 @@ function BuilderSteps({
                       absolute
                       left-[22px]
                       top-[43px]
-      
                       h-[calc(100%-22px)]
                       w-px
                       transition-colors
                       duration-300
-                      ${styles.connector[state]}
+
+                      ${
+                        isCompleted
+                          ? "bg-[#C7D2FE]"
+                          : "bg-[#E2E8F0]"
+                      }
                     `}
                   />
                 )}
 
-                {/* Step Button */}
+
+                {/* =================================================
+                    STEP BUTTON
+                ================================================= */}
 
                 <button
                   type="button"
@@ -430,7 +409,9 @@ function BuilderSteps({
                     handleStepChange(step.id)
                   }
                   aria-current={
-                    isActive ? "step" : undefined
+                    isActive
+                      ? "step"
+                      : undefined
                   }
                   className={`
                     group
@@ -439,19 +420,25 @@ function BuilderSteps({
                     w-full
                     items-center
                     gap-3
-                    rounded-buildcv-md
+                    rounded-xl
                     border
-                    
                     px-3
                     py-3
                     text-left
                     transition-all
                     duration-200
-                    ${styles.button[state]}
+
+                    ${
+                      isActive
+                        ? "border-[#C7D2FE] bg-[#EEF2FF] shadow-sm"
+                        : "border-transparent bg-white hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
+                    }
                   `}
                 >
 
-                  {/* Indicator */}
+                  {/* =================================================
+                      NUMBER / INDICATOR
+                  ================================================= */}
 
                   <span
                     className={`
@@ -466,13 +453,20 @@ function BuilderSteps({
                       rounded-full
                       border
                       text-[11px]
-                      font-bold
+                      font-black
                       transition-all
-                      
                       duration-200
-                      ${styles.indicator[state]}
+
+                      ${
+                        isCompleted
+                          ? "border-[#6366F1] bg-[#6366F1] text-white shadow-md shadow-[#6366F1]/20"
+                          : isActive
+                            ? "border-[#6366F1] bg-[#6366F1] text-white shadow-[0_0_0_4px_rgba(99,102,241,0.10)]"
+                            : "border-[#E2E8F0] bg-white text-[#64748B] group-hover:border-[#A5B4FC] group-hover:bg-[#EEF2FF] group-hover:text-[#4F46E5]"
+                      }
                     `}
                   >
+
                     {isCompleted ? (
                       <span
                         className="text-[12px]"
@@ -483,9 +477,13 @@ function BuilderSteps({
                     ) : (
                       step.number
                     )}
+
                   </span>
 
-                  {/* Content */}
+
+                  {/* =================================================
+                      TEXT
+                  ================================================= */}
 
                   <span className="min-w-0 flex-1">
 
@@ -494,16 +492,23 @@ function BuilderSteps({
                         block
                         truncate
                         text-[13px]
-                        font-semibold
+                        font-bold
                         leading-5
                         transition-colors
-                        
                         duration-200
-                        ${styles.title[state]}
+
+                        ${
+                          isActive
+                            ? "text-[#4F46E5]"
+                            : isCompleted
+                              ? "text-[#111827]"
+                              : "text-[#334155] group-hover:text-[#111827]"
+                        }
                       `}
                     >
                       {step.title}
                     </span>
+
 
                     <span
                       className={`
@@ -512,8 +517,14 @@ function BuilderSteps({
                         truncate
                         text-[10px]
                         leading-4
-                        
-                        ${styles.description[state]}
+
+                        ${
+                          isActive
+                            ? "text-[#6366F1]/70"
+                            : isCompleted
+                              ? "text-[#64748B]"
+                              : "text-[#94A3B8]"
+                        }
                       `}
                     >
                       {step.description}
@@ -521,7 +532,10 @@ function BuilderSteps({
 
                   </span>
 
-                  {/* Active */}
+
+                  {/* =================================================
+                      ACTIVE ARROW
+                  ================================================= */}
 
                   {isActive && (
                     <span
@@ -534,11 +548,11 @@ function BuilderSteps({
                         justify-center
                         rounded-full
                         border
-                        border-buildcv-border-violet
-                        bg-buildcv-violet-100
+                        border-[#C7D2FE]
+                        bg-white
                         text-xs
-                        font-bold
-                        text-buildcv-violet-600
+                        font-black
+                        text-[#4F46E5]
                         transition-transform
                         duration-200
                         group-hover:translate-x-0.5
@@ -549,15 +563,18 @@ function BuilderSteps({
                     </span>
                   )}
 
-                  {/* Completed */}
+
+                  {/* =================================================
+                      COMPLETED LABEL
+                  ================================================= */}
 
                   {isCompleted && (
                     <span
                       className="
                         hidden
-                        text-[10px]
-                        font-semibold
-                        text-buildcv-violet-600
+                        text-[9px]
+                        font-bold
+                        text-[#6366F1]
                         sm:block
                       "
                     >
@@ -566,21 +583,23 @@ function BuilderSteps({
                   )}
 
                 </button>
+
               </div>
             )
           })}
 
         </nav>
 
-        {/* =====================================================
-            PROGRESS
-        ====================================================== */}
+
+        {/* =================================================
+            PROGRESS SUMMARY
+        ================================================= */}
 
         <div
           className="
             border-t
-            border-buildcv-border
-            bg-buildcv-background
+            border-[#E2E8F0]
+            bg-[#FAFBFC]
             px-5
             py-5
           "
@@ -593,8 +612,8 @@ function BuilderSteps({
               <p
                 className="
                   text-xs
-                  font-semibold
-                  text-buildcv-ink-900
+                  font-bold
+                  text-[#111827]
                 "
               >
                 Your progress
@@ -604,10 +623,11 @@ function BuilderSteps({
                 className="
                   mt-0.5
                   text-[10px]
-                  text-buildcv-text-muted
+                  text-[#94A3B8]
                 "
               >
-                Step {safeStepIndex + 1} of {steps.length}
+                Step {safeStepIndex + 1} of{" "}
+                {steps.length}
               </p>
 
             </div>
@@ -615,8 +635,8 @@ function BuilderSteps({
             <span
               className="
                 text-xs
-                font-bold
-                text-buildcv-violet-600
+                font-black
+                text-[#4F46E5]
               "
             >
               {Math.round(progress)}%
@@ -624,7 +644,8 @@ function BuilderSteps({
 
           </div>
 
-          {/* Progress Bar */}
+
+          {/* PROGRESS BAR */}
 
           <div
             className="
@@ -632,7 +653,7 @@ function BuilderSteps({
               h-1.5
               overflow-hidden
               rounded-full
-              bg-buildcv-violet-50
+              bg-[#E0E7FF]
             "
           >
 
@@ -640,7 +661,7 @@ function BuilderSteps({
               className="
                 h-full
                 rounded-full
-                bg-buildcv-violet
+                bg-[#6366F1]
                 transition-all
                 duration-500
                 ease-out
@@ -652,35 +673,47 @@ function BuilderSteps({
 
           </div>
 
-          {/* Progress Message */}
+
+          {/* MESSAGE */}
 
           <p
             className="
               mt-3
               text-[10px]
               leading-4
-              text-buildcv-text-muted
+              text-[#94A3B8]
             "
           >
-            {safeStepIndex === steps.length - 1
+            {safeStepIndex ===
+            steps.length - 1
               ? "Almost there — review your resume and download it."
               : "Keep going — each section makes your resume stronger."}
           </p>
 
         </div>
 
-        {/* =====================================================
-            PROFESSIONAL TIP
-        ====================================================== */}
 
-        <div className="bg-buildcv-background px-3 pb-3">
+        {/* =================================================
+            RESUME TIP
+        ================================================= */}
+
+        <div
+          className="
+            border-t
+            border-[#E2E8F0]
+            bg-white
+            px-3
+            pb-3
+            pt-3
+          "
+        >
 
           <div
             className="
-              rounded-buildcv-md
+              rounded-xl
               border
-              border-buildcv-border-violet
-              bg-buildcv-background-violet
+              border-[#C7D2FE]
+              bg-[#EEF2FF]
               p-3
             "
           >
@@ -697,11 +730,11 @@ function BuilderSteps({
                   justify-center
                   rounded-full
                   border
-                  border-buildcv-border-violet
-                  bg-buildcv-white
+                  border-[#C7D2FE]
+                  bg-white
                   text-[11px]
-                  font-semibold
-                  text-buildcv-violet
+                  font-bold
+                  text-[#6366F1]
                 "
               >
                 ✦
@@ -713,7 +746,7 @@ function BuilderSteps({
                   className="
                     text-[10px]
                     font-bold
-                    text-buildcv-ink-900
+                    text-[#111827]
                   "
                 >
                   Resume tip
@@ -724,12 +757,12 @@ function BuilderSteps({
                     mt-0.5
                     text-[10px]
                     leading-4
-                    text-buildcv-text-secondary
+                    text-[#64748B]
                   "
                 >
-                  Use clear, concise information and
-                  highlight results rather than simply
-                  listing responsibilities.
+                  Highlight measurable results
+                  instead of only listing your
+                  responsibilities.
                 </p>
 
               </div>
@@ -741,6 +774,7 @@ function BuilderSteps({
         </div>
 
       </div>
+
     </aside>
   )
 }

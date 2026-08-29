@@ -1,64 +1,142 @@
+import { useState } from "react"
 import html2pdf from "html2pdf.js"
 
 function DownloadButton() {
-  const downloadResume = () => {
-    const resume = document.getElementById("resume-preview")
+  const [isDownloading, setIsDownloading] =
+    useState(false)
 
-    if (!resume) {
-      alert("Resume preview is not available.")
+  const handleDownload = async () => {
+    if (isDownloading) {
       return
     }
 
-    const options = {
-      margin: 0,
-      filename: "BuildCV-Resume.pdf",
+    try {
+      setIsDownloading(true)
 
-      image: {
-        type: "jpeg",
-        quality: 0.98,
-      },
+      // =================================================
+      // FIND VISIBLE RESUME PREVIEW
+      // =================================================
 
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-      },
+      const previews = Array.from(
+        document.querySelectorAll(
+          ".resume-preview"
+        )
+      )
 
-      jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "portrait",
-      },
+      const preview = previews.find((element) => {
+        const rect =
+          element.getBoundingClientRect()
+
+        return (
+          rect.width > 0 &&
+          rect.height > 0
+        )
+      })
+
+      if (!preview) {
+        throw new Error(
+          "Resume preview could not be found."
+        )
+      }
+
+      // =================================================
+      // PDF OPTIONS
+      // =================================================
+
+      const options = {
+        margin: 0,
+
+        filename:
+          "BuildCV-Resume.pdf",
+
+        image: {
+          type: "jpeg",
+          quality: 0.98,
+        },
+
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: "#ffffff",
+          logging: false,
+        },
+
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "portrait",
+        },
+
+        pagebreak: {
+          mode: [
+            "css",
+            "legacy",
+          ],
+        },
+      }
+
+      // =================================================
+      // DOWNLOAD
+      // =================================================
+
+      await html2pdf()
+        .set(options)
+        .from(preview)
+        .save()
+
+    } catch (error) {
+      console.error(
+        "Resume download failed:",
+        error
+      )
+
+      alert(
+        "Unable to download the resume. Please try again."
+      )
+    } finally {
+      setIsDownloading(false)
     }
-
-    html2pdf()
-      .set(options)
-      .from(resume)
-      .save()
   }
 
   return (
     <button
       type="button"
-      onClick={downloadResume}
+      onClick={handleDownload}
+      disabled={isDownloading}
       className="
+        flex
         w-full
-        rounded-buildcv-md
-        bg-buildcv-indigo
+        items-center
+        justify-center
+        gap-2
+        rounded-lg
+        bg-[#6366F1]
         px-5
         py-3
         text-sm
         font-semibold
         text-white
-        shadow-buildcv-sm
         transition-all
         duration-200
-        hover:-translate-y-0.5
-        hover:bg-buildcv-indigo-600
-        hover:shadow-buildcv-md
+        hover:bg-[#4F46E5]
+        focus:outline-none
+        focus:ring-2
+        focus:ring-[#6366F1]/25
+        disabled:cursor-not-allowed
+        disabled:opacity-60
+      
       "
     >
-      ↓ Download Resume
+      <span className="text-base">
+        {isDownloading ? "..." : "↓"}
+      </span>
+
+      <span>
+        {isDownloading
+          ? "Generating PDF..."
+          : "Download Resume"}
+      </span>
     </button>
   )
 }

@@ -42,10 +42,7 @@ function Experience({ formData, setFormData }) {
       description: "",
     }
 
-    updateFormData([
-      ...experiences,
-      newExperience,
-    ])
+    updateFormData([...experiences, newExperience])
   }
 
   // =====================================================
@@ -65,60 +62,59 @@ function Experience({ formData, setFormData }) {
   // =====================================================
 
   const updateExperience = (id, field, value) => {
-    const updatedExperiences = experiences.map(
-      (experience) =>
-        experience.id === id
-          ? {
+    const updatedExperiences = experiences.map((experience) =>
+      experience.id === id
+        ? {
             ...experience,
             [field]: value,
 
-            // Clear end date when current job is selected
             ...(field === "current" && value
               ? { endDate: "" }
               : {}),
           }
-          : experience
+        : experience
     )
 
     updateFormData(updatedExperiences)
   }
 
   // =====================================================
-  // INPUT STYLES
+  // SHARED INPUT STYLE
   // =====================================================
 
   const inputClass = `
     w-full
-    rounded-buildcv-lg
+    rounded-lg
     border
-    border-buildcv-border
-    bg-buildcv-background
+    border-[#E2E8F0]
+    bg-white
     px-4
     py-3
     text-sm
     font-medium
-    text-buildcv-text
+    text-[#111827]
     outline-none
     transition-all
     duration-200
-    placeholder:text-buildcv-text-muted
-    hover:border-buildcv-border-strong
-    focus:border-buildcv-indigo
-    focus:bg-buildcv-navy
+    placeholder:text-[#718096]
+    hover:border-[#CBD5E1]
+    focus:border-[#6366F1]
     focus:ring-4
-    focus:ring-buildcv-indigo/10
+    focus:ring-[#6366F1]/10
   `
-
 
   return (
     <section
       className="
+        flex
+        h-full
+        min-h-0
+        flex-col
         overflow-hidden
-        rounded-buildcv-2xl
+        rounded-xl
         border
-        border-buildcv-border
-        bg-buildcv-card
-        shadow-buildcv-md
+        border-[#E2E8F0]
+        bg-white
       "
     >
       {/* =====================================================
@@ -127,17 +123,19 @@ function Experience({ formData, setFormData }) {
 
       <div
         className="
+          shrink-0
           border-b
-          border-buildcv-border
+          border-[#E2E8F0]
+          bg-white
           px-5
-          py-6
+          py-5
           sm:px-7
-          sm:py-7
+          sm:py-6
         "
       >
         <div className="flex items-start gap-4">
 
-          {/* Icon */}
+          {/* ICON */}
 
           <div
             className="
@@ -147,11 +145,11 @@ function Experience({ formData, setFormData }) {
               shrink-0
               items-center
               justify-center
-              rounded-buildcv-md
-               border
-              border-buildcv-indigo/20
-              bg-buildcv-indigo/10
-              text-buildcv-indigo
+              rounded-lg
+              border
+              border-[#E0E7FF]
+              bg-[#EEF2FF]
+              text-[#6366F1]
             "
           >
             <svg
@@ -175,29 +173,39 @@ function Experience({ formData, setFormData }) {
             </svg>
           </div>
 
-          {/* Text */}
+          {/* HEADER TEXT */}
 
-          <div>
-            <p
-              className="
-                text-xs
-                font-bold
-                uppercase
-                tracking-[0.14em]
-                text-buildcv-indigo
-              "
-            >
-              Step 03
-            </p>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <span
+                className="
+                  h-1.5
+                  w-1.5
+                  rounded-full
+                  bg-[#6366F1]
+                "
+              />
+
+              <span
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.16em]
+                  text-[#6366F1]
+                "
+              >
+                Step 03
+              </span>
+            </div>
 
             <h2
               className="
                 mt-1.5
-                font-display
                 text-2xl
                 font-bold
                 tracking-tight
-                text-buildcv-text
+                text-[#111827]
                 sm:text-3xl
               "
             >
@@ -210,49 +218,54 @@ function Experience({ formData, setFormData }) {
                 max-w-xl
                 text-sm
                 leading-6
-                text-buildcv-text-secondary
+                text-[#475569]
               "
             >
-              Add your previous roles and highlight the experience,
-              responsibilities, and achievements that matter most.
+              Add your previous roles and highlight the
+              experience, responsibilities, and achievements
+              that matter most.
             </p>
           </div>
-
         </div>
       </div>
 
       {/* =====================================================
-          CONTENT
+          SCROLLABLE CONTENT
       ====================================================== */}
 
-      <div className="p-5 sm:p-7">
-
+      <div
+        className="
+          min-h-0
+          flex-1
+          overflow-y-auto
+          overscroll-contain
+          p-5
+          sm:p-7
+        "
+      >
         {/* =====================================================
             EXPERIENCE LIST
         ====================================================== */}
 
-        <div className="space-y-6">
+        <div className="space-y-5">
 
           {experiences.map((experience, index) => (
-
             <article
               key={experience.id}
               className="
-               rounded-buildcv-xl
+                rounded-xl
                 border
-                border-buildcv-border
-                bg-buildcv-background
+                border-[#E2E8F0]
+                bg-[#F8FAFC]
                 p-5
-                transition-colors
+                transition-all
                 duration-200
-                hover:border-buildcv-border-strong
+                hover:border-[#CBD5E1]
                 sm:p-6
               "
             >
 
-              {/* =================================================
-                  ENTRY HEADER
-              ================================================= */}
+              {/* ENTRY HEADER */}
 
               <div
                 className="
@@ -263,41 +276,68 @@ function Experience({ formData, setFormData }) {
                   gap-4
                 "
               >
-
                 <div className="min-w-0">
 
-                  <p
-                    className="
-                      text-[10px]
-                      font-bold
-                      uppercase
-                      tracking-[0.14em]
-                      text-buildcv-indigo
-                    "
-                  >
-                    Experience {index + 1}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="
+                        rounded-full
+                        bg-[#EEF2FF]
+                        px-2
+                        py-1
+                        text-[10px]
+                        font-bold
+                        uppercase
+                        tracking-wide
+                        text-[#6366F1]
+                      "
+                    >
+                      Experience {index + 1}
+                    </span>
+
+                    {experience.current && (
+                      <span
+                        className="
+                          rounded-full
+                          bg-[#E0E7FF]
+                          px-2
+                          py-1
+                          text-[10px]
+                          font-semibold
+                          text-[#4F46E5]
+                        "
+                      >
+                        Current
+                      </span>
+                    )}
+                  </div>
 
                   <h3
                     className="
-                      mt-1
+                      mt-2
                       truncate
-                      font-display
                       text-lg
                       font-bold
-                      text-buildcv-primary
+                      text-[#111827]
                     "
                   >
                     {experience.jobTitle || "New position"}
                   </h3>
 
                   {experience.company && (
-                    <p className="mt-1 text-xs text-buildcv-text-secondary">
+                    <p
+                      className="
+                        mt-1
+                        text-xs
+                        text-[#718096]
+                      "
+                    >
                       {experience.company}
                     </p>
                   )}
-
                 </div>
+
+                {/* REMOVE */}
 
                 <button
                   type="button"
@@ -306,35 +346,35 @@ function Experience({ formData, setFormData }) {
                   }
                   className="
                     shrink-0
-                    rounded-buildcv-md
+                    rounded-lg
                     border
-                    border-red-400/10
+                    border-[#E2E8F0]
+                    bg-white
                     px-3
                     py-2
                     text-xs
                     font-semibold
-                    text-red-400
+                    text-[#475569]
                     transition-all
                     duration-200
-                    hover:border-red-400/20
-                    hover:bg-red-400/10
+                    hover:border-red-200
+                    hover:bg-red-50
+                    hover:text-red-500
                   "
                 >
                   Remove
                 </button>
-
               </div>
 
               {/* =================================================
-                  FIELDS
-              ================================================= */}
+                  FORM FIELDS
+              ================================================== */}
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
 
                 {/* JOB TITLE */}
 
                 <div className="sm:col-span-2">
-
                   <label
                     htmlFor={`jobTitle-${experience.id}`}
                     className="
@@ -342,7 +382,7 @@ function Experience({ formData, setFormData }) {
                       block
                       text-sm
                       font-semibold
-                      text-buildcv-text
+                      text-[#111827]
                     "
                   >
                     Job title
@@ -363,13 +403,11 @@ function Experience({ formData, setFormData }) {
                     autoComplete="organization-title"
                     className={inputClass}
                   />
-
                 </div>
 
                 {/* COMPANY */}
 
                 <div>
-
                   <label
                     htmlFor={`company-${experience.id}`}
                     className="
@@ -377,7 +415,7 @@ function Experience({ formData, setFormData }) {
                       block
                       text-sm
                       font-semibold
-                      text-buildcv-text
+                      text-[#111827]
                     "
                   >
                     Company
@@ -398,13 +436,11 @@ function Experience({ formData, setFormData }) {
                     autoComplete="organization"
                     className={inputClass}
                   />
-
                 </div>
 
                 {/* LOCATION */}
 
                 <div>
-
                   <label
                     htmlFor={`experience-location-${experience.id}`}
                     className="
@@ -412,7 +448,7 @@ function Experience({ formData, setFormData }) {
                       block
                       text-sm
                       font-semibold
-                      text-buildcv-text
+                      text-[#111827]
                     "
                   >
                     Location
@@ -433,13 +469,11 @@ function Experience({ formData, setFormData }) {
                     autoComplete="address-level2"
                     className={inputClass}
                   />
-
                 </div>
 
                 {/* START DATE */}
 
                 <div>
-
                   <label
                     htmlFor={`experience-start-${experience.id}`}
                     className="
@@ -447,7 +481,7 @@ function Experience({ formData, setFormData }) {
                       block
                       text-sm
                       font-semibold
-                      text-buildcv-text
+                      text-[#111827]
                     "
                   >
                     Start date
@@ -466,13 +500,11 @@ function Experience({ formData, setFormData }) {
                     }
                     className={inputClass}
                   />
-
                 </div>
 
                 {/* END DATE */}
 
                 <div>
-
                   <label
                     htmlFor={`experience-end-${experience.id}`}
                     className="
@@ -480,7 +512,7 @@ function Experience({ formData, setFormData }) {
                       block
                       text-sm
                       font-semibold
-                      text-buildcv-text
+                      text-[#111827]
                     "
                   >
                     End date
@@ -498,9 +530,14 @@ function Experience({ formData, setFormData }) {
                         event.target.value
                       )
                     }
-                    className={inputClass}
+                    className={`
+                      ${inputClass}
+                      disabled:cursor-not-allowed
+                      disabled:bg-[#F1F5F9]
+                      disabled:text-[#94A3B8]
+                      disabled:opacity-70
+                    `}
                   />
-
                 </div>
 
                 {/* CURRENT JOB */}
@@ -509,24 +546,26 @@ function Experience({ formData, setFormData }) {
 
                   <label
                     className="
+                      group
                       flex
                       cursor-pointer
                       items-center
                       gap-3
-                      rounded-buildcv-lg
+                      rounded-lg
                       border
-                      border-buildcv-border
-                      bg-buildcv-navy-800
+                      border-[#E2E8F0]
+                      bg-white
                       px-4
                       py-3
-                      transition-colors
-                      hover:border-buildcv-indigo/40
+                      transition-all
+                      duration-200
+                      hover:border-[#C7D2FE]
+                      hover:bg-[#F8FAFC]
                     "
                   >
-
                     <input
                       type="checkbox"
-                      checked={experience.current}
+                      checked={Boolean(experience.current)}
                       onChange={(event) =>
                         updateExperience(
                           experience.id,
@@ -537,9 +576,10 @@ function Experience({ formData, setFormData }) {
                       className="
                         h-4
                         w-4
+                        cursor-pointer
                         rounded
-                        border-buildcv-border
-                        accent-buildcv-indigo
+                        border-[#CBD5E1]
+                        accent-[#6366F1]
                       "
                     />
 
@@ -547,14 +587,14 @@ function Experience({ formData, setFormData }) {
                       className="
                         text-sm
                         font-medium
-                        text-buildcv-text-secondary
+                        text-[#475569]
+                        transition-colors
+                        group-hover:text-[#111827]
                       "
                     >
                       I currently work here
                     </span>
-
                   </label>
-
                 </div>
 
                 {/* DESCRIPTION */}
@@ -568,16 +608,21 @@ function Experience({ formData, setFormData }) {
                       className="
                         text-sm
                         font-semibold
-                        text-buildcv-text
+                        text-[#111827]
                       "
                     >
                       Description
                     </label>
 
-                    <span className="text-[10px] text-buildcv-text-muted">
+                    <span
+                      className="
+                        text-[10px]
+                        font-medium
+                        text-[#718096]
+                      "
+                    >
                       Optional
                     </span>
-
                   </div>
 
                   <textarea
@@ -600,26 +645,41 @@ function Experience({ formData, setFormData }) {
                     `}
                   />
 
-                  <div className="mt-2 flex items-center justify-between">
-
-                    <p className="text-xs text-buildcv-text-muted">
-                      Focus on achievements rather than simply listing duties.
+                  <div
+                    className="
+                      mt-2
+                      flex
+                      items-center
+                      justify-between
+                      gap-4
+                    "
+                  >
+                    <p
+                      className="
+                        text-xs
+                        leading-5
+                        text-[#718096]
+                      "
+                    >
+                      Focus on achievements rather than simply
+                      listing duties.
                     </p>
 
-                    <span className="text-[10px] text-buildcv-text-muted">
+                    <span
+                      className="
+                        shrink-0
+                        text-[10px]
+                        font-medium
+                        text-[#718096]
+                      "
+                    >
                       {experience.description?.length || 0}/1000
                     </span>
-
                   </div>
-
                 </div>
-
               </div>
-
             </article>
-
           ))}
-
         </div>
 
         {/* =====================================================
@@ -627,20 +687,18 @@ function Experience({ formData, setFormData }) {
         ====================================================== */}
 
         {experiences.length === 0 && (
-
           <div
             className="
-              rounded-buildcv-xl
+              rounded-xl
               border
               border-dashed
-              border-buildcv-border
-              bg-buildcv-background
+              border-[#E2E8F0]
+              bg-[#F8FAFC]
               px-6
               py-12
               text-center
             "
           >
-
             <div
               className="
                 mx-auto
@@ -650,12 +708,10 @@ function Experience({ formData, setFormData }) {
                 items-center
                 justify-center
                 rounded-full
-                border
-                border-buildcv-indigo/5
-                bg-buildcv-indigo/10
-                text-lg
-                font-bold
-                text-buildcv-indigo
+                bg-[#EEF2FF]
+                text-xl
+                font-semibold
+                text-[#6366F1]
               "
             >
               +
@@ -664,10 +720,9 @@ function Experience({ formData, setFormData }) {
             <h3
               className="
                 mt-4
-                font-display
                 text-lg
                 font-bold
-                text-buildcv-primary
+                text-[#111827]
               "
             >
               Add your work experience
@@ -680,45 +735,43 @@ function Experience({ formData, setFormData }) {
                 max-w-md
                 text-sm
                 leading-6
-                text-buildcv-text-secondary
+                text-[#475569]
               "
             >
               Add your current or previous positions to show
               employers what you have accomplished.
             </p>
-
           </div>
-
         )}
 
         {/* =====================================================
-            ADD EXPERIENCE BUTTON
+            ADD EXPERIENCE
         ====================================================== */}
 
         <button
           type="button"
           onClick={addExperience}
           className="
-           mt-6
+            mt-6
             flex
             w-full
             items-center
             justify-center
             gap-2
-            rounded-buildcv-lg
+            rounded-lg
             border
             border-dashed
-            border-buildcv-indigo/30
-            bg-buildcv-indigo/5
+            border-[#C7D2FE]
+            bg-[#EEF2FF]
             px-5
             py-3.5
             text-sm
             font-semibold
-            text-buildcv-indigo
+            text-[#6366F1]
             transition-all
             duration-200
-            hover:border-buildcv-indigo/50
-            hover:bg-buildcv-indigo/10
+            hover:border-[#A5B4FC]
+            hover:bg-[#E0E7FF]
           "
         >
           <span className="text-lg leading-none">
@@ -728,6 +781,9 @@ function Experience({ formData, setFormData }) {
           Add another experience
         </button>
 
+        {/* BOTTOM SPACE */}
+
+        <div className="h-2" />
       </div>
     </section>
   )

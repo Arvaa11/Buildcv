@@ -1,225 +1,271 @@
-// // src/data/templateQuestions.js
+// =====================================================
+// BUILDCV — TEMPLATE QUESTIONNAIRE
+// =====================================================
 
-// export const templateQuestions = [
-//   {
-//     id: "role",
+export const templateQuestions = [
+  {
+    id: "careerField",
+    title: "What type of work are you applying for?",
+    description: "Choose the field that best matches your career.",
+    type: "single",
+    options: [
+      {
+        id: "technology",
+        label: "Technology / Software",
+        value: "technology",
+      },
+      {
+        id: "business",
+        label: "Business / Corporate",
+        value: "business",
+      },
+      {
+        id: "academic",
+        label: "Academic / Research",
+        value: "academic",
+      },
+      {
+        id: "creative",
+        label: "Creative / Design",
+        value: "creative",
+      },
+      {
+        id: "general",
+        label: "General Professional",
+        value: "general",
+      },
+    ],
+  },
 
-//     question: "What type of role are you targeting?",
+  {
+    id: "experienceLevel",
+    title: "What is your experience level?",
+    description:
+      "This helps us choose a layout appropriate for your career stage.",
+    type: "single",
+    options: [
+      {
+        id: "student",
+        label: "Student / Fresh Graduate",
+        value: "student",
+      },
+      {
+        id: "entry",
+        label: "Entry Level",
+        value: "entry",
+      },
+      {
+        id: "mid",
+        label: "Mid Level",
+        value: "mid",
+      },
+      {
+        id: "senior",
+        label: "Senior Level",
+        value: "senior",
+      },
+      {
+        id: "executive",
+        label: "Executive",
+        value: "executive",
+      },
+    ],
+  },
 
-//     description:
-//       "We'll use this to find templates that fit your career field.",
+  {
+    id: "purpose",
+    title: "What are you creating this resume for?",
+    description: "Choose the main purpose of your resume.",
+    type: "single",
+    options: [
+      {
+        id: "job",
+        label: "Job Application",
+        value: "job",
+      },
+      {
+        id: "internship",
+        label: "Internship",
+        value: "internship",
+      },
+      {
+        id: "freelance",
+        label: "Freelancing",
+        value: "freelance",
+      },
+      {
+        id: "academicPosition",
+        label: "Academic Position",
+        value: "academicPosition",
+      },
+      {
+        id: "careerChange",
+        label: "Career Change",
+        value: "careerChange",
+      },
+    ],
+  },
 
-//     options: [
-//       {
-//         id: "developer",
-//         label: "Software Developer",
-//         icon: "💻",
-//       },
+  {
+    id: "ats",
+    title: "How important is ATS compatibility?",
+    description:
+      "ATS-friendly resumes are easier for applicant tracking systems to read.",
+    type: "single",
+    options: [
+      {
+        id: "veryImportant",
+        label: "Very important",
+        value: "veryImportant",
+      },
+      {
+        id: "important",
+        label: "Important",
+        value: "important",
+      },
+      {
+        id: "notSure",
+        label: "I'm not sure",
+        value: "notSure",
+      },
+      {
+        id: "notImportant",
+        label: "Not important",
+        value: "notImportant",
+      },
+    ],
+  },
 
-//       {
-//         id: "frontend-developer",
-//         label: "Frontend Developer",
-//         icon: "🌐",
-//       },
+  {
+    id: "style",
+    title: "What resume style do you prefer?",
+    description: "Choose the visual style you like most.",
+    type: "single",
+    options: [
+      {
+        id: "modern",
+        label: "Modern",
+        value: "modern",
+      },
+      {
+        id: "minimal",
+        label: "Minimal & Clean",
+        value: "minimal",
+      },
+      {
+        id: "professional",
+        label: "Professional",
+        value: "professional",
+      },
+      {
+        id: "creative",
+        label: "Creative",
+        value: "creative",
+      },
+      {
+        id: "traditional",
+        label: "Traditional",
+        value: "traditional",
+      },
+    ],
+  },
 
-//       {
-//         id: "backend-developer",
-//         label: "Backend Developer",
-//         icon: "⚙️",
-//       },
+  {
+    id: "strength",
+    title: "What do you want your resume to highlight?",
+    description:
+      "Choose the area that best represents your strongest experience.",
+    type: "single",
+    options: [
+      {
+        id: "projects",
+        label: "Projects & Technical Skills",
+        value: "projects",
+      },
+      {
+        id: "experience",
+        label: "Work Experience",
+        value: "experience",
+      },
+      {
+        id: "education",
+        label: "Education",
+        value: "education",
+      },
+      {
+        id: "research",
+        label: "Research & Publications",
+        value: "research",
+      },
+      {
+        id: "portfolio",
+        label: "Portfolio & Creative Work",
+        value: "portfolio",
+      },
+      {
+        id: "leadership",
+        label: "Leadership & Achievements",
+        value: "leadership",
+      },
+    ],
+  },
+]
 
-//       {
-//         id: "designer",
-//         label: "Designer",
-//         icon: "🎨",
-//       },
+// =====================================================
+// DEFAULT ANSWERS
+// =====================================================
 
-//       {
-//         id: "business",
-//         label: "Business / Management",
-//         icon: "📊",
-//       },
+export const DEFAULT_TEMPLATE_ANSWERS = {
+  careerField: "",
+  experienceLevel: "",
+  purpose: "",
+  ats: "",
+  style: "",
+  strength: "",
+}
 
-//       {
-//         id: "student",
-//         label: "Student / Graduate",
-//         icon: "🎓",
-//       },
+// =====================================================
+// HELPERS
+// =====================================================
 
-//       {
-//         id: "academic",
-//         label: "Academic / Research",
-//         icon: "🔬",
-//       },
+export function getQuestionById(questionId) {
+  return TEMPLATE_QUESTIONS.find(
+    (question) => question.id === questionId
+  ) || null
+}
 
-//       {
-//         id: "general",
-//         label: "Other",
-//         icon: "✨",
-//       },
-//     ],
-//   },
+export function getOptionById(questionId, optionId) {
+  const question = getQuestionById(questionId)
 
-//   {
-//     id: "experienceLevel",
+  if (!question) {
+    return null
+  }
 
-//     question: "What's your experience level?",
+  return (
+    question.options.find(
+      (option) => option.id === optionId
+    ) || null
+  )
+}
 
-//     description:
-//       "We'll recommend a layout that gives the right sections priority.",
+export function getTotalQuestions() {
+  return TEMPLATE_QUESTIONS.length
+}
 
-//     options: [
-//       {
-//         id: "student",
-//         label: "Student / No Experience",
-//         icon: "🎓",
-//       },
+export function getAnsweredQuestions(answers = {}) {
+  return TEMPLATE_QUESTIONS.filter(
+    (question) => Boolean(answers[question.id])
+  ).length
+}
 
-//       {
-//         id: "entry",
-//         label: "Entry Level",
-//         icon: "🌱",
-//       },
+export function getQuestionProgress(answers = {}) {
+  const total = getTotalQuestions()
 
-//       {
-//         id: "mid",
-//         label: "1–3+ Years",
-//         icon: "💼",
-//       },
+  if (!total) return 0
 
-//       {
-//         id: "senior",
-//         label: "Senior / Experienced",
-//         icon: "🏆",
-//       },
-//     ],
-//   },
+  return Math.round(
+    (getAnsweredQuestions(answers) / total) * 100
+  )
+}
 
-//   {
-//     id: "style",
-
-//     question: "What style represents you?",
-
-//     description:
-//       "Choose the visual personality you'd like your resume to have.",
-
-//     options: [
-//       {
-//         id: "minimal",
-//         label: "Minimal & Clean",
-//         icon: "◻️",
-//       },
-
-//       {
-//         id: "modern",
-//         label: "Modern & Professional",
-//         icon: "✨",
-//       },
-
-//       {
-//         id: "creative",
-//         label: "Creative & Bold",
-//         icon: "🎨",
-//       },
-
-//       {
-//         id: "executive",
-//         label: "Elegant & Executive",
-//         icon: "👔",
-//       },
-//     ],
-//   },
-
-//   {
-//     id: "ats",
-
-//     question: "How important is ATS compatibility?",
-
-//     description:
-//       "ATS-friendly templates are optimized for automated resume screening systems.",
-
-//     options: [
-//       {
-//         id: "excellent",
-//         label: "Very Important",
-//         description:
-//           "I mainly apply through online job portals.",
-//         icon: "🟢",
-//       },
-
-//       {
-//         id: "good",
-//         label: "Somewhat Important",
-//         description:
-//           "I apply both online and directly.",
-//         icon: "🟡",
-//       },
-
-//       {
-//         id: "creative",
-//         label: "Design Is More Important",
-//         description:
-//           "Visual presentation is my priority.",
-//         icon: "🔵",
-//       },
-//     ],
-//   },
-
-//   {
-//     id: "photo",
-
-//     question: "Would you like a profile photo?",
-
-//     description:
-//       "Some resume styles work better with a profile image.",
-
-//     options: [
-//       {
-//         id: true,
-//         label: "Yes, include a photo",
-//         icon: "👤",
-//       },
-
-//       {
-//         id: false,
-//         label: "No photo",
-//         icon: "📄",
-//       },
-//     ],
-//   },
-
-//   {
-//     id: "contentLevel",
-
-//     question: "How much information do you have?",
-
-//     description:
-//       "This helps us choose between compact and spacious layouts.",
-
-//     options: [
-//       {
-//         id: "short",
-//         label: "Short",
-//         description:
-//           "Education and skills",
-//         icon: "📄",
-//       },
-
-//       {
-//         id: "medium",
-//         label: "Medium",
-//         description:
-//           "Education, skills, and projects",
-//         icon: "📑",
-//       },
-
-//       {
-//         id: "detailed",
-//         label: "Detailed",
-//         description:
-//           "Experience, projects, education, and more",
-//         icon: "📚",
-//       },
-//     ],
-//   },
-// ]
+export default templateQuestions

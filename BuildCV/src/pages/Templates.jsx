@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -16,47 +17,88 @@ const TEMPLATE_STORAGE_KEY = "buildcv-selected-template"
 function Templates() {
   const navigate = useNavigate()
 
-  const [selectedTemplate, setSelectedTemplate] =
-    useState(() => {
+  // ---------------------------------------------------
+  // SELECTED TEMPLATE
+  // ---------------------------------------------------
+
+  const [selectedTemplate, setSelectedTemplate] = useState(() => {
+    try {
       return (
         localStorage.getItem(TEMPLATE_STORAGE_KEY) ||
         "modern"
       )
-    })
+    } catch (error) {
+      console.error(
+        "Failed to load selected template:",
+        error
+      )
 
-  // =====================================================
-  // CONTINUE TO BUILDER
-  // =====================================================
+      return "modern"
+    }
+  })
 
-  const handleContinue = (templateId) => {
+  // ---------------------------------------------------
+  // SELECT TEMPLATE
+  // ---------------------------------------------------
+
+  const handleSelectTemplate = (templateId) => {
     if (!templateId) return
 
-    // Save selected template
-    localStorage.setItem(
-      TEMPLATE_STORAGE_KEY,
-      templateId
-    )
-
-    // Update local state
     setSelectedTemplate(templateId)
 
-    // Go to builder
+    try {
+      localStorage.setItem(
+        TEMPLATE_STORAGE_KEY,
+        templateId
+      )
+    } catch (error) {
+      console.error(
+        "Failed to save selected template:",
+        error
+      )
+    }
+  }
+
+  // ---------------------------------------------------
+  // CONTINUE TO BUILDER
+  // ---------------------------------------------------
+
+  const handleContinue = (templateId) => {
+    const finalTemplateId =
+      templateId || selectedTemplate
+
+    if (!finalTemplateId) return
+
+    try {
+      localStorage.setItem(
+        TEMPLATE_STORAGE_KEY,
+        finalTemplateId
+      )
+    } catch (error) {
+      console.error(
+        "Failed to save selected template:",
+        error
+      )
+    }
+
+    setSelectedTemplate(finalTemplateId)
+
     navigate("/builder", {
       state: {
-        selectedTemplate: templateId,
+        selectedTemplate: finalTemplateId,
       },
     })
   }
 
-  // =====================================================
+  // ===================================================
   // RENDER
-  // =====================================================
+  // ===================================================
 
   return (
-    <main>
+    <main className="min-h-screen bg-buildcv-background">
       <TemplateSelector
         selectedTemplate={selectedTemplate}
-        setSelectedTemplate={setSelectedTemplate}
+        setSelectedTemplate={handleSelectTemplate}
         onContinue={handleContinue}
       />
     </main>

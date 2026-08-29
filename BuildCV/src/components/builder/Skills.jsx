@@ -75,397 +75,648 @@ function Skills({ formData, setFormData }) {
   }
 
   return (
-    <div
+    <section
       className="
-        rounded-buildcv-2xl
+        flex
+        h-full
+        min-h-0
+        flex-col
+        overflow-hidden
+        rounded-xl
         border
-        border-buildcv-border
+        border-[#E2E8F0]
         bg-white
-        p-6
-        shadow-buildcv-sm
-        sm:p-8
       "
     >
-
-      {/* =================================================
+      {/* =====================================================
           HEADER
-      ================================================= */}
+      ====================================================== */}
 
-      <div className="mb-8">
+      <div
+        className="
+          shrink-0
+          border-b
+          border-[#E2E8F0]
+          bg-white
+          px-5
+          py-5
+          sm:px-7
+          sm:py-6
+        "
+      >
+        <div className="flex items-start gap-4">
 
-        <span
-          className="
-            text-xs
-            font-bold
-            uppercase
-            tracking-wider
-            text-buildcv-indigo
-          "
-        >
-          Step 5
-        </span>
-
-        <h2
-          className="
-            mt-2
-            font-display
-            text-2xl
-            font-bold
-            text-buildcv-navy
-          "
-        >
-          Skills
-        </h2>
-
-        <p
-          className="
-            mt-2
-            text-sm
-            leading-6
-            text-buildcv-text-secondary
-          "
-        >
-          Add the skills that best describe your abilities
-          and experience.
-        </p>
-
-      </div>
-
-
-      {/* =================================================
-          SKILL INPUT
-      ================================================= */}
-
-      <div>
-
-        <label
-          htmlFor="skillInput"
-          className="
-            mb-2
-            block
-            text-sm
-            font-semibold
-            text-buildcv-navy
-          "
-        >
-          Add a Skill
-        </label>
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-
-          <input
-            id="skillInput"
-            type="text"
-            value={skillInput}
-            onChange={(event) =>
-              setSkillInput(event.target.value)
-            }
-            onKeyDown={handleKeyDown}
-            placeholder="e.g. React.js"
-            className="
-              min-w-0
-              flex-1
-              rounded-buildcv-md
-              border
-              border-buildcv-border
-              bg-white
-              px-4
-              py-3
-              text-sm
-              text-buildcv-navy
-              outline-none
-              transition-all
-              duration-200
-              placeholder:text-buildcv-text-muted
-              focus:border-buildcv-indigo
-              focus:ring-4
-              focus:ring-buildcv-indigo/10
-            "
-          />
-
-          <button
-            type="button"
-            onClick={addSkill}
-            className="
-              rounded-buildcv-md
-              bg-buildcv-indigo
-              px-6
-              py-3
-              text-sm
-              font-semibold
-              text-white
-              transition-all
-              duration-200
-              hover:-translate-y-0.5
-              hover:bg-buildcv-indigo-600
-              focus:outline-none
-              focus:ring-4
-              focus:ring-buildcv-indigo/20
-            "
-          >
-            Add Skill
-          </button>
-
-        </div>
-
-        <p
-          className="
-            mt-2
-            text-xs
-            text-buildcv-text-muted
-          "
-        >
-          Press Enter or click "Add Skill" to add it.
-        </p>
-
-      </div>
-
-
-      {/* =================================================
-          SKILLS LIST
-      ================================================= */}
-
-      <div className="mt-8">
-
-        <div className="mb-3 flex items-center justify-between">
-
-          <h3
-            className="
-              text-sm
-              font-semibold
-              text-buildcv-navy
-            "
-          >
-            Your Skills
-          </h3>
-
-          <span
-            className="
-              text-xs
-              font-medium
-              text-buildcv-text-muted
-            "
-          >
-            {skills.length}{" "}
-            {skills.length === 1 ? "skill" : "skills"}
-          </span>
-
-        </div>
-
-
-        {skills.length > 0 ? (
+          {/* ICON */}
 
           <div
             className="
               flex
-              flex-wrap
-              gap-2
-              rounded-buildcv-xl
+              h-11
+              w-11
+              shrink-0
+              items-center
+              justify-center
+              rounded-lg
               border
-              border-buildcv-border
-              bg-buildcv-background
-              p-5
+              border-[#E0E7FF]
+              bg-[#EEF2FF]
+              text-[#6366F1]
             "
           >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 3h6"
+              />
 
-            {skills.map((skill) => (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 3v4l-5.5 9.5A3 3 0 0 0 7.1 21h9.8a3 3 0 0 0 2.6-4.5L14 7V3"
+              />
 
-              <div
-                key={skill}
-                className="
-                  group
-                  inline-flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  bg-buildcv-indigo-50
-                  px-3.5
-                  py-2
-                  text-sm
-                  font-medium
-                  text-buildcv-indigo
-                "
-              >
-
-                <span>
-                  {skill}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => removeSkill(skill)}
-                  aria-label={`Remove ${skill}`}
-                  className="
-                    flex
-                    h-5
-                    w-5
-                    items-center
-                    justify-center
-                    rounded-full
-                    text-buildcv-indigo
-                    transition-colors
-                    duration-150
-                    hover:bg-buildcv-indigo
-                    hover:text-white
-                  "
-                >
-                  ×
-                </button>
-
-              </div>
-
-            ))}
-
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 14h8"
+              />
+            </svg>
           </div>
 
-        ) : (
+          {/* HEADER TEXT */}
 
-          <div
-            className="
-              rounded-buildcv-xl
-              border
-              border-dashed
-              border-buildcv-border
-              bg-buildcv-background
-              px-6
-              py-10
-              text-center
-            "
-          >
+          <div className="min-w-0">
 
-            <div
-              className="
-                mx-auto
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-full
-                bg-buildcv-indigo-50
-                text-xl
-                text-buildcv-indigo
-              "
-            >
-              +
+            <div className="flex items-center gap-2">
+              <span
+                className="
+                  h-1.5
+                  w-1.5
+                  rounded-full
+                  bg-[#6366F1]
+                "
+              />
+
+              <span
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.16em]
+                  text-[#6366F1]
+                "
+              >
+                Step 04
+              </span>
             </div>
 
-            <h3
+            <h2
               className="
-                mt-4
-                font-display
-                text-lg
+                mt-1.5
+                text-2xl
                 font-bold
-                text-buildcv-navy
+                tracking-tight
+                text-[#111827]
+                sm:text-3xl
               "
             >
-              No skills added yet
-            </h3>
+              Skills
+            </h2>
 
             <p
               className="
-                mx-auto
                 mt-2
-                max-w-sm
+                max-w-xl
                 text-sm
                 leading-6
-                text-buildcv-text-secondary
+                text-[#475569]
               "
             >
-              Start adding your technical and professional
-              skills above.
+              Add the technical and professional skills that
+              best represent your abilities and experience.
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+      {/* =====================================================
+          SCROLLABLE CONTENT
+      ====================================================== */}
+
+      <div
+        className="
+          min-h-0
+          flex-1
+          overflow-y-auto
+          overscroll-contain
+          p-5
+          sm:p-7
+        "
+      >
+
+        {/* =====================================================
+            ADD SKILL
+        ====================================================== */}
+
+        <div>
+
+          <div className="mb-4">
+
+            <div className="flex items-center gap-3">
+
+              <h3
+                className="
+                  text-sm
+                  font-bold
+                  text-[#111827]
+                "
+              >
+                Add skills
+              </h3>
+
+              <div className="h-px flex-1 bg-[#E2E8F0]" />
+
+              <span
+                className="
+                  rounded-full
+                  bg-[#EEF2FF]
+                  px-2.5
+                  py-1
+                  text-[10px]
+                  font-semibold
+                  text-[#6366F1]
+                "
+              >
+                {skills.length} added
+              </span>
+
+            </div>
+
+            <p
+              className="
+                mt-1.5
+                text-xs
+                leading-5
+                text-[#718096]
+              "
+            >
+              Add skills one at a time. Press Enter for a
+              quicker workflow.
             </p>
 
           </div>
 
-        )}
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#E2E8F0]
+              bg-[#F8FAFC]
+              p-4
+              sm:p-5
+            "
+          >
 
-      </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
 
-
-      {/* =================================================
-          POPULAR SKILLS
-      ================================================= */}
-
-      <div className="mt-8">
-
-        <p
-          className="
-            mb-3
-            text-xs
-            font-semibold
-            uppercase
-            tracking-wider
-            text-buildcv-text-muted
-          "
-        >
-          Popular Skills
-        </p>
-
-        <div className="flex flex-wrap gap-2">
-
-          {[
-            "JavaScript",
-            "React",
-            "HTML",
-            "CSS",
-            "Tailwind CSS",
-            "Python",
-            "Git",
-            "SQL",
-          ].map((skill) => {
-
-            const isAdded = skills.some(
-              (item) =>
-                item.toLowerCase() === skill.toLowerCase()
-            )
-
-            return (
-              <button
-                key={skill}
-                type="button"
-                onClick={() => addPopularSkill(skill)}
-                disabled={isAdded}
-                className={`
-                  rounded-full
+              <input
+                id="skillInput"
+                type="text"
+                value={skillInput}
+                onChange={(event) =>
+                  setSkillInput(event.target.value)
+                }
+                onKeyDown={handleKeyDown}
+                placeholder="e.g. React.js"
+                className="
+                  min-w-0
+                  flex-1
+                  rounded-lg
                   border
-                  px-3
-                  py-1.5
-                  text-xs
+                  border-[#E2E8F0]
+                  bg-white
+                  px-4
+                  py-3
+                  text-sm
                   font-medium
+                  text-[#111827]
+                  outline-none
                   transition-all
                   duration-200
+                  placeholder:text-[#718096]
+                  hover:border-[#CBD5E1]
+                  focus:border-[#6366F1]
+                  focus:ring-4
+                  focus:ring-[#6366F1]/10
+                "
+              />
 
-                  ${
-                    isAdded
-                      ? `
-                        cursor-not-allowed
-                        border-buildcv-indigo/20
-                        bg-buildcv-indigo-50
-                        text-buildcv-indigo/50
-                      `
-                      : `
-                        border-buildcv-border
-                        bg-white
-                        text-buildcv-text-secondary
-                        hover:border-buildcv-indigo
-                        hover:bg-buildcv-indigo-50
-                        hover:text-buildcv-indigo
-                      `
-                  }
-                `}
+              <button
+                type="button"
+                onClick={addSkill}
+                className="
+                  shrink-0
+                  rounded-lg
+                  bg-[#6366F1]
+                  px-6
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-white
+                  transition-all
+                  duration-200
+                  hover:-translate-y-0.5
+                  hover:bg-[#4F46E5]
+                  focus:outline-none
+                  focus:ring-4
+                  focus:ring-[#6366F1]/20
+                "
               >
-                {isAdded ? "✓ " : "+ "}
-                {skill}
+                <span className="mr-1">
+                  +
+                </span>
+                Add Skill
               </button>
-            )
-          })}
+
+            </div>
+
+            <p
+              className="
+                mt-2.5
+                text-xs
+                text-[#718096]
+              "
+            >
+              Press Enter or click Add Skill to add it.
+            </p>
+
+          </div>
+        </div>
+
+        {/* =====================================================
+            YOUR SKILLS
+        ====================================================== */}
+
+        <div className="mt-8">
+
+          <div className="mb-3 flex items-center justify-between">
+
+            <div>
+
+              <h3
+                className="
+                  text-sm
+                  font-bold
+                  text-[#111827]
+                "
+              >
+                Your skills
+              </h3>
+
+              <p
+                className="
+                  mt-1
+                  text-xs
+                  text-[#718096]
+                "
+              >
+                These skills will appear on your resume.
+              </p>
+
+            </div>
+
+            <span
+              className="
+                rounded-full
+                border
+                border-[#E2E8F0]
+                bg-white
+                px-2.5
+                py-1
+                text-[10px]
+                font-semibold
+                text-[#475569]
+              "
+            >
+              {skills.length}{" "}
+              {skills.length === 1 ? "skill" : "skills"}
+            </span>
+
+          </div>
+
+          {skills.length > 0 ? (
+
+            <div
+              className="
+                flex
+                min-h-[110px]
+                flex-wrap
+                content-start
+                gap-2
+                rounded-xl
+                border
+                border-[#E2E8F0]
+                bg-[#F8FAFC]
+                p-4
+                sm:p-5
+              "
+            >
+
+              {skills.map((skill) => (
+
+                <div
+                  key={skill}
+                  className="
+                    group
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-[#E0E7FF]
+                    bg-[#EEF2FF]
+                    px-3.5
+                    py-2
+                    text-sm
+                    font-medium
+                    text-[#4F46E5]
+                    transition-all
+                    duration-200
+                    hover:border-[#C7D2FE]
+                    hover:bg-[#E0E7FF]
+                  "
+                >
+
+                  <span>
+                    {skill}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => removeSkill(skill)}
+                    aria-label={`Remove ${skill}`}
+                    className="
+                      flex
+                      h-5
+                      w-5
+                      items-center
+                      justify-center
+                      rounded-full
+                      text-sm
+                      leading-none
+                      text-[#6366F1]
+                      transition-all
+                      duration-150
+                      hover:bg-[#6366F1]
+                      hover:text-white
+                    "
+                  >
+                    ×
+                  </button>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          ) : (
+
+            <div
+              className="
+                rounded-xl
+                border
+                border-dashed
+                border-[#E2E8F0]
+                bg-[#F8FAFC]
+                px-6
+                py-10
+                text-center
+              "
+            >
+
+              <div
+                className="
+                  mx-auto
+                  flex
+                  h-12
+                  w-12
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-[#EEF2FF]
+                  text-xl
+                  font-semibold
+                  text-[#6366F1]
+                "
+              >
+                +
+              </div>
+
+              <h3
+                className="
+                  mt-4
+                  text-lg
+                  font-bold
+                  text-[#111827]
+                "
+              >
+                No skills added yet
+              </h3>
+
+              <p
+                className="
+                  mx-auto
+                  mt-2
+                  max-w-sm
+                  text-sm
+                  leading-6
+                  text-[#475569]
+                "
+              >
+                Add your technical and professional skills
+                using the field above.
+              </p>
+
+            </div>
+          )}
 
         </div>
 
-      </div>
+        {/* =====================================================
+            POPULAR SKILLS
+        ====================================================== */}
 
-    </div>
+        <div className="mt-8">
+
+          <div className="mb-3">
+
+            <h3
+              className="
+                text-sm
+                font-bold
+                text-[#111827]
+              "
+            >
+              Popular skills
+            </h3>
+
+            <p
+              className="
+                mt-1
+                text-xs
+                text-[#718096]
+              "
+            >
+              Quickly add a commonly used skill.
+            </p>
+
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+
+            {[
+              "JavaScript",
+              "React",
+              "HTML",
+              "CSS",
+              "Tailwind CSS",
+              "Python",
+              "Git",
+              "SQL",
+            ].map((skill) => {
+
+              const isAdded = skills.some(
+                (item) =>
+                  item.toLowerCase() === skill.toLowerCase()
+              )
+
+              return (
+                <button
+                  key={skill}
+                  type="button"
+                  onClick={() =>
+                    addPopularSkill(skill)
+                  }
+                  disabled={isAdded}
+                  className={`
+                    rounded-full
+                    border
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-medium
+                    transition-all
+                    duration-200
+
+                    ${
+                      isAdded
+                        ? `
+                          cursor-not-allowed
+                          border-[#E0E7FF]
+                          bg-[#EEF2FF]
+                          text-[#6366F1]/50
+                        `
+                        : `
+                          border-[#E2E8F0]
+                          bg-white
+                          text-[#475569]
+                          hover:border-[#C7D2FE]
+                          hover:bg-[#EEF2FF]
+                          hover:text-[#6366F1]
+                        `
+                    }
+                  `}
+                >
+                  {isAdded ? "✓ " : "+ "}
+                  {skill}
+                </button>
+              )
+            })}
+
+          </div>
+        </div>
+
+        {/* =====================================================
+            PROFESSIONAL TIP
+        ====================================================== */}
+
+        <div
+          className="
+            mt-8
+            flex
+            items-start
+            gap-3
+            rounded-lg
+            border
+            border-[#E0E7FF]
+            bg-[#EEF2FF]
+            px-4
+            py-3.5
+          "
+        >
+
+          <span
+            className="
+              flex
+              h-6
+              w-6
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+              bg-[#E0E7FF]
+              text-[10px]
+              font-bold
+              text-[#6366F1]
+            "
+          >
+            i
+          </span>
+
+          <div>
+
+            <p
+              className="
+                text-xs
+                font-semibold
+                text-[#111827]
+              "
+            >
+              Keep your skills relevant
+            </p>
+
+            <p
+              className="
+                mt-0.5
+                text-xs
+                leading-5
+                text-[#475569]
+              "
+            >
+              Focus on skills that match the job you are
+              applying for. A focused list is more effective
+              than adding every skill you know.
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* BOTTOM SPACE */}
+
+        <div className="h-2" />
+
+      </div>
+    </section>
   )
 }
 

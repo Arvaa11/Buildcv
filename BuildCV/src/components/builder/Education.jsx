@@ -42,10 +42,7 @@ function Education({ formData, setFormData }) {
       description: "",
     }
 
-    updateParent([
-      ...education,
-      newEducation,
-    ])
+    updateParent([...education, newEducation])
   }
 
   // =====================================================
@@ -71,7 +68,6 @@ function Education({ formData, setFormData }) {
             ...item,
             [field]: value,
 
-            // Clear end date when currently studying
             ...(field === "current" && value
               ? { endDate: "" }
               : {}),
@@ -88,56 +84,69 @@ function Education({ formData, setFormData }) {
 
   const inputClass = `
     w-full
-    rounded-buildcv-lg
+    rounded-lg
     border
-    border-buildcv-border
-    bg-buildcv-background
+    border-[#E2E8F0]
+    bg-white
     px-4
     py-3
     text-sm
     font-medium
-    text-buildcv-text
+    text-[#111827]
     outline-none
     transition-all
     duration-200
-    placeholder:text-buildcv-text-muted
-    hover:border-buildcv-border-strong
-    focus:border-buildcv-indigo
-    focus:bg-buildcv-navy
+    placeholder:text-[#718096]
+    hover:border-[#CBD5E1]
+    focus:border-[#6366F1]
     focus:ring-4
-    focus:ring-buildcv-indigo/10
+    focus:ring-[#6366F1]/10
+    disabled:cursor-not-allowed
+    disabled:bg-[#F8FAFC]
+    disabled:text-[#94A3B8]
+  `
+
+  const labelClass = `
+    mb-2
+    block
+    text-sm
+    font-semibold
+    text-[#111827]
   `
 
   return (
     <section
       className="
+        flex
+        min-h-0
+        flex-col
         overflow-hidden
-        rounded-buildcv-2xl
+        rounded-xl
         border
-        border-buildcv-border
-        bg-buildcv-card
-        shadow-buildcv-md
+        border-[#E2E8F0]
+        bg-white
+        shadow-sm
       "
     >
-
       {/* =====================================================
           HEADER
       ====================================================== */}
 
       <div
         className="
+          shrink-0
           border-b
-          border-buildcv-border
+          border-[#E2E8F0]
+          bg-white
           px-5
-          py-6
+          py-5
           sm:px-7
-          sm:py-7
+          sm:py-6
         "
       >
-
         <div className="flex items-start gap-4">
 
-          {/* Icon */}
+          {/* ICON */}
 
           <div
             className="
@@ -147,14 +156,13 @@ function Education({ formData, setFormData }) {
               shrink-0
               items-center
               justify-center
-              rounded-buildcv-md
+              rounded-lg
               border
-              border-buildcv-indigo/20
-              bg-buildcv-indigo/10
-              text-buildcv-indigo
+              border-[#E0E7FF]
+              bg-[#EEF2FF]
+              text-[#6366F1]
             "
           >
-
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -180,33 +188,37 @@ function Education({ formData, setFormData }) {
                 d="M8 6h8M8 10h8"
               />
             </svg>
-
           </div>
 
-          {/* Header text */}
+          {/* HEADER TEXT */}
 
           <div className="min-w-0">
 
-            <span
-              className="
-                text-[11px]
-                font-bold
-                uppercase
-                tracking-[0.16em]
-                text-buildcv-indigo
-              "
-            >
-              Step 4
-            </span>
+            <div className="flex items-center gap-2">
+
+              <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
+
+              <span
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.16em]
+                  text-[#6366F1]
+                "
+              >
+                Step 02
+              </span>
+
+            </div>
 
             <h2
               className="
                 mt-1
-                font-display
                 text-2xl
                 font-bold
                 tracking-tight
-                text-buildcv-primary
+                text-[#111827]
                 sm:text-3xl
               "
             >
@@ -219,7 +231,7 @@ function Education({ formData, setFormData }) {
                 max-w-xl
                 text-sm
                 leading-6
-                text-buildcv-text-secondary
+                text-[#718096]
               "
             >
               Add your academic background, degrees,
@@ -227,17 +239,24 @@ function Education({ formData, setFormData }) {
             </p>
 
           </div>
-
         </div>
-
       </div>
 
-
       {/* =====================================================
-          CONTENT
+          SCROLLABLE CONTENT
       ====================================================== */}
 
-      <div className="p-5 sm:p-7">
+      <div
+        className="
+          min-h-0
+          flex-1
+          overflow-y-auto
+          px-5
+          py-5
+          sm:px-7
+          sm:py-6
+        "
+      >
 
         {/* =====================================================
             EDUCATION ENTRIES
@@ -250,21 +269,20 @@ function Education({ formData, setFormData }) {
             <article
               key={item.id}
               className="
-                rounded-buildcv-xl
+                rounded-xl
                 border
-                border-buildcv-border
-                bg-buildcv-background
+                border-[#E2E8F0]
+                bg-[#F8FAFC]
                 p-5
-                transition-colors
+                transition-all
                 duration-200
-                hover:border-buildcv-border-strong
+                hover:border-[#CBD5E1]
+                hover:bg-white
                 sm:p-6
               "
             >
 
-              {/* =================================================
-                  ENTRY HEADER
-              ================================================= */}
+              {/* ENTRY HEADER */}
 
               <div
                 className="
@@ -278,26 +296,47 @@ function Education({ formData, setFormData }) {
 
                 <div className="min-w-0">
 
-                  <span
-                    className="
-                      text-[10px]
-                      font-bold
-                      uppercase
-                      tracking-[0.14em]
-                      text-buildcv-indigo
-                    "
-                  >
-                    Education {index + 1}
-                  </span>
+                  <div className="flex items-center gap-2">
+
+                    <span
+                      className="
+                        flex
+                        h-7
+                        w-7
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-lg
+                        bg-[#EEF2FF]
+                        text-xs
+                        font-bold
+                        text-[#6366F1]
+                      "
+                    >
+                      {index + 1}
+                    </span>
+
+                    <span
+                      className="
+                        text-[10px]
+                        font-bold
+                        uppercase
+                        tracking-[0.14em]
+                        text-[#6366F1]
+                      "
+                    >
+                      Education
+                    </span>
+
+                  </div>
 
                   <h3
                     className="
-                      mt-1
+                      mt-2
                       truncate
-                      font-display
                       text-lg
                       font-bold
-                      text-buildcv-primary
+                      text-[#111827]
                     "
                   >
                     {item.degree || "New Education"}
@@ -312,25 +351,26 @@ function Education({ formData, setFormData }) {
                   }
                   className="
                     shrink-0
-                    rounded-buildcv-md
+                    rounded-lg
                     border
-                    border-red-400/10
+                    border-[#E2E8F0]
+                    bg-white
                     px-3
                     py-2
                     text-xs
                     font-semibold
-                    text-red-400
+                    text-[#718096]
                     transition-all
                     duration-200
-                    hover:border-red-400/20
-                    hover:bg-red-400/10
+                    hover:border-red-200
+                    hover:bg-red-50
+                    hover:text-red-500
                   "
                 >
                   Remove
                 </button>
 
               </div>
-
 
               {/* =================================================
                   FIELDS
@@ -344,13 +384,7 @@ function Education({ formData, setFormData }) {
 
                   <label
                     htmlFor={`degree-${item.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-buildcv-text
-                    "
+                    className={labelClass}
                   >
                     Degree / Qualification
                   </label>
@@ -372,20 +406,13 @@ function Education({ formData, setFormData }) {
 
                 </div>
 
-
                 {/* INSTITUTION */}
 
                 <div>
 
                   <label
                     htmlFor={`institution-${item.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-buildcv-text
-                    "
+                    className={labelClass}
                   >
                     Institution
                   </label>
@@ -407,20 +434,13 @@ function Education({ formData, setFormData }) {
 
                 </div>
 
-
                 {/* LOCATION */}
 
                 <div>
 
                   <label
                     htmlFor={`education-location-${item.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-buildcv-text
-                    "
+                    className={labelClass}
                   >
                     Location
                   </label>
@@ -442,20 +462,13 @@ function Education({ formData, setFormData }) {
 
                 </div>
 
-
                 {/* START DATE */}
 
                 <div>
 
                   <label
                     htmlFor={`education-start-${item.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-buildcv-text
-                    "
+                    className={labelClass}
                   >
                     Start Date
                   </label>
@@ -476,20 +489,13 @@ function Education({ formData, setFormData }) {
 
                 </div>
 
-
                 {/* END DATE */}
 
                 <div>
 
                   <label
                     htmlFor={`education-end-${item.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-buildcv-text
-                    "
+                    className={labelClass}
                   >
                     End Date
                   </label>
@@ -506,15 +512,10 @@ function Education({ formData, setFormData }) {
                         event.target.value
                       )
                     }
-                    className={`
-                      ${inputClass}
-                      disabled:cursor-not-allowed
-                      disabled:opacity-40
-                    `}
+                    className={inputClass}
                   />
 
                 </div>
-
 
                 {/* CURRENTLY STUDYING */}
 
@@ -522,11 +523,20 @@ function Education({ formData, setFormData }) {
 
                   <label
                     className="
-                      group
                       flex
                       cursor-pointer
                       items-center
                       gap-3
+                      rounded-lg
+                      border
+                      border-[#E2E8F0]
+                      bg-white
+                      px-4
+                      py-3
+                      transition-colors
+                      duration-200
+                      hover:border-[#E0E7FF]
+                      hover:bg-[#EEF2FF]/40
                     "
                   >
 
@@ -545,20 +555,12 @@ function Education({ formData, setFormData }) {
                         w-4
                         cursor-pointer
                         rounded
-                        border-buildcv-border
-                        accent-buildcv-indigo
+                        border-[#CBD5E1]
+                        accent-[#6366F1]
                       "
                     />
 
-                    <span
-                      className="
-                        text-sm
-                        font-medium
-                        text-buildcv-text-secondary
-                        transition-colors
-                        group-hover:text-buildcv-text
-                      "
-                    >
+                    <span className="text-sm font-medium text-[#475569]">
                       I am currently studying here
                     </span>
 
@@ -566,20 +568,13 @@ function Education({ formData, setFormData }) {
 
                 </div>
 
-
                 {/* DESCRIPTION */}
 
                 <div className="sm:col-span-2">
 
                   <label
                     htmlFor={`education-description-${item.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-buildcv-text
-                    "
+                    className={labelClass}
                   >
                     Description
                   </label>
@@ -603,6 +598,10 @@ function Education({ formData, setFormData }) {
                     `}
                   />
 
+                  <p className="mt-1.5 text-xs text-[#718096]">
+                    Keep this concise and focus on relevant achievements.
+                  </p>
+
                 </div>
 
               </div>
@@ -613,7 +612,6 @@ function Education({ formData, setFormData }) {
 
         </div>
 
-
         {/* =====================================================
             EMPTY STATE
         ====================================================== */}
@@ -622,11 +620,11 @@ function Education({ formData, setFormData }) {
 
           <div
             className="
-              rounded-buildcv-xl
+              rounded-xl
               border
               border-dashed
-              border-buildcv-border
-              bg-buildcv-background
+              border-[#E2E8F0]
+              bg-[#F8FAFC]
               px-6
               py-12
               text-center
@@ -641,13 +639,11 @@ function Education({ formData, setFormData }) {
                 w-12
                 items-center
                 justify-center
-                rounded-full
-                border
-                border-buildcv-indigo/5
-                bg-buildcv-indigo/10
-                text-lg
+                rounded-xl
+                bg-[#EEF2FF]
+                text-xl
                 font-bold
-                text-buildcv-indigo
+                text-[#6366F1]
               "
             >
               +
@@ -656,10 +652,9 @@ function Education({ formData, setFormData }) {
             <h3
               className="
                 mt-4
-                font-display
                 text-lg
                 font-bold
-                text-buildcv-primary
+                text-[#111827]
               "
             >
               Add your education
@@ -672,7 +667,7 @@ function Education({ formData, setFormData }) {
                 max-w-md
                 text-sm
                 leading-6
-                text-buildcv-text-secondary
+                text-[#718096]
               "
             >
               Add your degree, university, college,
@@ -684,7 +679,6 @@ function Education({ formData, setFormData }) {
 
         )}
 
-
         {/* =====================================================
             ADD EDUCATION
         ====================================================== */}
@@ -693,30 +687,44 @@ function Education({ formData, setFormData }) {
           type="button"
           onClick={addEducation}
           className="
-            mt-6
+            mt-5
             flex
             w-full
             items-center
             justify-center
             gap-2
-            rounded-buildcv-lg
+            rounded-lg
             border
             border-dashed
-            border-buildcv-indigo/30
-            bg-buildcv-indigo/5
+            border-[#C7D2FE]
+            bg-[#EEF2FF]
             px-5
             py-3.5
             text-sm
             font-semibold
-            text-buildcv-indigo
+            text-[#4F46E5]
             transition-all
             duration-200
-            hover:border-buildcv-indigo/50
-            hover:bg-buildcv-indigo/10
+            hover:border-[#6366F1]
+            hover:bg-[#E0E7FF]
           "
         >
 
-          <span className="text-lg leading-none">
+          <span
+            className="
+              flex
+              h-5
+              w-5
+              items-center
+              justify-center
+              rounded-full
+              bg-[#6366F1]
+              text-sm
+              font-bold
+              leading-none
+              text-white
+            "
+          >
             +
           </span>
 
@@ -725,7 +733,6 @@ function Education({ formData, setFormData }) {
         </button>
 
       </div>
-
     </section>
   )
 }

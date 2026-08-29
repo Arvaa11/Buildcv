@@ -1,155 +1,219 @@
-import { jsPDF } from "jspdf"
+import html2pdf from "html2pdf.js"
 
-const pageMargin = 18
-const pageBottom = 282
+// =====================================================
+// DOWNLOAD RESUME PDF
+// =====================================================
 
-const formatDate = (value) => {
-  if (!value) return ""
+export async function downloadResumePdf(formData = {}) {
+  const resume = document.getElementById("resume-preview")
 
-  const [year, month] = value.split("-")
+  // ---------------------------------------------------
+  // CHECK PREVIEW
+  // ---------------------------------------------------
 
-  if (!year || !month) return value
+  if (!resume) {
+    throw new Error(
+      "Resume preview element (#resume-preview) was not found."
+    )
+  }
 
-  return new Date(Number(year), Number(month) - 1)
-    .toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    })
-}
+  // ---------------------------------------------------
+  // GET NAME FROM COMMON DATA STRUCTURE
+  // ---------------------------------------------------
 
-const sanitizeFilename = (value) =>
-  (value || "BuildCV")
+  const fullName =
+    formData?.personal?.fullName ||
+    "BuildCV"
+
+  const safeName = String(fullName)
     .trim()
-    .replace(/[<>:"/\\|?*]|\p{Cc}/gu, "-") || "BuildCV"
+    .replace(/[<>:"/\\|?*]/g, "-")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
 
-export function downloadResumePdf(formData = {}) {
-  const pdf = new jsPDF({
-    unit: "mm",
-    format: "a4",
-    orientation: "portrait",
-    compress: true,
+  // ---------------------------------------------------
+  // CLONE EXACT RENDERED RESUME
+  // ---------------------------------------------------
+
+  const clone = resume.cloneNode(true)
+
+  clone.removeAttribute("id")
+
+  // ---------------------------------------------------
+  // PDF CONTAINER
+  // ---------------------------------------------------
+
+  const container = document.createElement("div")
+
+  container.style.position = "fixed"
+  container.style.left = "-100000px"
+  container.style.top = "0"
+  container.style.width = "794px"
+  container.style.minWidth = "794px"
+  container.style.backgroundColor = "#ffffff"
+  container.style.padding = "0"
+  container.style.margin = "0"
+  container.style.zIndex = "-9999"
+  container.style.overflow = "visible"
+
+  // ---------------------------------------------------
+  // CLONE STYLING
+  // ---------------------------------------------------
+
+  clone.style.width = "794px"
+  clone.style.minWidth = "794px"
+  clone.style.maxWidth = "794px"
+  clone.style.height = "auto"
+  clone.style.minHeight = "1123px"
+  clone.style.margin = "0"
+  clone.style.padding = "0"
+  clone.style.backgroundColor = "#ffffff"
+  clone.style.borderRadius = "0"
+  clone.style.boxShadow = "none"
+  clone.style.overflow = "visible"
+
+  container.appendChild(clone)
+  document.body.appendChild(container)
+
+  // ---------------------------------------------------
+  // REMOVE UI-ONLY ELEMENTS
+  // ---------------------------------------------------
+
+  clone
+    .querySelectorAll(
+      "[data-pdf-ignore='true']"
+    )
+    .forEach((element) => {
+      element.remove()
+    })
+
+  // ---------------------------------------------------
+  // WAIT FOR IMAGES
+  // ---------------------------------------------------
+
+  const images = Array.from(
+    clone.querySelectorAll("img")
+  )
+
+  await Promise.all(
+    images.map((img) => {
+      if (img.complete) {
+        return Promise.resolve()
+      }
+
+      return new Promise((resolve) => {
+        img.onload = resolve
+        img.onerror = resolve
+      })
+    })
+  )
+
+  // ---------------------------------------------------
+  // WAIT FOR FONTS
+  // ---------------------------------------------------
+
+  if (document.fonts?.ready) {
+    try {
+      await document.fonts.ready
+    } catch {
+      // Ignore font loading errors
+    }
+  }
+
+  // ---------------------------------------------------
+  // WAIT FOR BROWSER PAINT
+  // ---------------------------------------------------
+
+  await new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve)
+    })
   })
 
-  let cursorY = pageMargin
+  // ---------------------------------------------------
+  // PDF OPTIONS
+  // ---------------------------------------------------
 
-  const ensureSpace = (height) => {
-    if (cursorY + height <= pageBottom) return
+  const options = {
+    margin: 0,
 
-    pdf.addPage()
-    cursorY = pageMargin
+    filename: `${safeName}-Resume.pdf`,
+
+    image: {
+      type: "jpeg",
+      quality: 0.98,
+    },
+
+    html2canvas: {
+      scale: 2,
+
+      useCORS: true,
+
+      allowTaint: false,
+
+      backgroundColor: "#ffffff",
+
+      logging: false,
+
+      scrollX: 0,
+
+      scrollY: 0,
+
+      windowWidth: 794,
+
+      windowHeight: clone.scrollHeight,
+
+      width: 794,
+
+      height: clone.scrollHeight,
+    },
+
+    jsPDF: {
+      unit: "mm",
+
+      format: "a4",
+
+      orientation: "portrait",
+
+      compress: true,
+    },
+
+    pagebreak: {
+      mode: [
+        "css",
+        "legacy",
+      ],
+    },
   }
 
-  const writeLines = (text, size = 10, indent = pageMargin) => {
-    if (!text) return
+  // ---------------------------------------------------
+  // GENERATE PDF
+  // ---------------------------------------------------
 
-    pdf.setFontSize(size)
-    const lines = pdf.splitTextToSize(
-      String(text),
-      210 - pageMargin - indent
+  try {
+    await html2pdf()
+      .set(options)
+      .from(clone)
+      .save()
+  } catch (error) {
+    console.error(
+      "BuildCV PDF generation failed:",
+      error
     )
 
-    ensureSpace(lines.length * (size * 0.45) + 3)
-    pdf.text(lines, indent, cursorY)
-    cursorY += lines.length * (size * 0.45) + 3
+    throw new Error(
+      "Unable to generate the resume PDF. Please try again."
+    )
+  } finally {
+    // -------------------------------------------------
+    // CLEANUP
+    // -------------------------------------------------
+
+    if (
+      container &&
+      document.body.contains(container)
+    ) {
+      document.body.removeChild(container)
+    }
   }
-
-  const section = (title) => {
-    ensureSpace(12)
-    cursorY += 3
-    pdf.setDrawColor(79, 70, 229)
-    pdf.line(pageMargin, cursorY, 192, cursorY)
-    cursorY += 5
-    pdf.setFont("helvetica", "bold")
-    pdf.setTextColor(31, 41, 55)
-    pdf.setFontSize(11)
-    pdf.text(title.toUpperCase(), pageMargin, cursorY)
-    cursorY += 6
-    pdf.setFont("helvetica", "normal")
-  }
-
-  const contact = [
-    formData.email,
-    formData.phone,
-    formData.location,
-    formData.linkedin,
-    formData.github,
-  ].filter(Boolean).join("  •  ")
-
-  pdf.setTextColor(17, 24, 39)
-  pdf.setFont("helvetica", "bold")
-  pdf.setFontSize(22)
-  writeLines(formData.fullName || "Your Name", 22)
-
-  if (formData.jobTitle) {
-    pdf.setTextColor(79, 70, 229)
-    writeLines(formData.jobTitle, 12)
-  }
-
-  pdf.setTextColor(71, 85, 105)
-  writeLines(contact, 9)
-  pdf.setTextColor(31, 41, 55)
-
-  if (formData.summary) {
-    section("Professional Summary")
-    writeLines(formData.summary)
-  }
-
-  if (Array.isArray(formData.experience) && formData.experience.length) {
-    section("Experience")
-    formData.experience.forEach((entry) => {
-      ensureSpace(16)
-      pdf.setFont("helvetica", "bold")
-      writeLines(
-        [entry.position, entry.company].filter(Boolean).join(" — "),
-        10
-      )
-      pdf.setFont("helvetica", "normal")
-      writeLines(
-        [formatDate(entry.startDate), entry.current ? "Present" : formatDate(entry.endDate)]
-          .filter(Boolean)
-          .join(" – "),
-        8
-      )
-      writeLines(entry.description, 9)
-    })
-  }
-
-  if (Array.isArray(formData.education) && formData.education.length) {
-    section("Education")
-    formData.education.forEach((entry) => {
-      pdf.setFont("helvetica", "bold")
-      writeLines(
-        [entry.degree, entry.school].filter(Boolean).join(" — "),
-        10
-      )
-      pdf.setFont("helvetica", "normal")
-      writeLines(
-        [formatDate(entry.startDate), formatDate(entry.endDate)]
-          .filter(Boolean)
-          .join(" – "),
-        8
-      )
-    })
-  }
-
-  if (Array.isArray(formData.skills) && formData.skills.length) {
-    section("Skills")
-    writeLines(formData.skills.filter(Boolean).join("  •  "))
-  }
-
-  if (Array.isArray(formData.projects) && formData.projects.length) {
-    section("Projects")
-    formData.projects.forEach((entry) => {
-      pdf.setFont("helvetica", "bold")
-      writeLines(entry.name, 10)
-      pdf.setFont("helvetica", "normal")
-      writeLines(entry.description, 9)
-      writeLines(
-        [entry.liveUrl, entry.githubUrl].filter(Boolean).join("  •  "),
-        8
-      )
-    })
-  }
-
-  pdf.save(`${sanitizeFilename(formData.fullName)}-Resume.pdf`)
 }

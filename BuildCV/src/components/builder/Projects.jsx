@@ -42,7 +42,10 @@ function Projects({ formData, setFormData }) {
       githubUrl: "",
     }
 
-    updateParent([...projects, newProject])
+    updateParent([
+      ...projects,
+      newProject,
+    ])
   }
 
   // =====================================================
@@ -68,13 +71,14 @@ function Projects({ formData, setFormData }) {
   // =====================================================
 
   const updateProject = (id, field, value) => {
-    const updatedProjects = projects.map((project) =>
-      project.id === id
-        ? {
-          ...project,
-          [field]: value,
-        }
-        : project
+    const updatedProjects = projects.map(
+      (project) =>
+        project.id === id
+          ? {
+            ...project,
+            [field]: value,
+          }
+          : project
     )
 
     updateParent(updatedProjects)
@@ -163,77 +167,154 @@ function Projects({ formData, setFormData }) {
     }
   }
 
+  // =====================================================
+  // INPUT STYLE
+  // =====================================================
+
+  const inputClass = `
+    w-full
+    rounded-lg
+                  border
+                  border-[#E2E8F0]
+                  bg-white
+                  px-4
+                  py-3
+                  text-sm
+                  font-medium
+                  text-[#111827]
+                  outline-none
+                  transition-all
+                  duration-200
+                  placeholder:text-[#718096]
+                  hover:border-[#CBD5E1]
+                  focus:border-[#6366F1]
+                  focus:ring-4
+                  focus:ring-[#6366F1]/10
+  `
+
   return (
-    <div
+    <section
       className="
         overflow-hidden
         rounded-buildcv-2xl
         border
         border-buildcv-border
         bg-buildcv-card
-        shadow-buildcv-sm
+        shadow-buildcv-md
       "
     >
 
-      {/* =================================================
+      {/* =====================================================
           HEADER
-      ================================================= */}
+      ====================================================== */}
 
       <div
         className="
           border-b
           border-buildcv-border
-          px-6
+          bg-white
+          px-5
           py-6
-          sm:px-8
+          sm:px-7
+          sm:py-7
         "
       >
-        <span
-          className="
-            text-[11px]
-            font-bold
-            uppercase
-            tracking-[0.16em]
-            text-buildcv-indigo
-          "
-        >
-          Step 6
-        </span>
 
-        <h2
-          className="
-            mt-2
-            font-display
-            text-2xl
-            font-bold
-            tracking-tight
-            text-buildcv-primary
-            sm:text-3xl
-          "
-        >
-          Projects
-        </h2>
+        <div className="flex items-start gap-4">
 
-        <p
-          className="
-            mt-2
-            max-w-2xl
-            text-sm
-            leading-6
-            text-buildcv-text-secondary
-          "
-        >
-          Showcase projects that demonstrate your skills,
-          experience, and achievements.
-        </p>
+          {/* Icon */}
+
+          <div
+            className="
+              flex
+              h-11
+              w-11
+              shrink-0
+              items-center
+              justify-center
+              rounded-buildcv-md
+              border
+              border-[#E0E7FF]
+              bg-[#EEF2FF]
+              text-buildcv-indigo
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 7h18M5 7v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              />
+
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12h6M9 16h4"
+              />
+            </svg>
+          </div>
+
+          {/* Text */}
+
+          <div>
+
+            <p
+              className="
+                text-xs
+                font-bold
+                uppercase
+                tracking-[0.14em]
+                text-buildcv-indigo
+              "
+            >
+              Step 05
+            </p>
+
+            <h2
+              className="
+                mt-1.5
+                font-display
+                text-2xl
+                font-bold
+                tracking-tight
+                text-buildcv-text
+                sm:text-3xl
+              "
+            >
+              Projects
+            </h2>
+
+            <p
+              className="
+                mt-2
+                max-w-xl
+                text-sm
+                leading-6
+                text-buildcv-text-secondary
+              "
+            >
+              Showcase projects that demonstrate your skills,
+              experience, and achievements.
+            </p>
+
+          </div>
+
+        </div>
+
       </div>
 
 
-      {/* =================================================
+      {/* =====================================================
           CONTENT
-      ================================================= */}
+      ====================================================== */}
 
-      <div className="p-6 sm:p-8">
+      <div className="p-5 sm:p-7">
 
         {/* =================================================
             PROJECT LIST
@@ -247,15 +328,18 @@ function Projects({ formData, setFormData }) {
               project.technologies || []
 
             return (
-              <div
+
+              <article
                 key={project.id}
                 className="
                   rounded-buildcv-xl
                   border
                   border-buildcv-border
                   bg-buildcv-background
-                  hover:border-buildcv-border-strong
                   p-5
+                  transition-colors
+                  duration-200
+                  hover:border-buildcv-border-strong
                   sm:p-6
                 "
               >
@@ -276,9 +360,9 @@ function Projects({ formData, setFormData }) {
 
                   <div className="min-w-0">
 
-                    <span
+                    <p
                       className="
-                        text-[11px]
+                        text-[10px]
                         font-bold
                         uppercase
                         tracking-[0.14em]
@@ -286,7 +370,7 @@ function Projects({ formData, setFormData }) {
                       "
                     >
                       Project {index + 1}
-                    </span>
+                    </p>
 
                     <h3
                       className="
@@ -295,11 +379,26 @@ function Projects({ formData, setFormData }) {
                         font-display
                         text-lg
                         font-bold
-                        text-buildcv-primary
+                        text-buildcv-text
                       "
                     >
-                      {project.name || "New Project"}
+                      {project.name || "New project"}
                     </h3>
+
+                    {project.technologies?.length > 0 && (
+                      <p
+                        className="
+                          mt-1
+                          text-xs
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {project.technologies.length}{" "}
+                        {project.technologies.length === 1
+                          ? "technology"
+                          : "technologies"}
+                      </p>
+                    )}
 
                   </div>
 
@@ -315,7 +414,7 @@ function Projects({ formData, setFormData }) {
                       shrink-0
                       rounded-buildcv-md
                       border
-                      border-border-red-400/10
+                      border-red-400/10
                       px-3
                       py-2
                       text-xs
@@ -325,7 +424,6 @@ function Projects({ formData, setFormData }) {
                       duration-200
                       hover:border-red-400/20
                       hover:bg-red-400/10
-                    
                     "
                   >
                     Remove
@@ -340,7 +438,7 @@ function Projects({ formData, setFormData }) {
 
                 <div className="grid grid-cols-1 gap-5">
 
-                  {/* Project Name */}
+                  {/* PROJECT NAME */}
 
                   <div>
 
@@ -354,7 +452,7 @@ function Projects({ formData, setFormData }) {
                         text-buildcv-text
                       "
                     >
-                      Project Name
+                      Project name
                     </label>
 
                     <input
@@ -369,53 +467,45 @@ function Projects({ formData, setFormData }) {
                         )
                       }
                       placeholder="e.g. BuildCV Resume Builder"
-                      className="
-                        w-full
-    rounded-buildcv-lg
-    border
-    border-buildcv-border
-    bg-buildcv-background
-    px-4
-    py-3
-    text-sm
-    font-medium
-    text-buildcv-text
-    outline-none
-    transition-all
-    duration-200
-    placeholder:text-buildcv-text-muted
-    hover:border-buildcv-border-strong
-    focus:border-buildcv-indigo
-    focus:bg-buildcv-navy
-    focus:ring-4
-    focus:ring-buildcv-indigo/10
-                      "
+                      className={inputClass}
                     />
 
                   </div>
 
 
-                  {/* Description */}
+                  {/* DESCRIPTION */}
 
                   <div>
 
-                    <label
-                      htmlFor={`project-description-${project.id}`}
-                      className="
-                        mb-2
-                        block
-                        text-sm
-                        font-semibold
-                        text-buildcv-text
-                      "
-                    >
-                      Description
-                    </label>
+                    <div className="mb-2 flex items-center justify-between">
+
+                      <label
+                        htmlFor={`project-description-${project.id}`}
+                        className="
+                          text-sm
+                          font-semibold
+                          text-buildcv-text
+                        "
+                      >
+                        Description
+                      </label>
+
+                      <span
+                        className="
+                          text-[10px]
+                          text-buildcv-text-muted
+                        "
+                      >
+                        Optional
+                      </span>
+
+                    </div>
 
                     <textarea
                       id={`project-description-${project.id}`}
                       rows={5}
                       value={project.description || ""}
+                      maxLength={1000}
                       onChange={(event) =>
                         updateProject(
                           project.id,
@@ -424,44 +514,48 @@ function Projects({ formData, setFormData }) {
                         )
                       }
                       placeholder="Explain what you built, what problem it solved, and what you achieved..."
-                      className="
-                        w-full
-    rounded-buildcv-lg
-    border
-    border-buildcv-border
-    bg-buildcv-background
-    px-4
-    py-3
-    text-sm
-    font-medium
-    text-buildcv-text
-    outline-none
-    transition-all
-    duration-200
-    placeholder:text-buildcv-text-muted
-    hover:border-buildcv-border-strong
-    focus:border-buildcv-indigo
-    focus:bg-buildcv-navy
-    focus:ring-4
-    focus:ring-buildcv-indigo/10
-                      "
+                      className={`
+                        ${inputClass}
+                        resize-none
+                        leading-6
+                      `}
                     />
 
-                    <p
+                    <div
                       className="
                         mt-2
-                        text-xs
-                        text-buildcv-text-muted
+                        flex
+                        items-center
+                        justify-between
                       "
                     >
-                      Focus on what you built, the problem you
-                      solved, and the result.
-                    </p>
+
+                      <p
+                        className="
+                          text-xs
+                          text-buildcv-text-muted
+                        "
+                      >
+                        Focus on the problem, your solution,
+                        and the result.
+                      </p>
+
+                      <span
+                        className="
+                          shrink-0
+                          text-[10px]
+                          text-buildcv-text-muted
+                        "
+                      >
+                        {project.description?.length || 0}/1000
+                      </span>
+
+                    </div>
 
                   </div>
 
 
-                  {/* Technologies */}
+                  {/* TECHNOLOGIES */}
 
                   <div>
 
@@ -509,27 +603,10 @@ function Projects({ formData, setFormData }) {
                           )
                         }
                         placeholder="e.g. React"
-                        className="
-                          w-full
-    rounded-buildcv-lg
-    border
-    border-buildcv-border
-    bg-buildcv-background
-    px-4
-    py-3
-    text-sm
-    font-medium
-    text-buildcv-text
-    outline-none
-    transition-all
-    duration-200
-    placeholder:text-buildcv-text-muted
-    hover:border-buildcv-border-strong
-    focus:border-buildcv-indigo
-    focus:bg-buildcv-navy
-    focus:ring-4
-    focus:ring-buildcv-indigo/10
-                        "
+                        className={`
+                          ${inputClass}
+                          sm:flex-1
+                        `}
                       />
 
                       <button
@@ -538,25 +615,22 @@ function Projects({ formData, setFormData }) {
                           addTechnology(project.id)
                         }
                         className="
-                          w-full
-    rounded-buildcv-lg
-    border
-    border-buildcv-border
-    bg-buildcv-background
-    px-4
-    py-3
-    text-sm
-    font-medium
-    text-buildcv-text
-    outline-none
-    transition-all
-    duration-200
-    placeholder:text-buildcv-text-muted
-    hover:border-buildcv-border-strong
-    focus:border-buildcv-indigo
-    focus:bg-buildcv-navy
-    focus:ring-4
-    focus:ring-buildcv-indigo/10
+                          rounded-buildcv-lg
+                          border
+                          border-buildcv-indigo/30
+                          bg-buildcv-indigo/10
+                          px-6
+                          py-3
+                          text-sm
+                          font-semibold
+                          text-buildcv-indigo
+                          transition-all
+                          duration-200
+                          hover:border-buildcv-indigo/50
+                          hover:bg-buildcv-indigo/20
+                          focus:outline-none
+                          focus:ring-4
+                          focus:ring-buildcv-indigo
                         "
                       >
                         Add
@@ -565,7 +639,7 @@ function Projects({ formData, setFormData }) {
                     </div>
 
 
-                    {/* Technology Tags */}
+                    {/* TECHNOLOGY TAGS */}
 
                     {technologies.length > 0 && (
 
@@ -589,7 +663,7 @@ function Projects({ formData, setFormData }) {
                                 gap-2
                                 rounded-full
                                 border
-                                border-buildcv-border
+                                border-buildcv-indigo/20
                                 bg-buildcv-indigo/10
                                 px-3
                                 py-1.5
@@ -620,9 +694,10 @@ function Projects({ formData, setFormData }) {
                                   justify-center
                                   rounded-full
                                   text-buildcv-indigo
-                                  transition-colors
+                                  transition-all
+                                  duration-150
                                   hover:bg-buildcv-indigo
-                                  hover:text-buildcv-primary
+                                  hover:text-white
                                 "
                               >
                                 ×
@@ -652,7 +727,7 @@ function Projects({ formData, setFormData }) {
 
 
                   {/* =======================================
-                      LINKS
+                      PROJECT LINKS
                   ======================================= */}
 
                   <div
@@ -664,7 +739,7 @@ function Projects({ formData, setFormData }) {
                     "
                   >
 
-                    {/* Live Demo */}
+                    {/* LIVE DEMO */}
 
                     <div>
 
@@ -675,10 +750,10 @@ function Projects({ formData, setFormData }) {
                           block
                           text-sm
                           font-semibold
-                          text-buildcv-primary
+                          text-buildcv-text
                         "
                       >
-                        Live Demo URL
+                        Live demo URL
                       </label>
 
                       <input
@@ -693,29 +768,14 @@ function Projects({ formData, setFormData }) {
                           )
                         }
                         placeholder="https://example.com"
-                        className="
-                          w-full
-                          rounded-buildcv-md
-                          border
-                          border-buildcv-border
-                          bg-buildcv-navy
-                          px-4
-                          py-3
-                          text-sm
-                          text-buildcv-primary
-                          outline-none
-                          transition-all
-                          placeholder:text-buildcv-text-muted
-                          focus:border-buildcv-indigo/60
-                          focus:ring-4
-                          focus:ring-buildcv-indigo/10
-                        "
+                        autoComplete="url"
+                        className={inputClass}
                       />
 
                     </div>
 
 
-                    {/* GitHub */}
+                    {/* GITHUB */}
 
                     <div>
 
@@ -726,7 +786,7 @@ function Projects({ formData, setFormData }) {
                           block
                           text-sm
                           font-semibold
-                          text-buildcv-primary
+                          text-buildcv-text
                         "
                       >
                         GitHub URL
@@ -744,23 +804,8 @@ function Projects({ formData, setFormData }) {
                           )
                         }
                         placeholder="https://github.com/username/project"
-                        className="
-                          w-full
-                          rounded-buildcv-md
-                          border
-                          border-buildcv-border
-                          bg-buildcv-navy
-                          px-4
-                          py-3
-                          text-sm
-                          text-buildcv-primary
-                          outline-none
-                          transition-all
-                          placeholder:text-buildcv-text-muted
-                          focus:border-buildcv-indigo/60
-                          focus:ring-4
-                          focus:ring-buildcv-indigo/10
-                        "
+                        autoComplete="url"
+                        className={inputClass}
                       />
 
                     </div>
@@ -769,7 +814,7 @@ function Projects({ formData, setFormData }) {
 
                 </div>
 
-              </div>
+              </article>
             )
           })}
 
@@ -805,9 +850,10 @@ function Projects({ formData, setFormData }) {
                 justify-center
                 rounded-full
                 border
-                border-buildcv-gold/20
-                bg-buildcv-gold/10
+                border-buildcv-indigo/20
+                bg-buildcv-indigo/10
                 text-xl
+                font-bold
                 text-buildcv-indigo
               "
             >
@@ -820,7 +866,7 @@ function Projects({ formData, setFormData }) {
                 font-display
                 text-lg
                 font-bold
-                text-buildcv-primary
+                text-buildcv-text
               "
             >
               Add your projects
@@ -846,7 +892,7 @@ function Projects({ formData, setFormData }) {
 
 
         {/* =================================================
-            ADD PROJECT
+            ADD PROJECT BUTTON
         ================================================= */}
 
         <button
@@ -859,33 +905,37 @@ function Projects({ formData, setFormData }) {
             items-center
             justify-center
             gap-2
-            rounded-buildcv-md
+            rounded-buildcv-lg
             border
             border-dashed
-            border-buildcv-indigo/40
+            border-buildcv-indigo/30
             bg-buildcv-indigo/5
             px-5
-            py-3
+            py-3.5
             text-sm
             font-semibold
             text-buildcv-indigo
             transition-all
             duration-200
-            hover:border-buildcv-indigo
-            hover:bg-buildcv-indigo
-            hover:text-buildcv-primary
+            hover:border-buildcv-indigo/50
+            hover:bg-buildcv-indigo/10
+            focus:outline-none
+            focus:ring-4
+            focus:ring-buildcv-indigo/10
           "
         >
+
           <span className="text-lg leading-none">
             +
           </span>
 
-          Add Another Project
+          Add another project
+
         </button>
 
       </div>
 
-    </div>
+    </section>
   )
 }
 

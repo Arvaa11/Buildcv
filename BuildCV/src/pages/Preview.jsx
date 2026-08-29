@@ -1,392 +1,254 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
-import html2pdf from "html2pdf.js"
-import { downloadResumePdf } from "../utils/downloadResumePdf"
 
 import { templates } from "../data/templates"
-import ResumePreview from "../components/builder/ResumePreview"
+import ResumePreview from "../components/ResumePreview"
+import { downloadResumePdf } from "../utils/downloadResumePdf"
+
+// =====================================================
+// STORAGE KEYS
+// =====================================================
+
+const FORM_DATA_KEY = "buildcv-form-data"
+const TEMPLATE_STORAGE_KEY = "buildcv-selected-template"
+
+// =====================================================
+// DEFAULT FORM DATA
+// =====================================================
 
 const defaultFormData = {
+  personal: {
+    fullName: "",
+    jobTitle: "",
+    email: "",
+    phone: "",
+    location: "",
+    linkedin: "",
+    github: "",
+    summary: "",
+  },
+
   profileImage: "",
 
-  fullName: "",
-  jobTitle: "",
-  email: "",
-  phone: "",
-  location: "",
-  linkedin: "",
-  github: "",
-
-  summary: "",
-
-  experience: [],
   education: [],
+  experience: [],
   skills: [],
   projects: [],
 }
 
+// =====================================================
+// NORMALIZE FORM DATA
+// =====================================================
+
+function normalizeFormData(data) {
+  if (!data || typeof data !== "object") {
+    return defaultFormData
+  }
+
+  /*
+   * Your Builder stores personal information
+   * inside formData.personal.
+   *
+   * We preserve that structure here.
+   */
+
+  return {
+    ...defaultFormData,
+    ...data,
+
+    personal: {
+      ...defaultFormData.personal,
+      ...(data.personal || {}),
+    },
+
+    education: Array.isArray(data.education)
+      ? data.education
+      : [],
+
+    experience: Array.isArray(data.experience)
+      ? data.experience
+      : [],
+
+    skills: Array.isArray(data.skills)
+      ? data.skills
+      : [],
+
+    projects: Array.isArray(data.projects)
+      ? data.projects
+      : [],
+  }
+}
+
+// =====================================================
+// LOAD FORM DATA
+// =====================================================
+
+function loadFormData() {
+  try {
+    const savedData =
+      localStorage.getItem(FORM_DATA_KEY)
+
+    if (!savedData) {
+      return defaultFormData
+    }
+
+    return normalizeFormData(
+      JSON.parse(savedData)
+    )
+  } catch (error) {
+    console.error(
+      "Failed to load BuildCV resume data:",
+      error
+    )
+
+    return defaultFormData
+  }
+}
+
+// =====================================================
+// LOAD TEMPLATE
+// =====================================================
+
+function loadTemplate() {
+  try {
+    return (
+      localStorage.getItem(
+        TEMPLATE_STORAGE_KEY
+      ) || "modern"
+    )
+  } catch (error) {
+    console.error(
+      "Failed to load selected template:",
+      error
+    )
+
+    return "modern"
+  }
+}
+
+// =====================================================
+// CHECK RESUME CONTENT
+// =====================================================
+
+function hasResumeContent(formData) {
+  const personal = formData?.personal || {}
+
+  return Boolean(
+    personal.fullName?.trim() ||
+      personal.jobTitle?.trim() ||
+      personal.email?.trim() ||
+      personal.phone?.trim() ||
+      personal.location?.trim() ||
+      personal.linkedin?.trim() ||
+      personal.github?.trim() ||
+      personal.summary?.trim() ||
+      formData?.profileImage ||
+      formData?.experience?.length ||
+      formData?.education?.length ||
+      formData?.skills?.length ||
+      formData?.projects?.length
+  )
+}
+
+// =====================================================
+// COMPONENT
+// =====================================================
+
 function Preview() {
-  const [formData, setFormData] = useState(defaultFormData)
+  const [formData, setFormData] = useState(
+    loadFormData
+  )
 
   const [selectedTemplate, setSelectedTemplate] =
-    useState("modern-professional")
+    useState(loadTemplate)
 
   const [isDownloading, setIsDownloading] =
     useState(false)
 
-  const currentTemplate = templates.find(
-    (template) =>
-      template.id === selectedTemplate
-  )
+  // ===================================================
+  // CURRENT TEMPLATE
+  // ===================================================
 
-  // =========================================================
-  // LOAD RESUME DATA
-  // =========================================================
+  const currentTemplate = useMemo(() => {
+    return (
+      templates.find(
+        (template) =>
+          template.id === selectedTemplate
+      ) || templates[0]
+    )
+  }, [selectedTemplate])
+
+  // ===================================================
+  // LOAD DATA WHEN PAGE OPENS
+  // ===================================================
 
   useEffect(() => {
     const savedData =
-      localStorage.getItem("buildcv-form-data")
+      loadFormData()
 
     const savedTemplate =
-      localStorage.getItem("buildcv-template")
+      loadTemplate()
 
-    // Load resume data
-    if (savedData) {
-      try {
-        const parsedData = JSON.parse(savedData)
+    setFormData(savedData)
+    setSelectedTemplate(savedTemplate)
+  }, [])
 
-        setFormData({
-          ...defaultFormData,
-          ...parsedData,
-        })
-      } catch (error) {
-        console.error(
-          "Could not load resume data:",
-          error
-        )
-      }
+  // ===================================================
+  // KEEP PREVIEW UPDATED
+  // ===================================================
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setFormData(loadFormData())
+      setSelectedTemplate(loadTemplate())
     }
 
-    // Load selected template
-    if (savedTemplate) {
-      setSelectedTemplate(savedTemplate)
+    window.addEventListener(
+      "storage",
+      handleStorageChange
+    )
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        handleStorageChange
+      )
     }
   }, [])
 
-  // =========================================================
-  // WAIT FOR IMAGES
-  // =========================================================
-
-  const waitForImages = async (element) => {
-    const images = Array.from(
-      element.querySelectorAll("img")
-    )
-
-    await Promise.all(
-      images.map((image) => {
-        if (image.complete) {
-          return Promise.resolve()
-        }
-
-        return new Promise((resolve) => {
-          image.onload = resolve
-          image.onerror = resolve
-        })
-      })
-    )
-  }
-
-  // =========================================================
+  // ===================================================
   // DOWNLOAD PDF
-  // =========================================================
+  // ===================================================
 
-  const downloadResume = async () => {
-    if (!window.__BUILDCV_USE_LEGACY_PDF_EXPORT__) {
-      downloadResumePdf(formData)
+  const handleDownload = async () => {
+    if (isDownloading) return
+
+    if (!hasResumeContent(formData)) {
+      alert(
+        "Please add some resume information before downloading."
+      )
+
       return
     }
-
-    const resume =
-      document.getElementById("resume-preview")
-
-    if (!resume) {
-      alert("Resume preview not found.")
-      return
-    }
-
-    const resumeName = (
-      formData.fullName || "BuildCV"
-    )
-      .trim()
-      .replace(/[<>:"/\\|?*]|\p{Cc}/gu, "-") || "BuildCV"
 
     setIsDownloading(true)
 
-    let pdfContainer = null
-
     try {
-      // =====================================================
-      // CLONE RESUME
-      // =====================================================
+      /*
+       * IMPORTANT:
+       *
+       * downloadResumePdf should export
+       * the same #resume-preview element
+       * that the user sees on this page.
+       *
+       * Therefore we don't create another
+       * fake resume layout here.
+       */
 
-      const clone =
-        resume.cloneNode(true)
-
-      clone.removeAttribute("id")
-      clone.removeAttribute("class")
-      clone.classList.add("pdf-resume")
-
-      // =====================================================
-      // PDF CONTAINER
-      // =====================================================
-
-      pdfContainer =
-        document.createElement("div")
-
-      pdfContainer.style.position = "absolute"
-      pdfContainer.style.left = "-9999px"
-      pdfContainer.style.top = "0"
-      pdfContainer.style.width = "794px"
-      pdfContainer.style.minHeight = "1123px"
-      pdfContainer.style.background = "#ffffff"
-      pdfContainer.style.padding = "0"
-      pdfContainer.style.margin = "0"
-      pdfContainer.style.zIndex = "-9999"
-      pdfContainer.style.color = "#111827"
-      pdfContainer.style.overflow = "visible"
-
-      // =====================================================
-      // PDF FRIENDLY STYLING
-      // =====================================================
-
-      clone.style.width = "794px"
-      clone.style.minHeight = "1123px"
-      clone.style.background = "#ffffff"
-      clone.style.backgroundColor = "#ffffff"
-      clone.style.color = "#111827"
-      clone.style.border = "none"
-      clone.style.borderRadius = "0"
-      clone.style.boxShadow = "none"
-      clone.style.overflow = "visible"
-
-      clone.style.fontFamily = "Arial, sans-serif"
-      clone.style.fontSize = "12px"
-      clone.style.lineHeight = "1.5"
-
-      clone.style.setProperty(
-        "background-color",
-        "#ffffff",
-        "important"
-      )
-
-      clone.style.setProperty(
-        "color",
-        "#111827",
-        "important"
-      )
-
-      clone.style.setProperty(
-        "border",
-        "none",
-        "important"
-      )
-
-      clone.style.setProperty(
-        "border-radius",
-        "0",
-        "important"
-      )
-
-      clone.style.setProperty(
-        "box-shadow",
-        "none",
-        "important"
-      )
-
-      // =====================================================
-      // REMOVE UI SHADOWS
-      // =====================================================
-
-      clone
-        .querySelectorAll("*")
-        .forEach((element) => {
-          element.removeAttribute("class")
-          element.style.boxShadow = "none"
-          element.style.textShadow = "none"
-          element.style.setProperty(
-            "color",
-            "#111827",
-            "important"
-          )
-          element.style.setProperty(
-            "background-color",
-            "transparent",
-            "important"
-          )
-          element.style.setProperty(
-            "background-image",
-            "none",
-            "important"
-          )
-          element.style.setProperty(
-            "border-color",
-            "#e2e8f0",
-            "important"
-          )
-        })
-
-      // =====================================================
-      // SAFE BACKGROUND COLORS
-      // =====================================================
-
-      const backgroundSelectors = [
-        ".bg-buildcv-background",
-        ".bg-buildcv-surface",
-        ".bg-buildcv-card",
-        ".bg-buildcv-charcoal",
-        ".bg-buildcv-dark",
-      ]
-
-      backgroundSelectors.forEach((selector) => {
-        clone
-          .querySelectorAll(selector)
-          .forEach((element) => {
-            element.style.setProperty(
-              "background-color",
-              "#ffffff",
-              "important"
-            )
-          })
-      })
-
-      // =====================================================
-      // SAFE TEXT COLORS
-      // =====================================================
-
-      const textColors = {
-        ".text-buildcv-text": "#111827",
-        ".text-buildcv-text-secondary":
-          "#374151",
-        ".text-buildcv-text-muted":
-          "#6b7280",
-        ".text-buildcv-charcoal":
-          "#111827",
-        ".text-buildcv-gold":
-          "#6366f1",
-      }
-
-      Object.entries(textColors).forEach(
-        ([selector, color]) => {
-          clone
-            .querySelectorAll(selector)
-            .forEach((element) => {
-              element.style.setProperty(
-                "color",
-                color,
-                "important"
-              )
-            })
-        }
-      )
-
-      // =====================================================
-      // SAFE BORDERS
-      // =====================================================
-
-      clone
-        .querySelectorAll(
-          ".border-buildcv-border"
-        )
-        .forEach((element) => {
-          element.style.setProperty(
-            "border-color",
-            "#e5e7eb",
-            "important"
-          )
-        })
-
-      // =====================================================
-      // ADD TO DOCUMENT
-      // =====================================================
-
-      pdfContainer.appendChild(clone)
-
-      document.body.appendChild(
-        pdfContainer
-      )
-
-      // =====================================================
-      // WAIT FOR IMAGES
-      // =====================================================
-
-      await waitForImages(clone)
-
-      // =====================================================
-      // WAIT FOR RENDER
-      // =====================================================
-
-      await new Promise((resolve) => {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(resolve)
-        })
-      })
-
-      await new Promise((resolve) => {
-        setTimeout(resolve, 300)
-      })
-
-      // =====================================================
-      // PDF OPTIONS
-      // =====================================================
-
-      const options = {
-        margin: 0,
-
-        filename: `${resumeName}-Resume.pdf`,
-
-        image: {
-          type: "jpeg",
-          quality: 0.98,
-        },
-
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#ffffff",
-          logging: false,
-          width: 794,
-          windowWidth: 794,
-          scrollX: 0,
-          scrollY: 0,
-        },
-
-        jsPDF: {
-          unit: "mm",
-          format: "a4",
-          orientation: "portrait",
-          compress: true,
-        },
-
-        pagebreak: {
-          mode: [
-            "css",
-            "legacy",
-          ],
-        },
-      }
-
-      // =====================================================
-      // GENERATE PDF
-      // =====================================================
-
-      await html2pdf()
-        .set(options)
-        .from(clone)
-        .save()
+      await downloadResumePdf(formData)
     } catch (error) {
       console.error(
-        "PDF ERROR:",
+        "Failed to download resume:",
         error
       )
 
@@ -394,68 +256,45 @@ function Preview() {
         "Could not create the PDF. Please try again."
       )
     } finally {
-      // =====================================================
-      // CLEANUP
-      // =====================================================
-
-      if (
-        pdfContainer &&
-        document.body.contains(
-          pdfContainer
-        )
-      ) {
-        document.body.removeChild(
-          pdfContainer
-        )
-      }
-
       setIsDownloading(false)
     }
   }
 
-  // =========================================================
-  // CHECK IF RESUME HAS CONTENT
-  // =========================================================
+  // ===================================================
+  // RESUME STATUS
+  // ===================================================
 
   const hasResume =
-    formData.fullName ||
-    formData.jobTitle ||
-    formData.email ||
-    formData.summary ||
-    formData.experience?.length ||
-    formData.education?.length ||
-    formData.skills?.length ||
-    formData.projects?.length
+    hasResumeContent(formData)
 
-  // =========================================================
+  // ===================================================
   // RENDER
-  // =========================================================
+  // ===================================================
 
   return (
-    <section
+    <main
       className="
         min-h-screen
-        bg-buildcv-background
-        text-buildcv-text
+        bg-slate-950
+        text-white
       "
     >
 
-      {/* =====================================================
+      {/* =================================================
           HEADER
-      ===================================================== */}
+      ================================================= */}
 
       <header
         className="
           sticky
           top-0
-          z-40
+          z-50
           border-b
-          border-buildcv-border
-          bg-buildcv-background/90
+          border-white/10
+          bg-slate-950/90
           backdrop-blur-xl
         "
       >
-
         <div
           className="
             mx-auto
@@ -476,22 +315,18 @@ function Preview() {
           <Link
             to="/"
             className="
-              font-display
               text-xl
               font-extrabold
               tracking-tight
-              text-buildcv-text
-              transition-colors
-              duration-200
-              hover:text-buildcv-violet
+              transition
+              hover:opacity-80
             "
           >
             Build
-            <span className="text-buildcv-violet">
+            <span className="text-indigo-400">
               CV
             </span>
           </Link>
-
 
           {/* ACTIONS */}
 
@@ -504,138 +339,96 @@ function Preview() {
             "
           >
 
-            {/* BACK */}
-
             <Link
               to="/builder"
               className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-buildcv-md
+                rounded-xl
                 border
-                border-buildcv-border
-                bg-buildcv-surface
-                px-3
-                py-2.5
-                text-xs
-                font-semibold
-                text-buildcv-text
-                transition-all
-                duration-300
-                hover:-translate-y-0.5
-                hover:border-buildcv-border-violet
-                hover:bg-buildcv-violet-50
-                hover:text-buildcv-violet
-                sm:px-4
-                sm:text-sm
-              "
-            >
-
-              <span>←</span>
-
-              <span className="hidden sm:inline">
-                Back to Builder
-              </span>
-
-              <span className="sm:hidden">
-                Builder
-              </span>
-
-            </Link>
-
-
-            {/* DOWNLOAD */}
-
-            <button
-              type="button"
-              onClick={downloadResume}
-              disabled={
-                isDownloading ||
-                !hasResume
-              }
-              className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-buildcv-md
-                bg-buildcv-violet
+                border-white/10
+                bg-white/5
                 px-3
                 py-2.5
                 text-xs
                 font-bold
-                text-buildcv-white
-                shadow-buildcv-violet
-                transition-all
-                duration-300
-                hover:-translate-y-0.5
-                hover:bg-buildcv-violet-600
-                hover:shadow-buildcv-lg
-                disabled:cursor-not-allowed
-                disabled:opacity-50
+                text-slate-200
+                transition
+                hover:border-indigo-400/40
+                hover:bg-indigo-500/10
+                hover:text-indigo-300
                 sm:px-4
                 sm:text-sm
               "
             >
-
-              <span>
-                {isDownloading
-                  ? "..."
-                  : "↓"}
+              <span className="sm:hidden">
+                Builder
               </span>
 
               <span className="hidden sm:inline">
-                {isDownloading
-                  ? "Creating PDF..."
-                  : "Download PDF"}
+                ← Back to Builder
               </span>
+            </Link>
 
-              <span className="sm:hidden">
-                PDF
-              </span>
-
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={
+                isDownloading || !hasResume
+              }
+              className="
+                rounded-xl
+                bg-indigo-500
+                px-3
+                py-2.5
+                text-xs
+                font-bold
+                text-white
+                transition
+                hover:bg-indigo-600
+                disabled:cursor-not-allowed
+                disabled:opacity-40
+                sm:px-5
+                sm:text-sm
+              "
+            >
+              {isDownloading
+                ? "Creating PDF..."
+                : "↓ Download PDF"}
             </button>
 
           </div>
-
         </div>
-
       </header>
 
-
-      {/* =====================================================
+      {/* =================================================
           PAGE CONTENT
-      ===================================================== */}
+      ================================================= */}
 
       <div
         className="
           relative
           mx-auto
           max-w-7xl
-          overflow-hidden
           px-5
-          py-12
+          py-10
           sm:px-6
-          sm:py-16
+          sm:py-14
           lg:px-8
-          lg:py-20
+          lg:py-16
         "
       >
 
-        {/* ===================================================
-            BACKGROUND GLOW
-        =================================================== */}
+        {/* BACKGROUND GLOW */}
 
         <div
           className="
             pointer-events-none
             absolute
-            -left-56
-            top-20
-            h-[420px]
-            w-[420px]
+            left-[-180px]
+            top-[100px]
+            h-[400px]
+            w-[400px]
             rounded-full
-            bg-buildcv-violet/8
+            bg-indigo-500/10
             blur-[130px]
           "
         />
@@ -644,22 +437,21 @@ function Preview() {
           className="
             pointer-events-none
             absolute
-            -right-56
-            bottom-20
-            h-[420px]
-            w-[420px]
+            bottom-[100px]
+            right-[-180px]
+            h-[400px]
+            w-[400px]
             rounded-full
-            bg-buildcv-accent/5
+            bg-violet-500/10
             blur-[130px]
           "
         />
 
+        {/* =================================================
+            PAGE INTRO
+        ================================================= */}
 
-        {/* ===================================================
-            PAGE HEADER
-        =================================================== */}
-
-        <div
+        <section
           className="
             relative
             mx-auto
@@ -668,8 +460,6 @@ function Preview() {
           "
         >
 
-          {/* BADGE */}
-
           <span
             className="
               inline-flex
@@ -677,105 +467,92 @@ function Preview() {
               gap-2
               rounded-full
               border
-              border-buildcv-border-violet
-              bg-buildcv-violet-50
-              px-3.5
-              py-1.5
-              text-xs
+              border-indigo-400/20
+              bg-indigo-500/10
+              px-4
+              py-2
+              text-[11px]
               font-bold
               uppercase
-              tracking-[0.12em]
-              text-buildcv-violet
+              tracking-[0.14em]
+              text-indigo-300
             "
           >
-
             <span
               className="
                 h-1.5
                 w-1.5
                 rounded-full
-                bg-buildcv-violet
+                bg-indigo-400
               "
             />
 
             Final Preview
-
           </span>
-
-
-          {/* TITLE */}
 
           <h1
             className="
               mt-5
-              font-display
               text-3xl
               font-extrabold
-              leading-[1.1]
               tracking-tight
-              text-buildcv-text
               sm:text-4xl
               lg:text-5xl
             "
           >
-
-            Your resume is
-
+            Your resume is{" "}
             <span
               className="
-                buildcv-gradient-text
+                bg-gradient-to-r
+                from-indigo-400
+                to-violet-400
+                bg-clip-text
+                text-transparent
               "
             >
-              {" "}ready to review.
+              ready to review.
             </span>
-
           </h1>
-
-
-          {/* DESCRIPTION */}
 
           <p
             className="
               mx-auto
-              mt-5
+              mt-4
               max-w-2xl
               text-sm
               leading-7
-              text-buildcv-text-secondary
+              text-slate-400
               sm:text-base
-              sm:leading-8
             "
           >
-            Review your resume below, make any
-            final changes in the builder, and
-            download your professional PDF when
-            you're ready.
+            Review your resume exactly as it
+            will appear in the selected template.
+            You can return to the builder anytime
+            to make changes.
           </p>
 
-        </div>
+        </section>
 
+        {/* =================================================
+            TEMPLATE BAR
+        ================================================= */}
 
-        {/* ===================================================
-            TEMPLATE INFO
-        =================================================== */}
-
-        <div
+        <section
           className="
             relative
             mx-auto
-            mt-9
+            mt-8
             flex
             max-w-4xl
             flex-col
             items-center
             justify-between
             gap-4
-            rounded-buildcv-xl
+            rounded-2xl
             border
-            border-buildcv-border
-            bg-buildcv-surface
+            border-white/10
+            bg-white/[0.03]
             p-4
-            shadow-buildcv-sm
             sm:flex-row
             sm:px-5
           "
@@ -789,56 +566,76 @@ function Preview() {
                 font-bold
                 uppercase
                 tracking-[0.14em]
-                text-buildcv-text-muted
+                text-slate-500
               "
             >
               Selected template
             </p>
 
-            <p
+            <div
               className="
                 mt-1
-                text-sm
-                font-bold
-                capitalize
-                text-buildcv-text
+                flex
+                items-center
+                justify-center
+                gap-2
+                sm:justify-start
               "
             >
-              {currentTemplate?.name ||
-                "Modern"}
-            </p>
+
+              <span
+                className="h-2.5 w-2.5 rounded-full"
+                style={{
+                  backgroundColor:
+                    currentTemplate?.accent ||
+                    "#6366f1",
+                }}
+              />
+
+              <p
+                className="
+                  text-sm
+                  font-bold
+                  text-white
+                "
+              >
+                {currentTemplate?.name ||
+                  "Modern"}
+              </p>
+
+            </div>
 
           </div>
 
-
           <Link
-            to="/builder"
+            to="/templates"
             className="
-              rounded-full
-              px-3
-              py-1.5
+              rounded-xl
+              border
+              border-white/10
+              px-4
+              py-2
               text-xs
               font-bold
-              text-buildcv-violet
-              transition-all
-              duration-200
-              hover:bg-buildcv-violet-50
-              hover:text-buildcv-violet-600
+              text-indigo-300
+              transition
+              hover:border-indigo-400/30
+              hover:bg-indigo-500/10
               sm:text-sm
             "
           >
-            Change template →
+            Change Template →
           </Link>
 
-        </div>
+        </section>
 
+        {/* =================================================
+            RESUME PREVIEW
+        ================================================= */}
 
-        {/* ===================================================
-            RESUME
-        =================================================== */}
-
-        <div
+        <section
           className="
+            relative
             mx-auto
             mt-8
             max-w-[850px]
@@ -850,13 +647,9 @@ function Preview() {
             <div
               className="
                 overflow-hidden
-                rounded-buildcv-2xl
-                border
-                border-buildcv-border
+                rounded-2xl
                 bg-white
-                shadow-buildcv-xl
-                ring-1
-                ring-white/5
+                shadow-[0_30px_80px_rgba(0,0,0,0.35)]
               "
             >
 
@@ -877,15 +670,14 @@ function Preview() {
 
             <div
               className="
-                rounded-buildcv-2xl
+                rounded-2xl
                 border
                 border-dashed
-                border-buildcv-border-strong
-                bg-buildcv-surface
+                border-white/10
+                bg-white/[0.03]
                 px-6
                 py-20
                 text-center
-                shadow-buildcv-lg
               "
             >
 
@@ -898,31 +690,24 @@ function Preview() {
                   items-center
                   justify-center
                   rounded-2xl
-                  border
-                  border-buildcv-border-violet
-                  bg-buildcv-violet-50
-                  font-display
+                  bg-indigo-500/10
                   text-xl
                   font-extrabold
-                  text-buildcv-violet
+                  text-indigo-400
                 "
               >
                 CV
               </div>
 
-
               <h2
                 className="
                   mt-6
-                  font-display
                   text-xl
                   font-bold
-                  text-buildcv-text
                 "
               >
                 Your resume is still empty
               </h2>
-
 
               <p
                 className="
@@ -931,15 +716,13 @@ function Preview() {
                   max-w-md
                   text-sm
                   leading-6
-                  text-buildcv-text-secondary
+                  text-slate-400
                 "
               >
                 Add your personal information,
-                experience, education, and skills
-                in the builder to see your resume
-                here.
+                education, experience, skills,
+                and projects in the builder.
               </p>
-
 
               <Link
                 to="/builder"
@@ -948,23 +731,18 @@ function Preview() {
                   inline-flex
                   items-center
                   gap-2
-                  rounded-buildcv-md
-                  bg-buildcv-violet
+                  rounded-xl
+                  bg-indigo-500
                   px-6
                   py-3
                   text-sm
                   font-bold
-                  text-buildcv-white
-                  shadow-buildcv-violet
-                  transition-all
-                  duration-300
-                  hover:-translate-y-1
-                  hover:bg-buildcv-violet-600
-                  hover:shadow-buildcv-lg
+                  text-white
+                  transition
+                  hover:bg-indigo-600
                 "
               >
                 Start Building
-
                 <span>→</span>
               </Link>
 
@@ -972,12 +750,11 @@ function Preview() {
 
           )}
 
-        </div>
+        </section>
 
-
-        {/* ===================================================
+        {/* =================================================
             BOTTOM ACTION
-        =================================================== */}
+        ================================================= */}
 
         {hasResume && (
           <div
@@ -986,20 +763,20 @@ function Preview() {
               mx-auto
               mt-8
               flex
-              max-w-4xl
               flex-col
               items-center
               justify-center
-              gap-3
+              gap-2
               text-center
               sm:flex-row
+              sm:gap-3
             "
           >
 
             <p
               className="
                 text-xs
-                text-buildcv-text-muted
+                text-slate-500
               "
             >
               Need to make changes?
@@ -1010,9 +787,9 @@ function Preview() {
               className="
                 text-xs
                 font-bold
-                text-buildcv-violet
-                transition-colors
-                hover:text-buildcv-violet-400
+                text-indigo-400
+                transition
+                hover:text-indigo-300
                 sm:text-sm
               "
             >
@@ -1023,8 +800,7 @@ function Preview() {
         )}
 
       </div>
-
-    </section>
+    </main>
   )
 }
 
