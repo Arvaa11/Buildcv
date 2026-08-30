@@ -125,104 +125,131 @@ function TemplateSelector({
     <section className="min-w-0 space-y-8 p-7">
 
       {/* =================================================
-          HERO
-      ================================================= */}
+    HERO
+================================================= */}
 
       <div
         className="
-          relative
-          overflow-hidden
-          rounded-3xl
-          border
-          border-buildcv-border
-          bg-buildcv-background
-          px-8
-          py-10
-          shadow-buildcv-sm
-          lg:px-10
-          lg:py-12
-        "
+    relative
+    overflow-hidden
+    rounded-3xl
+    border
+    border-buildcv-border
+    bg-buildcv-surface
+    px-8
+    py-10
+    shadow-buildcv-md
+    lg:px-10
+    lg:py-12
+  "
       >
+        {/* Ambient violet glow */}
         <div
           className="
-            pointer-events-none
-            absolute
-            -right-24
-            -top-24
-            h-72
-            w-72
-            rounded-full
-            bg-buildcv-indigo/10
-            blur-3xl
-          "
+      pointer-events-none
+      absolute
+      -right-24
+      -top-28
+      h-80
+      w-80
+      rounded-full
+      bg-buildcv-violet-50
+      opacity-80
+      blur-3xl
+    "
+        />
+
+        <div
+          className="
+      pointer-events-none
+      absolute
+      -bottom-32
+      left-1/3
+      h-64
+      w-64
+      rounded-full
+      bg-buildcv-indigo-50
+      opacity-60
+      blur-3xl
+    "
         />
 
         <div className="relative">
 
+          {/* Step Badge */}
           <div
             className="
-              mb-5
-              inline-flex
-              items-center
-              gap-2
-              rounded-full
-              border
-              border-buildcv-indigo/30
-              bg-buildcv-indigo/10
-              px-4
-              py-2
-              text-[11px]
-              font-bold
-              uppercase
-              tracking-[0.15em]
-              text-buildcv-indigo
-            "
+        mb-6
+        inline-flex
+        items-center
+        gap-2.5
+        rounded-full
+        border
+        border-buildcv-border-violet
+        bg-buildcv-violet-50
+        px-4
+        py-2
+        text-[11px]
+        font-bold
+        uppercase
+        tracking-[0.15em]
+        text-buildcv-violet
+      "
           >
             <span
               className="
-                h-2
-                w-2
-                rounded-full
-                bg-buildcv-indigo
-              "
+          h-2
+          w-2
+          rounded-full
+          bg-buildcv-violet
+        "
             />
 
             Step 1 · Choose your design
           </div>
 
+          {/* Heading */}
           <h1
             className="
-              max-w-4xl
-              font-display
-              text-4xl
-              font-extrabold
-              leading-[1.08]
-              tracking-tight
-              text-buildcv-text
-              sm:text-5xl
-            "
+        max-w-4xl
+        font-display
+        text-4xl
+        font-extrabold
+        leading-[1.08]
+        tracking-tight
+        text-buildcv-text
+        sm:text-5xl
+      "
           >
             Build a resume that
-            <span className="block text-buildcv-violet">
+
+            <span
+              className="
+          block
+          text-buildcv-violet
+        "
+            >
               looks as good as it reads.
             </span>
           </h1>
 
+          {/* Description */}
           <p
             className="
-              mt-5
-              max-w-2xl
-              text-base
-              leading-7
-              text-buildcv-text-secondary
-              sm:text-lg
-            "
+        mt-5
+        max-w-2xl
+        text-base
+        leading-7
+        text-buildcv-text-secondary
+        sm:text-lg
+      "
           >
             Choose a professionally designed template
             and create a resume that looks polished,
             modern, and professional.
           </p>
 
+          {/* Stats */}
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
 
             <StatCard
@@ -241,9 +268,9 @@ function TemplateSelector({
             />
 
           </div>
+
         </div>
       </div>
-
       {/* =================================================
           FIND YOUR TEMPLATE
       ================================================= */}
@@ -255,7 +282,7 @@ function TemplateSelector({
           rounded-3xl
           border
           border-buildcv-indigo/20
-          bg-white
+          bg-buildcv-ink
           shadow-buildcv-sm
         "
       >
@@ -299,7 +326,7 @@ function TemplateSelector({
                   font-display
                   text-lg
                   font-bold
-                  text-buildcv-text
+                  text-white
                   sm:text-xl
                 "
               >
@@ -330,26 +357,51 @@ function TemplateSelector({
               setShowRecommendation(true)
             }
             className="
-              inline-flex
-              shrink-0
-              items-center
-              justify-center
-              gap-2
-              rounded-xl
-              bg-buildcv-indigo
-              px-6
-              py-3.5
-              text-sm
-              font-bold
-              text-white
-              shadow-lg
-              transition-all
-              duration-200
-              hover:-translate-y-1
-              hover:bg-buildcv-indigo-600
-            "
+    group
+    inline-flex
+    shrink-0
+    items-center
+    justify-center
+    gap-2.5
+    rounded-xl
+    bg-buildcv-violet
+    px-6
+    py-3.5
+    text-sm
+    font-bold
+    text-white
+    shadow-buildcv-violet
+    transition-all
+    duration-200
+    hover:-translate-y-0.5
+    hover:bg-buildcv-violet-600
+    active:translate-y-0
+    active:scale-[0.98]
+  "
           >
-            ✦ Find My Template
+            <span
+              className="
+      text-base
+      transition-transform
+      duration-200
+      group-hover:rotate-12
+    "
+            >
+              ✦
+            </span>
+
+            Find My Template
+
+            <span
+              className="
+      text-base
+      transition-transform
+      duration-200
+      group-hover:translate-x-1
+    "
+            >
+              →
+            </span>
           </button>
 
         </div>
@@ -404,10 +456,9 @@ function TemplateSelector({
                     text-sm
                     font-semibold
                     transition-all
-                    ${
-                      isActive
-                        ? "bg-buildcv-indigo text-white shadow-md"
-                        : "text-buildcv-text-secondary hover:bg-buildcv-border hover:text-buildcv-text"
+                    ${isActive
+                      ? "bg-buildcv-indigo text-white shadow-md"
+                      : "text-buildcv-text-secondary hover:bg-buildcv-border hover:text-buildcv-text"
                     }
                   `}
                 >
@@ -496,24 +547,40 @@ function TemplateSelector({
             type="button"
             onClick={handleContinue}
             className="
-              rounded-xl
-              bg-buildcv-indigo
-              px-7
-              py-3.5
-              text-sm
-              font-bold
-              text-white
-              shadow-xl
-              transition
-              hover:bg-buildcv-indigo-600
-            "
+    group
+    rounded-xl
+    bg-buildcv-violet
+    px-7
+    py-3.5
+    text-sm
+    font-bold
+    text-white
+    shadow-buildcv-violet
+    transition-all
+    duration-200
+    hover:-translate-y-0.5
+    hover:bg-buildcv-violet-600
+    active:translate-y-0
+    active:scale-[0.98]
+  "
           >
             Continue with{" "}
             {templates.find(
               (template) =>
                 template.id === selectedTemplate
             )?.name || "Template"}
-            →
+
+            <span
+              className="
+      ml-1.5
+      inline-block
+      transition-transform
+      duration-200
+      group-hover:translate-x-1
+    "
+            >
+              →
+            </span>
           </button>
         </div>
       )}
@@ -547,25 +614,30 @@ function TemplateSelector({
 /* =========================================================
    STAT CARD
 ========================================================= */
-
 function StatCard({ label, value }) {
   return (
     <div
       className="
+        group
         rounded-2xl
         border
         border-buildcv-border
-        bg-buildcv-background
+        bg-buildcv-surface-soft
         px-5
         py-4
+        transition-all
+        duration-200
+        hover:-translate-y-0.5
+        hover:border-buildcv-border-violet
+        hover:bg-buildcv-violet-50
       "
     >
       <p
         className="
-          text-[11px]
+          text-[10px]
           font-bold
           uppercase
-          tracking-wider
+          tracking-[0.14em]
           text-buildcv-text-muted
         "
       >
@@ -574,10 +646,14 @@ function StatCard({ label, value }) {
 
       <p
         className="
-          mt-1
+          mt-1.5
           text-base
           font-bold
+          tracking-tight
           text-buildcv-text
+          transition-colors
+          duration-200
+          group-hover:text-buildcv-violet
         "
       >
         {value}
@@ -607,10 +683,9 @@ function TemplateCard({
         bg-buildcv-background
         transition-all
         duration-300
-        ${
-          isSelected
-            ? "border-buildcv-indigo shadow-[0_20px_55px_rgba(99,102,241,0.20)]"
-            : "border-buildcv-border shadow-buildcv-sm hover:-translate-y-2 hover:border-buildcv-indigo/50"
+        ${isSelected
+          ? "border-buildcv-indigo shadow-[0_20px_55px_rgba(99,102,241,0.20)]"
+          : "border-buildcv-border shadow-buildcv-sm hover:-translate-y-2 hover:border-buildcv-indigo/50"
         }
       `}
     >
@@ -781,10 +856,9 @@ function TemplateCard({
               text-sm
               font-bold
               transition-all
-              ${
-                isSelected
-                  ? "bg-buildcv-indigo text-white"
-                  : "bg-buildcv-indigo/5 text-buildcv-text hover:bg-buildcv-indigo hover:text-white"
+              ${isSelected
+                ? "bg-buildcv-indigo text-white"
+                : "bg-buildcv-indigo/5 text-buildcv-text hover:bg-buildcv-indigo hover:text-white"
               }
             `}
           >
@@ -1132,11 +1206,10 @@ function TemplateRecommendation({
               duration-300
             "
             style={{
-              width: `${
-                (step /
-                  questions.length) *
+              width: `${(step /
+                questions.length) *
                 100
-              }%`,
+                }%`,
             }}
           />
 

@@ -197,400 +197,563 @@ function ModernPreview({ formData = {} }) {
   return (
     <div
       className="
-        min-h-[1123px]
+        h-full
         w-full
         overflow-hidden
         bg-[#FFFFFF]
-        px-6
-        py-6
         text-[#111827]
       "
     >
-      {/* =================================================
-          HEADER
-      ================================================= */}
+      <div
+        className="
+          min-h-[1123px]
+          w-full
+          bg-[#FFFFFF]
+          px-6
+          py-6
+        "
+      >
 
-      <header>
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
-        <div className="flex items-start justify-between gap-4">
+        <header>
 
-          {/* NAME + TITLE */}
+          <div
+            className="
+              flex
+              items-start
+              justify-between
+              gap-4
+            "
+          >
 
-          <div className="min-w-0 flex-1">
+            {/* NAME + TITLE */}
 
-            {displayPersonal.fullName && (
-              <h1
+            <div className="min-w-0 flex-1">
+
+              {displayPersonal.fullName && (
+                <h1
+                  className="
+                    break-words
+                    text-[16px]
+                    font-bold
+                    leading-tight
+                    tracking-tight
+                    text-[#111827]
+                  "
+                >
+                  {displayPersonal.fullName}
+                </h1>
+              )}
+
+              {displayPersonal.jobTitle && (
+                <p
+                  className="
+                    mt-1
+                    break-words
+                    text-[7px]
+                    font-semibold
+                    uppercase
+                    tracking-[0.16em]
+                    text-[#6366F1]
+                  "
+                >
+                  {displayPersonal.jobTitle}
+                </p>
+              )}
+
+            </div>
+
+            {/* PROFILE IMAGE */}
+
+            {displayPersonal.profileImage ? (
+              <img
+                src={displayPersonal.profileImage}
+                alt=""
                 className="
-                  break-words
-                  text-[16px]
+                  h-16
+                  w-16
+                  shrink-0
+                  rounded-full
+                  object-cover
+                  ring-2
+                  ring-[#EEF2FF]
+                "
+              />
+            ) : (
+              <div
+                className="
+                  flex
+                  h-16
+                  w-16
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-[#EEF2FF]
+                  text-[12px]
                   font-bold
-                  leading-tight
-                  tracking-tight
-                  text-[#111827]
-                "
-              >
-                {displayPersonal.fullName}
-              </h1>
-            )}
-
-            {displayPersonal.jobTitle && (
-              <p
-                className="
-                  mt-1
-                  break-words
-                  text-[7px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.16em]
+                  tracking-wide
                   text-[#6366F1]
+                  ring-2
+                  ring-[#EEF2FF]
                 "
               >
-                {displayPersonal.jobTitle}
-              </p>
+                {getInitials(
+                  displayPersonal.fullName
+                )}
+              </div>
             )}
 
           </div>
 
-          {/* PROFILE IMAGE */}
+          {/* CONTACT */}
 
-          {displayPersonal.profileImage ? (
-            <img
-              src={displayPersonal.profileImage}
-              alt=""
-              className="
-                h-12
-                w-12
-                shrink-0
-                rounded-full
-                object-cover
-                ring-2
-                ring-[#EEF2FF]
-              "
-            />
-          ) : (
-            <div
-              className="
-                flex
-                h-12
-                w-12
-                shrink-0
-                items-center
-                justify-center
-                rounded-full
-                bg-[#EEF2FF]
-                text-[10px]
-                font-bold
-                text-[#6366F1]
-              "
-            >
-              {getInitials(displayPersonal.fullName)}
-            </div>
-          )}
-
-        </div>
-
-        {/* CONTACT */}
-
-        <div
-          className="
-            mt-3
-            flex
-            flex-wrap
-            gap-x-3
-            gap-y-1
-            text-[5px]
-            text-[#718096]
-          "
-        >
-
-          {displayPersonal.email && (
-            <span>{displayPersonal.email}</span>
-          )}
-
-          {displayPersonal.phone && (
-            <span>{displayPersonal.phone}</span>
-          )}
-
-          {displayPersonal.location && (
-            <span>{displayPersonal.location}</span>
-          )}
-
-          {displayPersonal.linkedin && (
-            <span>{displayPersonal.linkedin}</span>
-          )}
-
-          {displayPersonal.github && (
-            <span>{displayPersonal.github}</span>
-          )}
-
-        </div>
-
-        <div
-          className="
-            my-4
-            h-px
-            bg-[#E2E8F0]
-          "
-        />
-
-      </header>
-
-      {/* =================================================
-          PROFILE
-      ================================================= */}
-
-      {displayPersonal.summary && (
-        <section className="mb-5">
-
-          <PreviewSectionTitle>
-            Profile
-          </PreviewSectionTitle>
-
-          <p
+          <div
             className="
-              mt-2
-              max-w-[95%]
-              text-[5.5px]
-              leading-[1.6]
-              text-[#475569]
+              mt-3
+              flex
+              flex-wrap
+              gap-x-3
+              gap-y-1
+              text-[5px]
+              leading-[1.4]
+              text-[#718096]
             "
           >
-            {displayPersonal.summary}
-          </p>
 
-        </section>
-      )}
+            {displayPersonal.email && (
+              <span>
+                {displayPersonal.email}
+              </span>
+            )}
 
-      {/* =================================================
-          EXPERIENCE
-      ================================================= */}
+            {displayPersonal.phone && (
+              <span>
+                {displayPersonal.phone}
+              </span>
+            )}
 
-      {displayExperience.length > 0 && (
-        <section className="mb-5">
+            {displayPersonal.location && (
+              <span>
+                {displayPersonal.location}
+              </span>
+            )}
 
-          <PreviewSectionTitle>
-            Experience
-          </PreviewSectionTitle>
+            {displayPersonal.linkedin && (
+              <span>
+                {displayPersonal.linkedin}
+              </span>
+            )}
 
-          <div className="mt-3 space-y-3.5">
+            {displayPersonal.github && (
+              <span>
+                {displayPersonal.github}
+              </span>
+            )}
 
-            {displayExperience
-              .slice(0, 3)
-              .map((item, index) => {
+          </div>
 
-                const title = getValue(
-                  item,
-                  [
-                    "position",
-                    "jobTitle",
-                    "title",
-                    "role",
-                  ]
-                )
+          <div
+            className="
+              my-5
+              h-px
+              bg-[#E2E8F0]
+            "
+          />
 
-                const company = getValue(
-                  item,
-                  [
-                    "company",
-                    "organization",
-                    "employer",
-                  ]
-                )
+        </header>
 
-                const startDate = getValue(
-                  item,
-                  [
-                    "startDate",
-                    "start",
-                    "from",
-                  ]
-                )
+        {/* =================================================
+            PROFILE
+        ================================================= */}
 
-                const endDate = getValue(
-                  item,
-                  [
-                    "endDate",
-                    "end",
-                    "to",
-                  ]
-                )
+        {displayPersonal.summary && (
+          <section className="mb-5">
 
-                const description = getValue(
-                  item,
-                  [
-                    "description",
-                    "details",
-                    "responsibilities",
-                  ]
-                )
+            <PreviewSectionTitle>
+              Profile
+            </PreviewSectionTitle>
 
-                return (
-                  <article
-                    key={item.id || index}
-                  >
+            <p
+              className="
+                mt-2
+                max-w-[95%]
+                text-[5.5px]
+                leading-[1.6]
+                text-[#475569]
+              "
+            >
+              {displayPersonal.summary}
+            </p>
 
-                    <div
-                      className="
-                        flex
-                        items-start
-                        justify-between
-                        gap-3
-                      "
+          </section>
+        )}
+
+        {/* =================================================
+            EXPERIENCE
+        ================================================= */}
+
+        {displayExperience.length > 0 && (
+          <section className="mb-5">
+
+            <PreviewSectionTitle>
+              Experience
+            </PreviewSectionTitle>
+
+            <div className="mt-3 space-y-3.5">
+
+              {displayExperience
+                .slice(0, 3)
+                .map((item, index) => {
+
+                  const title = getValue(
+                    item,
+                    [
+                      "position",
+                      "jobTitle",
+                      "title",
+                      "role",
+                    ]
+                  )
+
+                  const company = getValue(
+                    item,
+                    [
+                      "company",
+                      "organization",
+                      "employer",
+                    ]
+                  )
+
+                  const startDate = getValue(
+                    item,
+                    [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]
+                  )
+
+                  const endDate = getValue(
+                    item,
+                    [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]
+                  )
+
+                  const description = getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                      "responsibilities",
+                    ]
+                  )
+
+                  return (
+                    <article
+                      key={
+                        item?.id || index
+                      }
                     >
 
-                      <div className="min-w-0">
+                      <div
+                        className="
+                          flex
+                          items-start
+                          justify-between
+                          gap-3
+                        "
+                      >
 
-                        {title && (
-                          <h3
+                        <div className="min-w-0">
+
+                          {title && (
+                            <h3
+                              className="
+                                break-words
+                                text-[6.5px]
+                                font-semibold
+                                leading-tight
+                                text-[#111827]
+                              "
+                            >
+                              {title}
+                            </h3>
+                          )}
+
+                          {company && (
+                            <p
+                              className="
+                                mt-0.5
+                                break-words
+                                text-[5.2px]
+                                font-medium
+                                text-[#6366F1]
+                              "
+                            >
+                              {company}
+                            </p>
+                          )}
+
+                        </div>
+
+                        {(startDate ||
+                          endDate) && (
+                          <span
                             className="
-                              break-words
-                              text-[6.5px]
-                              font-semibold
-                              leading-tight
-                              text-[#111827]
+                              shrink-0
+                              whitespace-nowrap
+                              text-[4.7px]
+                              text-[#718096]
                             "
                           >
-                            {title}
-                          </h3>
-                        )}
+                            {startDate}
 
-                        {company && (
-                          <p
-                            className="
-                              mt-0.5
-                              break-words
-                              text-[5.2px]
-                              font-medium
-                              text-[#6366F1]
-                            "
-                          >
-                            {company}
-                          </p>
+                            {startDate &&
+                            endDate
+                              ? " — "
+                              : ""}
+
+                            {endDate}
+                          </span>
                         )}
 
                       </div>
 
-                      {(startDate || endDate) && (
-                        <span
+                      {description && (
+                        <p
                           className="
-                            shrink-0
-                            whitespace-nowrap
-                            text-[4.7px]
-                            text-[#718096]
+                            mt-1
+                            text-[5.2px]
+                            leading-[1.55]
+                            text-[#475569]
                           "
                         >
-                          {startDate}
-
-                          {startDate && endDate
-                            ? " — "
-                            : ""}
-
-                          {endDate}
-                        </span>
+                          {description}
+                        </p>
                       )}
 
-                    </div>
+                    </article>
+                  )
+                })}
 
-                    {description && (
-                      <p
+            </div>
+
+          </section>
+        )}
+
+        {/* =================================================
+            EDUCATION
+        ================================================= */}
+
+        {displayEducation.length > 0 && (
+          <section className="mb-5">
+
+            <PreviewSectionTitle>
+              Education
+            </PreviewSectionTitle>
+
+            <div className="mt-3 space-y-2.5">
+
+              {displayEducation
+                .slice(0, 2)
+                .map((item, index) => {
+
+                  const degree = getValue(
+                    item,
+                    [
+                      "degree",
+                      "qualification",
+                      "title",
+                      "program",
+                    ]
+                  )
+
+                  const field = getValue(
+                    item,
+                    [
+                      "field",
+                      "major",
+                      "specialization",
+                    ]
+                  )
+
+                  const institution = getValue(
+                    item,
+                    [
+                      "institution",
+                      "school",
+                      "university",
+                      "college",
+                    ]
+                  )
+
+                  const startDate = getValue(
+                    item,
+                    [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]
+                  )
+
+                  const endDate = getValue(
+                    item,
+                    [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]
+                  )
+
+                  return (
+                    <article
+                      key={
+                        item?.id || index
+                      }
+                    >
+
+                      <div
                         className="
-                          mt-1
-                          text-[5.2px]
-                          leading-[1.55]
-                          text-[#475569]
+                          flex
+                          items-start
+                          justify-between
+                          gap-3
                         "
                       >
-                        {description}
-                      </p>
-                    )}
 
-                  </article>
-                )
-              })}
+                        <div className="min-w-0">
 
-          </div>
+                          {degree && (
+                            <h3
+                              className="
+                                break-words
+                                text-[6.5px]
+                                font-semibold
+                                leading-tight
+                                text-[#111827]
+                              "
+                            >
+                              {degree}
 
-        </section>
-      )}
+                              {field
+                                ? ` — ${field}`
+                                : ""}
+                            </h3>
+                          )}
 
-      {/* =================================================
-          EDUCATION
-      ================================================= */}
+                          {institution && (
+                            <p
+                              className="
+                                mt-0.5
+                                break-words
+                                text-[5.2px]
+                                text-[#475569]
+                              "
+                            >
+                              {institution}
+                            </p>
+                          )}
 
-      {displayEducation.length > 0 && (
-        <section className="mb-5">
+                        </div>
 
-          <PreviewSectionTitle>
-            Education
-          </PreviewSectionTitle>
+                        {(startDate ||
+                          endDate) && (
+                          <span
+                            className="
+                              shrink-0
+                              whitespace-nowrap
+                              text-[4.7px]
+                              text-[#718096]
+                            "
+                          >
+                            {startDate}
 
-          <div className="mt-3 space-y-2.5">
+                            {startDate &&
+                            endDate
+                              ? " — "
+                              : ""}
 
-            {displayEducation
-              .slice(0, 2)
-              .map((item, index) => {
+                            {endDate}
+                          </span>
+                        )}
 
-                const degree = getValue(
-                  item,
-                  [
-                    "degree",
-                    "qualification",
-                    "title",
-                    "program",
-                  ]
-                )
+                      </div>
 
-                const field = getValue(
-                  item,
-                  [
-                    "field",
-                    "major",
-                    "specialization",
-                  ]
-                )
+                    </article>
+                  )
+                })}
 
-                const institution = getValue(
-                  item,
-                  [
-                    "institution",
-                    "school",
-                    "university",
-                    "college",
-                  ]
-                )
+            </div>
 
-                const startDate = getValue(
-                  item,
-                  [
-                    "startDate",
-                    "start",
-                    "from",
-                  ]
-                )
+          </section>
+        )}
 
-                const endDate = getValue(
-                  item,
-                  [
-                    "endDate",
-                    "end",
-                    "to",
-                  ]
-                )
+        {/* =================================================
+            PROJECTS
+        ================================================= */}
 
-                return (
-                  <div
-                    key={item.id || index}
-                    className="
-                      flex
-                      items-start
-                      justify-between
-                      gap-3
-                    "
-                  >
+        {displayProjects.length > 0 && (
+          <section className="mb-5">
 
-                    <div className="min-w-0">
+            <PreviewSectionTitle>
+              Projects
+            </PreviewSectionTitle>
 
-                      {degree && (
+            <div className="mt-3 space-y-2.5">
+
+              {displayProjects
+                .slice(0, 3)
+                .map((item, index) => {
+
+                  const name = getValue(
+                    item,
+                    [
+                      "name",
+                      "projectName",
+                      "title",
+                    ]
+                  )
+
+                  const technologies =
+                    getValue(
+                      item,
+                      [
+                        "technologies",
+                        "technology",
+                        "techStack",
+                        "stack",
+                      ]
+                    )
+
+                  const description =
+                    getValue(
+                      item,
+                      [
+                        "description",
+                        "details",
+                      ]
+                    )
+
+                  return (
+                    <article
+                      key={
+                        item?.id || index
+                      }
+                      className="
+                        border-l-2
+                        border-[#E0E7FF]
+                        pl-3
+                      "
+                    >
+
+                      {name && (
                         <h3
                           className="
                             break-words
@@ -600,216 +763,111 @@ function ModernPreview({ formData = {} }) {
                             text-[#111827]
                           "
                         >
-                          {degree}
-
-                          {field
-                            ? ` — ${field}`
-                            : ""}
+                          {name}
                         </h3>
                       )}
 
-                      {institution && (
+                      {technologies && (
                         <p
                           className="
                             mt-0.5
                             break-words
-                            text-[5.2px]
-                            text-[#475569]
+                            text-[4.7px]
+                            font-medium
+                            text-[#6366F1]
                           "
                         >
-                          {institution}
+                          {Array.isArray(
+                            technologies
+                          )
+                            ? technologies.join(
+                                " • "
+                              )
+                            : technologies}
                         </p>
                       )}
 
-                    </div>
+                      {description && (
+                        <p
+                          className="
+                            mt-1
+                            text-[5.2px]
+                            leading-[1.5]
+                            text-[#475569]
+                          "
+                        >
+                          {description}
+                        </p>
+                      )}
 
-                    {(startDate || endDate) && (
-                      <span
-                        className="
-                          shrink-0
-                          whitespace-nowrap
-                          text-[4.7px]
-                          text-[#718096]
-                        "
-                      >
-                        {startDate}
-
-                        {startDate && endDate
-                          ? " — "
-                          : ""}
-
-                        {endDate}
-                      </span>
-                    )}
-
-                  </div>
-                )
-              })}
-
-          </div>
-
-        </section>
-      )}
-
-      {/* =================================================
-          PROJECTS
-      ================================================= */}
-
-      {displayProjects.length > 0 && (
-        <section className="mb-5">
-
-          <PreviewSectionTitle>
-            Projects
-          </PreviewSectionTitle>
-
-          <div className="mt-3 space-y-2.5">
-
-            {displayProjects
-              .slice(0, 2)
-              .map((item, index) => {
-
-                const name = getValue(
-                  item,
-                  [
-                    "name",
-                    "projectName",
-                    "title",
-                  ]
-                )
-
-                const technologies =
-                  getValue(
-                    item,
-                    [
-                      "technologies",
-                      "technology",
-                      "techStack",
-                      "stack",
-                    ]
+                    </article>
                   )
+                })}
 
-                const description =
-                  getValue(
-                    item,
-                    [
-                      "description",
-                      "details",
-                    ]
+            </div>
+
+          </section>
+        )}
+
+        {/* =================================================
+            SKILLS
+        ================================================= */}
+
+        {displaySkills.length > 0 && (
+          <section>
+
+            <PreviewSectionTitle>
+              Skills
+            </PreviewSectionTitle>
+
+            <div
+              className="
+                mt-3
+                flex
+                flex-wrap
+                gap-x-2
+                gap-y-1.5
+              "
+            >
+
+              {displaySkills
+                .slice(0, 10)
+                .map((skill, index) => {
+
+                  const skillName =
+                    getSkillName(skill)
+
+                  if (!skillName) {
+                    return null
+                  }
+
+                  return (
+                    <span
+                      key={
+                        skill?.id || index
+                      }
+                      className="
+                        rounded
+                        bg-[#EEF2FF]
+                        px-1.5
+                        py-0.5
+                        text-[4.8px]
+                        font-medium
+                        leading-none
+                        text-[#6366F1]
+                      "
+                    >
+                      {skillName}
+                    </span>
                   )
+                })}
 
-                return (
-                  <div
-                    key={item.id || index}
-                  >
+            </div>
 
-                    {name && (
-                      <h3
-                        className="
-                          break-words
-                          text-[6.5px]
-                          font-semibold
-                          text-[#111827]
-                        "
-                      >
-                        {name}
-                      </h3>
-                    )}
+          </section>
+        )}
 
-                    {technologies && (
-                      <p
-                        className="
-                          mt-0.5
-                          break-words
-                          text-[4.7px]
-                          font-medium
-                          text-[#6366F1]
-                        "
-                      >
-                        {Array.isArray(technologies)
-                          ? technologies.join(" • ")
-                          : technologies}
-                      </p>
-                    )}
-
-                    {description && (
-                      <p
-                        className="
-                          mt-1
-                          text-[5.2px]
-                          leading-[1.5]
-                          text-[#475569]
-                        "
-                      >
-                        {description}
-                      </p>
-                    )}
-
-                  </div>
-                )
-              })}
-
-          </div>
-
-        </section>
-      )}
-
-      {/* =================================================
-          SKILLS
-      ================================================= */}
-
-      {displaySkills.length > 0 && (
-        <section>
-
-          <PreviewSectionTitle>
-            Skills
-          </PreviewSectionTitle>
-
-          <div
-            className="
-              mt-3
-              flex
-              flex-wrap
-              gap-x-2
-              gap-y-1.5
-            "
-          >
-
-            {displaySkills
-              .slice(0, 10)
-              .map((skill, index) => {
-
-                const skillName =
-                  getSkillName(skill)
-
-                if (!skillName) {
-                  return null
-                }
-
-                return (
-                  <span
-                    key={
-                      skill?.id || index
-                    }
-                    className="
-                      rounded
-                      bg-[#EEF2FF]
-                      px-1.5
-                      py-0.5
-                      text-[4.8px]
-                      font-medium
-                      text-[#6366F1]
-                    "
-                  >
-                    {skillName}
-                  </span>
-                )
-              })}
-
-          </div>
-
-        </section>
-      )}
-
+      </div>
     </div>
   )
 }
@@ -851,7 +909,7 @@ function PreviewSectionTitle({ children }) {
       <h2
         className="
           shrink-0
-          text-[6.5px]
+          text-[6px]
           font-bold
           uppercase
           tracking-[0.16em]
