@@ -1,18 +1,85 @@
 function ATSFocusPreview({ formData = {} }) {
+  // =====================================================
+  // PERSONAL DATA
+  // =====================================================
+
+  const personal = formData.personal || {}
+
   const {
-    fullName = "Sarah Thompson",
-    jobTitle = "Marketing Specialist",
-    email = "sarah@email.com",
-    phone = "+1 555 456 7890",
-    location = "New York, NY",
-    linkedin = "linkedin.com/in/sarah",
-    summary =
-      "Results-driven professional with experience in marketing, project coordination, data analysis, and developing strategies that support business growth.",
-    skills = [],
-    experience = [],
-    education = [],
-    projects = [],
-  } = formData
+    fullName = "",
+    jobTitle = "",
+    email = "",
+    phone = "",
+    location = "",
+    linkedin = "",
+    summary = "",
+    profileImage = "",
+  } = personal
+
+  // =====================================================
+  // OTHER DATA
+  // =====================================================
+
+  const skills = Array.isArray(formData.skills)
+    ? formData.skills
+    : []
+
+  const experience = Array.isArray(formData.experience)
+    ? formData.experience
+    : []
+
+  const education = Array.isArray(formData.education)
+    ? formData.education
+    : []
+
+  const projects = Array.isArray(formData.projects)
+    ? formData.projects
+    : []
+
+  // =====================================================
+  // CHECK WHETHER RESUME IS EMPTY
+  // =====================================================
+
+  const hasResumeData =
+    fullName.trim() ||
+    jobTitle.trim() ||
+    email.trim() ||
+    phone.trim() ||
+    location.trim() ||
+    linkedin.trim() ||
+    summary.trim() ||
+    profileImage ||
+    skills.length > 0 ||
+    experience.length > 0 ||
+    education.length > 0 ||
+    projects.length > 0
+
+  // =====================================================
+  // SAMPLE PERSONAL DATA
+  // =====================================================
+
+  const displayPersonal = hasResumeData
+    ? {
+        fullName,
+        jobTitle,
+        email,
+        phone,
+        location,
+        linkedin,
+        summary,
+        profileImage,
+      }
+    : {
+        fullName: "Sarah Thompson",
+        jobTitle: "Marketing Specialist",
+        email: "sarah@email.com",
+        phone: "+1 555 456 7890",
+        location: "New York, NY",
+        linkedin: "linkedin.com/in/sarah",
+        summary:
+          "Results-driven professional with experience in marketing, project coordination, data analysis, and developing strategies that support business growth.",
+        profileImage: "",
+      }
 
   // =====================================================
   // FALLBACK DATA
@@ -21,76 +88,97 @@ function ATSFocusPreview({ formData = {} }) {
   const displaySkills =
     skills.length > 0
       ? skills
-      : [
-          "Marketing",
-          "Project Management",
-          "Data Analysis",
-          "SEO",
-          "Content Strategy",
-          "Microsoft Excel",
-          "Google Analytics",
-          "Communication",
-        ]
+      : hasResumeData
+        ? []
+        : [
+            "Marketing",
+            "Project Management",
+            "Data Analysis",
+            "SEO",
+            "Content Strategy",
+            "Microsoft Excel",
+            "Google Analytics",
+            "Communication",
+          ]
 
   const displayExperience =
     experience.length > 0
       ? experience
-      : [
-          {
-            jobTitle: "Marketing Specialist",
-            company: "Growth Solutions",
-            startDate: "2022",
-            endDate: "Present",
-            description:
-              "Developed marketing campaigns, analyzed performance data, and collaborated with cross-functional teams to improve customer engagement.",
-          },
-          {
-            jobTitle: "Marketing Coordinator",
-            company: "Digital Agency",
-            startDate: "2020",
-            endDate: "2022",
-            description:
-              "Coordinated marketing activities, prepared reports, and supported content and campaign development.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "ats-sample-experience-1",
+              jobTitle: "Marketing Specialist",
+              company: "Growth Solutions",
+              startDate: "2022",
+              endDate: "Present",
+              description:
+                "Developed marketing campaigns, analyzed performance data, and collaborated with cross-functional teams to improve customer engagement.",
+            },
+            {
+              id: "ats-sample-experience-2",
+              jobTitle: "Marketing Coordinator",
+              company: "Digital Agency",
+              startDate: "2020",
+              endDate: "2022",
+              description:
+                "Coordinated marketing activities, prepared reports, and supported content and campaign development.",
+            },
+          ]
 
   const displayEducation =
     education.length > 0
       ? education
-      : [
-          {
-            degree: "Bachelor of Business Administration",
-            institution: "State University",
-            startDate: "2016",
-            endDate: "2020",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "ats-sample-education-1",
+              degree: "Bachelor of Business Administration",
+              institution: "State University",
+              field: "",
+              startDate: "2016",
+              endDate: "2020",
+            },
+          ]
 
   const displayProjects =
     projects.length > 0
       ? projects
-      : [
-          {
-            name: "Marketing Analytics Dashboard",
-            technologies: "Excel • Google Analytics • Data Analysis",
-            description:
-              "Created a dashboard for tracking campaign performance and identifying growth opportunities.",
-          },
-          {
-            name: "Content Strategy",
-            technologies: "SEO • Content Marketing • Analytics",
-            description:
-              "Developed a content strategy focused on increasing organic traffic and audience engagement.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "ats-sample-project-1",
+              name: "Marketing Analytics Dashboard",
+              technologies:
+                "Excel • Google Analytics • Data Analysis",
+              description:
+                "Created a dashboard for tracking campaign performance and identifying growth opportunities.",
+            },
+            {
+              id: "ats-sample-project-2",
+              name: "Content Strategy",
+              technologies:
+                "SEO • Content Marketing • Analytics",
+              description:
+                "Developed a content strategy focused on increasing organic traffic and audience engagement.",
+            },
+          ]
 
   // =====================================================
-  // HELPER
+  // HELPERS
   // =====================================================
 
   function getValue(item, keys, fallback = "") {
     for (const key of keys) {
-      if (item?.[key]) {
+      if (
+        item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        String(item[key]).trim() !== ""
+      ) {
         return item[key]
       }
     }
@@ -98,60 +186,127 @@ function ATSFocusPreview({ formData = {} }) {
     return fallback
   }
 
-  return (
-    <div className="h-full w-full overflow-hidden bg-white text-slate-900">
+  function getSkillName(skill) {
+    if (typeof skill === "string") {
+      return skill
+    }
 
+    return getValue(
+      skill,
+      ["name", "skill", "title"],
+      ""
+    )
+  }
+
+  function getTechnologies(item) {
+    const technologies = getValue(
+      item,
+      [
+        "technologies",
+        "technology",
+        "techStack",
+        "stack",
+      ],
+      ""
+    )
+
+    return Array.isArray(technologies)
+      ? technologies.join(" • ")
+      : technologies
+  }
+
+  return (
+    <div
+      className="h-full w-full overflow-hidden"
+      style={{
+        backgroundColor: "#FFFFFF",
+        color: "#111827",
+      }}
+    >
       {/* =====================================================
           HEADER
       ====================================================== */}
 
-      <header className="px-6 py-5">
+      <header
+        className="border-b px-6 py-5"
+        style={{
+          borderColor: "#111827",
+        }}
+      >
+        <div className="min-w-0">
+          {displayPersonal.fullName && (
+            <h1
+              className="text-[17px] font-bold tracking-tight"
+              style={{
+                color: "#111827",
+              }}
+            >
+              {displayPersonal.fullName}
+            </h1>
+          )}
 
-        <h1 className="text-[17px] font-bold tracking-tight">
-          {fullName}
-        </h1>
-
-        <p className="mt-1 text-[6.5px] font-medium text-slate-600">
-          {jobTitle}
-        </p>
+          {displayPersonal.jobTitle && (
+            <p
+              className="mt-1 text-[6.5px] font-medium"
+              style={{
+                color: "#475569",
+              }}
+            >
+              {displayPersonal.jobTitle}
+            </p>
+          )}
+        </div>
 
         {/* CONTACT */}
 
-        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5px] text-slate-500">
+        <div
+          className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5px]"
+          style={{
+            color: "#718096",
+          }}
+        >
+          {displayPersonal.email && (
+            <span>{displayPersonal.email}</span>
+          )}
 
-          {email && <span>{email}</span>}
+          {displayPersonal.phone && (
+            <span>{displayPersonal.phone}</span>
+          )}
 
-          {phone && <span>{phone}</span>}
+          {displayPersonal.location && (
+            <span>{displayPersonal.location}</span>
+          )}
 
-          {location && <span>{location}</span>}
-
-          {linkedin && <span>{linkedin}</span>}
-
+          {displayPersonal.linkedin && (
+            <span>{displayPersonal.linkedin}</span>
+          )}
         </div>
-
-        <div className="mt-4 h-px bg-slate-900" />
-
       </header>
 
       {/* =====================================================
-          CONTENT
+          MAIN CONTENT
       ====================================================== */}
 
-      <main className="px-6 pb-6">
+      <main className="px-6 py-5">
 
         {/* =================================================
             PROFESSIONAL SUMMARY
         ================================================== */}
 
-        {summary && (
-          <section className="mb-4">
+        {displayPersonal.summary && (
+          <section className="mb-5">
 
             <ATSSectionTitle>
               Professional Summary
             </ATSSectionTitle>
 
-            <p className="mt-2 text-[5.5px] leading-[1.6] text-slate-600">
-              {summary}
+            <p
+              className="mt-2 text-[5.5px] leading-[1.6]"
+              style={{
+                color: "#475569",
+              }}
+            >
+              {displayPersonal.summary}
             </p>
 
           </section>
@@ -162,34 +317,37 @@ function ATSFocusPreview({ formData = {} }) {
         ================================================== */}
 
         {displaySkills.length > 0 && (
-          <section className="mb-4">
+          <section className="mb-5">
 
             <ATSSectionTitle>
               Skills
             </ATSSectionTitle>
 
-            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5">
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
 
-              {displaySkills.slice(0, 12).map((skill, index) => {
+              {displaySkills
+                .slice(0, 12)
+                .map((skill, index) => {
 
-                const skillName =
-                  typeof skill === "string"
-                    ? skill
-                    : getValue(
-                        skill,
-                        ["name", "skill", "title"],
-                        "Skill"
-                      )
+                  const skillName =
+                    getSkillName(skill)
 
-                return (
-                  <span
-                    key={skill.id || index}
-                    className="text-[5px] text-slate-600"
-                  >
-                    {skillName}
-                  </span>
-                )
-              })}
+                  if (!skillName) {
+                    return null
+                  }
+
+                  return (
+                    <span
+                      key={skill?.id || index}
+                      className="text-[5px]"
+                      style={{
+                        color: "#475569",
+                      }}
+                    >
+                      {skillName}
+                    </span>
+                  )
+                })}
 
             </div>
 
@@ -197,80 +355,134 @@ function ATSFocusPreview({ formData = {} }) {
         )}
 
         {/* =================================================
-            EXPERIENCE
+            PROFESSIONAL EXPERIENCE
         ================================================== */}
 
         {displayExperience.length > 0 && (
-          <section className="mb-4">
+          <section className="mb-5">
 
             <ATSSectionTitle>
               Professional Experience
             </ATSSectionTitle>
 
-            <div className="mt-3 space-y-3">
+            <div className="mt-3 space-y-3.5">
 
-              {displayExperience.slice(0, 3).map((item, index) => {
+              {displayExperience
+                .slice(0, 3)
+                .map((item, index) => {
 
-                const title = getValue(
-                  item,
-                  ["jobTitle", "position", "title", "role"],
-                  "Marketing Specialist"
-                )
+                  const title = getValue(
+                    item,
+                    [
+                      "jobTitle",
+                      "position",
+                      "title",
+                      "role",
+                    ]
+                  )
 
-                const company = getValue(
-                  item,
-                  ["company", "organization", "employer"],
-                  "Growth Solutions"
-                )
+                  const company = getValue(
+                    item,
+                    [
+                      "company",
+                      "organization",
+                      "employer",
+                    ]
+                  )
 
-                const startDate = getValue(
-                  item,
-                  ["startDate", "start", "from"],
-                  "2022"
-                )
+                  const startDate = getValue(
+                    item,
+                    [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]
+                  )
 
-                const endDate = getValue(
-                  item,
-                  ["endDate", "end", "to"],
-                  "Present"
-                )
+                  const endDate = getValue(
+                    item,
+                    [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]
+                  )
 
-                const description = getValue(
-                  item,
-                  ["description", "details", "responsibilities"],
-                  "Developed campaigns and supported business growth initiatives."
-                )
+                  const description = getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                      "responsibilities",
+                    ]
+                  )
 
-                return (
-                  <article key={item.id || index}>
+                  return (
+                    <article
+                      key={item.id || index}
+                    >
 
-                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start justify-between gap-3">
 
-                      <div className="min-w-0">
+                        <div className="min-w-0">
 
-                        <h3 className="truncate text-[6.5px] font-bold">
-                          {title}
-                        </h3>
+                          {title && (
+                            <h3
+                              className="truncate text-[6.5px] font-bold"
+                              style={{
+                                color: "#111827",
+                              }}
+                            >
+                              {title}
+                            </h3>
+                          )}
 
-                        <p className="mt-0.5 truncate text-[5.2px] font-medium text-slate-600">
-                          {company}
-                        </p>
+                          {company && (
+                            <p
+                              className="mt-0.5 truncate text-[5.2px] font-medium"
+                              style={{
+                                color: "#475569",
+                              }}
+                            >
+                              {company}
+                            </p>
+                          )}
+
+                        </div>
+
+                        {(startDate || endDate) && (
+                          <span
+                            className="shrink-0 text-[4.7px]"
+                            style={{
+                              color: "#718096",
+                            }}
+                          >
+                            {startDate}
+
+                            {startDate && endDate
+                              ? " — "
+                              : ""}
+
+                            {endDate}
+                          </span>
+                        )}
 
                       </div>
 
-                      <span className="shrink-0 text-[4.7px] text-slate-500">
-                        {startDate} — {endDate}
-                      </span>
+                      {description && (
+                        <p
+                          className="mt-1 text-[5.2px] leading-[1.55]"
+                          style={{
+                            color: "#475569",
+                          }}
+                        >
+                          • {description}
+                        </p>
+                      )}
 
-                    </div>
-
-                    <p className="mt-1 text-[5.2px] leading-[1.55] text-slate-600">
-                      {description}
-                    </p>
-
-                  </article>
-                )
-              })}
+                    </article>
+                  )
+                })}
 
             </div>
 
@@ -282,7 +494,7 @@ function ATSFocusPreview({ formData = {} }) {
         ================================================== */}
 
         {displayEducation.length > 0 && (
-          <section className="mb-4">
+          <section className="mb-5">
 
             <ATSSectionTitle>
               Education
@@ -290,57 +502,113 @@ function ATSFocusPreview({ formData = {} }) {
 
             <div className="mt-3 space-y-2">
 
-              {displayEducation.slice(0, 2).map((item, index) => {
+              {displayEducation
+                .slice(0, 2)
+                .map((item, index) => {
 
-                const degree = getValue(
-                  item,
-                  ["degree", "qualification", "title", "program"],
-                  "Bachelor of Business Administration"
-                )
+                  const degree = getValue(
+                    item,
+                    [
+                      "degree",
+                      "qualification",
+                      "title",
+                      "program",
+                    ]
+                  )
 
-                const institution = getValue(
-                  item,
-                  ["institution", "school", "university", "college"],
-                  "State University"
-                )
+                  const field = getValue(
+                    item,
+                    [
+                      "field",
+                      "major",
+                      "specialization",
+                    ]
+                  )
 
-                const startDate = getValue(
-                  item,
-                  ["startDate", "start", "from"],
-                  "2016"
-                )
+                  const institution = getValue(
+                    item,
+                    [
+                      "institution",
+                      "school",
+                      "university",
+                      "college",
+                    ]
+                  )
 
-                const endDate = getValue(
-                  item,
-                  ["endDate", "end", "to"],
-                  "2020"
-                )
+                  const startDate = getValue(
+                    item,
+                    [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]
+                  )
 
-                return (
-                  <div
-                    key={item.id || index}
-                    className="flex items-start justify-between gap-3"
-                  >
+                  const endDate = getValue(
+                    item,
+                    [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]
+                  )
 
-                    <div>
+                  return (
+                    <div
+                      key={item.id || index}
+                      className="flex items-start justify-between gap-3"
+                    >
 
-                      <h3 className="text-[6px] font-bold">
-                        {degree}
-                      </h3>
+                      <div className="min-w-0">
 
-                      <p className="mt-0.5 text-[5px] text-slate-600">
-                        {institution}
-                      </p>
+                        {degree && (
+                          <h3
+                            className="text-[6px] font-bold"
+                            style={{
+                              color: "#111827",
+                            }}
+                          >
+                            {degree}
+
+                            {field
+                              ? ` — ${field}`
+                              : ""}
+                          </h3>
+                        )}
+
+                        {institution && (
+                          <p
+                            className="mt-0.5 text-[5px]"
+                            style={{
+                              color: "#475569",
+                            }}
+                          >
+                            {institution}
+                          </p>
+                        )}
+
+                      </div>
+
+                      {(startDate || endDate) && (
+                        <span
+                          className="shrink-0 text-[4.7px]"
+                          style={{
+                            color: "#718096",
+                          }}
+                        >
+                          {startDate}
+
+                          {startDate && endDate
+                            ? " — "
+                            : ""}
+
+                          {endDate}
+                        </span>
+                      )}
 
                     </div>
-
-                    <span className="text-[4.7px] text-slate-500">
-                      {startDate} — {endDate}
-                    </span>
-
-                  </div>
-                )
-              })}
+                  )
+                })}
 
             </div>
 
@@ -360,46 +628,71 @@ function ATSFocusPreview({ formData = {} }) {
 
             <div className="mt-3 space-y-2.5">
 
-              {displayProjects.slice(0, 2).map((item, index) => {
+              {displayProjects
+                .slice(0, 2)
+                .map((item, index) => {
 
-                const name = getValue(
-                  item,
-                  ["name", "projectName", "title"],
-                  "Marketing Analytics Dashboard"
-                )
+                  const name = getValue(
+                    item,
+                    [
+                      "name",
+                      "projectName",
+                      "title",
+                    ]
+                  )
 
-                const technologies = getValue(
-                  item,
-                  ["technologies", "technology", "techStack", "stack"],
-                  "Excel • Google Analytics"
-                )
+                  const technologies =
+                    getTechnologies(item)
 
-                const description = getValue(
-                  item,
-                  ["description", "details"],
-                  "Created a dashboard for analyzing campaign performance."
-                )
+                  const description = getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                    ]
+                  )
 
-                return (
-                  <article key={item.id || index}>
+                  return (
+                    <article
+                      key={item.id || index}
+                    >
 
-                    <h3 className="text-[6px] font-bold">
-                      {name}
-                    </h3>
+                      {name && (
+                        <h3
+                          className="text-[6px] font-bold"
+                          style={{
+                            color: "#111827",
+                          }}
+                        >
+                          {name}
+                        </h3>
+                      )}
 
-                    <p className="mt-0.5 text-[4.7px] font-medium text-slate-600">
-                      {Array.isArray(technologies)
-                        ? technologies.join(" • ")
-                        : technologies}
-                    </p>
+                      {technologies && (
+                        <p
+                          className="mt-0.5 text-[4.7px] font-medium"
+                          style={{
+                            color: "#475569",
+                          }}
+                        >
+                          {technologies}
+                        </p>
+                      )}
 
-                    <p className="mt-1 text-[5px] leading-[1.5] text-slate-600">
-                      {description}
-                    </p>
+                      {description && (
+                        <p
+                          className="mt-1 text-[5px] leading-[1.5]"
+                          style={{
+                            color: "#475569",
+                          }}
+                        >
+                          {description}
+                        </p>
+                      )}
 
-                  </article>
-                )
-              })}
+                    </article>
+                  )
+                })}
 
             </div>
 
@@ -407,7 +700,6 @@ function ATSFocusPreview({ formData = {} }) {
         )}
 
       </main>
-
     </div>
   )
 }
@@ -419,7 +711,13 @@ function ATSFocusPreview({ formData = {} }) {
 
 function ATSSectionTitle({ children }) {
   return (
-    <h2 className="border-b border-slate-900 pb-1 text-[7px] font-bold uppercase tracking-[0.08em]">
+    <h2
+      className="border-b pb-1 text-[7px] font-bold uppercase tracking-[0.08em]"
+      style={{
+        color: "#111827",
+        borderColor: "#111827",
+      }}
+    >
       {children}
     </h2>
   )

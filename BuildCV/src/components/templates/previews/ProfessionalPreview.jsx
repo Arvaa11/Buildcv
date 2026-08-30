@@ -1,4 +1,3 @@
-
 function ProfessionalPreview({ formData = {} }) {
   // =====================================================
   // PERSONAL DATA
@@ -42,20 +41,21 @@ function ProfessionalPreview({ formData = {} }) {
   // CHECK WHETHER RESUME IS EMPTY
   // =====================================================
 
-  const hasResumeData =
+  const hasResumeData = Boolean(
     fullName.trim() ||
-    jobTitle.trim() ||
-    email.trim() ||
-    phone.trim() ||
-    location.trim() ||
-    linkedin.trim() ||
-    github.trim() ||
-    summary.trim() ||
-    profileImage ||
-    skills.length > 0 ||
-    experience.length > 0 ||
-    education.length > 0 ||
-    projects.length > 0
+      jobTitle.trim() ||
+      email.trim() ||
+      phone.trim() ||
+      location.trim() ||
+      linkedin.trim() ||
+      github.trim() ||
+      summary.trim() ||
+      profileImage ||
+      skills.length > 0 ||
+      experience.length > 0 ||
+      education.length > 0 ||
+      projects.length > 0
+  )
 
   // =====================================================
   // SAMPLE DATA
@@ -201,14 +201,20 @@ function ProfessionalPreview({ formData = {} }) {
   return (
     <div
       className="
-        min-h-[1123px]
+        h-full
         w-full
         overflow-hidden
-        bg-white
-        text-slate-900
+        bg-[#FFFFFF]
+        text-[#111827]
       "
     >
-      <div className="grid min-h-[1123px] grid-cols-[30%_70%]">
+      <div
+        className="
+          grid
+          min-h-[1123px]
+          grid-cols-[30%_70%]
+        "
+      >
 
         {/* =================================================
             LEFT SIDEBAR
@@ -216,14 +222,19 @@ function ProfessionalPreview({ formData = {} }) {
 
         <aside
           className="
+            flex
             min-h-[1123px]
-            bg-slate-900
+            flex-col
+            bg-[#111827]
             px-5
-            py-6
+            py-5
             text-white
           "
         >
-          {/* PROFILE IMAGE */}
+
+          {/* =================================================
+              PROFILE IMAGE
+          ================================================= */}
 
           <div className="flex justify-center">
 
@@ -232,30 +243,32 @@ function ProfessionalPreview({ formData = {} }) {
                 src={displayPersonal.profileImage}
                 alt=""
                 className="
-                  h-20
-                  w-20
+                  h-16
+                  w-16
+                  shrink-0
                   rounded-full
                   object-cover
                   ring-2
-                  ring-white/20
+                  ring-[#FFFFFF33]
                 "
               />
             ) : (
               <div
                 className="
                   flex
-                  h-20
-                  w-20
+                  h-16
+                  w-16
+                  shrink-0
                   items-center
                   justify-center
                   rounded-full
-                  bg-white/10
-                  text-[16px]
+                  bg-[#1F2937]
+                  text-[13px]
                   font-bold
                   tracking-wide
-                  text-white
+                  text-[#FFFFFF]
                   ring-2
-                  ring-white/20
+                  ring-[#FFFFFF33]
                 "
               >
                 {getInitials(
@@ -266,97 +279,117 @@ function ProfessionalPreview({ formData = {} }) {
 
           </div>
 
-          {/* NAME */}
+          {/* =================================================
+              NAME + JOB TITLE
+          ================================================= */}
 
-          <div className="mt-4 text-center">
+          <div className="mt-3 text-center">
 
-            <h1
-              className="
-                break-words
-                text-[14px]
-                font-bold
-                leading-tight
-                tracking-tight
-                text-white
-              "
-            >
-              {displayPersonal.fullName}
-            </h1>
+            {displayPersonal.fullName && (
+              <h1
+                className="
+                  break-words
+                  text-[12px]
+                  font-bold
+                  leading-tight
+                  tracking-tight
+                  text-[#FFFFFF]
+                "
+              >
+                {displayPersonal.fullName}
+              </h1>
+            )}
 
-            <p
-              className="
-                mt-1.5
-                break-words
-                text-[6px]
-                font-medium
-                uppercase
-                tracking-[0.14em]
-                text-slate-300
-              "
-            >
-              {displayPersonal.jobTitle}
-            </p>
+            {displayPersonal.jobTitle && (
+              <p
+                className="
+                  mt-1
+                  break-words
+                  text-[5.5px]
+                  font-medium
+                  uppercase
+                  tracking-[0.14em]
+                  text-[#CBD5E1]
+                "
+              >
+                {displayPersonal.jobTitle}
+              </p>
+            )}
 
           </div>
 
-          {/* SIDEBAR DIVIDER */}
+          {/* =================================================
+              DIVIDER
+          ================================================= */}
 
-          <div className="my-5 h-px bg-white/10" />
+          <div className="my-4 h-px bg-[#334155]" />
 
           {/* =================================================
               CONTACT
           ================================================= */}
 
-          <SidebarTitle>
-            Contact
-          </SidebarTitle>
+          {(displayPersonal.email ||
+            displayPersonal.phone ||
+            displayPersonal.location ||
+            displayPersonal.linkedin ||
+            displayPersonal.github) && (
 
-          <div className="mt-2.5 space-y-2">
+            <section>
 
-            {displayPersonal.email && (
-              <SidebarContact>
-                {displayPersonal.email}
-              </SidebarContact>
-            )}
+              <SidebarTitle>
+                Contact
+              </SidebarTitle>
 
-            {displayPersonal.phone && (
-              <SidebarContact>
-                {displayPersonal.phone}
-              </SidebarContact>
-            )}
+              <div className="mt-2 space-y-1.5">
 
-            {displayPersonal.location && (
-              <SidebarContact>
-                {displayPersonal.location}
-              </SidebarContact>
-            )}
+                {displayPersonal.email && (
+                  <SidebarContact>
+                    {displayPersonal.email}
+                  </SidebarContact>
+                )}
 
-            {displayPersonal.linkedin && (
-              <SidebarContact>
-                {displayPersonal.linkedin}
-              </SidebarContact>
-            )}
+                {displayPersonal.phone && (
+                  <SidebarContact>
+                    {displayPersonal.phone}
+                  </SidebarContact>
+                )}
 
-            {displayPersonal.github && (
-              <SidebarContact>
-                {displayPersonal.github}
-              </SidebarContact>
-            )}
+                {displayPersonal.location && (
+                  <SidebarContact>
+                    {displayPersonal.location}
+                  </SidebarContact>
+                )}
 
-          </div>
+                {displayPersonal.linkedin && (
+                  <SidebarContact>
+                    {displayPersonal.linkedin}
+                  </SidebarContact>
+                )}
+
+                {displayPersonal.github && (
+                  <SidebarContact>
+                    {displayPersonal.github}
+                  </SidebarContact>
+                )}
+
+              </div>
+
+            </section>
+          )}
 
           {/* =================================================
               SKILLS
           ================================================= */}
 
           {displaySkills.length > 0 && (
-            <section className="mt-6">
+
+            <section className="mt-5">
 
               <SidebarTitle>
                 Skills
               </SidebarTitle>
 
-              <div className="mt-3 space-y-2">
+              <div className="mt-2.5 space-y-1.5">
 
                 {displaySkills
                   .slice(0, 8)
@@ -375,11 +408,13 @@ function ProfessionalPreview({ formData = {} }) {
                           skill?.id || index
                         }
                         className="
-                          text-[6px]
+                          break-words
+                          text-[5.5px]
                           leading-[1.4]
-                          text-slate-300
+                          text-[#CBD5E1]
                         "
                       >
+
                         <span
                           className="
                             mr-1.5
@@ -387,11 +422,12 @@ function ProfessionalPreview({ formData = {} }) {
                             h-1
                             w-1
                             rounded-full
-                            bg-white/60
+                            bg-[#94A3B8]
                           "
                         />
 
                         {skillName}
+
                       </div>
                     )
                   })}
@@ -406,13 +442,14 @@ function ProfessionalPreview({ formData = {} }) {
           ================================================= */}
 
           {displayEducation.length > 0 && (
-            <section className="mt-6">
+
+            <section className="mt-5">
 
               <SidebarTitle>
                 Education
               </SidebarTitle>
 
-              <div className="mt-3 space-y-3">
+              <div className="mt-2.5 space-y-2.5">
 
                 {displayEducation
                   .slice(0, 2)
@@ -473,7 +510,7 @@ function ProfessionalPreview({ formData = {} }) {
                     return (
                       <div
                         key={
-                          item.id || index
+                          item?.id || index
                         }
                       >
 
@@ -481,10 +518,10 @@ function ProfessionalPreview({ formData = {} }) {
                           <h3
                             className="
                               break-words
-                              text-[6.5px]
+                              text-[5.8px]
                               font-semibold
                               leading-[1.4]
-                              text-white
+                              text-[#FFFFFF]
                             "
                           >
                             {degree}
@@ -500,9 +537,9 @@ function ProfessionalPreview({ formData = {} }) {
                             className="
                               mt-0.5
                               break-words
-                              text-[5.5px]
+                              text-[5px]
                               leading-[1.4]
-                              text-slate-400
+                              text-[#CBD5E1]
                             "
                           >
                             {institution}
@@ -511,11 +548,12 @@ function ProfessionalPreview({ formData = {} }) {
 
                         {(startDate ||
                           endDate) && (
+
                           <p
                             className="
                               mt-0.5
-                              text-[5px]
-                              text-slate-500
+                              text-[4.5px]
+                              text-[#94A3B8]
                             "
                           >
                             {startDate}
@@ -547,17 +585,18 @@ function ProfessionalPreview({ formData = {} }) {
         <main
           className="
             min-h-[1123px]
-            bg-white
+            bg-[#FFFFFF]
             px-6
-            py-6
+            py-5
           "
         >
 
           {/* =================================================
-              PROFILE
+              PROFESSIONAL PROFILE
           ================================================= */}
 
           {displayPersonal.summary && (
+
             <section className="mb-5">
 
               <MainSectionTitle>
@@ -568,9 +607,9 @@ function ProfessionalPreview({ formData = {} }) {
                 className="
                   mt-2
                   max-w-[97%]
-                  text-[6.5px]
+                  text-[5.5px]
                   leading-[1.6]
-                  text-slate-500
+                  text-[#64748B]
                 "
               >
                 {displayPersonal.summary}
@@ -584,13 +623,14 @@ function ProfessionalPreview({ formData = {} }) {
           ================================================= */}
 
           {displayExperience.length > 0 && (
+
             <section className="mb-5">
 
               <MainSectionTitle>
                 Experience
               </MainSectionTitle>
 
-              <div className="mt-3 space-y-4">
+              <div className="mt-3 space-y-3.5">
 
                 {displayExperience
                   .slice(0, 3)
@@ -600,8 +640,8 @@ function ProfessionalPreview({ formData = {} }) {
                       getValue(
                         item,
                         [
-                          "jobTitle",
                           "position",
+                          "jobTitle",
                           "title",
                           "role",
                         ]
@@ -650,7 +690,7 @@ function ProfessionalPreview({ formData = {} }) {
                     return (
                       <article
                         key={
-                          item.id || index
+                          item?.id || index
                         }
                       >
 
@@ -669,10 +709,10 @@ function ProfessionalPreview({ formData = {} }) {
                               <h3
                                 className="
                                   break-words
-                                  text-[7px]
+                                  text-[6.5px]
                                   font-semibold
                                   leading-tight
-                                  text-slate-900
+                                  text-[#111827]
                                 "
                               >
                                 {title}
@@ -684,9 +724,9 @@ function ProfessionalPreview({ formData = {} }) {
                                 className="
                                   mt-0.5
                                   break-words
-                                  text-[5.5px]
+                                  text-[5.2px]
                                   font-medium
-                                  text-slate-500
+                                  text-[#64748B]
                                 "
                               >
                                 {company}
@@ -697,12 +737,13 @@ function ProfessionalPreview({ formData = {} }) {
 
                           {(startDate ||
                             endDate) && (
+
                             <span
                               className="
                                 shrink-0
                                 whitespace-nowrap
-                                text-[5px]
-                                text-slate-400
+                                text-[4.7px]
+                                text-[#94A3B8]
                               "
                             >
                               {startDate}
@@ -719,12 +760,13 @@ function ProfessionalPreview({ formData = {} }) {
                         </div>
 
                         {description && (
+
                           <p
                             className="
-                              mt-1.5
-                              text-[5.5px]
-                              leading-[1.6]
-                              text-slate-500
+                              mt-1
+                              text-[5.2px]
+                              leading-[1.55]
+                              text-[#64748B]
                             "
                           >
                             {description}
@@ -741,17 +783,172 @@ function ProfessionalPreview({ formData = {} }) {
           )}
 
           {/* =================================================
+              EDUCATION
+          ================================================= */}
+
+          {displayEducation.length > 0 && (
+
+            <section className="mb-5">
+
+              <MainSectionTitle>
+                Education
+              </MainSectionTitle>
+
+              <div className="mt-3 space-y-2.5">
+
+                {displayEducation
+                  .slice(0, 2)
+                  .map((item, index) => {
+
+                    const degree =
+                      getValue(
+                        item,
+                        [
+                          "degree",
+                          "qualification",
+                          "title",
+                          "program",
+                        ]
+                      )
+
+                    const field =
+                      getValue(
+                        item,
+                        [
+                          "field",
+                          "major",
+                          "specialization",
+                        ]
+                      )
+
+                    const institution =
+                      getValue(
+                        item,
+                        [
+                          "institution",
+                          "school",
+                          "university",
+                          "college",
+                        ]
+                      )
+
+                    const startDate =
+                      getValue(
+                        item,
+                        [
+                          "startDate",
+                          "start",
+                          "from",
+                        ]
+                      )
+
+                    const endDate =
+                      getValue(
+                        item,
+                        [
+                          "endDate",
+                          "end",
+                          "to",
+                        ]
+                      )
+
+                    return (
+                      <article
+                        key={
+                          item?.id || index
+                        }
+                      >
+
+                        <div
+                          className="
+                            flex
+                            items-start
+                            justify-between
+                            gap-3
+                          "
+                        >
+
+                          <div className="min-w-0">
+
+                            {degree && (
+                              <h3
+                                className="
+                                  break-words
+                                  text-[6.5px]
+                                  font-semibold
+                                  leading-tight
+                                  text-[#111827]
+                                "
+                              >
+                                {degree}
+
+                                {field
+                                  ? ` — ${field}`
+                                  : ""}
+                              </h3>
+                            )}
+
+                            {institution && (
+                              <p
+                                className="
+                                  mt-0.5
+                                  break-words
+                                  text-[5.2px]
+                                  text-[#64748B]
+                                "
+                              >
+                                {institution}
+                              </p>
+                            )}
+
+                          </div>
+
+                          {(startDate ||
+                            endDate) && (
+
+                            <span
+                              className="
+                                shrink-0
+                                whitespace-nowrap
+                                text-[4.7px]
+                                text-[#94A3B8]
+                              "
+                            >
+                              {startDate}
+
+                              {startDate &&
+                              endDate
+                                ? " — "
+                                : ""}
+
+                              {endDate}
+                            </span>
+                          )}
+
+                        </div>
+
+                      </article>
+                    )
+                  })}
+
+              </div>
+
+            </section>
+          )}
+
+          {/* =================================================
               PROJECTS
           ================================================= */}
 
           {displayProjects.length > 0 && (
+
             <section>
 
               <MainSectionTitle>
                 Selected Projects
               </MainSectionTitle>
 
-              <div className="mt-3 space-y-3">
+              <div className="mt-3 space-y-2.5">
 
                 {displayProjects
                   .slice(0, 3)
@@ -790,11 +987,11 @@ function ProfessionalPreview({ formData = {} }) {
                     return (
                       <article
                         key={
-                          item.id || index
+                          item?.id || index
                         }
                         className="
                           border-l-2
-                          border-slate-200
+                          border-[#E2E8F0]
                           pl-3
                         "
                       >
@@ -803,9 +1000,9 @@ function ProfessionalPreview({ formData = {} }) {
                           <h3
                             className="
                               break-words
-                              text-[7px]
+                              text-[6.5px]
                               font-semibold
-                              text-slate-900
+                              text-[#111827]
                             "
                           >
                             {name}
@@ -813,13 +1010,14 @@ function ProfessionalPreview({ formData = {} }) {
                         )}
 
                         {technologies && (
+
                           <p
                             className="
                               mt-0.5
                               break-words
-                              text-[5px]
+                              text-[4.7px]
                               font-medium
-                              text-slate-500
+                              text-[#64748B]
                             "
                           >
                             {Array.isArray(
@@ -833,12 +1031,13 @@ function ProfessionalPreview({ formData = {} }) {
                         )}
 
                         {description && (
+
                           <p
                             className="
                               mt-1
-                              text-[5.5px]
-                              leading-[1.55]
-                              text-slate-500
+                              text-[5.2px]
+                              leading-[1.5]
+                              text-[#64748B]
                             "
                           >
                             {description}
@@ -896,11 +1095,11 @@ function SidebarTitle({ children }) {
     <div>
       <h2
         className="
-          text-[6.5px]
+          text-[6px]
           font-bold
           uppercase
           tracking-[0.16em]
-          text-white
+          text-[#FFFFFF]
         "
       >
         {children}
@@ -908,10 +1107,10 @@ function SidebarTitle({ children }) {
 
       <div
         className="
-          mt-1.5
+          mt-1
           h-px
           w-5
-          bg-white/40
+          bg-[#64748B]
         "
       />
     </div>
@@ -927,9 +1126,9 @@ function SidebarContact({ children }) {
     <p
       className="
         break-words
-        text-[5.5px]
+        text-[5px]
         leading-[1.5]
-        text-slate-300
+        text-[#CBD5E1]
       "
     >
       {children}
@@ -948,11 +1147,11 @@ function MainSectionTitle({ children }) {
       <h2
         className="
           shrink-0
-          text-[6.5px]
+          text-[6px]
           font-bold
           uppercase
           tracking-[0.16em]
-          text-slate-900
+          text-[#111827]
         "
       >
         {children}
@@ -962,7 +1161,7 @@ function MainSectionTitle({ children }) {
         className="
           h-px
           flex-1
-          bg-slate-200
+          bg-[#E2E8F0]
         "
       />
 

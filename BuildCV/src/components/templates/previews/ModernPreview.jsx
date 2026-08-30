@@ -41,20 +41,21 @@ function ModernPreview({ formData = {} }) {
   // CHECK WHETHER RESUME IS EMPTY
   // =====================================================
 
-  const hasResumeData =
+  const hasResumeData = Boolean(
     fullName.trim() ||
-    jobTitle.trim() ||
-    email.trim() ||
-    phone.trim() ||
-    location.trim() ||
-    linkedin.trim() ||
-    github.trim() ||
-    summary.trim() ||
-    profileImage ||
-    skills.length > 0 ||
-    experience.length > 0 ||
-    education.length > 0 ||
-    projects.length > 0
+      jobTitle.trim() ||
+      email.trim() ||
+      phone.trim() ||
+      location.trim() ||
+      linkedin.trim() ||
+      github.trim() ||
+      summary.trim() ||
+      profileImage ||
+      skills.length > 0 ||
+      experience.length > 0 ||
+      education.length > 0 ||
+      projects.length > 0
+  )
 
   // =====================================================
   // SAMPLE DATA
@@ -199,10 +200,10 @@ function ModernPreview({ formData = {} }) {
         min-h-[1123px]
         w-full
         overflow-hidden
-        bg-white
+        bg-[#FFFFFF]
         px-6
         py-6
-        text-slate-900
+        text-[#111827]
       "
     >
       {/* =================================================
@@ -210,6 +211,7 @@ function ModernPreview({ formData = {} }) {
       ================================================= */}
 
       <header>
+
         <div className="flex items-start justify-between gap-4">
 
           {/* NAME + TITLE */}
@@ -224,7 +226,7 @@ function ModernPreview({ formData = {} }) {
                   font-bold
                   leading-tight
                   tracking-tight
-                  text-slate-900
+                  text-[#111827]
                 "
               >
                 {displayPersonal.fullName}
@@ -235,11 +237,12 @@ function ModernPreview({ formData = {} }) {
               <p
                 className="
                   mt-1
+                  break-words
                   text-[7px]
                   font-semibold
                   uppercase
                   tracking-[0.16em]
-                  text-buildcv-violet
+                  text-[#6366F1]
                 "
               >
                 {displayPersonal.jobTitle}
@@ -261,7 +264,7 @@ function ModernPreview({ formData = {} }) {
                 rounded-full
                 object-cover
                 ring-2
-                ring-buildcv-violet-50
+                ring-[#EEF2FF]
               "
             />
           ) : (
@@ -274,10 +277,10 @@ function ModernPreview({ formData = {} }) {
                 items-center
                 justify-center
                 rounded-full
-                bg-buildcv-violet-50
+                bg-[#EEF2FF]
                 text-[10px]
                 font-bold
-                text-buildcv-violet
+                text-[#6366F1]
               "
             >
               {getInitials(displayPersonal.fullName)}
@@ -295,10 +298,11 @@ function ModernPreview({ formData = {} }) {
             flex-wrap
             gap-x-3
             gap-y-1
-            text-[5.5px]
-            text-slate-400
+            text-[5px]
+            text-[#718096]
           "
         >
+
           {displayPersonal.email && (
             <span>{displayPersonal.email}</span>
           )}
@@ -318,9 +322,17 @@ function ModernPreview({ formData = {} }) {
           {displayPersonal.github && (
             <span>{displayPersonal.github}</span>
           )}
+
         </div>
 
-        <div className="my-4 h-px bg-slate-200" />
+        <div
+          className="
+            my-4
+            h-px
+            bg-[#E2E8F0]
+          "
+        />
+
       </header>
 
       {/* =================================================
@@ -338,9 +350,9 @@ function ModernPreview({ formData = {} }) {
             className="
               mt-2
               max-w-[95%]
-              text-[6.5px]
+              text-[5.5px]
               leading-[1.6]
-              text-slate-500
+              text-[#475569]
             "
           >
             {displayPersonal.summary}
@@ -360,7 +372,7 @@ function ModernPreview({ formData = {} }) {
             Experience
           </PreviewSectionTitle>
 
-          <div className="mt-2 space-y-3">
+          <div className="mt-3 space-y-3.5">
 
             {displayExperience
               .slice(0, 3)
@@ -432,9 +444,10 @@ function ModernPreview({ formData = {} }) {
                           <h3
                             className="
                               break-words
-                              text-[7px]
+                              text-[6.5px]
                               font-semibold
-                              text-slate-900
+                              leading-tight
+                              text-[#111827]
                             "
                           >
                             {title}
@@ -446,9 +459,9 @@ function ModernPreview({ formData = {} }) {
                             className="
                               mt-0.5
                               break-words
-                              text-[5.5px]
+                              text-[5.2px]
                               font-medium
-                              text-buildcv-violet
+                              text-[#6366F1]
                             "
                           >
                             {company}
@@ -462,14 +475,16 @@ function ModernPreview({ formData = {} }) {
                           className="
                             shrink-0
                             whitespace-nowrap
-                            text-[5px]
-                            text-slate-400
+                            text-[4.7px]
+                            text-[#718096]
                           "
                         >
                           {startDate}
+
                           {startDate && endDate
                             ? " — "
                             : ""}
+
                           {endDate}
                         </span>
                       )}
@@ -480,9 +495,9 @@ function ModernPreview({ formData = {} }) {
                       <p
                         className="
                           mt-1
-                          text-[5.5px]
+                          text-[5.2px]
                           leading-[1.55]
-                          text-slate-500
+                          text-[#475569]
                         "
                       >
                         {description}
@@ -494,6 +509,7 @@ function ModernPreview({ formData = {} }) {
               })}
 
           </div>
+
         </section>
       )}
 
@@ -508,7 +524,7 @@ function ModernPreview({ formData = {} }) {
             Education
           </PreviewSectionTitle>
 
-          <div className="mt-2 space-y-2">
+          <div className="mt-3 space-y-2.5">
 
             {displayEducation
               .slice(0, 2)
@@ -578,12 +594,14 @@ function ModernPreview({ formData = {} }) {
                         <h3
                           className="
                             break-words
-                            text-[7px]
+                            text-[6.5px]
                             font-semibold
-                            text-slate-900
+                            leading-tight
+                            text-[#111827]
                           "
                         >
                           {degree}
+
                           {field
                             ? ` — ${field}`
                             : ""}
@@ -595,8 +613,8 @@ function ModernPreview({ formData = {} }) {
                           className="
                             mt-0.5
                             break-words
-                            text-[5.5px]
-                            text-slate-500
+                            text-[5.2px]
+                            text-[#475569]
                           "
                         >
                           {institution}
@@ -610,14 +628,16 @@ function ModernPreview({ formData = {} }) {
                         className="
                           shrink-0
                           whitespace-nowrap
-                          text-[5px]
-                          text-slate-400
+                          text-[4.7px]
+                          text-[#718096]
                         "
                       >
                         {startDate}
+
                         {startDate && endDate
                           ? " — "
                           : ""}
+
                         {endDate}
                       </span>
                     )}
@@ -627,6 +647,7 @@ function ModernPreview({ formData = {} }) {
               })}
 
           </div>
+
         </section>
       )}
 
@@ -641,7 +662,7 @@ function ModernPreview({ formData = {} }) {
             Projects
           </PreviewSectionTitle>
 
-          <div className="mt-2 space-y-2">
+          <div className="mt-3 space-y-2.5">
 
             {displayProjects
               .slice(0, 2)
@@ -685,9 +706,9 @@ function ModernPreview({ formData = {} }) {
                       <h3
                         className="
                           break-words
-                          text-[7px]
+                          text-[6.5px]
                           font-semibold
-                          text-slate-900
+                          text-[#111827]
                         "
                       >
                         {name}
@@ -699,9 +720,9 @@ function ModernPreview({ formData = {} }) {
                         className="
                           mt-0.5
                           break-words
-                          text-[5px]
+                          text-[4.7px]
                           font-medium
-                          text-buildcv-violet
+                          text-[#6366F1]
                         "
                       >
                         {Array.isArray(technologies)
@@ -714,9 +735,9 @@ function ModernPreview({ formData = {} }) {
                       <p
                         className="
                           mt-1
-                          text-[5.5px]
+                          text-[5.2px]
                           leading-[1.5]
-                          text-slate-500
+                          text-[#475569]
                         "
                       >
                         {description}
@@ -728,6 +749,7 @@ function ModernPreview({ formData = {} }) {
               })}
 
           </div>
+
         </section>
       )}
 
@@ -744,11 +766,11 @@ function ModernPreview({ formData = {} }) {
 
           <div
             className="
-              mt-2
+              mt-3
               flex
               flex-wrap
               gap-x-2
-              gap-y-1
+              gap-y-1.5
             "
           >
 
@@ -765,15 +787,17 @@ function ModernPreview({ formData = {} }) {
 
                 return (
                   <span
-                    key={skill?.id || index}
+                    key={
+                      skill?.id || index
+                    }
                     className="
                       rounded
-                      bg-buildcv-violet-50
+                      bg-[#EEF2FF]
                       px-1.5
                       py-0.5
-                      text-[5px]
+                      text-[4.8px]
                       font-medium
-                      text-buildcv-violet
+                      text-[#6366F1]
                     "
                   >
                     {skillName}
@@ -831,13 +855,19 @@ function PreviewSectionTitle({ children }) {
           font-bold
           uppercase
           tracking-[0.16em]
-          text-slate-900
+          text-[#111827]
         "
       >
         {children}
       </h2>
 
-      <div className="h-px flex-1 bg-slate-200" />
+      <div
+        className="
+          h-px
+          flex-1
+          bg-[#E2E8F0]
+        "
+      />
 
     </div>
   )

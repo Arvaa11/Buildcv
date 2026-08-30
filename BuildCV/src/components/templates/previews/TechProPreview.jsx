@@ -1,19 +1,89 @@
 function TechProPreview({ formData = {} }) {
+  // =====================================================
+  // PERSONAL DATA
+  // =====================================================
+
+  const personal = formData.personal || {}
+
   const {
-    fullName = "Michael Anderson",
-    jobTitle = "Senior Software Engineer",
-    email = "michael@email.com",
-    phone = "+1 555 789 1234",
-    location = "Seattle, WA",
-    linkedin = "linkedin.com/in/michael",
-    github = "github.com/michael",
-    summary =
-      "Experienced software engineer specializing in scalable applications, cloud technologies, system architecture, and modern development practices.",
-    skills = [],
-    experience = [],
-    education = [],
-    projects = [],
-  } = formData
+    fullName = "",
+    jobTitle = "",
+    email = "",
+    phone = "",
+    location = "",
+    linkedin = "",
+    github = "",
+    summary = "",
+    profileImage = "",
+  } = personal
+
+  // =====================================================
+  // OTHER DATA
+  // =====================================================
+
+  const skills = Array.isArray(formData.skills)
+    ? formData.skills
+    : []
+
+  const experience = Array.isArray(formData.experience)
+    ? formData.experience
+    : []
+
+  const education = Array.isArray(formData.education)
+    ? formData.education
+    : []
+
+  const projects = Array.isArray(formData.projects)
+    ? formData.projects
+    : []
+
+  // =====================================================
+  // CHECK WHETHER RESUME IS EMPTY
+  // =====================================================
+
+  const hasResumeData =
+    fullName.trim() ||
+    jobTitle.trim() ||
+    email.trim() ||
+    phone.trim() ||
+    location.trim() ||
+    linkedin.trim() ||
+    github.trim() ||
+    summary.trim() ||
+    profileImage ||
+    skills.length > 0 ||
+    experience.length > 0 ||
+    education.length > 0 ||
+    projects.length > 0
+
+  // =====================================================
+  // SAMPLE PERSONAL DATA
+  // =====================================================
+
+  const displayPersonal = hasResumeData
+    ? {
+        fullName,
+        jobTitle,
+        email,
+        phone,
+        location,
+        linkedin,
+        github,
+        summary,
+        profileImage,
+      }
+    : {
+        fullName: "Michael Anderson",
+        jobTitle: "Senior Software Engineer",
+        email: "michael@email.com",
+        phone: "+1 555 789 1234",
+        location: "Seattle, WA",
+        linkedin: "linkedin.com/in/michael",
+        github: "github.com/michael",
+        summary:
+          "Experienced software engineer specializing in scalable applications, cloud technologies, system architecture, and modern development practices.",
+        profileImage: "",
+      }
 
   // =====================================================
   // FALLBACK DATA
@@ -22,76 +92,94 @@ function TechProPreview({ formData = {} }) {
   const displaySkills =
     skills.length > 0
       ? skills
-      : [
-          "JavaScript",
-          "TypeScript",
-          "React",
-          "Node.js",
-          "Python",
-          "AWS",
-          "Docker",
-          "PostgreSQL",
-        ]
+      : hasResumeData
+        ? []
+        : [
+            "JavaScript",
+            "TypeScript",
+            "React",
+            "Node.js",
+            "Python",
+            "AWS",
+            "Docker",
+            "PostgreSQL",
+          ]
 
   const displayExperience =
     experience.length > 0
       ? experience
-      : [
-          {
-            jobTitle: "Senior Software Engineer",
-            company: "Cloud Systems Inc.",
-            startDate: "2022",
-            endDate: "Present",
-            description:
-              "Designed scalable applications, improved system performance, and collaborated with engineering teams to deliver reliable software products.",
-          },
-          {
-            jobTitle: "Software Engineer",
-            company: "Tech Solutions",
-            startDate: "2019",
-            endDate: "2022",
-            description:
-              "Developed web applications, integrated APIs, and improved development workflows using modern engineering practices.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-experience-1",
+              jobTitle: "Senior Software Engineer",
+              company: "Cloud Systems Inc.",
+              startDate: "2022",
+              endDate: "Present",
+              description:
+                "Designed scalable applications, improved system performance, and collaborated with engineering teams to deliver reliable software products.",
+            },
+            {
+              id: "sample-experience-2",
+              jobTitle: "Software Engineer",
+              company: "Tech Solutions",
+              startDate: "2019",
+              endDate: "2022",
+              description:
+                "Developed web applications, integrated APIs, and improved development workflows using modern engineering practices.",
+            },
+          ]
 
   const displayEducation =
     education.length > 0
       ? education
-      : [
-          {
-            degree: "B.S. Computer Science",
-            institution: "University of Washington",
-            startDate: "2015",
-            endDate: "2019",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-education-1",
+              degree: "B.S. Computer Science",
+              institution: "University of Washington",
+              startDate: "2015",
+              endDate: "2019",
+            },
+          ]
 
   const displayProjects =
     projects.length > 0
       ? projects
-      : [
-          {
-            name: "Cloud Analytics Platform",
-            technologies: "React • Node.js • AWS",
-            description:
-              "Built a scalable analytics platform for processing and visualizing business data.",
-          },
-          {
-            name: "Developer API",
-            technologies: "TypeScript • PostgreSQL • Docker",
-            description:
-              "Developed a REST API with authentication, database integration, and containerized deployment.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-project-1",
+              name: "Cloud Analytics Platform",
+              technologies: "React • Node.js • AWS",
+              description:
+                "Built a scalable analytics platform for processing and visualizing business data.",
+            },
+            {
+              id: "sample-project-2",
+              name: "Developer API",
+              technologies: "TypeScript • PostgreSQL • Docker",
+              description:
+                "Developed a REST API with authentication, database integration, and containerized deployment.",
+            },
+          ]
 
   // =====================================================
-  // HELPER
+  // HELPERS
   // =====================================================
 
   function getValue(item, keys, fallback = "") {
     for (const key of keys) {
-      if (item?.[key]) {
+      if (
+        item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        String(item[key]).trim() !== ""
+      ) {
         return item[key]
       }
     }
@@ -99,34 +187,112 @@ function TechProPreview({ formData = {} }) {
     return fallback
   }
 
-  return (
-    <div className="h-full w-full overflow-hidden bg-white text-slate-900">
+  function getSkillName(skill) {
+    if (typeof skill === "string") {
+      return skill
+    }
 
+    return getValue(
+      skill,
+      ["name", "skill", "title"],
+      ""
+    )
+  }
+
+  function getInitials(name = "") {
+    const words = name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+
+    if (words.length === 0) {
+      return "CV"
+    }
+
+    if (words.length === 1) {
+      return words[0]
+        .slice(0, 2)
+        .toUpperCase()
+    }
+
+    return (
+      words[0][0] +
+      words[words.length - 1][0]
+    ).toUpperCase()
+  }
+
+  // =====================================================
+  // RENDER
+  // =====================================================
+
+  return (
+    <div
+      className="h-full w-full overflow-hidden"
+      style={{
+        backgroundColor: "#FFFFFF",
+        color: "#0F172A",
+      }}
+    >
       {/* =====================================================
           HEADER
       ====================================================== */}
 
-      <header className="bg-slate-900 px-6 py-5 text-white">
-
+      <header
+        className="px-6 py-5"
+        style={{
+          backgroundColor: "#0F172A",
+          color: "#FFFFFF",
+        }}
+      >
         <div className="flex items-start justify-between gap-3">
+
+          {/* NAME + TITLE */}
 
           <div className="min-w-0">
 
-            <p className="mb-1 text-[5px] font-semibold uppercase tracking-[0.2em] text-indigo-300">
+            <p
+              className="mb-1 text-[5px] font-semibold uppercase tracking-[0.2em]"
+              style={{
+                color: "#A5B4FC",
+              }}
+            >
               Technology Professional
             </p>
 
-            <h1 className="truncate text-[17px] font-extrabold tracking-tight">
-              {fullName}
-            </h1>
+            {displayPersonal.fullName && (
+              <h1
+                className="truncate text-[17px] font-extrabold tracking-tight"
+                style={{
+                  color: "#FFFFFF",
+                }}
+              >
+                {displayPersonal.fullName}
+              </h1>
+            )}
 
-            <p className="mt-1 text-[6.5px] font-medium text-slate-300">
-              {jobTitle}
-            </p>
+            {displayPersonal.jobTitle && (
+              <p
+                className="mt-1 text-[6.5px] font-medium"
+                style={{
+                  color: "#CBD5E1",
+                }}
+              >
+                {displayPersonal.jobTitle}
+              </p>
+            )}
 
           </div>
 
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-indigo-400 bg-indigo-500/20 text-[6px] font-bold text-indigo-200">
+          {/* TECHNOLOGY BADGE */}
+
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border text-[6px] font-bold"
+            style={{
+              borderColor: "#818CF8",
+              backgroundColor: "#312E81",
+              color: "#C7D2FE",
+            }}
+          >
             TP
           </div>
 
@@ -134,20 +300,32 @@ function TechProPreview({ formData = {} }) {
 
         {/* CONTACT */}
 
-        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5px] text-slate-300">
+        <div
+          className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5px]"
+          style={{
+            color: "#CBD5E1",
+          }}
+        >
+          {displayPersonal.email && (
+            <span>{displayPersonal.email}</span>
+          )}
 
-          {email && <span>{email}</span>}
+          {displayPersonal.phone && (
+            <span>{displayPersonal.phone}</span>
+          )}
 
-          {phone && <span>{phone}</span>}
+          {displayPersonal.location && (
+            <span>{displayPersonal.location}</span>
+          )}
 
-          {location && <span>{location}</span>}
+          {displayPersonal.github && (
+            <span>{displayPersonal.github}</span>
+          )}
 
-          {github && <span>{github}</span>}
-
-          {linkedin && <span>{linkedin}</span>}
-
+          {displayPersonal.linkedin && (
+            <span>{displayPersonal.linkedin}</span>
+          )}
         </div>
-
       </header>
 
       {/* =====================================================
@@ -160,19 +338,30 @@ function TechProPreview({ formData = {} }) {
             SIDEBAR
         ================================================== */}
 
-        <aside className="border-r border-slate-200 bg-slate-50 px-4 py-5">
+        <aside
+          className="border-r px-4 py-5"
+          style={{
+            backgroundColor: "#F8FAFC",
+            borderColor: "#E2E8F0",
+          }}
+        >
 
           {/* PROFILE */}
 
-          {summary && (
+          {displayPersonal.summary && (
             <section className="mb-5">
 
               <TechSideTitle>
                 Profile
               </TechSideTitle>
 
-              <p className="mt-2 text-[5.3px] leading-[1.6] text-slate-500">
-                {summary}
+              <p
+                className="mt-2 text-[5.3px] leading-[1.6]"
+                style={{
+                  color: "#64748B",
+                }}
+              >
+                {displayPersonal.summary}
               </p>
 
             </section>
@@ -180,44 +369,56 @@ function TechProPreview({ formData = {} }) {
 
           {/* CORE TECHNOLOGIES */}
 
-          <section className="mb-5">
+          {displaySkills.length > 0 && (
+            <section className="mb-5">
 
-            <TechSideTitle>
-              Core Skills
-            </TechSideTitle>
+              <TechSideTitle>
+                Core Skills
+              </TechSideTitle>
 
-            <div className="mt-2 space-y-1.5">
+              <div className="mt-2 space-y-1.5">
 
-              {displaySkills.slice(0, 10).map((skill, index) => {
+                {displaySkills
+                  .slice(0, 10)
+                  .map((skill, index) => {
 
-                const skillName =
-                  typeof skill === "string"
-                    ? skill
-                    : getValue(
-                        skill,
-                        ["name", "skill", "title"],
-                        "Skill"
-                      )
+                    const skillName =
+                      getSkillName(skill)
 
-                return (
-                  <div
-                    key={skill.id || index}
-                    className="flex items-center gap-1.5"
-                  >
+                    if (!skillName) {
+                      return null
+                    }
 
-                    <span className="h-1 w-1 shrink-0 rounded-full bg-indigo-500" />
+                    return (
+                      <div
+                        key={skill?.id || index}
+                        className="flex items-center gap-1.5"
+                      >
 
-                    <span className="text-[4.8px] font-medium text-slate-600">
-                      {skillName}
-                    </span>
+                        <span
+                          className="h-1 w-1 shrink-0 rounded-full"
+                          style={{
+                            backgroundColor: "#6366F1",
+                          }}
+                        />
 
-                  </div>
-                )
-              })}
+                        <span
+                          className="text-[4.8px] font-medium"
+                          style={{
+                            color: "#475569",
+                          }}
+                        >
+                          {skillName}
+                        </span>
 
-            </div>
+                      </div>
+                    )
+                  })}
 
-          </section>
+              </div>
+
+            </section>
+          )}
 
           {/* EDUCATION */}
 
@@ -230,44 +431,77 @@ function TechProPreview({ formData = {} }) {
 
               <div className="mt-2 space-y-2">
 
-                {displayEducation.slice(0, 2).map((item, index) => {
+                {displayEducation
+                  .slice(0, 2)
+                  .map((item, index) => {
 
-                  const degree = getValue(
-                    item,
-                    ["degree", "qualification", "title", "program"],
-                    "B.S. Computer Science"
-                  )
+                    const degree = getValue(
+                      item,
+                      [
+                        "degree",
+                        "qualification",
+                        "title",
+                        "program",
+                      ],
+                      "B.S. Computer Science"
+                    )
 
-                  const institution = getValue(
-                    item,
-                    ["institution", "school", "university", "college"],
-                    "University of Washington"
-                  )
+                    const institution = getValue(
+                      item,
+                      [
+                        "institution",
+                        "school",
+                        "university",
+                        "college",
+                      ],
+                      "University of Washington"
+                    )
 
-                  const endDate = getValue(
-                    item,
-                    ["endDate", "end", "to"],
-                    "2019"
-                  )
+                    const endDate = getValue(
+                      item,
+                      [
+                        "endDate",
+                        "end",
+                        "to",
+                      ],
+                      "2019"
+                    )
 
-                  return (
-                    <div key={item.id || index}>
+                    return (
+                      <div
+                        key={item.id || index}
+                      >
 
-                      <h3 className="text-[5.5px] font-bold">
-                        {degree}
-                      </h3>
+                        <h3
+                          className="text-[5.5px] font-bold"
+                          style={{
+                            color: "#0F172A",
+                          }}
+                        >
+                          {degree}
+                        </h3>
 
-                      <p className="mt-0.5 text-[4.8px] text-slate-500">
-                        {institution}
-                      </p>
+                        <p
+                          className="mt-0.5 text-[4.8px]"
+                          style={{
+                            color: "#64748B",
+                          }}
+                        >
+                          {institution}
+                        </p>
 
-                      <p className="mt-0.5 text-[4.5px] text-slate-400">
-                        {endDate}
-                      </p>
+                        <p
+                          className="mt-0.5 text-[4.5px]"
+                          style={{
+                            color: "#94A3B8",
+                          }}
+                        >
+                          {endDate}
+                        </p>
 
-                    </div>
-                  )
-                })}
+                      </div>
+                    )
+                  })}
 
               </div>
 
@@ -293,68 +527,125 @@ function TechProPreview({ formData = {} }) {
 
               <div className="mt-3 space-y-3">
 
-                {displayExperience.slice(0, 3).map((item, index) => {
+                {displayExperience
+                  .slice(0, 3)
+                  .map((item, index) => {
 
-                  const title = getValue(
-                    item,
-                    ["jobTitle", "position", "title", "role"],
-                    "Senior Software Engineer"
-                  )
+                    const title = getValue(
+                      item,
+                      [
+                        "jobTitle",
+                        "position",
+                        "title",
+                        "role",
+                      ],
+                      "Senior Software Engineer"
+                    )
 
-                  const company = getValue(
-                    item,
-                    ["company", "organization", "employer"],
-                    "Cloud Systems Inc."
-                  )
+                    const company = getValue(
+                      item,
+                      [
+                        "company",
+                        "organization",
+                        "employer",
+                      ],
+                      "Cloud Systems Inc."
+                    )
 
-                  const startDate = getValue(
-                    item,
-                    ["startDate", "start", "from"],
-                    "2022"
-                  )
+                    const startDate = getValue(
+                      item,
+                      [
+                        "startDate",
+                        "start",
+                        "from",
+                      ],
+                      "2022"
+                    )
 
-                  const endDate = getValue(
-                    item,
-                    ["endDate", "end", "to"],
-                    "Present"
-                  )
+                    const endDate = getValue(
+                      item,
+                      [
+                        "endDate",
+                        "end",
+                        "to",
+                      ],
+                      "Present"
+                    )
 
-                  const description = getValue(
-                    item,
-                    ["description", "details", "responsibilities"],
-                    "Designed scalable applications and collaborated with engineering teams."
-                  )
+                    const description = getValue(
+                      item,
+                      [
+                        "description",
+                        "details",
+                        "responsibilities",
+                      ],
+                      "Designed scalable applications and collaborated with engineering teams."
+                    )
 
-                  return (
-                    <article key={item.id || index}>
+                    return (
+                      <article
+                        key={item.id || index}
+                      >
 
-                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-start justify-between gap-2">
 
-                        <div className="min-w-0">
+                          <div className="min-w-0">
 
-                          <h3 className="truncate text-[6.5px] font-bold">
-                            {title}
-                          </h3>
+                            {title && (
+                              <h3
+                                className="truncate text-[6.5px] font-bold"
+                                style={{
+                                  color: "#0F172A",
+                                }}
+                              >
+                                {title}
+                              </h3>
+                            )}
 
-                          <p className="mt-0.5 truncate text-[5.2px] font-medium text-indigo-600">
-                            {company}
-                          </p>
+                            {company && (
+                              <p
+                                className="mt-0.5 truncate text-[5.2px] font-medium"
+                                style={{
+                                  color: "#4F46E5",
+                                }}
+                              >
+                                {company}
+                              </p>
+                            )}
+
+                          </div>
+
+                          {(startDate || endDate) && (
+                            <span
+                              className="shrink-0 text-[4.7px]"
+                              style={{
+                                color: "#94A3B8",
+                              }}
+                            >
+                              {startDate}
+                              {startDate && endDate
+                                ? " — "
+                                : ""}
+                              {endDate}
+                            </span>
+                          )}
 
                         </div>
 
-                        <span className="shrink-0 text-[4.7px] text-slate-400">
-                          {startDate} — {endDate}
-                        </span>
+                        {description && (
+                          <p
+                            className="mt-1 text-[5.2px] leading-[1.55]"
+                            style={{
+                              color: "#64748B",
+                            }}
+                          >
+                            {description}
+                          </p>
+                        )}
 
-                      </div>
-
-                      <p className="mt-1 text-[5.2px] leading-[1.55] text-slate-500">
-                        {description}
-                      </p>
-
-                    </article>
-                  )
-                })}
+                      </article>
+                    )
+                  })}
 
               </div>
 
@@ -372,49 +663,93 @@ function TechProPreview({ formData = {} }) {
 
               <div className="mt-3 grid grid-cols-2 gap-2">
 
-                {displayProjects.slice(0, 2).map((item, index) => {
+                {displayProjects
+                  .slice(0, 2)
+                  .map((item, index) => {
 
-                  const name = getValue(
-                    item,
-                    ["name", "projectName", "title"],
-                    "Cloud Analytics Platform"
-                  )
+                    const name = getValue(
+                      item,
+                      [
+                        "name",
+                        "projectName",
+                        "title",
+                      ],
+                      "Cloud Analytics Platform"
+                    )
 
-                  const technologies = getValue(
-                    item,
-                    ["technologies", "technology", "techStack", "stack"],
-                    "React • Node.js • AWS"
-                  )
+                    const technologies =
+                      getValue(
+                        item,
+                        [
+                          "technologies",
+                          "technology",
+                          "techStack",
+                          "stack",
+                        ],
+                        "React • Node.js • AWS"
+                      )
 
-                  const description = getValue(
-                    item,
-                    ["description", "details"],
-                    "Built a scalable technology platform."
-                  )
+                    const description =
+                      getValue(
+                        item,
+                        [
+                          "description",
+                          "details",
+                        ],
+                        "Built a scalable technology platform."
+                      )
 
-                  return (
-                    <article
-                      key={item.id || index}
-                      className="border border-slate-200 p-2.5"
-                    >
+                    return (
+                      <article
+                        key={item.id || index}
+                        className="border p-2.5"
+                        style={{
+                          borderColor: "#E2E8F0",
+                        }}
+                      >
 
-                      <h3 className="text-[5.8px] font-bold">
-                        {name}
-                      </h3>
+                        {name && (
+                          <h3
+                            className="text-[5.8px] font-bold"
+                            style={{
+                              color: "#0F172A",
+                            }}
+                          >
+                            {name}
+                          </h3>
+                        )}
 
-                      <p className="mt-0.5 text-[4.5px] font-medium text-indigo-600">
-                        {Array.isArray(technologies)
-                          ? technologies.join(" • ")
-                          : technologies}
-                      </p>
+                        {technologies && (
+                          <p
+                            className="mt-0.5 text-[4.5px] font-medium"
+                            style={{
+                              color: "#4F46E5",
+                            }}
+                          >
+                            {Array.isArray(
+                              technologies
+                            )
+                              ? technologies.join(
+                                  " • "
+                                )
+                              : technologies}
+                          </p>
+                        )}
 
-                      <p className="mt-1 text-[4.8px] leading-[1.5] text-slate-500">
-                        {description}
-                      </p>
+                        {description && (
+                          <p
+                            className="mt-1 text-[4.8px] leading-[1.5]"
+                            style={{
+                              color: "#64748B",
+                            }}
+                          >
+                            {description}
+                          </p>
+                        )}
 
-                    </article>
-                  )
-                })}
+                      </article>
+                    )
+                  })}
 
               </div>
 
@@ -424,11 +759,9 @@ function TechProPreview({ formData = {} }) {
         </main>
 
       </div>
-
     </div>
   )
 }
-
 
 /* =========================================================
    SIDEBAR TITLE
@@ -437,17 +770,24 @@ function TechProPreview({ formData = {} }) {
 function TechSideTitle({ children }) {
   return (
     <div>
-
-      <h2 className="text-[6px] font-bold uppercase tracking-[0.14em] text-indigo-600">
+      <h2
+        className="text-[6px] font-bold uppercase tracking-[0.14em]"
+        style={{
+          color: "#4F46E5",
+        }}
+      >
         {children}
       </h2>
 
-      <div className="mt-1.5 h-[2px] w-5 bg-indigo-500" />
-
+      <div
+        className="mt-1.5 h-[2px] w-5"
+        style={{
+          backgroundColor: "#6366F1",
+        }}
+      />
     </div>
   )
 }
-
 
 /* =========================================================
    MAIN SECTION TITLE
@@ -457,15 +797,24 @@ function TechMainTitle({ children }) {
   return (
     <div className="flex items-center gap-2">
 
-      <h2 className="shrink-0 text-[7px] font-bold uppercase tracking-[0.12em]">
+      <h2
+        className="shrink-0 text-[7px] font-bold uppercase tracking-[0.12em]"
+        style={{
+          color: "#0F172A",
+        }}
+      >
         {children}
       </h2>
 
-      <div className="h-px flex-1 bg-slate-200" />
+      <div
+        className="h-px flex-1"
+        style={{
+          backgroundColor: "#E2E8F0",
+        }}
+      />
 
     </div>
   )
 }
-
 
 export default TechProPreview

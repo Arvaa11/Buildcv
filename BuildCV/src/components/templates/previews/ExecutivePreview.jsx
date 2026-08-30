@@ -1,19 +1,91 @@
+
 function ExecutivePreview({ formData = {} }) {
+  // =====================================================
+  // PERSONAL DATA
+  // =====================================================
+
+  const personal = formData.personal || {}
+
   const {
-    fullName = "Michael Anderson",
-    jobTitle = "Senior Business Executive",
-    email = "michael@email.com",
-    phone = "+1 555 345 6789",
-    location = "New York, NY",
-    linkedin = "linkedin.com/in/michael",
+    fullName = "",
+    jobTitle = "",
+    email = "",
+    phone = "",
+    location = "",
+    linkedin = "",
     github = "",
-    summary =
-      "Strategic and results-driven executive with extensive experience leading teams, managing complex initiatives, and driving sustainable business growth.",
-    skills = [],
-    experience = [],
-    education = [],
-    projects = [],
-  } = formData
+    summary = "",
+    profileImage = "",
+  } = personal
+
+  // =====================================================
+  // OTHER DATA
+  // =====================================================
+
+  const skills = Array.isArray(formData.skills)
+    ? formData.skills
+    : []
+
+  const experience = Array.isArray(formData.experience)
+    ? formData.experience
+    : []
+
+  const education = Array.isArray(formData.education)
+    ? formData.education
+    : []
+
+  const projects = Array.isArray(formData.projects)
+    ? formData.projects
+    : []
+
+  // =====================================================
+  // CHECK WHETHER RESUME IS EMPTY
+  // =====================================================
+
+  const hasResumeData = Boolean(
+    fullName.trim() ||
+      jobTitle.trim() ||
+      email.trim() ||
+      phone.trim() ||
+      location.trim() ||
+      linkedin.trim() ||
+      github.trim() ||
+      summary.trim() ||
+      profileImage ||
+      skills.length > 0 ||
+      experience.length > 0 ||
+      education.length > 0 ||
+      projects.length > 0
+  )
+
+  // =====================================================
+  // PERSONAL DISPLAY DATA
+  // =====================================================
+
+  const displayPersonal = hasResumeData
+    ? {
+        fullName,
+        jobTitle,
+        email,
+        phone,
+        location,
+        linkedin,
+        github,
+        summary,
+        profileImage,
+      }
+    : {
+        fullName: "Michael Anderson",
+        jobTitle: "Senior Business Executive",
+        email: "michael@email.com",
+        phone: "+1 555 345 6789",
+        location: "New York, NY",
+        linkedin: "linkedin.com/in/michael",
+        github: "",
+        summary:
+          "Strategic and results-driven executive with extensive experience leading teams, managing complex initiatives, and driving sustainable business growth.",
+        profileImage: "",
+      }
 
   // =====================================================
   // FALLBACK DATA
@@ -22,88 +94,108 @@ function ExecutivePreview({ formData = {} }) {
   const displaySkills =
     skills.length > 0
       ? skills
-      : [
-          "Strategic Leadership",
-          "Business Development",
-          "Team Leadership",
-          "Project Management",
-          "Operations",
-          "Stakeholder Management",
-        ]
+      : hasResumeData
+        ? []
+        : [
+            "Strategic Leadership",
+            "Business Development",
+            "Team Leadership",
+            "Project Management",
+            "Operations",
+            "Stakeholder Management",
+          ]
 
   const displayExperience =
     experience.length > 0
       ? experience
-      : [
-          {
-            jobTitle: "Chief Operations Officer",
-            company: "Global Enterprises",
-            startDate: "2022",
-            endDate: "Present",
-            description:
-              "Led organizational strategy, operational planning, and cross-functional teams while driving business performance and long-term growth.",
-          },
-          {
-            jobTitle: "Senior Business Manager",
-            company: "Northstar Group",
-            startDate: "2018",
-            endDate: "2022",
-            description:
-              "Managed strategic initiatives, improved operational processes, and developed partnerships that supported company expansion.",
-          },
-          {
-            jobTitle: "Business Manager",
-            company: "Summit Solutions",
-            startDate: "2015",
-            endDate: "2018",
-            description:
-              "Oversaw business operations, client relationships, and project delivery across multiple departments.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-experience-1",
+              jobTitle: "Chief Operations Officer",
+              company: "Global Enterprises",
+              startDate: "2022",
+              endDate: "Present",
+              description:
+                "Led organizational strategy, operational planning, and cross-functional teams while driving business performance and long-term growth.",
+            },
+            {
+              id: "sample-experience-2",
+              jobTitle: "Senior Business Manager",
+              company: "Northstar Group",
+              startDate: "2018",
+              endDate: "2022",
+              description:
+                "Managed strategic initiatives, improved operational processes, and developed partnerships that supported company expansion.",
+            },
+            {
+              id: "sample-experience-3",
+              jobTitle: "Business Manager",
+              company: "Summit Solutions",
+              startDate: "2015",
+              endDate: "2018",
+              description:
+                "Oversaw business operations, client relationships, and project delivery across multiple departments.",
+            },
+          ]
 
   const displayEducation =
     education.length > 0
       ? education
-      : [
-          {
-            degree: "MBA, Business Administration",
-            institution: "New York University",
-            startDate: "2013",
-            endDate: "2015",
-          },
-          {
-            degree: "BBA, Management",
-            institution: "State University",
-            startDate: "2009",
-            endDate: "2013",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-education-1",
+              degree: "MBA, Business Administration",
+              institution: "New York University",
+              startDate: "2013",
+              endDate: "2015",
+            },
+            {
+              id: "sample-education-2",
+              degree: "BBA, Management",
+              institution: "State University",
+              startDate: "2009",
+              endDate: "2013",
+            },
+          ]
 
   const displayProjects =
     projects.length > 0
       ? projects
-      : [
-          {
-            name: "Business Transformation",
-            technologies: "",
-            description:
-              "Led a company-wide transformation initiative focused on operational efficiency and sustainable growth.",
-          },
-          {
-            name: "Market Expansion Strategy",
-            technologies: "",
-            description:
-              "Developed and executed an expansion strategy that opened new markets and strengthened customer relationships.",
-          },
-        ]
+      : hasResumeData
+        ? []
+        : [
+            {
+              id: "sample-project-1",
+              name: "Business Transformation",
+              technologies: "",
+              description:
+                "Led a company-wide transformation initiative focused on operational efficiency and sustainable growth.",
+            },
+            {
+              id: "sample-project-2",
+              name: "Market Expansion Strategy",
+              technologies: "",
+              description:
+                "Developed and executed an expansion strategy that opened new markets and strengthened customer relationships.",
+            },
+          ]
 
   // =====================================================
-  // HELPER
+  // HELPERS
   // =====================================================
 
   function getValue(item, keys, fallback = "") {
     for (const key of keys) {
-      if (item?.[key]) {
+      if (
+        item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        String(item[key]).trim() !== ""
+      ) {
         return item[key]
       }
     }
@@ -111,54 +203,168 @@ function ExecutivePreview({ formData = {} }) {
     return fallback
   }
 
+  function getSkillName(skill) {
+    if (typeof skill === "string") {
+      return skill
+    }
+
+    return getValue(
+      skill,
+      ["name", "skill", "title"],
+      ""
+    )
+  }
+
+  // =====================================================
+  // RENDER
+  // =====================================================
+
   return (
-    <div className="h-full w-full overflow-hidden bg-white text-slate-900">
+    <div
+      className="
+        h-full
+        w-full
+        overflow-hidden
+        bg-[#FFFFFF]
+        text-[#111827]
+      "
+    >
 
       {/* =====================================================
           HEADER
-      ====================================================== */}
+      ===================================================== */}
 
-      <header className="border-b border-slate-300 px-7 pb-5 pt-6">
+      <header
+        className="
+          border-b
+          border-[#CBD5E1]
+          px-7
+          pb-5
+          pt-6
+        "
+      >
 
         <div className="flex items-start justify-between gap-5">
 
           <div className="min-w-0">
 
-            <p className="text-[5.5px] font-bold uppercase tracking-[0.25em] text-buildcv-violet">
+            <p
+              className="
+                text-[5.5px]
+                font-bold
+                uppercase
+                tracking-[0.25em]
+                text-[#6366F1]
+              "
+            >
               Executive Resume
             </p>
 
-            <h1 className="mt-1.5 truncate text-[17px] font-bold tracking-tight text-slate-900">
-              {fullName}
-            </h1>
+            {displayPersonal.fullName && (
+              <h1
+                className="
+                  mt-1.5
+                  truncate
+                  text-[17px]
+                  font-bold
+                  tracking-tight
+                  text-[#111827]
+                "
+              >
+                {displayPersonal.fullName}
+              </h1>
+            )}
 
-            <p className="mt-1 truncate text-[7px] font-medium uppercase tracking-[0.14em] text-slate-500">
-              {jobTitle}
-            </p>
+            {displayPersonal.jobTitle && (
+              <p
+                className="
+                  mt-1
+                  truncate
+                  text-[7px]
+                  font-medium
+                  uppercase
+                  tracking-[0.14em]
+                  text-[#64748B]
+                "
+              >
+                {displayPersonal.jobTitle}
+              </p>
+            )}
 
           </div>
 
-          {/* INITIALS */}
+          {/* PROFILE IMAGE / INITIALS */}
 
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-slate-300 bg-slate-50 text-[8px] font-bold text-slate-700">
-            {getInitials(fullName)}
-          </div>
+          {displayPersonal.profileImage ? (
+            <img
+              src={displayPersonal.profileImage}
+              alt=""
+              className="
+                h-10
+                w-10
+                shrink-0
+                rounded-full
+                object-cover
+                border
+                border-[#CBD5E1]
+              "
+            />
+          ) : (
+            <div
+              className="
+                flex
+                h-10
+                w-10
+                shrink-0
+                items-center
+                justify-center
+                border
+                border-[#CBD5E1]
+                bg-[#F8FAFC]
+                text-[8px]
+                font-bold
+                text-[#475569]
+              "
+            >
+              {getInitials(displayPersonal.fullName)}
+            </div>
+          )}
 
         </div>
 
         {/* CONTACT */}
 
-        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-[5.5px] text-slate-500">
+        <div
+          className="
+            mt-4
+            flex
+            flex-wrap
+            gap-x-3
+            gap-y-1
+            text-[5.5px]
+            text-[#64748B]
+          "
+        >
 
-          {email && <span>{email}</span>}
+          {displayPersonal.email && (
+            <span>{displayPersonal.email}</span>
+          )}
 
-          {phone && <span>{phone}</span>}
+          {displayPersonal.phone && (
+            <span>{displayPersonal.phone}</span>
+          )}
 
-          {location && <span>{location}</span>}
+          {displayPersonal.location && (
+            <span>{displayPersonal.location}</span>
+          )}
 
-          {linkedin && <span>{linkedin}</span>}
+          {displayPersonal.linkedin && (
+            <span>{displayPersonal.linkedin}</span>
+          )}
 
-          {github && <span>{github}</span>}
+          {displayPersonal.github && (
+            <span>{displayPersonal.github}</span>
+          )}
 
         </div>
 
@@ -166,37 +372,48 @@ function ExecutivePreview({ formData = {} }) {
 
       {/* =====================================================
           CONTENT
-      ====================================================== */}
+      ===================================================== */}
 
       <div className="grid grid-cols-[0.34fr_1fr]">
 
         {/* =================================================
             SIDEBAR
-        ================================================== */}
+        ================================================= */}
 
-        <aside className="border-r border-slate-200 bg-slate-50 px-4 py-5">
+        <aside
+          className="
+            border-r
+            border-[#E2E8F0]
+            bg-[#F8FAFC]
+            px-4
+            py-5
+          "
+        >
 
-          {/* =================================================
-              EXECUTIVE PROFILE
-          ================================================== */}
+          {/* PROFILE */}
 
-          {summary && (
+          {displayPersonal.summary && (
             <section className="mb-5">
 
               <ExecutiveSectionTitle>
                 Profile
               </ExecutiveSectionTitle>
 
-              <p className="mt-2 text-[5.5px] leading-[1.6] text-slate-500">
-                {summary}
+              <p
+                className="
+                  mt-2
+                  text-[5.5px]
+                  leading-[1.6]
+                  text-[#64748B]
+                "
+              >
+                {displayPersonal.summary}
               </p>
 
             </section>
           )}
 
-          {/* =================================================
-              CORE EXPERTISE
-          ================================================== */}
+          {/* EXPERTISE */}
 
           {displaySkills.length > 0 && (
             <section className="mb-5">
@@ -207,35 +424,43 @@ function ExecutivePreview({ formData = {} }) {
 
               <div className="mt-2 space-y-1.5">
 
-                {displaySkills.slice(0, 8).map((skill, index) => {
+                {displaySkills
+                  .slice(0, 8)
+                  .map((skill, index) => {
 
-                  const skillName =
-                    typeof skill === "string"
-                      ? skill
-                      : getValue(
-                          skill,
-                          ["name", "skill", "title"],
-                          "Skill"
-                        )
+                    const skillName =
+                      getSkillName(skill)
 
-                  return (
-                    <div
-                      key={skill.id || index}
-                      className="border-l-2 border-buildcv-violet pl-2 text-[5.5px] font-medium leading-[1.4] text-slate-600"
-                    >
-                      {skillName}
-                    </div>
-                  )
-                })}
+                    if (!skillName) {
+                      return null
+                    }
+
+                    return (
+                      <div
+                        key={
+                          skill?.id || index
+                        }
+                        className="
+                          border-l-2
+                          border-[#6366F1]
+                          pl-2
+                          text-[5.5px]
+                          font-medium
+                          leading-[1.4]
+                          text-[#475569]
+                        "
+                      >
+                        {skillName}
+                      </div>
+                    )
+                  })}
 
               </div>
 
             </section>
           )}
 
-          {/* =================================================
-              EDUCATION
-          ================================================== */}
+          {/* EDUCATION */}
 
           {displayEducation.length > 0 && (
             <section>
@@ -246,44 +471,122 @@ function ExecutivePreview({ formData = {} }) {
 
               <div className="mt-2 space-y-3">
 
-                {displayEducation.slice(0, 2).map((item, index) => {
+                {displayEducation
+                  .slice(0, 2)
+                  .map((item, index) => {
 
-                  const degree = getValue(
-                    item,
-                    ["degree", "qualification", "title", "program"],
-                    "MBA, Business Administration"
-                  )
+                    const degree =
+                      getValue(
+                        item,
+                        [
+                          "degree",
+                          "qualification",
+                          "title",
+                          "program",
+                        ]
+                      )
 
-                  const institution = getValue(
-                    item,
-                    ["institution", "school", "university", "college"],
-                    "New York University"
-                  )
+                    const field =
+                      getValue(
+                        item,
+                        [
+                          "field",
+                          "major",
+                          "specialization",
+                        ]
+                      )
 
-                  const endDate = getValue(
-                    item,
-                    ["endDate", "end", "to"],
-                    "2015"
-                  )
+                    const institution =
+                      getValue(
+                        item,
+                        [
+                          "institution",
+                          "school",
+                          "university",
+                          "college",
+                        ]
+                      )
 
-                  return (
-                    <div key={item.id || index}>
+                    const startDate =
+                      getValue(
+                        item,
+                        [
+                          "startDate",
+                          "start",
+                          "from",
+                        ]
+                      )
 
-                      <h3 className="text-[5.8px] font-bold leading-[1.4] text-slate-700">
-                        {degree}
-                      </h3>
+                    const endDate =
+                      getValue(
+                        item,
+                        [
+                          "endDate",
+                          "end",
+                          "to",
+                        ]
+                      )
 
-                      <p className="mt-0.5 text-[5px] leading-[1.4] text-slate-500">
-                        {institution}
-                      </p>
+                    return (
+                      <div
+                        key={
+                          item?.id || index
+                        }
+                      >
 
-                      <p className="mt-0.5 text-[4.5px] text-slate-400">
-                        {endDate}
-                      </p>
+                        {degree && (
+                          <h3
+                            className="
+                              text-[5.8px]
+                              font-bold
+                              leading-[1.4]
+                              text-[#475569]
+                            "
+                          >
+                            {degree}
 
-                    </div>
-                  )
-                })}
+                            {field
+                              ? ` — ${field}`
+                              : ""}
+                          </h3>
+                        )}
+
+                        {institution && (
+                          <p
+                            className="
+                              mt-0.5
+                              text-[5px]
+                              leading-[1.4]
+                              text-[#64748B]
+                            "
+                          >
+                            {institution}
+                          </p>
+                        )}
+
+                        {(startDate ||
+                          endDate) && (
+                          <p
+                            className="
+                              mt-0.5
+                              text-[4.5px]
+                              text-[#94A3B8]
+                            "
+                          >
+                            {startDate}
+
+                            {startDate &&
+                            endDate
+                              ? " — "
+                              : ""}
+
+                            {endDate}
+                          </p>
+                        )}
+
+                      </div>
+                    )
+                  })}
 
               </div>
 
@@ -294,13 +597,17 @@ function ExecutivePreview({ formData = {} }) {
 
         {/* =================================================
             MAIN CONTENT
-        ================================================== */}
+        ================================================= */}
 
-        <main className="px-6 py-5">
+        <main
+          className="
+            bg-[#FFFFFF]
+            px-6
+            py-5
+          "
+        >
 
-          {/* =================================================
-              EXPERIENCE
-          ================================================== */}
+          {/* EXPERIENCE */}
 
           {displayExperience.length > 0 && (
             <section className="mb-5">
@@ -311,79 +618,153 @@ function ExecutivePreview({ formData = {} }) {
 
               <div className="mt-3 space-y-4">
 
-                {displayExperience.slice(0, 3).map((item, index) => {
+                {displayExperience
+                  .slice(0, 3)
+                  .map((item, index) => {
 
-                  const title = getValue(
-                    item,
-                    ["jobTitle", "position", "title", "role"],
-                    "Chief Operations Officer"
-                  )
+                    const title =
+                      getValue(
+                        item,
+                        [
+                          "jobTitle",
+                          "position",
+                          "title",
+                          "role",
+                        ]
+                      )
 
-                  const company = getValue(
-                    item,
-                    ["company", "organization", "employer"],
-                    "Global Enterprises"
-                  )
+                    const company =
+                      getValue(
+                        item,
+                        [
+                          "company",
+                          "organization",
+                          "employer",
+                        ]
+                      )
 
-                  const startDate = getValue(
-                    item,
-                    ["startDate", "start", "from"],
-                    "2022"
-                  )
+                    const startDate =
+                      getValue(
+                        item,
+                        [
+                          "startDate",
+                          "start",
+                          "from",
+                        ]
+                      )
 
-                  const endDate = getValue(
-                    item,
-                    ["endDate", "end", "to"],
-                    "Present"
-                  )
+                    const endDate =
+                      getValue(
+                        item,
+                        [
+                          "endDate",
+                          "end",
+                          "to",
+                        ]
+                      )
 
-                  const description = getValue(
-                    item,
-                    ["description", "details", "responsibilities"],
-                    "Led strategic initiatives and cross-functional teams while driving business performance and organizational growth."
-                  )
+                    const description =
+                      getValue(
+                        item,
+                        [
+                          "description",
+                          "details",
+                          "responsibilities",
+                        ]
+                      )
 
-                  return (
-                    <article key={item.id || index}>
+                    return (
+                      <article
+                        key={
+                          item?.id || index
+                        }
+                      >
 
-                      <div className="flex items-start justify-between gap-3">
+                        <div
+                          className="
+                            flex
+                            items-start
+                            justify-between
+                            gap-3
+                          "
+                        >
 
-                        <div className="min-w-0">
+                          <div className="min-w-0">
 
-                          <h3 className="truncate text-[7.5px] font-bold text-slate-900">
-                            {title}
-                          </h3>
+                            {title && (
+                              <h3
+                                className="
+                                  truncate
+                                  text-[7.5px]
+                                  font-bold
+                                  text-[#111827]
+                                "
+                              >
+                                {title}
+                              </h3>
+                            )}
 
-                          <p className="mt-0.5 truncate text-[5.8px] font-medium text-buildcv-violet">
-                            {company}
-                          </p>
+                            {company && (
+                              <p
+                                className="
+                                  mt-0.5
+                                  truncate
+                                  text-[5.8px]
+                                  font-medium
+                                  text-[#6366F1]
+                                "
+                              >
+                                {company}
+                              </p>
+                            )}
+
+                          </div>
+
+                          {(startDate ||
+                            endDate) && (
+                            <span
+                              className="
+                                shrink-0
+                                text-[5px]
+                                text-[#94A3B8]
+                              "
+                            >
+                              {startDate}
+
+                              {startDate &&
+                              endDate
+                                ? " — "
+                                : ""}
+
+                              {endDate}
+                            </span>
+                          )}
 
                         </div>
 
-                        <span className="shrink-0 text-[5px] text-slate-400">
-                          {startDate} — {endDate}
-                        </span>
+                        {description && (
+                          <p
+                            className="
+                              mt-1.5
+                              text-[5.8px]
+                              leading-[1.6]
+                              text-[#64748B]
+                            "
+                          >
+                            {description}
+                          </p>
+                        )}
 
-                      </div>
-
-                      {description && (
-                        <p className="mt-1.5 text-[5.8px] leading-[1.6] text-slate-500">
-                          {description}
-                        </p>
-                      )}
-
-                    </article>
-                  )
-                })}
+                      </article>
+                    )
+                  })}
 
               </div>
 
             </section>
           )}
 
-          {/* =================================================
-              SELECTED PROJECTS
-          ================================================== */}
+          {/* PROJECTS */}
 
           {displayProjects.length > 0 && (
             <section>
@@ -394,51 +775,98 @@ function ExecutivePreview({ formData = {} }) {
 
               <div className="mt-3 grid grid-cols-2 gap-2">
 
-                {displayProjects.slice(0, 2).map((item, index) => {
+                {displayProjects
+                  .slice(0, 2)
+                  .map((item, index) => {
 
-                  const name = getValue(
-                    item,
-                    ["name", "projectName", "title"],
-                    "Business Transformation"
-                  )
+                    const name =
+                      getValue(
+                        item,
+                        [
+                          "name",
+                          "projectName",
+                          "title",
+                        ]
+                      )
 
-                  const technologies = getValue(
-                    item,
-                    ["technologies", "technology", "techStack", "stack"],
-                    ""
-                  )
+                    const technologies =
+                      getValue(
+                        item,
+                        [
+                          "technologies",
+                          "technology",
+                          "techStack",
+                          "stack",
+                        ]
+                      )
 
-                  const description = getValue(
-                    item,
-                    ["description", "details"],
-                    "Led a strategic initiative focused on improving organizational performance."
-                  )
+                    const description =
+                      getValue(
+                        item,
+                        [
+                          "description",
+                          "details",
+                        ]
+                      )
 
-                  return (
-                    <div
-                      key={item.id || index}
-                      className="border border-slate-200 p-2.5"
-                    >
+                    return (
+                      <div
+                        key={
+                          item?.id || index
+                        }
+                        className="
+                          border
+                          border-[#E2E8F0]
+                          p-2.5
+                        "
+                      >
 
-                      <h3 className="text-[6.5px] font-bold text-slate-900">
-                        {name}
-                      </h3>
+                        {name && (
+                          <h3
+                            className="
+                              text-[6.5px]
+                              font-bold
+                              text-[#111827]
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
 
-                      {technologies && (
-                        <p className="mt-0.5 text-[5px] text-buildcv-violet">
-                          {Array.isArray(technologies)
-                            ? technologies.join(" • ")
-                            : technologies}
-                        </p>
-                      )}
+                        {technologies && (
+                          <p
+                            className="
+                              mt-0.5
+                              text-[5px]
+                              text-[#6366F1]
+                            "
+                          >
+                            {Array.isArray(
+                              technologies
+                            )
+                              ? technologies.join(
+                                  " • "
+                                )
+                              : technologies}
+                          </p>
+                        )}
 
-                      <p className="mt-1 text-[5px] leading-[1.5] text-slate-500">
-                        {description}
-                      </p>
+                        {description && (
+                          <p
+                            className="
+                              mt-1
+                              text-[5px]
+                              leading-[1.5]
+                              text-[#64748B]
+                            "
+                          >
+                            {description}
+                          </p>
+                        )}
 
-                    </div>
-                  )
-                })}
+                      </div>
+                    )
+                  })}
 
               </div>
 
@@ -454,9 +882,9 @@ function ExecutivePreview({ formData = {} }) {
 }
 
 
-/* =========================================================
-   INITIALS
-========================================================= */
+// =====================================================
+// INITIALS
+// =====================================================
 
 function getInitials(name = "") {
   const words = name
@@ -481,38 +909,68 @@ function getInitials(name = "") {
 }
 
 
-/* =========================================================
-   SIDEBAR SECTION TITLE
-========================================================= */
+// =====================================================
+// SIDEBAR SECTION TITLE
+// =====================================================
 
 function ExecutiveSectionTitle({ children }) {
   return (
     <div>
 
-      <h2 className="text-[6px] font-bold uppercase tracking-[0.14em] text-slate-800">
+      <h2
+        className="
+          text-[6px]
+          font-bold
+          uppercase
+          tracking-[0.14em]
+          text-[#475569]
+        "
+      >
         {children}
       </h2>
 
-      <div className="mt-1.5 h-[2px] w-5 bg-buildcv-violet" />
+      <div
+        className="
+          mt-1.5
+          h-[2px]
+          w-5
+          bg-[#6366F1]
+        "
+      />
 
     </div>
   )
 }
 
 
-/* =========================================================
-   MAIN SECTION TITLE
-========================================================= */
+// =====================================================
+// MAIN SECTION TITLE
+// =====================================================
 
 function ExecutiveMainTitle({ children }) {
   return (
     <div className="flex items-center gap-2">
 
-      <h2 className="shrink-0 text-[7px] font-bold uppercase tracking-[0.13em] text-slate-900">
+      <h2
+        className="
+          shrink-0
+          text-[7px]
+          font-bold
+          uppercase
+          tracking-[0.13em]
+          text-[#111827]
+        "
+      >
         {children}
       </h2>
 
-      <div className="h-px flex-1 bg-slate-200" />
+      <div
+        className="
+          h-px
+          flex-1
+          bg-[#E2E8F0]
+        "
+      />
 
     </div>
   )

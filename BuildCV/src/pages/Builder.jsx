@@ -128,68 +128,68 @@ function normalizeFormData(data) {
     education:
       Array.isArray(data.education)
         ? data.education.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
+          (item) => ({
+            id:
+              item.id ||
+              createId(),
 
-              institution:
-                item.institution ||
-                "",
+            institution:
+              item.institution ||
+              "",
 
-              degree:
-                item.degree ||
-                "",
+            degree:
+              item.degree ||
+              "",
 
-              field:
-                item.field ||
-                "",
+            field:
+              item.field ||
+              "",
 
-              startDate:
-                item.startDate ||
-                "",
+            startDate:
+              item.startDate ||
+              "",
 
-              endDate:
-                item.endDate ||
-                "",
+            endDate:
+              item.endDate ||
+              "",
 
-              description:
-                item.description ||
-                "",
-            })
-          )
+            description:
+              item.description ||
+              "",
+          })
+        )
         : defaults.education,
 
     experience:
       Array.isArray(data.experience)
         ? data.experience.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
+          (item) => ({
+            id:
+              item.id ||
+              createId(),
 
-              company:
-                item.company ||
-                "",
+            company:
+              item.company ||
+              "",
 
-              position:
-                item.position ||
-                item.jobTitle ||
-                "",
+            position:
+              item.position ||
+              item.jobTitle ||
+              "",
 
-              startDate:
-                item.startDate ||
-                "",
+            startDate:
+              item.startDate ||
+              "",
 
-              endDate:
-                item.endDate ||
-                "",
+            endDate:
+              item.endDate ||
+              "",
 
-              description:
-                item.description ||
-                "",
-            })
-          )
+            description:
+              item.description ||
+              "",
+          })
+        )
         : defaults.experience,
 
     skills:
@@ -200,28 +200,28 @@ function normalizeFormData(data) {
     projects:
       Array.isArray(data.projects)
         ? data.projects.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
+          (item) => ({
+            id:
+              item.id ||
+              createId(),
 
-              name:
-                item.name ||
-                "",
+            name:
+              item.name ||
+              "",
 
-              description:
-                item.description ||
-                "",
+            description:
+              item.description ||
+              "",
 
-              technologies:
-                item.technologies ||
-                "",
+            technologies:
+              item.technologies ||
+              "",
 
-              link:
-                item.link ||
-                "",
-            })
-          )
+            link:
+              item.link ||
+              "",
+          })
+        )
         : defaults.projects,
   }
 }
@@ -304,7 +304,7 @@ function Builder() {
   const [activeStep, setActiveStep] =
     useState(
       BUILDER_STEPS[0]?.id ||
-        "personal"
+      "personal"
     )
 
   // ===================================================
@@ -324,8 +324,8 @@ function Builder() {
 
       return getTemplateId(
         stateTemplate ||
-          savedTemplate ||
-          "modern"
+        savedTemplate ||
+        "modern"
       )
     }, [location.state])
 
@@ -380,17 +380,17 @@ function Builder() {
 
   const currentStep =
     BUILDER_STEPS[
-      currentStepIndex
+    currentStepIndex
     ]
 
   const progressPercentage =
     BUILDER_STEPS.length > 1
       ? Math.round(
-          (currentStepIndex /
-            (BUILDER_STEPS.length -
-              1)) *
-            100
-        )
+        (currentStepIndex /
+          (BUILDER_STEPS.length -
+            1)) *
+        100
+      )
       : 0
 
   // ===================================================
@@ -445,8 +445,8 @@ function Builder() {
       const updatedPersonal =
         typeof update === "function"
           ? update(
-              current.personal
-            )
+            current.personal
+          )
           : update
 
       return {
@@ -693,10 +693,9 @@ function Builder() {
                       text-xs
                       font-semibold
                       whitespace-nowrap
-                      ${
-                        isActive
-                          ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
-                          : "border-[#E2E8F0] bg-white text-[#718096]"
+                      ${isActive
+                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
+                        : "border-[#E2E8F0] bg-white text-[#718096]"
                       }
                     `}
                   >
@@ -841,14 +840,13 @@ function Builder() {
                           className={`
                             h-1.5
                             rounded-full
-                            ${
-                              index ===
+                            ${index ===
                               currentStepIndex
-                                ? "w-6 bg-[#6366F1]"
-                                : index <
-                                    currentStepIndex
-                                  ? "w-3 bg-[#6366F1]"
-                                  : "w-3 bg-[#E2E8F0]"
+                              ? "w-6 bg-[#6366F1]"
+                              : index <
+                                currentStepIndex
+                                ? "w-3 bg-[#6366F1]"
+                                : "w-3 bg-[#E2E8F0]"
                             }
                           `}
                         />
@@ -865,7 +863,7 @@ function Builder() {
                     disabled={
                       currentStepIndex ===
                       BUILDER_STEPS.length -
-                        1
+                      1
                     }
                     className="
                       rounded-lg
@@ -983,7 +981,7 @@ function Builder() {
 
               <div className="border-t border-[#E2E8F0] p-4">
 
-                <DownloadButton />
+                <DownloadButton previewId="resume-preview-desktop" />
 
                 <p className="mt-2 text-center text-[10px] text-[#718096]">
                   Your resume will be exported as PDF
