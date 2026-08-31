@@ -179,7 +179,7 @@ function MinimalPreview({ formData = {} }) {
       className="
         h-full
         w-full
-        overflow-hidden
+        overflow-visible
         bg-white
         px-6
         py-6
@@ -199,7 +199,7 @@ function MinimalPreview({ formData = {} }) {
 
         <h1
           className="
-            text-[16px]
+            text-[24px]
             font-semibold
             tracking-tight
           "
@@ -213,7 +213,7 @@ function MinimalPreview({ formData = {} }) {
         <p
           className="
             mt-1
-            text-[7px]
+            text-[11px]
             font-medium
             uppercase
             tracking-[0.16em]
@@ -234,7 +234,7 @@ function MinimalPreview({ formData = {} }) {
             flex-wrap
             gap-x-3
             gap-y-1
-            text-[5.5px]
+            text-[8px]
           "
           style={{
             color: "#718096",
@@ -297,7 +297,7 @@ function MinimalPreview({ formData = {} }) {
             className="
               mt-2
               max-w-[95%]
-              text-[6.5px]
+              text-[9px]
               leading-[1.6]
             "
             style={{
@@ -397,7 +397,7 @@ function MinimalPreview({ formData = {} }) {
                         <h3
                           className="
                             truncate
-                            text-[7px]
+                            text-[10px]
                             font-semibold
                           "
                           style={{
@@ -411,7 +411,7 @@ function MinimalPreview({ formData = {} }) {
                           className="
                             mt-0.5
                             truncate
-                            text-[5.5px]
+                            text-[8px]
                           "
                           style={{
                             color: "#475569",
@@ -425,7 +425,7 @@ function MinimalPreview({ formData = {} }) {
                       <span
                         className="
                           shrink-0
-                          text-[5px]
+                          text-[7px]
                         "
                         style={{
                           color: "#718096",
@@ -440,7 +440,7 @@ function MinimalPreview({ formData = {} }) {
                       <p
                         className="
                           mt-1
-                          text-[5.5px]
+                          text-[8px]
                           leading-[1.55]
                         "
                         style={{
@@ -546,7 +546,7 @@ function MinimalPreview({ formData = {} }) {
                       <h3
                         className="
                           truncate
-                          text-[7px]
+                          text-[10px]
                           font-semibold
                         "
                         style={{
@@ -564,7 +564,7 @@ function MinimalPreview({ formData = {} }) {
                         className="
                           mt-0.5
                           truncate
-                          text-[5.5px]
+                          text-[8px]
                         "
                         style={{
                           color: "#475569",
@@ -578,7 +578,7 @@ function MinimalPreview({ formData = {} }) {
                     <span
                       className="
                         shrink-0
-                        text-[5px]
+                        text-[7px]
                       "
                       style={{
                         color: "#718096",
@@ -652,7 +652,7 @@ function MinimalPreview({ formData = {} }) {
 
                     <h3
                       className="
-                        text-[7px]
+                        text-[10px]
                         font-semibold
                       "
                       style={{
@@ -666,7 +666,7 @@ function MinimalPreview({ formData = {} }) {
                       <p
                         className="
                           mt-0.5
-                          text-[5px]
+                          text-[7px]
                         "
                         style={{
                           color: "#718096",
@@ -685,7 +685,7 @@ function MinimalPreview({ formData = {} }) {
                     <p
                       className="
                         mt-1
-                        text-[5.5px]
+                        text-[8px]
                         leading-[1.5]
                       "
                       style={{
@@ -752,7 +752,7 @@ function MinimalPreview({ formData = {} }) {
                       skill?.id || index
                     }
                     className="
-                      text-[5.5px]
+                      text-[8px]
                       font-medium
                     "
                     style={{
@@ -785,7 +785,7 @@ function MinimalSectionTitle({ children }) {
       <h2
         className="
           shrink-0
-          text-[6.5px]
+          text-[9px]
           font-bold
           uppercase
           tracking-[0.16em]

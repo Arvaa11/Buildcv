@@ -107,8 +107,8 @@ function Experience({ formData, setFormData }) {
     <section
       className="
         flex
-        h-full
-        min-h-0
+        h-[calc(100vh-190px)]
+        min-h-[740px]
         flex-col
         overflow-hidden
         rounded-xl

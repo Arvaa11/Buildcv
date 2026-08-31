@@ -122,7 +122,7 @@ function TemplateSelector({
   }, [activeCategory])
 
   return (
-    <section className="min-w-0 space-y-8 p-7">
+    <section className="min-w-0 space-y-8 pt-25 p-7">
 
       {/* =================================================
     HERO
@@ -477,8 +477,8 @@ function TemplateSelector({
             border
             border-buildcv-indigo
             bg-buildcv-indigo
-            px-4
-            py-3
+            px-5
+            py-1
             text-sm
             font-medium
             text-white

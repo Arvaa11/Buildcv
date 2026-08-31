@@ -11,22 +11,9 @@ import StartupPreview from "./templates/previews/StartupPreview"
 import TechProPreview from "./templates/previews/TechProPreview"
 import ATSFocusPreview from "./templates/previews/ATSFocusPreview"
 
+
 // =====================================================
 // BUILDCV — RESUME PREVIEW
-// =====================================================
-//
-// IMPORTANT:
-// This component is the single controller for all
-// resume templates.
-//
-// Builder passes:
-//   selectedTemplate
-//   formData
-//
-// ResumePreview then renders the correct template.
-//
-// The exact same #resume-preview element is used by
-// DownloadButton for PDF generation.
 // =====================================================
 
 function ResumePreview({
@@ -75,20 +62,12 @@ function ResumePreview({
 
   const renderTemplate = () => {
     switch (selectedTemplate) {
-      // -------------------------------------------------
-      // MODERN
-      // -------------------------------------------------
-
       case "modern":
         return (
           <ModernPreview
             formData={normalizedData}
           />
         )
-
-      // -------------------------------------------------
-      // PROFESSIONAL
-      // -------------------------------------------------
 
       case "professional":
         return (
@@ -97,20 +76,12 @@ function ResumePreview({
           />
         )
 
-      // -------------------------------------------------
-      // MINIMAL
-      // -------------------------------------------------
-
       case "minimal":
         return (
           <MinimalPreview
             formData={normalizedData}
           />
         )
-
-      // -------------------------------------------------
-      // CLASSIC
-      // -------------------------------------------------
 
       case "classic":
         return (
@@ -119,20 +90,12 @@ function ResumePreview({
           />
         )
 
-      // -------------------------------------------------
-      // ELEGANT
-      // -------------------------------------------------
-
       case "elegant":
         return (
           <ElegantPreview
             formData={normalizedData}
           />
         )
-
-      // -------------------------------------------------
-      // CREATIVE
-      // -------------------------------------------------
 
       case "creative":
         return (
@@ -141,20 +104,12 @@ function ResumePreview({
           />
         )
 
-      // -------------------------------------------------
-      // DEVELOPER
-      // -------------------------------------------------
-
       case "developer":
         return (
           <DeveloperPreview
             formData={normalizedData}
           />
         )
-
-      // -------------------------------------------------
-      // EXECUTIVE
-      // -------------------------------------------------
 
       case "executive":
         return (
@@ -163,20 +118,12 @@ function ResumePreview({
           />
         )
 
-      // -------------------------------------------------
-      // ACADEMIC
-      // -------------------------------------------------
-
       case "academic":
         return (
           <AcademicPreview
             formData={normalizedData}
           />
         )
-
-      // -------------------------------------------------
-      // STARTUP
-      // -------------------------------------------------
 
       case "startup":
         return (
@@ -185,21 +132,6 @@ function ResumePreview({
           />
         )
 
-      // -------------------------------------------------
-      // ATS FOCUS
-      // -------------------------------------------------
-
-      case "ats-focus":
-        return (
-          <ATSFocusPreview
-            formData={normalizedData}
-          />
-        )
-
-      // -------------------------------------------------
-      // TECH PRO
-      // -------------------------------------------------
-
       case "tech-pro":
         return (
           <TechProPreview
@@ -207,9 +139,12 @@ function ResumePreview({
           />
         )
 
-      // -------------------------------------------------
-      // FALLBACK
-      // -------------------------------------------------
+      case "ats-focus":
+        return (
+          <ATSFocusPreview
+            formData={normalizedData}
+          />
+        )
 
       default:
         return (
@@ -227,14 +162,27 @@ function ResumePreview({
   return (
     <div
       id={previewId}
-      className="
-        resume-preview
-        mx-auto
-        w-full
-        max-w-[794px]
-        overflow-hidden
-        bg-white
-      "
+      className="resume-preview"
+      style={{
+        width: "210mm",
+        minWidth: "210mm",
+
+        height: "297mm",
+        minHeight: "297mm",
+
+        margin: "0",
+        padding: "0",
+
+        backgroundColor: "#FFFFFF",
+
+        color: "#111827",
+
+        boxSizing: "border-box",
+
+        overflow: "hidden",
+
+        position: "relative",
+      }}
     >
       {renderTemplate()}
     </div>

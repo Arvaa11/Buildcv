@@ -183,7 +183,7 @@ function PersonalInfo({ formData, setFormData }) {
       className="
       flex
       h-[calc(100vh-190px)]
-      min-h-[620px]
+      min-h-[740px]
       flex-col
       overflow-hidden
       rounded-xl

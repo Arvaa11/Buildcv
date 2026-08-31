@@ -267,6 +267,7 @@ function Home() {
                   flex-col
                   gap-3
                   sm:flex-row
+                  
                 "
               >
 
@@ -306,7 +307,7 @@ function Home() {
     -translate-x-full
     bg-gradient-to-r
     from-transparent
-    via-white/25
+    via-white/25F
     to-transparent
     transition-transform
     duration-700
@@ -372,7 +373,7 @@ function Home() {
                   </span>
                 </Link>
 
-                <div className="flex -space-x-2">
+                <div className="flex -space-x-2 ">
 
                   {["A", "M", "S", "J"].map((letter, index) => (
 

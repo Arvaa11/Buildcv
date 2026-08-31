@@ -528,7 +528,7 @@ function Builder() {
   // ===================================================
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-[#111827]">
+    <main className="min-h-screen bg-[#F8FAFC] text-[#111827] pt-45">
 
       {/* =================================================
           HEADER

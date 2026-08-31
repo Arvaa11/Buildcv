@@ -1,4 +1,6 @@
-import { Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes,Route } from "react-router-dom"
+import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 
 import Home from "./pages/Home"
 import Templates from "./pages/Templates"
@@ -7,23 +9,30 @@ import Preview from "./pages/Preview"
 
 function App() {
   return (
-    <Routes>
-      {/* Home */}
-      <Route path="/" element={<Home />} />
+    <>
+      <Navbar />
+      
 
-      {/* Templates */}
-      <Route path="/templates" element={<Templates />} />
+        <Routes>
+          {/* Home */}
+          <Route path="/" element={<Home />} />
 
-      {/* Resume Builder */}
-      <Route path="/builder" element={<Builder />} />
+          {/* Templates */}
+          <Route path="/templates" element={<Templates />} />
 
-      {/* Resume Preview */}
-      <Route path="/preview" element={<Preview />} />
+          {/* Resume Builder */}
+          <Route path="/builder" element={<Builder />} />
 
-      {/* Fallback */}
-      <Route path="*" element={<Home />} />
-    </Routes>
-  )
+          {/* Resume Preview */}
+          <Route path="/preview" element={<Preview />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Home />} />
+        </Routes>
+      
+      <Footer />
+    </>
+  );
 }
 
 export default App

@@ -271,7 +271,7 @@ function Footer() {
               {/* CTA */}
 
               <Link
-                to="/builder"
+                to="/template"
                 className="
                   group/button
                   inline-flex

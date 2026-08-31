@@ -195,12 +195,15 @@ function Projects({ formData, setFormData }) {
   return (
     <section
       className="
+        flex
+        h-[calc(100vh-190px)]
+        min-h-[740px]
+        flex-col
         overflow-hidden
-        rounded-buildcv-2xl
+        rounded-xl
         border
-        border-buildcv-border
-        bg-buildcv-card
-        shadow-buildcv-md
+        border-[#E2E8F0]
+        bg-white
       "
     >
 
@@ -314,7 +317,12 @@ function Projects({ formData, setFormData }) {
           CONTENT
       ====================================================== */}
 
-      <div className="p-5 sm:p-7">
+      <div className="min-h-0
+          flex-1
+          overflow-y-auto
+          overscroll-contain
+          p-5
+          sm:p-7">
 
         {/* =================================================
             PROJECT LIST

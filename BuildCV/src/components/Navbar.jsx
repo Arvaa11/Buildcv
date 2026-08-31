@@ -201,34 +201,14 @@ function Navbar() {
 
           <div className="flex items-center gap-2 sm:gap-3">
 
-            {/* LOGIN */}
-
-            <button
-              type="button"
-              className="
-                hidden
-                rounded-buildcv-md
-                px-3
-                py-2.5
-                text-sm
-                font-semibold
-                text-buildcv-text-secondary
-                transition-all
-                hover:bg-buildcv-violet-50
-                hover:text-buildcv-violet
-                sm:inline-flex
-              "
-            >
-              Log in
-            </button>
-
+          
 
             {/* =================================================
                 CREATE RESUME
             ================================================= */}
 
             <Link
-              to="/builder"
+              to="/templates"
               className="
                 inline-flex
                 items-center

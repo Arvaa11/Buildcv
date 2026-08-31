@@ -1,14 +1,12 @@
 import { useState } from "react"
-import html2pdf from "html2pdf.js"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
 
 function DownloadButton() {
-  const [isDownloading, setIsDownloading] =
-    useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   const handleDownload = async () => {
-    if (isDownloading) {
-      return
-    }
+    if (isDownloading) return
 
     let printContainer = null
 
@@ -20,366 +18,159 @@ function DownloadButton() {
       // =================================================
 
       const previews = Array.from(
-        document.querySelectorAll(
-          ".resume-preview"
-        )
+        document.querySelectorAll(".resume-preview")
       )
 
       const preview = previews.find((element) => {
-        const rect =
-          element.getBoundingClientRect()
+        const rect = element.getBoundingClientRect()
 
-        return (
-          rect.width > 0 &&
-          rect.height > 0
-        )
+        return rect.width > 0 && rect.height > 0
       })
 
       if (!preview) {
-        throw new Error(
-          "Resume preview could not be found."
-        )
+        throw new Error("Resume preview could not be found.")
       }
 
       // =================================================
-      // CREATE TEMPORARY PRINT CONTAINER
+      // WAIT FOR FONTS
       // =================================================
 
-      printContainer =
-        document.createElement("div")
+      if (document.fonts?.ready) {
+        await document.fonts.ready
+      }
 
-      printContainer.style.position =
-        "fixed"
+      // =================================================
+      // WAIT FOR IMAGES
+      // =================================================
 
-      printContainer.style.left =
-        "-100000px"
+      const images = Array.from(
+        preview.querySelectorAll("img")
+      )
 
-      printContainer.style.top = "0"
+      await Promise.all(
+        images.map((img) => {
+          if (img.complete) {
+            return Promise.resolve()
+          }
 
-      printContainer.style.width =
-        `${preview.offsetWidth}px`
-
-      printContainer.style.background =
-        "#FFFFFF"
-
-      printContainer.style.zIndex =
-        "-999999"
-
-      document.body.appendChild(
-        printContainer
+          return new Promise((resolve) => {
+            img.onload = resolve
+            img.onerror = resolve
+          })
+        })
       )
 
       // =================================================
-      // CLONE SELECTED TEMPLATE
+      // CREATE OFF-SCREEN PRINT CONTAINER
       // =================================================
 
-      const clone =
-        preview.cloneNode(true)
+      printContainer = document.createElement("div")
+
+      Object.assign(printContainer.style, {
+        position: "fixed",
+        left: "-100000px",
+        top: "0",
+
+        width: "794px",
+
+        margin: "0",
+        padding: "0",
+
+        backgroundColor: "#FFFFFF",
+
+        overflow: "visible",
+
+        visibility: "visible",
+        pointerEvents: "none",
+      })
+
+      document.body.appendChild(printContainer)
+
+      // =================================================
+      // CLONE RESUME
+      // =================================================
+
+      const clone = preview.cloneNode(true)
 
       clone.removeAttribute("id")
 
-      clone.style.width =
-        `${preview.offsetWidth}px`
+      Object.assign(clone.style, {
+        width: "794px",
+        minWidth: "794px",
+        maxWidth: "794px",
 
-      clone.style.maxWidth = "none"
+        height: "auto",
+        minHeight: "0",
+        maxHeight: "none",
 
-      clone.style.height = "auto"
+        margin: "0",
+        padding: "0",
 
-      clone.style.overflow = "visible"
+        backgroundColor: "#FFFFFF",
 
-      clone.style.backgroundColor =
-        "#FFFFFF"
+        overflow: "visible",
+
+        boxSizing: "border-box",
+
+        transform: "none",
+      })
 
       printContainer.appendChild(clone)
 
       // =================================================
-      // COPY COMPUTED STYLES
-      // =================================================
-      //
-      // html2canvas has trouble parsing modern CSS
-      // color functions such as:
-      //
-      // oklch(...)
-      //
-      // We therefore convert the computed styles
-      // into browser-resolved RGB values.
-      //
+      // FIND INNER RESUME PAGE
       // =================================================
 
-      const originalElements = [
-        preview,
-        ...preview.querySelectorAll("*"),
-      ]
+      const page = clone.querySelector(":scope > div")
 
-      const clonedElements = [
-        clone,
-        ...clone.querySelectorAll("*"),
-      ]
+      if (page) {
+        Object.assign(page.style, {
+          width: "794px",
+          minWidth: "794px",
+          maxWidth: "794px",
 
-      originalElements.forEach(
-        (original, index) => {
-          const cloned =
-            clonedElements[index]
+          height: "auto",
+          minHeight: "0",
+          maxHeight: "none",
 
-          if (!cloned) {
-            return
-          }
+          overflow: "visible",
 
-          const computed =
-            window.getComputedStyle(
-              original
-            )
+          boxSizing: "border-box",
 
-          // ---------------------------------------------
-          // IMPORTANT VISUAL PROPERTIES
-          // ---------------------------------------------
+          margin: "0",
 
-          const properties = [
-            "boxSizing",
-
-            "display",
-            "position",
-            "top",
-            "right",
-            "bottom",
-            "left",
-
-            "width",
-            "minWidth",
-            "maxWidth",
-            "height",
-            "minHeight",
-            "maxHeight",
-
-            "marginTop",
-            "marginRight",
-            "marginBottom",
-            "marginLeft",
-
-            "paddingTop",
-            "paddingRight",
-            "paddingBottom",
-            "paddingLeft",
-
-            "fontFamily",
-            "fontSize",
-            "fontWeight",
-            "fontStyle",
-            "lineHeight",
-            "letterSpacing",
-            "textAlign",
-            "textTransform",
-            "textDecoration",
-            "whiteSpace",
-
-            "color",
-            "backgroundColor",
-
-            "borderTopWidth",
-            "borderRightWidth",
-            "borderBottomWidth",
-            "borderLeftWidth",
-
-            "borderTopStyle",
-            "borderRightStyle",
-            "borderBottomStyle",
-            "borderLeftStyle",
-
-            "borderTopColor",
-            "borderRightColor",
-            "borderBottomColor",
-            "borderLeftColor",
-
-            "borderTopLeftRadius",
-            "borderTopRightRadius",
-            "borderBottomRightRadius",
-            "borderBottomLeftRadius",
-
-            "boxShadow",
-
-            "opacity",
-
-            "overflow",
-            "overflowX",
-            "overflowY",
-
-            "flex",
-            "flexDirection",
-            "flexWrap",
-            "flexGrow",
-            "flexShrink",
-            "flexBasis",
-
-            "alignItems",
-            "alignSelf",
-            "justifyContent",
-            "justifyItems",
-            "gap",
-            "columnGap",
-            "rowGap",
-
-            "gridTemplateColumns",
-            "gridTemplateRows",
-            "gridColumn",
-            "gridRow",
-
-            "verticalAlign",
-
-            "transform",
-            "transformOrigin",
-
-            "objectFit",
-            "objectPosition",
-
-            "listStyle",
-            "listStyleType",
-
-            "visibility",
-          ]
-
-          properties.forEach(
-            (property) => {
-              const value =
-                computed[property]
-
-              if (
-                value &&
-                value !== "normal" &&
-                value !== "none"
-              ) {
-                try {
-                  cloned.style[property] =
-                    value
-                } catch {
-                  // Ignore unsupported properties
-                }
-              }
-            }
-          )
-
-          // ---------------------------------------------
-          // REMOVE CLASSES
-          // ---------------------------------------------
-          //
-          // This is important because Tailwind's
-          // stylesheet can contain oklch().
-          //
-          // Once computed styles are copied above,
-          // the classes are no longer required.
-          //
-          cloned.removeAttribute(
-            "class"
-          )
-
-          // ---------------------------------------------
-          // REMOVE INLINE CSS VARIABLES
-          // ---------------------------------------------
-
-          cloned.style.removeProperty(
-            "--tw-ring-color"
-          )
-
-          cloned.style.removeProperty(
-            "--tw-shadow"
-          )
-
-          cloned.style.removeProperty(
-            "--tw-shadow-colored"
-          )
-
-          cloned.style.removeProperty(
-            "--tw-ring-shadow"
-          )
-
-          cloned.style.removeProperty(
-            "--tw-inset-shadow"
-          )
-
-          cloned.style.removeProperty(
-            "--tw-inset-ring-shadow"
-          )
-        }
-      )
+          transform: "none",
+        })
+      }
 
       // =================================================
-      // REMOVE STYLESHEETS FROM CLONE
-      // =================================================
-      //
-      // The computed styles are now inline.
-      //
-      // Removing stylesheet references prevents
-      // html2canvas from parsing Tailwind's oklch()
-      // declarations.
-      //
+      // REMOVE INTERACTIVE ELEMENTS
       // =================================================
 
-      const styleTags =
-        clone.querySelectorAll(
-          "style, link[rel='stylesheet']"
+      clone
+        .querySelectorAll(
+          "button, input, textarea, select"
         )
-
-      styleTags.forEach((element) => {
-        element.remove()
-      })
-
-      // =================================================
-      // REMOVE PROBLEMATIC CSS VARIABLES
-      // =================================================
-
-      const allElements = [
-        clone,
-        ...clone.querySelectorAll("*"),
-      ]
-
-      allElements.forEach((element) => {
-        const style =
-          element.getAttribute("style")
-
-        if (!style) {
-          return
-        }
-
-        if (
-          style.includes("oklch(") ||
-          style.includes("oklab(")
-        ) {
-          // Re-copy safe computed colors
-          // from the original element.
-
-          const original =
-            originalElements[
-              allElements.indexOf(element)
-            ]
-
-          if (original) {
-            const computed =
-              window.getComputedStyle(
-                original
-              )
-
-            element.style.color =
-              computed.color
-
-            element.style.backgroundColor =
-              computed.backgroundColor
-
-            element.style.borderTopColor =
-              computed.borderTopColor
-
-            element.style.borderRightColor =
-              computed.borderRightColor
-
-            element.style.borderBottomColor =
-              computed.borderBottomColor
-
-            element.style.borderLeftColor =
-              computed.borderLeftColor
-          }
-        }
-      })
+        .forEach((element) => {
+          element.remove()
+        })
 
       // =================================================
-      // WAIT FOR BROWSER PAINT
+      // IMPORTANT:
+      // PRESERVE ORIGINAL FONT SIZES
+      // AND FORCE TEXT WRAPPING
+      // =================================================
+
+      clone
+        .querySelectorAll("*")
+        .forEach((element) => {
+          element.style.boxSizing = "border-box"
+          element.style.maxWidth = "100%"
+          element.style.overflowWrap = "anywhere"
+        })
+
+      // =================================================
+      // WAIT FOR LAYOUT
       // =================================================
 
       await new Promise((resolve) => {
@@ -389,62 +180,136 @@ function DownloadButton() {
       })
 
       // =================================================
-      // PDF OPTIONS
+      // GET ACTUAL RESUME HEIGHT
       // =================================================
 
-      const options = {
-        margin: 0,
+      const resumeWidth = clone.scrollWidth
+      const resumeHeight = clone.scrollHeight
 
-        filename:
-          "BuildCV-Resume.pdf",
+      console.log("PDF resume width:", resumeWidth)
+      console.log("PDF resume height:", resumeHeight)
 
-        image: {
-          type: "jpeg",
-          quality: 0.98,
-        },
+      // =================================================
+      // A4 CSS DIMENSIONS
+      // 794 × 1123 px
+      // =================================================
 
-        html2canvas: {
-          scale: 2,
+      const A4_WIDTH = 794
+      const A4_HEIGHT = 1123
 
-          useCORS: true,
+      // =================================================
+      // SCALE ONLY IF NECESSARY
+      // =================================================
 
-          allowTaint: false,
+      let scale = 1
 
-          backgroundColor:
-            "#FFFFFF",
-
-          logging: false,
-
-          foreignObjectRendering:
-            false,
-
-          imageTimeout: 15000,
-        },
-
-        jsPDF: {
-          unit: "mm",
-
-          format: "a4",
-
-          orientation: "portrait",
-        },
-
-        pagebreak: {
-          mode: [
-            "css",
-            "legacy",
-          ],
-        },
+      if (resumeHeight > A4_HEIGHT) {
+        scale = A4_HEIGHT / resumeHeight
       }
 
       // =================================================
-      // GENERATE PDF
+      // APPLY SCALE
       // =================================================
 
-      await html2pdf()
-        .set(options)
-        .from(clone)
-        .save()
+      if (scale < 1) {
+        clone.style.transformOrigin = "top left"
+        clone.style.transform = `scale(${scale})`
+
+        clone.style.width = `${A4_WIDTH / scale}px`
+
+        if (page) {
+          page.style.width = `${A4_WIDTH / scale}px`
+        }
+      }
+
+      // =================================================
+      // WAIT AFTER SCALING
+      // =================================================
+
+      await new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(resolve)
+        })
+      })
+
+      // =================================================
+      // CAPTURE RESUME
+      // =================================================
+
+      const canvas = await html2canvas(clone, {
+        scale: 2,
+
+        useCORS: true,
+        allowTaint: false,
+
+        backgroundColor: "#FFFFFF",
+
+        logging: false,
+
+        imageTimeout: 20000,
+
+        scrollX: 0,
+        scrollY: 0,
+
+        width: A4_WIDTH,
+
+        windowWidth: A4_WIDTH,
+
+        height: Math.min(
+          clone.scrollHeight,
+          A4_HEIGHT
+        ),
+
+        windowHeight: A4_HEIGHT,
+      })
+
+      // =================================================
+      // CREATE A4 PDF
+      // =================================================
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+        compress: true,
+      })
+
+      // =================================================
+      // A4 SIZE
+      // =================================================
+
+      const pageWidth = 210
+      const pageHeight = 297
+
+      // =================================================
+      // IMAGE SIZE
+      // =================================================
+
+      const imageWidth = pageWidth
+      const imageHeight =
+        (canvas.height / canvas.width) *
+        imageWidth
+
+      // =================================================
+      // ADD IMAGE
+      // =================================================
+
+      pdf.addImage(
+        canvas.toDataURL("image/jpeg", 1),
+        "JPEG",
+        0,
+        0,
+        imageWidth,
+        Math.min(imageHeight, pageHeight),
+        undefined,
+        "FAST"
+      )
+
+      // =================================================
+      // SAVE
+      // =================================================
+
+      pdf.save("BuildCV-Resume.pdf")
 
     } catch (error) {
       console.error(
@@ -455,7 +320,6 @@ function DownloadButton() {
       alert(
         `Unable to download the resume.\n\n${error.message}`
       )
-
     } finally {
       // =================================================
       // CLEANUP

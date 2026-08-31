@@ -65,13 +65,13 @@ function Education({ formData, setFormData }) {
     const updatedEducation = education.map((item) =>
       item.id === id
         ? {
-            ...item,
-            [field]: value,
+          ...item,
+          [field]: value,
 
-            ...(field === "current" && value
-              ? { endDate: "" }
-              : {}),
-          }
+          ...(field === "current" && value
+            ? { endDate: "" }
+            : {}),
+        }
         : item
     )
 
@@ -118,7 +118,8 @@ function Education({ formData, setFormData }) {
     <section
       className="
         flex
-        min-h-0
+        h-[calc(100vh-190px)]
+        min-h-[740px]
         flex-col
         overflow-hidden
         rounded-xl
