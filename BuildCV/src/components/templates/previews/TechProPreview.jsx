@@ -1,820 +1,740 @@
-function TechProPreview({ formData = {} }) {
-  // =====================================================
-  // PERSONAL DATA
-  // =====================================================
+import {
+  getResumeData,
+  getSkillName,
+  getEducationTitle,
+  getInstitution,
+  getExperienceTitle,
+  getCompany,
+  getProjectName,
+  getDescription,
+  getDate,
+} from "../templateUtils";
 
-  const personal = formData.personal || {}
+/*
+=========================================================
+BUILDCV — TECH PRO
+=========================================================
 
-  const {
-    fullName = "",
-    jobTitle = "",
-    email = "",
-    phone = "",
-    location = "",
-    linkedin = "",
-    github = "",
-    summary = "",
-    profileImage = "",
-  } = personal
+Concept:
+• Premium technology resume
+• Two-column layout
+• No photo
+• Strong technical identity
+• Skills-first sidebar
+• Projects + experience emphasized
+• Clean ATS-friendly structure
+• A4 optimized
 
-  // =====================================================
-  // OTHER DATA
-  // =====================================================
+Visual identity:
+• Indigo accent
+• Technical dashboard-inspired header
+• Compact information architecture
+• Premium SaaS / engineering feel
+=========================================================
+*/
 
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : []
-
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : []
-
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : []
-
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : []
-
-  // =====================================================
-  // CHECK WHETHER RESUME IS EMPTY
-  // =====================================================
-
-  const hasResumeData =
-    fullName.trim() ||
-    jobTitle.trim() ||
-    email.trim() ||
-    phone.trim() ||
-    location.trim() ||
-    linkedin.trim() ||
-    github.trim() ||
-    summary.trim() ||
-    profileImage ||
-    skills.length > 0 ||
-    experience.length > 0 ||
-    education.length > 0 ||
-    projects.length > 0
-
-  // =====================================================
-  // SAMPLE PERSONAL DATA
-  // =====================================================
-
-  const displayPersonal = hasResumeData
-    ? {
-        fullName,
-        jobTitle,
-        email,
-        phone,
-        location,
-        linkedin,
-        github,
-        summary,
-        profileImage,
-      }
-    : {
-        fullName: "Michael Anderson",
-        jobTitle: "Senior Software Engineer",
-        email: "michael@email.com",
-        phone: "+1 555 789 1234",
-        location: "Seattle, WA",
-        linkedin: "linkedin.com/in/michael",
-        github: "github.com/michael",
-        summary:
-          "Experienced software engineer specializing in scalable applications, cloud technologies, system architecture, and modern development practices.",
-        profileImage: "",
-      }
-
-  // =====================================================
-  // FALLBACK DATA
-  // =====================================================
-
-  const displaySkills =
-    skills.length > 0
-      ? skills
-      : hasResumeData
-        ? []
-        : [
-            "JavaScript",
-            "TypeScript",
-            "React",
-            "Node.js",
-            "Python",
-            "AWS",
-            "Docker",
-            "PostgreSQL",
-          ]
-
-  const displayExperience =
-    experience.length > 0
-      ? experience
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-experience-1",
-              jobTitle: "Senior Software Engineer",
-              company: "Cloud Systems Inc.",
-              startDate: "2022",
-              endDate: "Present",
-              description:
-                "Designed scalable applications, improved system performance, and collaborated with engineering teams to deliver reliable software products.",
-            },
-            {
-              id: "sample-experience-2",
-              jobTitle: "Software Engineer",
-              company: "Tech Solutions",
-              startDate: "2019",
-              endDate: "2022",
-              description:
-                "Developed web applications, integrated APIs, and improved development workflows using modern engineering practices.",
-            },
-          ]
-
-  const displayEducation =
-    education.length > 0
-      ? education
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-education-1",
-              degree: "B.S. Computer Science",
-              institution: "University of Washington",
-              startDate: "2015",
-              endDate: "2019",
-            },
-          ]
-
-  const displayProjects =
-    projects.length > 0
-      ? projects
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-project-1",
-              name: "Cloud Analytics Platform",
-              technologies: "React • Node.js • AWS",
-              description:
-                "Built a scalable analytics platform for processing and visualizing business data.",
-            },
-            {
-              id: "sample-project-2",
-              name: "Developer API",
-              technologies: "TypeScript • PostgreSQL • Docker",
-              description:
-                "Developed a REST API with authentication, database integration, and containerized deployment.",
-            },
-          ]
-
-  // =====================================================
-  // HELPERS
-  // =====================================================
-
-  function getValue(item, keys, fallback = "") {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key]
-      }
-    }
-
-    return fallback
-  }
-
-  function getSkillName(skill) {
-    if (typeof skill === "string") {
-      return skill
-    }
-
-    return getValue(
-      skill,
-      ["name", "skill", "title"],
-      ""
-    )
-  }
-
-  function getInitials(name = "") {
-    const words = name
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean)
-
-    if (words.length === 0) {
-      return "CV"
-    }
-
-    if (words.length === 1) {
-      return words[0]
-        .slice(0, 2)
-        .toUpperCase()
-    }
-
-    return (
-      words[0][0] +
-      words[words.length - 1][0]
-    ).toUpperCase()
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
+export default function TechProPreview({ formData }) {
+  const resume = getResumeData(formData);
 
   return (
     <div
-      className="h-full w-full overflow-hidden"
-      style={{
-        backgroundColor: "#FFFFFF",
-        color: "#0F172A",
-      }}
+      className="
+        min-h-[1123px]
+        w-full
+        overflow-hidden
+        bg-white
+        text-buildcv-ink-900
+      "
     >
-      {/* =====================================================
-          HEADER
-      ====================================================== */}
+      {/* =================================================
+          TOP HEADER
+      ================================================= */}
 
-      <header
-        className="px-6 py-5"
-        style={{
-          backgroundColor: "#0F172A",
-          color: "#FFFFFF",
-        }}
-      >
-        <div className="flex items-start justify-between gap-3">
+      <header className="border-b border-buildcv-border bg-white">
+        <div className="flex items-stretch">
+          {/* Accent block */}
 
-          {/* NAME + TITLE */}
+          <div className="w-2 shrink-0 bg-buildcv-violet" />
 
-          <div className="min-w-0">
+          <div className="flex-1 px-8 py-7">
+            <div className="flex items-start justify-between gap-8">
+              {/* Identity */}
 
-            <p
-              className="mb-1 text-[5px] font-semibold uppercase tracking-[0.2em]"
-              style={{
-                color: "#A5B4FC",
-              }}
+              <div className="min-w-0">
+                <div
+                  className="
+                    mb-2
+                    font-mono
+                    text-[7px]
+                    font-bold
+                    uppercase
+                    tracking-[0.2em]
+                    text-buildcv-violet
+                  "
+                >
+                  TECH PROFESSIONAL
+                </div>
+
+                <h1
+                  className="
+                    text-[28px]
+                    font-extrabold
+                    leading-none
+                    tracking-[-0.045em]
+                    text-buildcv-ink-900
+                  "
+                >
+                  {resume.fullName || "Your Name"}
+                </h1>
+
+                <p
+                  className="
+                    mt-2
+                    text-[10px]
+                    font-semibold
+                    text-buildcv-text-secondary
+                  "
+                >
+                  {resume.jobTitle || "Technology Professional"}
+                </p>
+              </div>
+
+              {/* Contact */}
+
+              <div
+                className="
+                  max-w-[230px]
+                  text-right
+                  text-[7.5px]
+                  leading-5
+                  text-buildcv-text-muted
+                "
+              >
+                {resume.email && <div>{resume.email}</div>}
+
+                {resume.phone && <div>{resume.phone}</div>}
+
+                {resume.location && <div>{resume.location}</div>}
+
+                {resume.github && (
+                  <div className="font-medium text-buildcv-violet">
+                    {resume.github}
+                  </div>
+                )}
+
+                {resume.linkedin && (
+                  <div className="font-medium text-buildcv-violet">
+                    {resume.linkedin}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Tech status bar */}
+
+            <div
+              className="
+                mt-6
+                flex
+                items-center
+                justify-between
+                rounded-lg
+                border
+                border-buildcv-border
+                bg-buildcv-surface-soft
+                px-3
+                py-2
+              "
             >
-              Technology Professional
-            </p>
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-buildcv-violet" />
 
-            {displayPersonal.fullName && (
-              <h1
-                className="truncate text-[17px] font-extrabold tracking-tight"
-                style={{
-                  color: "#FFFFFF",
-                }}
+                <span
+                  className="
+                    font-mono
+                    text-[6.5px]
+                    font-semibold
+                    uppercase
+                    tracking-wider
+                    text-buildcv-text-secondary
+                  "
+                >
+                  Technology • Product • Engineering
+                </span>
+              </div>
+
+              <span
+                className="
+                  font-mono
+                  text-[6px]
+                  text-buildcv-text-muted
+                "
               >
-                {displayPersonal.fullName}
-              </h1>
-            )}
-
-            {displayPersonal.jobTitle && (
-              <p
-                className="mt-1 text-[6.5px] font-medium"
-                style={{
-                  color: "#CBD5E1",
-                }}
-              >
-                {displayPersonal.jobTitle}
-              </p>
-            )}
-
+                BuildCV / TECH
+              </span>
+            </div>
           </div>
-
-          {/* TECHNOLOGY BADGE */}
-
-          <div
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border text-[6px] font-bold"
-            style={{
-              borderColor: "#818CF8",
-              backgroundColor: "#312E81",
-              color: "#C7D2FE",
-            }}
-          >
-            TP
-          </div>
-
-        </div>
-
-        {/* CONTACT */}
-
-        <div
-          className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5px]"
-          style={{
-            color: "#CBD5E1",
-          }}
-        >
-          {displayPersonal.email && (
-            <span>{displayPersonal.email}</span>
-          )}
-
-          {displayPersonal.phone && (
-            <span>{displayPersonal.phone}</span>
-          )}
-
-          {displayPersonal.location && (
-            <span>{displayPersonal.location}</span>
-          )}
-
-          {displayPersonal.github && (
-            <span>{displayPersonal.github}</span>
-          )}
-
-          {displayPersonal.linkedin && (
-            <span>{displayPersonal.linkedin}</span>
-          )}
         </div>
       </header>
 
-      {/* =====================================================
-          MAIN CONTENT
-      ====================================================== */}
+      {/* =================================================
+          MAIN LAYOUT
+      ================================================= */}
 
-      <div className="grid grid-cols-[0.35fr_1fr]">
-
+      <div className="grid grid-cols-[235px_1fr]">
         {/* =================================================
-            SIDEBAR
-        ================================================== */}
+            LEFT SIDEBAR
+        ================================================= */}
 
         <aside
-          className="border-r px-4 py-5"
-          style={{
-            backgroundColor: "#F8FAFC",
-            borderColor: "#E2E8F0",
-          }}
+          className="
+            min-h-[1010px]
+            border-r
+            border-buildcv-border
+            bg-buildcv-surface-soft
+            px-6
+            py-7
+          "
         >
+          {/* =================================================
+              CORE SKILLS
+          ================================================= */}
 
-          {/* PROFILE */}
+          {resume.skills.length > 0 && (
+            <TechSideSection title="CORE SKILLS">
+              <div className="space-y-2">
+                {resume.skills.map((skill, index) => {
+                  const name = getSkillName(skill);
 
-          {displayPersonal.summary && (
-            <section className="mb-5">
+                  if (!name) return null;
 
-              <TechSideTitle>
-                Profile
-              </TechSideTitle>
-
-              <p
-                className="mt-2 text-[5.3px] leading-[1.6]"
-                style={{
-                  color: "#64748B",
-                }}
-              >
-                {displayPersonal.summary}
-              </p>
-
-            </section>
-          )}
-
-          {/* CORE TECHNOLOGIES */}
-
-          {displaySkills.length > 0 && (
-            <section className="mb-5">
-
-              <TechSideTitle>
-                Core Skills
-              </TechSideTitle>
-
-              <div className="mt-2 space-y-1.5">
-
-                {displaySkills
-                  .slice(0, 10)
-                  .map((skill, index) => {
-
-                    const skillName =
-                      getSkillName(skill)
-
-                    if (!skillName) {
-                      return null
-                    }
-
-                    return (
-                      <div
-                        key={skill?.id || index}
-                        className="flex items-center gap-1.5"
+                  return (
+                    <div
+                      key={index}
+                      className="
+                        flex
+                        items-center
+                        justify-between
+                        gap-2
+                        border-b
+                        border-buildcv-border
+                        pb-2
+                      "
+                    >
+                      <span
+                        className="
+                          text-[7.5px]
+                          font-semibold
+                          text-buildcv-text-secondary
+                        "
                       >
+                        {name}
+                      </span>
 
+                      <span
+                        className="
+                          h-1
+                          w-10
+                          overflow-hidden
+                          rounded-full
+                          bg-buildcv-border
+                        "
+                      >
                         <span
-                          className="h-1 w-1 shrink-0 rounded-full"
-                          style={{
-                            backgroundColor: "#6366F1",
-                          }}
+                          className="
+                            block
+                            h-full
+                            w-4/5
+                            rounded-full
+                            bg-buildcv-violet
+                          "
                         />
-
-                        <span
-                          className="text-[4.8px] font-medium"
-                          style={{
-                            color: "#475569",
-                          }}
-                        >
-                          {skillName}
-                        </span>
-
-                      </div>
-                    )
-                  })}
-
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
-
-            </section>
+            </TechSideSection>
           )}
 
-          {/* EDUCATION */}
+          {/* =================================================
+              EDUCATION
+          ================================================= */}
 
-          {displayEducation.length > 0 && (
-            <section>
-
-              <TechSideTitle>
-                Education
-              </TechSideTitle>
-
-              <div className="mt-2 space-y-2">
-
-                {displayEducation
-                  .slice(0, 2)
-                  .map((item, index) => {
-
-                    const degree = getValue(
-                      item,
-                      [
-                        "degree",
-                        "qualification",
-                        "title",
-                        "program",
-                      ],
-                      "B.S. Computer Science"
-                    )
-
-                    const institution = getValue(
-                      item,
-                      [
-                        "institution",
-                        "school",
-                        "university",
-                        "college",
-                      ],
-                      "University of Washington"
-                    )
-
-                    const endDate = getValue(
-                      item,
-                      [
-                        "endDate",
-                        "end",
-                        "to",
-                      ],
-                      "2019"
-                    )
-
-                    return (
-                      <div
-                        key={item.id || index}
+          {resume.education.length > 0 && (
+            <TechSideSection title="EDUCATION">
+              <div className="space-y-5">
+                {resume.education.map((item, index) => (
+                  <div key={item.id || index}>
+                    <div
+                      className="
+                        mb-2
+                        flex
+                        items-center
+                        gap-2
+                      "
+                    >
+                      <span
+                        className="
+                          flex
+                          h-4
+                          w-4
+                          items-center
+                          justify-center
+                          rounded
+                          bg-buildcv-violet-50
+                          font-mono
+                          text-[6px]
+                          font-bold
+                          text-buildcv-violet
+                        "
                       >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
 
-                        <h3
-                          className="text-[5.5px] font-bold"
-                          style={{
-                            color: "#0F172A",
-                          }}
-                        >
-                          {degree}
-                        </h3>
+                      <span
+                        className="
+                          font-mono
+                          text-[6px]
+                          text-buildcv-text-muted
+                        "
+                      >
+                        EDUCATION
+                      </span>
+                    </div>
 
-                        <p
-                          className="mt-0.5 text-[4.8px]"
-                          style={{
-                            color: "#64748B",
-                          }}
-                        >
-                          {institution}
-                        </p>
+                    <h3
+                      className="
+                        text-[9px]
+                        font-bold
+                        leading-4
+                        text-buildcv-ink-900
+                      "
+                    >
+                      {getEducationTitle(item)}
+                    </h3>
 
-                        <p
-                          className="mt-0.5 text-[4.5px]"
-                          style={{
-                            color: "#94A3B8",
-                          }}
-                        >
-                          {endDate}
-                        </p>
+                    <p
+                      className="
+                        mt-1
+                        text-[8px]
+                        leading-4
+                        text-buildcv-text-secondary
+                      "
+                    >
+                      {getInstitution(item)}
+                    </p>
 
-                      </div>
-                    )
-                  })}
-
+                    <p
+                      className="
+                        mt-1
+                        font-mono
+                        text-[7px]
+                        text-buildcv-violet
+                      "
+                    >
+                      {getDate(item)}
+                    </p>
+                  </div>
+                ))}
               </div>
-
-            </section>
+            </TechSideSection>
           )}
 
+          {/* =================================================
+              QUICK INFO
+          ================================================= */}
+
+          <TechSideSection title="QUICK INFO">
+            <div
+              className="
+                rounded-lg
+                border
+                border-buildcv-border
+                bg-white
+                p-3
+              "
+            >
+              <InfoRow
+                label="ROLE"
+                value={resume.jobTitle || "Technology"}
+              />
+
+              <InfoRow
+                label="LOCATION"
+                value={resume.location || "Open to opportunities"}
+              />
+
+              <InfoRow
+                label="STATUS"
+                value="Available"
+              />
+            </div>
+          </TechSideSection>
         </aside>
 
         {/* =================================================
-            MAIN COLUMN
-        ================================================== */}
+            RIGHT CONTENT
+        ================================================= */}
 
-        <main className="px-5 py-5">
+        <main className="px-8 py-7">
+          {/* =================================================
+              PROFILE
+          ================================================= */}
 
-          {/* EXPERIENCE */}
+          {resume.summary && (
+            <TechSection title="PROFILE">
+              <p
+                className="
+                  max-w-[520px]
+                  text-[9px]
+                  leading-[1.8]
+                  text-buildcv-text-secondary
+                "
+              >
+                {resume.summary}
+              </p>
+            </TechSection>
+          )}
 
-          {displayExperience.length > 0 && (
-            <section className="mb-5">
+          {/* =================================================
+              EXPERIENCE
+          ================================================= */}
 
-              <TechMainTitle>
-                Experience
-              </TechMainTitle>
+          {resume.experience.length > 0 && (
+            <TechSection title="PROFESSIONAL EXPERIENCE">
+              <div className="space-y-6">
+                {resume.experience.map((item, index) => (
+                  <article
+                    key={item.id || index}
+                    className="
+                      relative
+                      border-l-2
+                      border-buildcv-violet-200
+                      pl-5
+                    "
+                  >
+                    {/* Number */}
 
-              <div className="mt-3 space-y-3">
+                    <span
+                      className="
+                        absolute
+                        -left-[11px]
+                        top-0
+                        flex
+                        h-5
+                        w-5
+                        items-center
+                        justify-center
+                        rounded-full
+                        border
+                        border-buildcv-violet-200
+                        bg-white
+                        font-mono
+                        text-[6px]
+                        font-bold
+                        text-buildcv-violet
+                      "
+                    >
+                      {index + 1}
+                    </span>
 
-                {displayExperience
-                  .slice(0, 3)
-                  .map((item, index) => {
+                    <div className="flex items-start justify-between gap-5">
+                      <div>
+                        <h3
+                          className="
+                            text-[11px]
+                            font-bold
+                            text-buildcv-ink-900
+                          "
+                        >
+                          {getExperienceTitle(item)}
+                        </h3>
 
-                    const title = getValue(
-                      item,
-                      [
-                        "jobTitle",
-                        "position",
-                        "title",
-                        "role",
-                      ],
-                      "Senior Software Engineer"
-                    )
+                        <p
+                          className="
+                            mt-1
+                            text-[7.5px]
+                            font-semibold
+                            text-buildcv-violet
+                          "
+                        >
+                          {getCompany(item)}
+                        </p>
+                      </div>
 
-                    const company = getValue(
-                      item,
-                      [
-                        "company",
-                        "organization",
-                        "employer",
-                      ],
-                      "Cloud Systems Inc."
-                    )
-
-                    const startDate = getValue(
-                      item,
-                      [
-                        "startDate",
-                        "start",
-                        "from",
-                      ],
-                      "2022"
-                    )
-
-                    const endDate = getValue(
-                      item,
-                      [
-                        "endDate",
-                        "end",
-                        "to",
-                      ],
-                      "Present"
-                    )
-
-                    const description = getValue(
-                      item,
-                      [
-                        "description",
-                        "details",
-                        "responsibilities",
-                      ],
-                      "Designed scalable applications and collaborated with engineering teams."
-                    )
-
-                    return (
-                      <article
-                        key={item.id || index}
+                      <span
+                        className="
+                          shrink-0
+                          rounded-full
+                          bg-buildcv-surface-soft
+                          px-2
+                          py-1
+                          font-mono
+                          text-[6.5px]
+                          text-buildcv-text-muted
+                        "
                       >
+                        {getDate(item)}
+                      </span>
+                    </div>
 
-                        <div className="flex items-start justify-between gap-2">
+                    {getDescription(item) && (
+                      <p
+                        className="
+                          mt-2.5
+                          text-[8.5px]
+                          leading-[1.75]
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {getDescription(item)}
+                      </p>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </TechSection>
+          )}
 
-                          <div className="min-w-0">
+          {/* =================================================
+              PROJECTS
+          ================================================= */}
 
-                            {title && (
-                              <h3
-                                className="truncate text-[6.5px] font-bold"
-                                style={{
-                                  color: "#0F172A",
-                                }}
-                              >
-                                {title}
-                              </h3>
-                            )}
+          {resume.projects.length > 0 && (
+            <TechSection title="FEATURED PROJECTS">
+              <div className="grid grid-cols-2 gap-3">
+                {resume.projects.map((project, index) => (
+                  <article
+                    key={project.id || index}
+                    className="
+                      relative
+                      overflow-hidden
+                      rounded-xl
+                      border
+                      border-buildcv-border
+                      bg-white
+                      p-3.5
+                      shadow-buildcv-xs
+                    "
+                  >
+                    {/* Top accent */}
 
-                            {company && (
-                              <p
-                                className="mt-0.5 truncate text-[5.2px] font-medium"
-                                style={{
-                                  color: "#4F46E5",
-                                }}
-                              >
-                                {company}
-                              </p>
-                            )}
+                    <div className="absolute left-0 right-0 top-0 h-0.5 bg-buildcv-violet" />
 
-                          </div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div
+                        className="
+                          flex
+                          h-7
+                          w-7
+                          items-center
+                          justify-center
+                          rounded-lg
+                          bg-buildcv-violet-50
+                          font-mono
+                          text-[7px]
+                          font-bold
+                          text-buildcv-violet
+                        "
+                      >
+                        P{String(index + 1).padStart(2, "0")}
+                      </div>
 
-                          {(startDate || endDate) && (
-                            <span
-                              className="shrink-0 text-[4.7px]"
-                              style={{
-                                color: "#94A3B8",
-                              }}
-                            >
-                              {startDate}
-                              {startDate && endDate
-                                ? " — "
-                                : ""}
-                              {endDate}
-                            </span>
-                          )}
+                      <span
+                        className="
+                          font-mono
+                          text-[6px]
+                          text-buildcv-text-muted
+                        "
+                      >
+                        PROJECT
+                      </span>
+                    </div>
 
+                    <h3
+                      className="
+                        mt-3
+                        text-[9px]
+                        font-bold
+                        text-buildcv-ink-900
+                      "
+                    >
+                      {getProjectName(project)}
+                    </h3>
+
+                    {getDescription(project) && (
+                      <p
+                        className="
+                          mt-1.5
+                          text-[7.5px]
+                          leading-[1.7]
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {getDescription(project)}
+                      </p>
+                    )}
+
+                    {project.technologies && (
+                      <div
+                        className="
+                          mt-3
+                          border-t
+                          border-buildcv-border
+                          pt-2
+                        "
+                      >
+                        <div
+                          className="
+                            font-mono
+                            text-[6.5px]
+                            leading-4
+                            text-buildcv-violet
+                          "
+                        >
+                          {project.technologies}
                         </div>
-
-                        {description && (
-                          <p
-                            className="mt-1 text-[5.2px] leading-[1.55]"
-                            style={{
-                              color: "#64748B",
-                            }}
-                          >
-                            {description}
-                          </p>
-                        )}
-
-                      </article>
-                    )
-                  })}
-
+                      </div>
+                    )}
+                  </article>
+                ))}
               </div>
-
-            </section>
+            </TechSection>
           )}
-
-          {/* PROJECTS */}
-
-          {displayProjects.length > 0 && (
-            <section>
-
-              <TechMainTitle>
-                Key Projects
-              </TechMainTitle>
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-
-                {displayProjects
-                  .slice(0, 2)
-                  .map((item, index) => {
-
-                    const name = getValue(
-                      item,
-                      [
-                        "name",
-                        "projectName",
-                        "title",
-                      ],
-                      "Cloud Analytics Platform"
-                    )
-
-                    const technologies =
-                      getValue(
-                        item,
-                        [
-                          "technologies",
-                          "technology",
-                          "techStack",
-                          "stack",
-                        ],
-                        "React • Node.js • AWS"
-                      )
-
-                    const description =
-                      getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                        ],
-                        "Built a scalable technology platform."
-                      )
-
-                    return (
-                      <article
-                        key={item.id || index}
-                        className="border p-2.5"
-                        style={{
-                          borderColor: "#E2E8F0",
-                        }}
-                      >
-
-                        {name && (
-                          <h3
-                            className="text-[5.8px] font-bold"
-                            style={{
-                              color: "#0F172A",
-                            }}
-                          >
-                            {name}
-                          </h3>
-                        )}
-
-                        {technologies && (
-                          <p
-                            className="mt-0.5 text-[4.5px] font-medium"
-                            style={{
-                              color: "#4F46E5",
-                            }}
-                          >
-                            {Array.isArray(
-                              technologies
-                            )
-                              ? technologies.join(
-                                  " • "
-                                )
-                              : technologies}
-                          </p>
-                        )}
-
-                        {description && (
-                          <p
-                            className="mt-1 text-[4.8px] leading-[1.5]"
-                            style={{
-                              color: "#64748B",
-                            }}
-                          >
-                            {description}
-                          </p>
-                        )}
-
-                      </article>
-                    )
-                  })}
-
-              </div>
-
-            </section>
-          )}
-
         </main>
+      </div>
 
+      {/* =================================================
+          FOOTER
+      ================================================= */}
+
+      <footer
+        className="
+          flex
+          items-center
+          justify-between
+          border-t
+          border-buildcv-border
+          bg-white
+          px-9
+          py-3
+          font-mono
+          text-[6.5px]
+          text-buildcv-text-muted
+        "
+      >
+        <span>
+          <span className="text-buildcv-violet">BUILD.CV</span>
+          {" / "}
+          TECH PRO
+        </span>
+
+        <span>
+          {resume.fullName || "Your Name"}
+        </span>
+      </footer>
+    </div>
+  );
+}
+
+/* =========================================================
+   SIDEBAR SECTION
+========================================================= */
+
+function TechSideSection({ title, children }) {
+  return (
+    <section className="mb-7">
+      <div className="mb-3 flex items-center gap-2">
+        <span className="h-1 w-1 rounded-full bg-buildcv-violet" />
+
+        <h2
+          className="
+            text-[7px]
+            font-extrabold
+            uppercase
+            tracking-[0.18em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+/* =========================================================
+   MAIN SECTION
+========================================================= */
+
+function TechSection({ title, children }) {
+  return (
+    <section className="mb-8">
+      <div className="mb-4 flex items-center gap-3">
+        <h2
+          className="
+            text-[8px]
+            font-extrabold
+            uppercase
+            tracking-[0.16em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
+
+        <div className="h-px flex-1 bg-buildcv-border" />
+
+        <span
+          className="
+            font-mono
+            text-[6px]
+            font-semibold
+            text-buildcv-violet
+          "
+        >
+          01
+        </span>
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+/* =========================================================
+   INFO ROW
+========================================================= */
+
+function InfoRow({ label, value }) {
+  return (
+    <div className="border-b border-buildcv-border py-2 last:border-b-0">
+      <div
+        className="
+          font-mono
+          text-[5.5px]
+          font-bold
+          tracking-wider
+          text-buildcv-violet
+        "
+      >
+        {label}
+      </div>
+
+      <div
+        className="
+          mt-0.5
+          text-[7px]
+          font-medium
+          leading-4
+          text-buildcv-text-secondary
+        "
+      >
+        {value}
       </div>
     </div>
-  )
+  );
 }
-
-/* =========================================================
-   SIDEBAR TITLE
-========================================================= */
-
-function TechSideTitle({ children }) {
-  return (
-    <div>
-      <h2
-        className="text-[6px] font-bold uppercase tracking-[0.14em]"
-        style={{
-          color: "#4F46E5",
-        }}
-      >
-        {children}
-      </h2>
-
-      <div
-        className="mt-1.5 h-[2px] w-5"
-        style={{
-          backgroundColor: "#6366F1",
-        }}
-      />
-    </div>
-  )
-}
-
-/* =========================================================
-   MAIN SECTION TITLE
-========================================================= */
-
-function TechMainTitle({ children }) {
-  return (
-    <div className="flex items-center gap-2">
-
-      <h2
-        className="shrink-0 text-[7px] font-bold uppercase tracking-[0.12em]"
-        style={{
-          color: "#0F172A",
-        }}
-      >
-        {children}
-      </h2>
-
-      <div
-        className="h-px flex-1"
-        style={{
-          backgroundColor: "#E2E8F0",
-        }}
-      />
-
-    </div>
-  )
-}
-
-export default TechProPreview

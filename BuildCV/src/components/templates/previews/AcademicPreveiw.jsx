@@ -1,696 +1,417 @@
-function AcademicPreview({ formData = {} }) {
-  // =====================================================
-  // PERSONAL DATA
-  // =====================================================
+import {
+  getResumeData,
+  getSkillName,
+  getEducationTitle,
+  getInstitution,
+  getExperienceTitle,
+  getCompany,
+  getProjectName,
+  getDescription,
+  getDate,
+} from "../templateUtils";
 
-  const personal = formData.personal || {}
+/*
+=========================================================
+BUILDCV — ACADEMIC PREMIUM PREVIEW
+=========================================================
 
-  const {
-    fullName = "",
-    jobTitle = "",
-    email = "",
-    phone = "",
-    location = "",
-    linkedin = "",
-    github = "",
-    summary = "",
-    profileImage = "",
-  } = personal
+Design:
+• One Column
+• No Photo
+• Academic / Research focused
+• Strong education hierarchy
+• Research/project emphasis
+• Publication-friendly structure
+• Clean scholarly typography
+• ATS-friendly
+• A4 resume
+=========================================================
+*/
 
-  // =====================================================
-  // OTHER DATA
-  // =====================================================
-
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : []
-
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : []
-
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : []
-
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : []
-
-  // =====================================================
-  // CHECK WHETHER RESUME IS EMPTY
-  // =====================================================
-
-  const hasResumeData =
-    fullName.trim() ||
-    jobTitle.trim() ||
-    email.trim() ||
-    phone.trim() ||
-    location.trim() ||
-    linkedin.trim() ||
-    github.trim() ||
-    summary.trim() ||
-    profileImage ||
-    skills.length > 0 ||
-    experience.length > 0 ||
-    education.length > 0 ||
-    projects.length > 0
-
-  // =====================================================
-  // SAMPLE DATA
-  // =====================================================
-
-  const displayPersonal = hasResumeData
-    ? {
-        fullName,
-        jobTitle,
-        email,
-        phone,
-        location,
-        linkedin,
-        github,
-        summary,
-        profileImage,
-      }
-    : {
-        fullName: "Emily Johnson",
-        jobTitle: "Research Assistant",
-        email: "emily.johnson@email.com",
-        phone: "+1 555 345 6789",
-        location: "Boston, MA",
-        linkedin: "linkedin.com/in/emilyjohnson",
-        github: "",
-        summary:
-          "Dedicated academic professional with experience in research, data analysis, academic writing, and collaborative projects.",
-        profileImage: "",
-      }
-
-  const displaySkills =
-    skills.length > 0
-      ? skills
-      : hasResumeData
-        ? []
-        : [
-            "Research",
-            "Data Analysis",
-            "Academic Writing",
-            "Literature Review",
-            "SPSS",
-            "Python",
-            "Microsoft Office",
-            "Presentation",
-          ]
-
-  const displayExperience =
-    experience.length > 0
-      ? experience
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-experience-1",
-              jobTitle: "Research Assistant",
-              company: "University Research Center",
-              startDate: "2023",
-              endDate: "Present",
-              description:
-                "Supported research projects through literature reviews, data collection, analysis, documentation, and academic reporting.",
-            },
-            {
-              id: "sample-experience-2",
-              jobTitle: "Teaching Assistant",
-              company: "University Department",
-              startDate: "2021",
-              endDate: "2023",
-              description:
-                "Assisted faculty members with course preparation, student support, grading, and academic activities.",
-            },
-          ]
-
-  const displayEducation =
-    education.length > 0
-      ? education
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-education-1",
-              degree: "M.S. Computer Science",
-              institution: "Boston University",
-              startDate: "2021",
-              endDate: "2023",
-            },
-            {
-              id: "sample-education-2",
-              degree: "B.S. Computer Science",
-              institution: "University of Massachusetts",
-              startDate: "2017",
-              endDate: "2021",
-            },
-          ]
-
-  const displayProjects =
-    projects.length > 0
-      ? projects
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-project-1",
-              name: "Machine Learning Research",
-              technologies:
-                "Python • Scikit-learn • Pandas",
-              description:
-                "Investigated machine learning methods for improving predictive performance on real-world datasets.",
-            },
-            {
-              id: "sample-project-2",
-              name: "Academic Research Project",
-              technologies:
-                "Research • Data Analysis • Statistics",
-              description:
-                "Conducted research, analyzed findings, and prepared a structured academic report.",
-            },
-          ]
-
-  // =====================================================
-  // HELPERS
-  // =====================================================
-
-  function getValue(item, keys, fallback = "") {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key]
-      }
-    }
-
-    return fallback
-  }
-
-  function getSkillName(skill) {
-    if (typeof skill === "string") {
-      return skill
-    }
-
-    return getValue(
-      skill,
-      ["name", "skill", "title"],
-      ""
-    )
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
+export default function AcademicPreview({ formData }) {
+  const resume = getResumeData(formData);
 
   return (
     <div
-      className="h-full w-full overflow-hidden text-slate-900"
-      style={{
-        backgroundColor: "#FFFFFF",
-        color: "#0F172A",
-      }}
+      className="
+        min-h-[1123px]
+        w-full
+        bg-white
+        px-[58px]
+        py-[48px]
+        text-buildcv-ink-900
+      "
     >
-      {/* =====================================================
-          HEADER
-      ====================================================== */}
+      {/* =================================================
+          ACADEMIC HEADER
+      ================================================= */}
 
-      <header
-        className="border-b px-6 py-5"
-        style={{
-          borderColor: "#CBD5E1",
-        }}
-      >
-        {displayPersonal.fullName && (
-          <h1
-            className="font-serif text-[17px] font-bold tracking-tight"
-            style={{
-              color: "#0F172A",
-            }}
+      <header className="border-b border-buildcv-ink-900 pb-6">
+        <div className="flex items-start justify-between gap-8">
+          <div className="min-w-0">
+            <h1
+              className="
+                font-serif
+                text-[29px]
+                font-bold
+                leading-none
+                tracking-[-0.025em]
+                text-buildcv-ink-900
+              "
+            >
+              {resume.fullName || "Your Name"}
+            </h1>
+
+            <p
+              className="
+                mt-3
+                text-[10px]
+                font-semibold
+                uppercase
+                tracking-[0.13em]
+                text-buildcv-violet
+              "
+            >
+              {resume.jobTitle || "Researcher / Academic Professional"}
+            </p>
+          </div>
+
+          {/* Contact information */}
+
+          <div
+            className="
+              max-w-[245px]
+              text-right
+              text-[7.5px]
+              leading-[1.9]
+              text-buildcv-text-secondary
+            "
           >
-            {displayPersonal.fullName}
-          </h1>
-        )}
+            {resume.email && <div>{resume.email}</div>}
+            {resume.phone && <div>{resume.phone}</div>}
+            {resume.location && <div>{resume.location}</div>}
+            {resume.linkedin && <div>{resume.linkedin}</div>}
+            {resume.github && <div>{resume.github}</div>}
+          </div>
+        </div>
 
-        {displayPersonal.jobTitle && (
-          <p
-            className="mt-1 text-[6.5px] font-medium"
-            style={{
-              color: "#475569",
-            }}
-          >
-            {displayPersonal.jobTitle}
-          </p>
-        )}
+        {/* Academic rule */}
 
-        {/* CONTACT */}
-
-        <div
-          className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5px]"
-          style={{
-            color: "#64748B",
-          }}
-        >
-          {displayPersonal.email && (
-            <span>{displayPersonal.email}</span>
-          )}
-
-          {displayPersonal.phone && (
-            <span>{displayPersonal.phone}</span>
-          )}
-
-          {displayPersonal.location && (
-            <span>{displayPersonal.location}</span>
-          )}
-
-          {displayPersonal.linkedin && (
-            <span>{displayPersonal.linkedin}</span>
-          )}
-
-          {displayPersonal.github && (
-            <span>{displayPersonal.github}</span>
-          )}
+        <div className="mt-5 flex items-center gap-2">
+          <div className="h-[3px] w-[3px] rounded-full bg-buildcv-violet" />
+          <div className="h-px flex-1 bg-buildcv-border" />
         </div>
       </header>
 
-      {/* =====================================================
-          MAIN CONTENT
-      ====================================================== */}
+      {/* =================================================
+          RESEARCH / PROFESSIONAL PROFILE
+      ================================================= */}
 
-      <div className="px-6 py-5">
+      {resume.summary && (
+        <AcademicSection title="Research Profile">
+          <p
+            className="
+              max-w-[690px]
+              text-[8.5px]
+              leading-[1.8]
+              text-buildcv-text-secondary
+            "
+          >
+            {resume.summary}
+          </p>
+        </AcademicSection>
+      )}
 
-        {/* =================================================
-            RESEARCH PROFILE
-        ================================================== */}
+      {/* =================================================
+          EDUCATION
+      ================================================= */}
 
-        {displayPersonal.summary && (
-          <section className="mb-5">
-            <AcademicTitle>
-              Research Profile
-            </AcademicTitle>
+      {resume.education.length > 0 && (
+        <AcademicSection title="Education">
+          <div className="space-y-5">
+            {resume.education.map((item, index) => (
+              <article
+                key={item.id || index}
+                className="grid grid-cols-[1fr_auto] gap-6"
+              >
+                <div>
+                  <h3
+                    className="
+                      font-serif
+                      text-[11px]
+                      font-bold
+                      leading-4
+                      text-buildcv-ink-900
+                    "
+                  >
+                    {getEducationTitle(item)}
+                  </h3>
 
-            <p
-              className="mt-2 text-[5.5px] leading-[1.6]"
-              style={{
-                color: "#475569",
-              }}
-            >
-              {displayPersonal.summary}
-            </p>
-          </section>
-        )}
+                  <p
+                    className="
+                      mt-1
+                      text-[8px]
+                      font-medium
+                      text-buildcv-text-secondary
+                    "
+                  >
+                    {getInstitution(item)}
+                  </p>
+                </div>
 
-        {/* =================================================
-            EDUCATION
-        ================================================== */}
+                <span
+                  className="
+                    whitespace-nowrap
+                    pt-0.5
+                    text-[7.5px]
+                    font-semibold
+                    text-buildcv-violet
+                  "
+                >
+                  {getDate(item)}
+                </span>
+              </article>
+            ))}
+          </div>
+        </AcademicSection>
+      )}
 
-        {displayEducation.length > 0 && (
-          <section className="mb-5">
-            <AcademicTitle>
-              Education
-            </AcademicTitle>
+      {/* =================================================
+          EXPERIENCE / RESEARCH EXPERIENCE
+      ================================================= */}
 
-            <div className="mt-3 space-y-2.5">
-              {displayEducation
-                .slice(0, 3)
-                .map((item, index) => {
-                  const degree = getValue(
-                    item,
-                    [
-                      "degree",
-                      "qualification",
-                      "title",
-                      "program",
-                    ]
-                  )
+      {resume.experience.length > 0 && (
+        <AcademicSection title="Academic & Professional Experience">
+          <div className="space-y-6">
+            {resume.experience.map((item, index) => (
+              <article
+                key={item.id || index}
+                className="grid grid-cols-[1fr_auto] gap-6"
+              >
+                <div>
+                  <h3
+                    className="
+                      font-serif
+                      text-[11px]
+                      font-bold
+                      leading-4
+                      text-buildcv-ink-900
+                    "
+                  >
+                    {getExperienceTitle(item)}
+                  </h3>
 
-                  const institution = getValue(
-                    item,
-                    [
-                      "institution",
-                      "school",
-                      "university",
-                      "college",
-                    ]
-                  )
+                  <p
+                    className="
+                      mt-1
+                      text-[8px]
+                      font-semibold
+                      text-buildcv-violet
+                    "
+                  >
+                    {getCompany(item)}
+                  </p>
 
-                  const startDate = getValue(
-                    item,
-                    [
-                      "startDate",
-                      "start",
-                      "from",
-                    ]
-                  )
-
-                  const endDate = getValue(
-                    item,
-                    [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]
-                  )
-
-                  return (
-                    <article
-                      key={item.id || index}
-                      className="flex items-start justify-between gap-3"
+                  {getDescription(item) && (
+                    <p
+                      className="
+                        mt-2
+                        max-w-[650px]
+                        text-[8px]
+                        leading-[1.75]
+                        text-buildcv-text-secondary
+                      "
                     >
-                      <div className="min-w-0">
+                      {getDescription(item)}
+                    </p>
+                  )}
+                </div>
 
-                        {degree && (
-                          <h3
-                            className="break-words text-[6px] font-bold"
-                            style={{
-                              color: "#0F172A",
-                            }}
-                          >
-                            {degree}
-                          </h3>
-                        )}
+                <span
+                  className="
+                    whitespace-nowrap
+                    pt-0.5
+                    text-[7px]
+                    text-buildcv-text-muted
+                  "
+                >
+                  {getDate(item)}
+                </span>
+              </article>
+            ))}
+          </div>
+        </AcademicSection>
+      )}
 
-                        {institution && (
-                          <p
-                            className="mt-0.5 break-words text-[5px]"
-                            style={{
-                              color: "#475569",
-                            }}
-                          >
-                            {institution}
-                          </p>
-                        )}
+      {/* =================================================
+          RESEARCH / PROJECTS
+      ================================================= */}
 
-                      </div>
+      {resume.projects.length > 0 && (
+        <AcademicSection title="Research & Selected Projects">
+          <div className="space-y-5">
+            {resume.projects.map((project, index) => (
+              <article
+                key={project.id || index}
+                className="
+                  border-l-2
+                  border-buildcv-violet-200
+                  pl-4
+                "
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <h3
+                    className="
+                      font-serif
+                      text-[10px]
+                      font-bold
+                      leading-4
+                      text-buildcv-ink-900
+                    "
+                  >
+                    {getProjectName(project)}
+                  </h3>
 
-                      {(startDate || endDate) && (
-                        <span
-                          className="shrink-0 text-[4.7px]"
-                          style={{
-                            color: "#94A3B8",
-                          }}
-                        >
-                          {startDate}
-                          {startDate && endDate
-                            ? " — "
-                            : ""}
-                          {endDate}
-                        </span>
-                      )}
-                    </article>
-                  )
-                })}
-            </div>
-          </section>
-        )}
+                  <span
+                    className="
+                      shrink-0
+                      text-[6px]
+                      font-bold
+                      uppercase
+                      tracking-[0.12em]
+                      text-buildcv-violet
+                    "
+                  >
+                    Research {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
 
-        {/* =================================================
-            EXPERIENCE
-        ================================================== */}
+                {getDescription(project) && (
+                  <p
+                    className="
+                      mt-1.5
+                      text-[8px]
+                      leading-[1.75]
+                      text-buildcv-text-secondary
+                    "
+                  >
+                    {getDescription(project)}
+                  </p>
+                )}
 
-        {displayExperience.length > 0 && (
-          <section className="mb-5">
-            <AcademicTitle>
-              Academic Experience
-            </AcademicTitle>
+                {project.technologies && (
+                  <p
+                    className="
+                      mt-2
+                      text-[7px]
+                      font-medium
+                      text-buildcv-text-muted
+                    "
+                  >
+                    <span className="font-semibold text-buildcv-violet">
+                      Methods / Tools:
+                    </span>{" "}
+                    {project.technologies}
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
+        </AcademicSection>
+      )}
 
-            <div className="mt-3 space-y-3">
-              {displayExperience
-                .slice(0, 3)
-                .map((item, index) => {
-                  const title = getValue(
-                    item,
-                    [
-                      "jobTitle",
-                      "position",
-                      "title",
-                      "role",
-                    ]
-                  )
+      {/* =================================================
+          SKILLS / RESEARCH AREAS
+      ================================================= */}
 
-                  const company = getValue(
-                    item,
-                    [
-                      "company",
-                      "organization",
-                      "employer",
-                    ]
-                  )
+      {resume.skills.length > 0 && (
+        <AcademicSection title="Research Areas & Skills">
+          <div className="grid grid-cols-3 gap-x-6 gap-y-2">
+            {resume.skills.map((skill, index) => {
+              const name = getSkillName(skill);
 
-                  const startDate = getValue(
-                    item,
-                    [
-                      "startDate",
-                      "start",
-                      "from",
-                    ]
-                  )
+              if (!name) return null;
 
-                  const endDate = getValue(
-                    item,
-                    [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]
-                  )
+              return (
+                <div
+                  key={index}
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                    text-[7.5px]
+                    text-buildcv-text-secondary
+                  "
+                >
+                  <span
+                    className="
+                      h-1
+                      w-1
+                      shrink-0
+                      rounded-full
+                      bg-buildcv-violet
+                    "
+                  />
 
-                  const description = getValue(
-                    item,
-                    [
-                      "description",
-                      "details",
-                      "responsibilities",
-                    ]
-                  )
+                  <span>{name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </AcademicSection>
+      )}
 
-                  return (
-                    <article
-                      key={item.id || index}
-                    >
-                      <div className="flex items-start justify-between gap-3">
+      {/* =================================================
+          ACADEMIC FOOTER
+      ================================================= */}
 
-                        <div className="min-w-0">
+      <footer
+        className="
+          mt-8
+          border-t
+          border-buildcv-border
+          pt-3
+          text-[6.5px]
+          text-buildcv-text-muted
+        "
+      >
+        <div className="flex items-center justify-between gap-4">
+          <span>
+            {resume.fullName || "Your Name"}
+          </span>
 
-                          {title && (
-                            <h3
-                              className="break-words text-[6.2px] font-bold"
-                              style={{
-                                color: "#0F172A",
-                              }}
-                            >
-                              {title}
-                            </h3>
-                          )}
-
-                          {company && (
-                            <p
-                              className="mt-0.5 break-words text-[5.2px] italic"
-                              style={{
-                                color: "#475569",
-                              }}
-                            >
-                              {company}
-                            </p>
-                          )}
-
-                        </div>
-
-                        {(startDate || endDate) && (
-                          <span
-                            className="shrink-0 text-[4.7px]"
-                            style={{
-                              color: "#94A3B8",
-                            }}
-                          >
-                            {startDate}
-                            {startDate && endDate
-                              ? " — "
-                              : ""}
-                            {endDate}
-                          </span>
-                        )}
-
-                      </div>
-
-                      {description && (
-                        <p
-                          className="mt-1 text-[5.2px] leading-[1.55]"
-                          style={{
-                            color: "#475569",
-                          }}
-                        >
-                          {description}
-                        </p>
-                      )}
-                    </article>
-                  )
-                })}
-            </div>
-          </section>
-        )}
-
-        {/* =================================================
-            RESEARCH PROJECTS
-        ================================================== */}
-
-        {displayProjects.length > 0 && (
-          <section className="mb-5">
-            <AcademicTitle>
-              Research Projects
-            </AcademicTitle>
-
-            <div className="mt-3 grid grid-cols-2 gap-3">
-              {displayProjects
-                .slice(0, 2)
-                .map((item, index) => {
-                  const name = getValue(
-                    item,
-                    [
-                      "name",
-                      "projectName",
-                      "title",
-                    ]
-                  )
-
-                  const technologies = getValue(
-                    item,
-                    [
-                      "technologies",
-                      "technology",
-                      "techStack",
-                      "stack",
-                    ]
-                  )
-
-                  const description = getValue(
-                    item,
-                    [
-                      "description",
-                      "details",
-                    ]
-                  )
-
-                  return (
-                    <article
-                      key={item.id || index}
-                      className="border p-2.5"
-                      style={{
-                        borderColor: "#E2E8F0",
-                      }}
-                    >
-                      {name && (
-                        <h3
-                          className="break-words text-[5.8px] font-bold"
-                          style={{
-                            color: "#0F172A",
-                          }}
-                        >
-                          {name}
-                        </h3>
-                      )}
-
-                      {technologies && (
-                        <p
-                          className="mt-0.5 break-words text-[4.5px] italic"
-                          style={{
-                            color: "#64748B",
-                          }}
-                        >
-                          {Array.isArray(technologies)
-                            ? technologies.join(" • ")
-                            : technologies}
-                        </p>
-                      )}
-
-                      {description && (
-                        <p
-                          className="mt-1 text-[4.8px] leading-[1.5]"
-                          style={{
-                            color: "#475569",
-                          }}
-                        >
-                          {description}
-                        </p>
-                      )}
-                    </article>
-                  )
-                })}
-            </div>
-          </section>
-        )}
-
-        {/* =================================================
-            SKILLS
-        ================================================== */}
-
-        {displaySkills.length > 0 && (
-          <section>
-            <AcademicTitle>
-              Research & Technical Skills
-            </AcademicTitle>
-
-            <div className="mt-3 grid grid-cols-4 gap-x-3 gap-y-1.5">
-              {displaySkills
-                .slice(0, 12)
-                .map((skill, index) => {
-                  const skillName =
-                    getSkillName(skill)
-
-                  if (!skillName) {
-                    return null
-                  }
-
-                  return (
-                    <span
-                      key={skill?.id || index}
-                      className="text-[4.8px]"
-                      style={{
-                        color: "#475569",
-                      }}
-                    >
-                      {skillName}
-                    </span>
-                  )
-                })}
-            </div>
-          </section>
-        )}
-
-      </div>
+          <span>
+            Academic Curriculum Vitae
+          </span>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
 
 /* =========================================================
-   ACADEMIC SECTION TITLE
+   ACADEMIC SECTION
 ========================================================= */
 
-function AcademicTitle({ children }) {
+function AcademicSection({ title, children }) {
   return (
-    <div className="flex items-center gap-2">
-      <h2
-        className="shrink-0 font-serif text-[7px] font-bold uppercase tracking-[0.08em]"
-        style={{
-          color: "#0F172A",
-        }}
-      >
-        {children}
-      </h2>
+    <section className="mb-7">
+      <div className="mb-4 flex items-center gap-3">
+        <h2
+          className="
+            font-serif
+            text-[11px]
+            font-bold
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
 
-      <div
-        className="h-px flex-1"
-        style={{
-          backgroundColor: "#CBD5E1",
-        }}
-      />
-    </div>
-  )
+        <div className="h-px flex-1 bg-buildcv-border" />
+      </div>
+
+      {children}
+    </section>
+  );
 }
-
-export default AcademicPreview

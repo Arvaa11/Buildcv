@@ -1,980 +1,647 @@
+import {
+  getResumeData,
+  getSkillName,
+  getEducationTitle,
+  getInstitution,
+  getExperienceTitle,
+  getCompany,
+  getProjectName,
+  getDescription,
+  getDate,
+} from "../templateUtils";
 
-function ExecutivePreview({ formData = {} }) {
-  // =====================================================
-  // PERSONAL DATA
-  // =====================================================
+/*
+=========================================================
+BUILDCV — EXECUTIVE PREMIUM PREVIEW
+=========================================================
 
-  const personal = formData.personal || {}
+Design:
+• Two Column
+• No Photo
+• Executive / Leadership focused
+• Premium corporate appearance
+• Strong hierarchy
+• Clean ATS-friendly content structure
+• A4 compatible
+=========================================================
+*/
 
-  const {
-    fullName = "",
-    jobTitle = "",
-    email = "",
-    phone = "",
-    location = "",
-    linkedin = "",
-    github = "",
-    summary = "",
-    profileImage = "",
-  } = personal
-
-  // =====================================================
-  // OTHER DATA
-  // =====================================================
-
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : []
-
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : []
-
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : []
-
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : []
-
-  // =====================================================
-  // CHECK WHETHER RESUME IS EMPTY
-  // =====================================================
-
-  const hasResumeData = Boolean(
-    fullName.trim() ||
-      jobTitle.trim() ||
-      email.trim() ||
-      phone.trim() ||
-      location.trim() ||
-      linkedin.trim() ||
-      github.trim() ||
-      summary.trim() ||
-      profileImage ||
-      skills.length > 0 ||
-      experience.length > 0 ||
-      education.length > 0 ||
-      projects.length > 0
-  )
-
-  // =====================================================
-  // PERSONAL DISPLAY DATA
-  // =====================================================
-
-  const displayPersonal = hasResumeData
-    ? {
-        fullName,
-        jobTitle,
-        email,
-        phone,
-        location,
-        linkedin,
-        github,
-        summary,
-        profileImage,
-      }
-    : {
-        fullName: "Michael Anderson",
-        jobTitle: "Senior Business Executive",
-        email: "michael@email.com",
-        phone: "+1 555 345 6789",
-        location: "New York, NY",
-        linkedin: "linkedin.com/in/michael",
-        github: "",
-        summary:
-          "Strategic and results-driven executive with extensive experience leading teams, managing complex initiatives, and driving sustainable business growth.",
-        profileImage: "",
-      }
-
-  // =====================================================
-  // FALLBACK DATA
-  // =====================================================
-
-  const displaySkills =
-    skills.length > 0
-      ? skills
-      : hasResumeData
-        ? []
-        : [
-            "Strategic Leadership",
-            "Business Development",
-            "Team Leadership",
-            "Project Management",
-            "Operations",
-            "Stakeholder Management",
-          ]
-
-  const displayExperience =
-    experience.length > 0
-      ? experience
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-experience-1",
-              jobTitle: "Chief Operations Officer",
-              company: "Global Enterprises",
-              startDate: "2022",
-              endDate: "Present",
-              description:
-                "Led organizational strategy, operational planning, and cross-functional teams while driving business performance and long-term growth.",
-            },
-            {
-              id: "sample-experience-2",
-              jobTitle: "Senior Business Manager",
-              company: "Northstar Group",
-              startDate: "2018",
-              endDate: "2022",
-              description:
-                "Managed strategic initiatives, improved operational processes, and developed partnerships that supported company expansion.",
-            },
-            {
-              id: "sample-experience-3",
-              jobTitle: "Business Manager",
-              company: "Summit Solutions",
-              startDate: "2015",
-              endDate: "2018",
-              description:
-                "Oversaw business operations, client relationships, and project delivery across multiple departments.",
-            },
-          ]
-
-  const displayEducation =
-    education.length > 0
-      ? education
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-education-1",
-              degree: "MBA, Business Administration",
-              institution: "New York University",
-              startDate: "2013",
-              endDate: "2015",
-            },
-            {
-              id: "sample-education-2",
-              degree: "BBA, Management",
-              institution: "State University",
-              startDate: "2009",
-              endDate: "2013",
-            },
-          ]
-
-  const displayProjects =
-    projects.length > 0
-      ? projects
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-project-1",
-              name: "Business Transformation",
-              technologies: "",
-              description:
-                "Led a company-wide transformation initiative focused on operational efficiency and sustainable growth.",
-            },
-            {
-              id: "sample-project-2",
-              name: "Market Expansion Strategy",
-              technologies: "",
-              description:
-                "Developed and executed an expansion strategy that opened new markets and strengthened customer relationships.",
-            },
-          ]
-
-  // =====================================================
-  // HELPERS
-  // =====================================================
-
-  function getValue(item, keys, fallback = "") {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key]
-      }
-    }
-
-    return fallback
-  }
-
-  function getSkillName(skill) {
-    if (typeof skill === "string") {
-      return skill
-    }
-
-    return getValue(
-      skill,
-      ["name", "skill", "title"],
-      ""
-    )
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
+export default function ExecutivePreview({ formData }) {
+  const resume = getResumeData(formData);
 
   return (
     <div
       className="
-        h-full
+        min-h-[1123px]
         w-full
-        overflow-hidden
-        bg-[#FFFFFF]
-        text-[#111827]
+        bg-white
+        text-buildcv-ink-900
       "
     >
+      {/* =================================================
+          EXECUTIVE HEADER
+      ================================================= */}
 
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
+      <header className="px-10 pt-10">
 
-      <header
-        className="
-          border-b
-          border-[#CBD5E1]
-          px-7
-          pb-5
-          pt-6
-        "
-      >
+        <div className="flex items-start justify-between gap-10">
 
-        <div className="flex items-start justify-between gap-5">
+          {/* NAME */}
 
           <div className="min-w-0">
 
-            <p
+            <div className="mb-3 flex items-center gap-3">
+              <div className="h-px w-8 bg-buildcv-violet" />
+
+              <span
+                className="
+                  text-[7px]
+                  font-bold
+                  uppercase
+                  tracking-[0.22em]
+                  text-buildcv-violet
+                "
+              >
+                Executive Profile
+              </span>
+            </div>
+
+            <h1
               className="
-                text-[5.5px]
-                font-bold
-                uppercase
-                tracking-[0.25em]
-                text-[#6366F1]
+                text-[32px]
+                font-extrabold
+                leading-none
+                tracking-[-0.045em]
+                text-buildcv-ink-900
               "
             >
-              Executive Resume
+              {resume.fullName || "Your Name"}
+            </h1>
+
+            <p
+              className="
+                mt-3
+                text-[11px]
+                font-bold
+                uppercase
+                tracking-[0.16em]
+                text-buildcv-text-secondary
+              "
+            >
+              {resume.jobTitle || "Executive Professional"}
             </p>
-
-            {displayPersonal.fullName && (
-              <h1
-                className="
-                  mt-1.5
-                  truncate
-                  text-[17px]
-                  font-bold
-                  tracking-tight
-                  text-[#111827]
-                "
-              >
-                {displayPersonal.fullName}
-              </h1>
-            )}
-
-            {displayPersonal.jobTitle && (
-              <p
-                className="
-                  mt-1
-                  truncate
-                  text-[7px]
-                  font-medium
-                  uppercase
-                  tracking-[0.14em]
-                  text-[#64748B]
-                "
-              >
-                {displayPersonal.jobTitle}
-              </p>
-            )}
 
           </div>
 
-          {/* PROFILE IMAGE / INITIALS */}
+          {/* CONTACT */}
 
-          {displayPersonal.profileImage ? (
-            <img
-              src={displayPersonal.profileImage}
-              alt=""
-              className="
-                h-10
-                w-10
-                shrink-0
-                rounded-full
-                object-cover
-                border
-                border-[#CBD5E1]
-              "
-            />
-          ) : (
+          <div className="max-w-[220px] pt-1 text-right">
+
             <div
               className="
-                flex
-                h-10
-                w-10
-                shrink-0
-                items-center
-                justify-center
-                border
-                border-[#CBD5E1]
-                bg-[#F8FAFC]
-                text-[8px]
-                font-bold
-                text-[#475569]
+                space-y-1
+                text-[7.5px]
+                leading-4
+                text-buildcv-text-muted
               "
             >
-              {getInitials(displayPersonal.fullName)}
+              {resume.email && (
+                <p>{resume.email}</p>
+              )}
+
+              {resume.phone && (
+                <p>{resume.phone}</p>
+              )}
+
+              {resume.location && (
+                <p>{resume.location}</p>
+              )}
+
+              {resume.linkedin && (
+                <p className="text-buildcv-violet">
+                  {resume.linkedin}
+                </p>
+              )}
+
+              {resume.github && (
+                <p className="text-buildcv-violet">
+                  {resume.github}
+                </p>
+              )}
             </div>
-          )}
+
+          </div>
 
         </div>
 
-        {/* CONTACT */}
+        {/* HEADER DIVIDER */}
 
-        <div
-          className="
-            mt-4
-            flex
-            flex-wrap
-            gap-x-3
-            gap-y-1
-            text-[5.5px]
-            text-[#64748B]
-          "
-        >
+        <div className="mt-8 h-[3px] w-full bg-buildcv-ink-900" />
 
-          {displayPersonal.email && (
-            <span>{displayPersonal.email}</span>
-          )}
-
-          {displayPersonal.phone && (
-            <span>{displayPersonal.phone}</span>
-          )}
-
-          {displayPersonal.location && (
-            <span>{displayPersonal.location}</span>
-          )}
-
-          {displayPersonal.linkedin && (
-            <span>{displayPersonal.linkedin}</span>
-          )}
-
-          {displayPersonal.github && (
-            <span>{displayPersonal.github}</span>
-          )}
-
-        </div>
+        <div className="mt-1 h-px w-full bg-buildcv-violet" />
 
       </header>
 
-      {/* =====================================================
-          CONTENT
-      ===================================================== */}
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
 
-      <div className="grid grid-cols-[0.34fr_1fr]">
+      <div className="mt-8 grid grid-cols-[235px_1fr]">
 
         {/* =================================================
-            SIDEBAR
+            LEFT SIDEBAR
         ================================================= */}
 
-        <aside
-          className="
-            border-r
-            border-[#E2E8F0]
-            bg-[#F8FAFC]
-            px-4
-            py-5
-          "
-        >
+        <aside className="border-r border-buildcv-border px-7 py-1">
 
-          {/* PROFILE */}
+          {/* =================================================
+              EXPERTISE
+          ================================================= */}
 
-          {displayPersonal.summary && (
-            <section className="mb-5">
+          {resume.skills.length > 0 && (
+            <ExecutiveSideSection title="AREAS OF EXPERTISE">
 
-              <ExecutiveSectionTitle>
-                Profile
-              </ExecutiveSectionTitle>
+              <div className="space-y-2.5">
 
-              <p
-                className="
-                  mt-2
-                  text-[5.5px]
-                  leading-[1.6]
-                  text-[#64748B]
-                "
-              >
-                {displayPersonal.summary}
-              </p>
+                {resume.skills.map((skill, index) => {
+                  const name = getSkillName(skill);
 
-            </section>
-          )}
+                  if (!name) return null;
 
-          {/* EXPERTISE */}
-
-          {displaySkills.length > 0 && (
-            <section className="mb-5">
-
-              <ExecutiveSectionTitle>
-                Expertise
-              </ExecutiveSectionTitle>
-
-              <div className="mt-2 space-y-1.5">
-
-                {displaySkills
-                  .slice(0, 8)
-                  .map((skill, index) => {
-
-                    const skillName =
-                      getSkillName(skill)
-
-                    if (!skillName) {
-                      return null
-                    }
-
-                    return (
-                      <div
-                        key={
-                          skill?.id || index
-                        }
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2"
+                    >
+                      <span
                         className="
-                          border-l-2
-                          border-[#6366F1]
-                          pl-2
-                          text-[5.5px]
-                          font-medium
-                          leading-[1.4]
-                          text-[#475569]
+                          h-1.5
+                          w-1.5
+                          shrink-0
+                          rounded-full
+                          bg-buildcv-violet
+                        "
+                      />
+
+                      <span
+                        className="
+                          text-[8px]
+                          font-semibold
+                          leading-4
+                          text-buildcv-text-secondary
                         "
                       >
-                        {skillName}
-                      </div>
-                    )
-                  })}
+                        {name}
+                      </span>
+                    </div>
+                  );
+                })}
 
               </div>
 
-            </section>
+            </ExecutiveSideSection>
           )}
 
-          {/* EDUCATION */}
+          {/* =================================================
+              EDUCATION
+          ================================================= */}
 
-          {displayEducation.length > 0 && (
-            <section>
+          {resume.education.length > 0 && (
+            <ExecutiveSideSection title="EDUCATION">
 
-              <ExecutiveSectionTitle>
-                Education
-              </ExecutiveSectionTitle>
+              <div className="space-y-6">
 
-              <div className="mt-2 space-y-3">
+                {resume.education.map((item, index) => (
+                  <div key={item.id || index}>
 
-                {displayEducation
-                  .slice(0, 2)
-                  .map((item, index) => {
+                    <h3
+                      className="
+                        text-[9px]
+                        font-bold
+                        leading-4
+                        text-buildcv-ink-900
+                      "
+                    >
+                      {getEducationTitle(item)}
+                    </h3>
 
-                    const degree =
-                      getValue(
-                        item,
-                        [
-                          "degree",
-                          "qualification",
-                          "title",
-                          "program",
-                        ]
-                      )
+                    <p
+                      className="
+                        mt-1
+                        text-[8px]
+                        leading-4
+                        text-buildcv-text-secondary
+                      "
+                    >
+                      {getInstitution(item)}
+                    </p>
 
-                    const field =
-                      getValue(
-                        item,
-                        [
-                          "field",
-                          "major",
-                          "specialization",
-                        ]
-                      )
+                    <p
+                      className="
+                        mt-1
+                        text-[7px]
+                        font-semibold
+                        text-buildcv-violet
+                      "
+                    >
+                      {getDate(item)}
+                    </p>
 
-                    const institution =
-                      getValue(
-                        item,
-                        [
-                          "institution",
-                          "school",
-                          "university",
-                          "college",
-                        ]
-                      )
-
-                    const startDate =
-                      getValue(
-                        item,
-                        [
-                          "startDate",
-                          "start",
-                          "from",
-                        ]
-                      )
-
-                    const endDate =
-                      getValue(
-                        item,
-                        [
-                          "endDate",
-                          "end",
-                          "to",
-                        ]
-                      )
-
-                    return (
-                      <div
-                        key={
-                          item?.id || index
-                        }
-                      >
-
-                        {degree && (
-                          <h3
-                            className="
-                              text-[5.8px]
-                              font-bold
-                              leading-[1.4]
-                              text-[#475569]
-                            "
-                          >
-                            {degree}
-
-                            {field
-                              ? ` — ${field}`
-                              : ""}
-                          </h3>
-                        )}
-
-                        {institution && (
-                          <p
-                            className="
-                              mt-0.5
-                              text-[5px]
-                              leading-[1.4]
-                              text-[#64748B]
-                            "
-                          >
-                            {institution}
-                          </p>
-                        )}
-
-                        {(startDate ||
-                          endDate) && (
-                          <p
-                            className="
-                              mt-0.5
-                              text-[4.5px]
-                              text-[#94A3B8]
-                            "
-                          >
-                            {startDate}
-
-                            {startDate &&
-                            endDate
-                              ? " — "
-                              : ""}
-
-                            {endDate}
-                          </p>
-                        )}
-
-                      </div>
-                    )
-                  })}
+                  </div>
+                ))}
 
               </div>
 
-            </section>
+            </ExecutiveSideSection>
           )}
+
+          {/* =================================================
+              EXECUTIVE DETAILS
+          ================================================= */}
+
+          <ExecutiveSideSection title="PROFESSIONAL">
+
+            <div className="space-y-3">
+
+              <ExecutiveDetail
+                label="LOCATION"
+                value={resume.location}
+              />
+
+              <ExecutiveDetail
+                label="EMAIL"
+                value={resume.email}
+              />
+
+              <ExecutiveDetail
+                label="PHONE"
+                value={resume.phone}
+              />
+
+            </div>
+
+          </ExecutiveSideSection>
 
         </aside>
 
         {/* =================================================
-            MAIN CONTENT
+            RIGHT CONTENT
         ================================================= */}
 
-        <main
-          className="
-            bg-[#FFFFFF]
-            px-6
-            py-5
-          "
-        >
+        <main className="px-9 py-1">
 
-          {/* EXPERIENCE */}
+          {/* =================================================
+              LEADERSHIP PROFILE
+          ================================================= */}
 
-          {displayExperience.length > 0 && (
-            <section className="mb-5">
+          {resume.summary && (
+            <ExecutiveSection title="LEADERSHIP PROFILE">
 
-              <ExecutiveMainTitle>
-                Professional Experience
-              </ExecutiveMainTitle>
-
-              <div className="mt-3 space-y-4">
-
-                {displayExperience
-                  .slice(0, 3)
-                  .map((item, index) => {
-
-                    const title =
-                      getValue(
-                        item,
-                        [
-                          "jobTitle",
-                          "position",
-                          "title",
-                          "role",
-                        ]
-                      )
-
-                    const company =
-                      getValue(
-                        item,
-                        [
-                          "company",
-                          "organization",
-                          "employer",
-                        ]
-                      )
-
-                    const startDate =
-                      getValue(
-                        item,
-                        [
-                          "startDate",
-                          "start",
-                          "from",
-                        ]
-                      )
-
-                    const endDate =
-                      getValue(
-                        item,
-                        [
-                          "endDate",
-                          "end",
-                          "to",
-                        ]
-                      )
-
-                    const description =
-                      getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                          "responsibilities",
-                        ]
-                      )
-
-                    return (
-                      <article
-                        key={
-                          item?.id || index
-                        }
-                      >
-
-                        <div
-                          className="
-                            flex
-                            items-start
-                            justify-between
-                            gap-3
-                          "
-                        >
-
-                          <div className="min-w-0">
-
-                            {title && (
-                              <h3
-                                className="
-                                  truncate
-                                  text-[7.5px]
-                                  font-bold
-                                  text-[#111827]
-                                "
-                              >
-                                {title}
-                              </h3>
-                            )}
-
-                            {company && (
-                              <p
-                                className="
-                                  mt-0.5
-                                  truncate
-                                  text-[5.8px]
-                                  font-medium
-                                  text-[#6366F1]
-                                "
-                              >
-                                {company}
-                              </p>
-                            )}
-
-                          </div>
-
-                          {(startDate ||
-                            endDate) && (
-                            <span
-                              className="
-                                shrink-0
-                                text-[5px]
-                                text-[#94A3B8]
-                              "
-                            >
-                              {startDate}
-
-                              {startDate &&
-                              endDate
-                                ? " — "
-                                : ""}
-
-                              {endDate}
-                            </span>
-                          )}
-
-                        </div>
-
-                        {description && (
-                          <p
-                            className="
-                              mt-1.5
-                              text-[5.8px]
-                              leading-[1.6]
-                              text-[#64748B]
-                            "
-                          >
-                            {description}
-                          </p>
-                        )}
-
-                      </article>
-                    )
-                  })}
-
+              <div
+                className="
+                  border-l-[3px]
+                  border-buildcv-violet
+                  pl-5
+                "
+              >
+                <p
+                  className="
+                    text-[9.5px]
+                    leading-[1.8]
+                    text-buildcv-text-secondary
+                  "
+                >
+                  {resume.summary}
+                </p>
               </div>
 
-            </section>
+            </ExecutiveSection>
           )}
 
-          {/* PROJECTS */}
+          {/* =================================================
+              CAREER HISTORY
+          ================================================= */}
 
-          {displayProjects.length > 0 && (
-            <section>
+          {resume.experience.length > 0 && (
+            <ExecutiveSection title="CAREER HISTORY">
 
-              <ExecutiveMainTitle>
-                Selected Projects
-              </ExecutiveMainTitle>
+              <div className="space-y-7">
 
-              <div className="mt-3 grid grid-cols-2 gap-2">
+                {resume.experience.map((item, index) => (
+                  <article
+                    key={item.id || index}
+                    className="relative"
+                  >
 
-                {displayProjects
-                  .slice(0, 2)
-                  .map((item, index) => {
+                    {/* TOP LINE */}
 
-                    const name =
-                      getValue(
-                        item,
-                        [
-                          "name",
-                          "projectName",
-                          "title",
-                        ]
-                      )
+                    <div className="flex items-start justify-between gap-6">
 
-                    const technologies =
-                      getValue(
-                        item,
-                        [
-                          "technologies",
-                          "technology",
-                          "techStack",
-                          "stack",
-                        ]
-                      )
+                      <div className="min-w-0">
 
-                    const description =
-                      getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                        ]
-                      )
+                        <h3
+                          className="
+                            text-[12px]
+                            font-bold
+                            leading-5
+                            text-buildcv-ink-900
+                          "
+                        >
+                          {getExperienceTitle(item)}
+                        </h3>
 
-                    return (
-                      <div
-                        key={
-                          item?.id || index
-                        }
-                        className="
-                          border
-                          border-[#E2E8F0]
-                          p-2.5
-                        "
-                      >
-
-                        {name && (
-                          <h3
-                            className="
-                              text-[6.5px]
-                              font-bold
-                              text-[#111827]
-                            "
-                          >
-                            {name}
-                          </h3>
-                        )}
-
-                        {technologies && (
-                          <p
-                            className="
-                              mt-0.5
-                              text-[5px]
-                              text-[#6366F1]
-                            "
-                          >
-                            {Array.isArray(
-                              technologies
-                            )
-                              ? technologies.join(
-                                  " • "
-                                )
-                              : technologies}
-                          </p>
-                        )}
-
-                        {description && (
-                          <p
-                            className="
-                              mt-1
-                              text-[5px]
-                              leading-[1.5]
-                              text-[#64748B]
-                            "
-                          >
-                            {description}
-                          </p>
-                        )}
+                        <p
+                          className="
+                            mt-1
+                            text-[8px]
+                            font-bold
+                            uppercase
+                            tracking-[0.08em]
+                            text-buildcv-violet
+                          "
+                        >
+                          {getCompany(item)}
+                        </p>
 
                       </div>
-                    )
-                  })}
+
+                      <span
+                        className="
+                          shrink-0
+                          pt-1
+                          text-[7.5px]
+                          font-semibold
+                          text-buildcv-text-muted
+                        "
+                      >
+                        {getDate(item)}
+                      </span>
+
+                    </div>
+
+                    {/* DESCRIPTION */}
+
+                    {getDescription(item) && (
+                      <div className="mt-3">
+
+                        <p
+                          className="
+                            text-[8.5px]
+                            leading-[1.75]
+                            text-buildcv-text-secondary
+                          "
+                        >
+                          {getDescription(item)}
+                        </p>
+
+                      </div>
+                    )}
+
+                    {/* SEPARATOR */}
+
+                    {index <
+                      resume.experience.length - 1 && (
+                      <div className="mt-6 h-px bg-buildcv-border" />
+                    )}
+
+                  </article>
+                ))}
 
               </div>
 
-            </section>
+            </ExecutiveSection>
+          )}
+
+          {/* =================================================
+              SELECTED INITIATIVES / PROJECTS
+          ================================================= */}
+
+          {resume.projects.length > 0 && (
+            <ExecutiveSection title="SELECTED INITIATIVES">
+
+              <div className="space-y-5">
+
+                {resume.projects.map((project, index) => (
+                  <article
+                    key={project.id || index}
+                    className="
+                      grid
+                      grid-cols-[28px_1fr]
+                      gap-3
+                    "
+                  >
+
+                    {/* NUMBER */}
+
+                    <div
+                      className="
+                        flex
+                        h-6
+                        w-6
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-buildcv-violet-50
+                        text-[7px]
+                        font-bold
+                        text-buildcv-violet
+                      "
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    {/* PROJECT */}
+
+                    <div>
+
+                      <h3
+                        className="
+                          text-[10px]
+                          font-bold
+                          text-buildcv-ink-900
+                        "
+                      >
+                        {getProjectName(project)}
+                      </h3>
+
+                      {getDescription(project) && (
+                        <p
+                          className="
+                            mt-1.5
+                            text-[8px]
+                            leading-[1.7]
+                            text-buildcv-text-secondary
+                          "
+                        >
+                          {getDescription(project)}
+                        </p>
+                      )}
+
+                      {project.technologies && (
+                        <p
+                          className="
+                            mt-2
+                            text-[7px]
+                            font-semibold
+                            uppercase
+                            tracking-[0.06em]
+                            text-buildcv-violet
+                          "
+                        >
+                          {project.technologies}
+                        </p>
+                      )}
+
+                    </div>
+
+                  </article>
+                ))}
+
+              </div>
+
+            </ExecutiveSection>
           )}
 
         </main>
 
       </div>
 
+      {/* =================================================
+          FOOTER
+      ================================================= */}
+
+      <footer className="mt-7 border-t border-buildcv-border px-10 py-3">
+
+        <div className="flex items-center justify-between">
+
+          <span
+            className="
+              text-[6.5px]
+              font-semibold
+              uppercase
+              tracking-[0.15em]
+              text-buildcv-text-muted
+            "
+          >
+            BuildCV
+          </span>
+
+          <span
+            className="
+              text-[6.5px]
+              text-buildcv-text-muted
+            "
+          >
+            Professional Resume
+          </span>
+
+        </div>
+
+      </footer>
+
     </div>
-  )
+  );
 }
 
+/* =========================================================
+   SIDEBAR SECTION
+========================================================= */
 
-// =====================================================
-// INITIALS
-// =====================================================
-
-function getInitials(name = "") {
-  const words = name
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-
-  if (words.length === 0) {
-    return "MA"
-  }
-
-  if (words.length === 1) {
-    return words[0]
-      .slice(0, 2)
-      .toUpperCase()
-  }
-
+function ExecutiveSideSection({ title, children }) {
   return (
-    words[0][0] +
-    words[words.length - 1][0]
-  ).toUpperCase()
+    <section className="mb-8">
+
+      <div className="mb-4">
+
+        <h2
+          className="
+            text-[7px]
+            font-extrabold
+            uppercase
+            tracking-[0.2em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
+
+        <div className="mt-2 h-[2px] w-7 bg-buildcv-violet" />
+
+      </div>
+
+      {children}
+
+    </section>
+  );
 }
 
+/* =========================================================
+   SIDEBAR DETAIL
+========================================================= */
 
-// =====================================================
-// SIDEBAR SECTION TITLE
-// =====================================================
+function ExecutiveDetail({ label, value }) {
+  if (!value) return null;
 
-function ExecutiveSectionTitle({ children }) {
   return (
     <div>
 
-      <h2
+      <p
         className="
           text-[6px]
-          font-bold
+          font-extrabold
           uppercase
-          tracking-[0.14em]
-          text-[#475569]
+          tracking-[0.16em]
+          text-buildcv-text-muted
         "
       >
-        {children}
-      </h2>
+        {label}
+      </p>
 
-      <div
+      <p
         className="
-          mt-1.5
-          h-[2px]
-          w-5
-          bg-[#6366F1]
+          mt-1
+          break-words
+          text-[7.5px]
+          leading-4
+          text-buildcv-text-secondary
         "
-      />
+      >
+        {value}
+      </p>
 
     </div>
-  )
+  );
 }
 
+/* =========================================================
+   MAIN SECTION
+========================================================= */
 
-// =====================================================
-// MAIN SECTION TITLE
-// =====================================================
-
-function ExecutiveMainTitle({ children }) {
+function ExecutiveSection({ title, children }) {
   return (
-    <div className="flex items-center gap-2">
+    <section className="mb-9">
 
-      <h2
-        className="
-          shrink-0
-          text-[7px]
-          font-bold
-          uppercase
-          tracking-[0.13em]
-          text-[#111827]
-        "
-      >
-        {children}
-      </h2>
+      <div className="mb-5 flex items-center gap-3">
 
-      <div
-        className="
-          h-px
-          flex-1
-          bg-[#E2E8F0]
-        "
-      />
+        <h2
+          className="
+            shrink-0
+            text-[8px]
+            font-extrabold
+            uppercase
+            tracking-[0.2em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
 
-    </div>
-  )
+        <div className="h-px flex-1 bg-buildcv-border" />
+
+      </div>
+
+      {children}
+
+    </section>
+  );
 }
-
-
-export default ExecutivePreview

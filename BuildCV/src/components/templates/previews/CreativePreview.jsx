@@ -1,903 +1,851 @@
-function CreativePreview({ formData = {} }) {
-  // =====================================================
-  // PERSONAL DATA
-  // =====================================================
+import {
+  getResumeData,
+  getSkillName,
+  getEducationTitle,
+  getInstitution,
+  getExperienceTitle,
+  getCompany,
+  getProjectName,
+  getDescription,
+  getDate,
+} from "../templateUtils";
 
-  const personal = formData.personal || {}
-
-  const {
-    fullName = "",
-    jobTitle = "",
-    email = "",
-    phone = "",
-    location = "",
-    linkedin = "",
-    github = "",
-    summary = "",
-    profileImage = "",
-  } = personal
-
-  // =====================================================
-  // OTHER DATA
-  // =====================================================
-
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : []
-
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : []
-
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : []
-
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : []
-
-  // =====================================================
-  // CHECK WHETHER RESUME IS EMPTY
-  // =====================================================
-
-  const hasResumeData = Boolean(
-    fullName.trim() ||
-      jobTitle.trim() ||
-      email.trim() ||
-      phone.trim() ||
-      location.trim() ||
-      linkedin.trim() ||
-      github.trim() ||
-      summary.trim() ||
-      profileImage ||
-      skills.length > 0 ||
-      experience.length > 0 ||
-      education.length > 0 ||
-      projects.length > 0
-  )
-
-  // =====================================================
-  // PERSONAL DISPLAY DATA
-  // =====================================================
-
-  const displayPersonal = hasResumeData
-    ? {
-        fullName,
-        jobTitle,
-        email,
-        phone,
-        location,
-        linkedin,
-        github,
-        summary,
-        profileImage,
-      }
-    : {
-        fullName: "Olivia Anderson",
-        jobTitle: "UI/UX Designer",
-        email: "olivia@email.com",
-        phone: "+1 555 234 5678",
-        location: "New York, NY",
-        linkedin: "linkedin.com/in/olivia",
-        github: "",
-        summary:
-          "Creative designer with strong experience creating user-centered digital experiences, visual identities, and engaging brand systems.",
-        profileImage: "",
-      }
-
-  // =====================================================
-  // FALLBACK DATA
-  // =====================================================
-
-  const displaySkills =
-    skills.length > 0
-      ? skills
-      : hasResumeData
-        ? []
-        : [
-            "UI/UX Design",
-            "Branding",
-            "Figma",
-            "Adobe XD",
-            "Photoshop",
-            "Illustrator",
-          ]
-
-  const displayExperience =
-    experience.length > 0
-      ? experience
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-experience-1",
-              jobTitle: "Senior UI/UX Designer",
-              company: "Studio North",
-              startDate: "2022",
-              endDate: "Present",
-              description:
-                "Designed digital products and brand experiences for technology and lifestyle companies while leading design systems.",
-            },
-            {
-              id: "sample-experience-2",
-              jobTitle: "Product Designer",
-              company: "Pixel Works",
-              startDate: "2019",
-              endDate: "2022",
-              description:
-                "Created responsive interfaces, prototypes, and user flows while working closely with developers and product managers.",
-            },
-            {
-              id: "sample-experience-3",
-              jobTitle: "Visual Designer",
-              company: "Creative Lab",
-              startDate: "2017",
-              endDate: "2019",
-              description:
-                "Developed marketing graphics, social media assets, and visual concepts for growing brands.",
-            },
-          ]
-
-  const displayEducation =
-    education.length > 0
-      ? education
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-education-1",
-              degree: "B.A. Graphic Design",
-              institution: "School of Visual Arts",
-              startDate: "2013",
-              endDate: "2017",
-            },
-          ]
-
-  const displayProjects =
-    projects.length > 0
-      ? projects
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-project-1",
-              name: "Fintech Mobile App",
-              technologies:
-                "Figma • UX Research • Prototyping",
-              description:
-                "Complete UX redesign focused on usability and conversion.",
-            },
-            {
-              id: "sample-project-2",
-              name: "Brand Identity",
-              technologies:
-                "Illustrator • Photoshop • Branding",
-              description:
-                "Created a complete visual identity and digital brand system.",
-            },
-          ]
-
-  // =====================================================
-  // HELPER
-  // =====================================================
-
-  function getValue(item, keys, fallback = "") {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key]
-      }
-    }
-
-    return fallback
-  }
-
-  function getSkillName(skill) {
-    if (typeof skill === "string") {
-      return skill
-    }
-
-    return getValue(
-      skill,
-      ["name", "skill", "title"],
-      ""
-    )
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
+export default function CreativePreview({ formData }) {
+  const resume = getResumeData(formData);
 
   return (
     <div
       className="
-        h-full
+        relative
+        mx-auto
+        min-h-[1123px]
         w-full
+        max-w-[794px]
         overflow-hidden
-        bg-[#FFFFFF]
-        text-[#111827]
+        bg-white
+        text-buildcv-ink-900
       "
     >
       {/* =====================================================
-          HEADER
-      ====================================================== */}
+          CREATIVE DECORATION
+      ===================================================== */}
 
-      <header
+      <div
         className="
-          relative
-          bg-[#111827]
-          px-7
-          py-6
-          text-[#FFFFFF]
+          pointer-events-none
+          absolute
+          -right-20
+          -top-24
+          h-64
+          w-64
+          rounded-full
+          bg-buildcv-violet-50
         "
-      >
-        {/* DECORATIVE SHAPE */}
+      />
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          right-8
+          top-8
+          h-20
+          w-20
+          rounded-full
+          border-[12px]
+          border-buildcv-violet-100
+        "
+      />
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-0
+          h-32
+          w-32
+          -translate-x-1/2
+          translate-y-1/2
+          rounded-full
+          bg-buildcv-violet-50
+        "
+      />
+
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
+      <header className="relative px-10 pb-7 pt-9">
+        <div className="flex items-start justify-between gap-8">
+          {/* Identity */}
+
+          <div className="flex min-w-0 items-center gap-5">
+            {/* Profile */}
+
+            {resume.profileImage ? (
+              <img
+                src={resume.profileImage}
+                alt={resume.fullName || "Profile"}
+                className="
+                  h-24
+                  w-24
+                  shrink-0
+                  rounded-[28px]
+                  object-cover
+                  shadow-buildcv-md
+                  ring-4
+                  ring-buildcv-violet-50
+                "
+              />
+            ) : (
+              <div
+                className="
+                  flex
+                  h-24
+                  w-24
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-[28px]
+                  bg-buildcv-violet
+                  shadow-buildcv-md
+                  ring-4
+                  ring-buildcv-violet-50
+                "
+              >
+                <span
+                  className="
+                    font-display
+                    text-3xl
+                    font-extrabold
+                    text-white
+                  "
+                >
+                  {resume.fullName
+                    ? resume.fullName
+                        .charAt(0)
+                        .toUpperCase()
+                    : "A"}
+                </span>
+              </div>
+            )}
+
+            <div className="min-w-0">
+              <div
+                className="
+                  mb-2
+                  inline-flex
+                  rounded-full
+                  bg-buildcv-violet-50
+                  px-2.5
+                  py-1
+                  text-[7px]
+                  font-extrabold
+                  uppercase
+                  tracking-[0.16em]
+                  text-buildcv-violet
+                "
+              >
+                Creative Profile
+              </div>
+
+              <h1
+                className="
+                  font-display
+                  text-3xl
+                  font-extrabold
+                  leading-none
+                  tracking-tight
+                  text-buildcv-ink-900
+                "
+              >
+                {resume.fullName || "Your Name"}
+              </h1>
+
+              {resume.jobTitle && (
+                <p
+                  className="
+                    mt-2
+                    text-[11px]
+                    font-bold
+                    text-buildcv-text-secondary
+                  "
+                >
+                  {resume.jobTitle}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Decorative mark */}
+
+          <div className="hidden shrink-0 sm:block">
+            <div
+              className="
+                flex
+                h-11
+                w-11
+                rotate-12
+                items-center
+                justify-center
+                rounded-xl
+                bg-buildcv-violet
+              "
+            >
+              <span
+                className="
+                  -rotate-12
+                  text-lg
+                  font-black
+                  text-white
+                "
+              >
+                +
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact */}
 
         <div
           className="
-            absolute
-            right-0
-            top-0
-            h-20
-            w-20
-            rounded-bl-full
-            bg-[#6366F1]
-            opacity-80
+            mt-7
+            grid
+            grid-cols-2
+            gap-x-6
+            gap-y-2
+            border-t
+            border-buildcv-border
+            pt-4
+            sm:grid-cols-4
           "
-        />
-
-        <div className="relative z-10">
-          {/* LABEL */}
-
-          <p
-            className="
-              mb-1.5
-              text-[6px]
-              font-bold
-              uppercase
-              tracking-[0.25em]
-              text-[#C4B5FD]
-            "
-          >
-            Creative Professional
-          </p>
-
-          {/* NAME */}
-
-          {displayPersonal.fullName && (
-            <h1
-              className="
-                truncate
-                text-[17px]
-                font-bold
-                tracking-tight
-                text-[#FFFFFF]
-              "
-            >
-              {displayPersonal.fullName}
-            </h1>
+        >
+          {resume.email && (
+            <CreativeContact
+              label="EMAIL"
+              value={resume.email}
+            />
           )}
 
-          {/* JOB TITLE */}
-
-          {displayPersonal.jobTitle && (
-            <p
-              className="
-                mt-1
-                truncate
-                text-[7px]
-                font-medium
-                text-[#CBD5E1]
-              "
-            >
-              {displayPersonal.jobTitle}
-            </p>
+          {resume.phone && (
+            <CreativeContact
+              label="PHONE"
+              value={resume.phone}
+            />
           )}
 
-          {/* CONTACT */}
+          {resume.location && (
+            <CreativeContact
+              label="LOCATION"
+              value={resume.location}
+            />
+          )}
 
-          <div
-            className="
-              mt-3
-              flex
-              flex-wrap
-              gap-x-3
-              gap-y-1
-              text-[5.5px]
-              text-[#CBD5E1]
-            "
-          >
-            {displayPersonal.email && (
-              <span>{displayPersonal.email}</span>
-            )}
+          {resume.linkedin && (
+            <CreativeContact
+              label="LINKEDIN"
+              value={resume.linkedin}
+            />
+          )}
 
-            {displayPersonal.phone && (
-              <span>{displayPersonal.phone}</span>
-            )}
-
-            {displayPersonal.location && (
-              <span>{displayPersonal.location}</span>
-            )}
-
-            {displayPersonal.linkedin && (
-              <span>{displayPersonal.linkedin}</span>
-            )}
-
-            {displayPersonal.github && (
-              <span>{displayPersonal.github}</span>
-            )}
-          </div>
+          {resume.github && (
+            <CreativeContact
+              label="GITHUB"
+              value={resume.github}
+            />
+          )}
         </div>
       </header>
 
       {/* =====================================================
-          CONTENT
-      ====================================================== */}
+          MAIN
+      ===================================================== */}
 
-      <div className="grid grid-cols-[0.35fr_1fr]">
-        {/* =================================================
-            SIDEBAR
-        ================================================== */}
+      <div className="relative grid grid-cols-[1fr_235px] gap-8 px-10 pb-10">
+        {/* ===================================================
+            LEFT
+        =================================================== */}
 
-        <aside
-          className="
-            border-r
-            border-[#E2E8F0]
-            bg-[#F8FAFC]
-            px-4
-            py-5
-          "
-        >
-          {/* =================================================
-              PROFILE
-          ================================================== */}
+        <main className="min-w-0">
+          {/* PROFILE */}
 
-          {displayPersonal.summary && (
-            <section className="mb-5">
-              <CreativeSectionTitle>
-                Profile
-              </CreativeSectionTitle>
-
-              <p
+          {resume.summary && (
+            <CreativeSection
+              number="01"
+              title="About Me"
+            >
+              <div
                 className="
-                  mt-2
-                  text-[5.5px]
-                  leading-[1.6]
-                  text-[#475569]
+                  rounded-2xl
+                  bg-buildcv-violet-50
+                  p-4
                 "
               >
-                {displayPersonal.summary}
-              </p>
-            </section>
+                <p
+                  className="
+                    text-[9.5px]
+                    leading-[1.8]
+                    text-buildcv-text-secondary
+                  "
+                >
+                  {resume.summary}
+                </p>
+              </div>
+            </CreativeSection>
           )}
 
-          {/* =================================================
-              SKILLS
-          ================================================== */}
+          {/* EXPERIENCE */}
 
-          {displaySkills.length > 0 && (
-            <section className="mb-5">
-              <CreativeSectionTitle>
-                Skills
-              </CreativeSectionTitle>
+          {resume.experience.length > 0 && (
+            <CreativeSection
+              number="02"
+              title="Experience"
+            >
+              <div className="space-y-5">
+                {resume.experience.map(
+                  (item, index) => (
+                    <CreativeExperience
+                      key={
+                        item.id || index
+                      }
+                      item={item}
+                    />
+                  )
+                )}
+              </div>
+            </CreativeSection>
+          )}
 
-              <div className="mt-2 space-y-1.5">
-                {displaySkills
-                  .slice(0, 8)
-                  .map((skill, index) => {
-                    const skillName =
-                      getSkillName(skill)
+          {/* PROJECTS */}
 
-                    if (!skillName) {
-                      return null
-                    }
+          {resume.projects.length > 0 && (
+            <CreativeSection
+              number="03"
+              title="Selected Work"
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {resume.projects.map(
+                  (project, index) => (
+                    <CreativeProject
+                      key={
+                        project.id || index
+                      }
+                      project={project}
+                      index={index}
+                    />
+                  )
+                )}
+              </div>
+            </CreativeSection>
+          )}
+        </main>
+
+        {/* ===================================================
+            RIGHT SIDEBAR
+        =================================================== */}
+
+        <aside className="min-w-0">
+          {/* SKILLS */}
+
+          {resume.skills.length > 0 && (
+            <CreativeSidebar title="Skills">
+              <div className="flex flex-wrap gap-1.5">
+                {resume.skills.map(
+                  (skill, index) => {
+                    const name =
+                      getSkillName(
+                        skill
+                      );
+
+                    if (!name)
+                      return null;
 
                     return (
-                      <div
-                        key={
-                          skill?.id || index
-                        }
+                      <span
+                        key={index}
                         className="
-                          border-l-2
-                          border-[#6366F1]
-                          pl-2
-                          text-[5.5px]
-                          font-medium
-                          leading-[1.4]
-                          text-[#475569]
+                          rounded-lg
+                          border
+                          border-buildcv-violet-100
+                          bg-buildcv-violet-50
+                          px-2.5
+                          py-1.5
+                          text-[7.5px]
+                          font-bold
+                          text-buildcv-violet
                         "
                       >
-                        {skillName}
-                      </div>
-                    )
-                  })}
+                        {name}
+                      </span>
+                    );
+                  }
+                )}
               </div>
-            </section>
+            </CreativeSidebar>
           )}
 
-          {/* =================================================
-              TOOLS
-          ================================================== */}
+          {/* EDUCATION */}
 
-          <section className="mb-5">
-            <CreativeSectionTitle>
-              Tools
-            </CreativeSectionTitle>
+          {resume.education.length > 0 && (
+            <CreativeSidebar title="Education">
+              <div className="space-y-5">
+                {resume.education.map(
+                  (item, index) => (
+                    <div
+                      key={
+                        item.id || index
+                      }
+                      className="
+                        relative
+                        border-l-2
+                        border-buildcv-violet-100
+                        pl-4
+                      "
+                    >
+                      <div
+                        className="
+                          absolute
+                          -left-[5px]
+                          top-1
+                          h-2
+                          w-2
+                          rounded-full
+                          bg-buildcv-violet
+                        "
+                      />
+
+                      <h3
+                        className="
+                          text-[9px]
+                          font-extrabold
+                          leading-4
+                          text-buildcv-ink-900
+                        "
+                      >
+                        {getEducationTitle(
+                          item
+                        )}
+                      </h3>
+
+                      <p
+                        className="
+                          mt-1
+                          text-[7.5px]
+                          leading-4
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {getInstitution(
+                          item
+                        )}
+                      </p>
+
+                      <p
+                        className="
+                          mt-1
+                          text-[7px]
+                          font-bold
+                          text-buildcv-violet
+                        "
+                      >
+                        {getDate(item)}
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
+            </CreativeSidebar>
+          )}
+
+          {/* CREATIVE STATEMENT */}
+
+          <div
+            className="
+              mt-7
+              rounded-2xl
+              bg-buildcv-ink-900
+              p-4
+            "
+          >
+            <div
+              className="
+                mb-3
+                h-1
+                w-7
+                rounded-full
+                bg-buildcv-violet
+              "
+            />
+
+            <p
+              className="
+                text-[8px]
+                font-bold
+                leading-[1.7]
+                text-white
+              "
+            >
+              Design with purpose.
+              Build with impact.
+            </p>
 
             <p
               className="
                 mt-2
-                text-[5.5px]
-                leading-[1.7]
-                text-[#475569]
+                text-[6.5px]
+                text-white/60
               "
             >
-              Figma · Photoshop · Illustrator ·
-              <br />
-              After Effects · Notion · Miro
+              BuildCV
             </p>
-          </section>
-
-          {/* =================================================
-              EDUCATION
-          ================================================== */}
-
-          {displayEducation.length > 0 && (
-            <section>
-              <CreativeSectionTitle>
-                Education
-              </CreativeSectionTitle>
-
-              <div className="mt-2 space-y-2">
-                {displayEducation
-                  .slice(0, 2)
-                  .map((item, index) => {
-                    const degree =
-                      getValue(
-                        item,
-                        [
-                          "degree",
-                          "qualification",
-                          "title",
-                          "program",
-                        ]
-                      )
-
-                    const field =
-                      getValue(
-                        item,
-                        [
-                          "field",
-                          "major",
-                          "specialization",
-                        ]
-                      )
-
-                    const institution =
-                      getValue(
-                        item,
-                        [
-                          "institution",
-                          "school",
-                          "university",
-                          "college",
-                        ]
-                      )
-
-                    const startDate =
-                      getValue(
-                        item,
-                        [
-                          "startDate",
-                          "start",
-                          "from",
-                        ]
-                      )
-
-                    const endDate =
-                      getValue(
-                        item,
-                        [
-                          "endDate",
-                          "end",
-                          "to",
-                        ]
-                      )
-
-                    return (
-                      <div
-                        key={
-                          item?.id || index
-                        }
-                      >
-                        {degree && (
-                          <h3
-                            className="
-                              text-[5.8px]
-                              font-bold
-                              leading-[1.4]
-                              text-[#111827]
-                            "
-                          >
-                            {degree}
-
-                            {field
-                              ? ` — ${field}`
-                              : ""}
-                          </h3>
-                        )}
-
-                        {institution && (
-                          <p
-                            className="
-                              mt-0.5
-                              text-[5px]
-                              leading-[1.4]
-                              text-[#64748B]
-                            "
-                          >
-                            {institution}
-                          </p>
-                        )}
-
-                        {(startDate ||
-                          endDate) && (
-                          <p
-                            className="
-                              mt-0.5
-                              text-[4.5px]
-                              text-[#94A3B8]
-                            "
-                          >
-                            {startDate}
-
-                            {startDate &&
-                            endDate
-                              ? " — "
-                              : ""}
-
-                            {endDate}
-                          </p>
-                        )}
-                      </div>
-                    )
-                  })}
-              </div>
-            </section>
-          )}
+          </div>
         </aside>
-
-        {/* =================================================
-            MAIN CONTENT
-        ================================================== */}
-
-        <main className="px-5 py-5">
-          {/* =================================================
-              EXPERIENCE
-          ================================================== */}
-
-          {displayExperience.length > 0 && (
-            <section className="mb-5">
-              <CreativeMainTitle>
-                Experience
-              </CreativeMainTitle>
-
-              <div className="mt-3 space-y-3.5">
-                {displayExperience
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const title =
-                      getValue(
-                        item,
-                        [
-                          "jobTitle",
-                          "position",
-                          "title",
-                          "role",
-                        ]
-                      )
-
-                    const company =
-                      getValue(
-                        item,
-                        [
-                          "company",
-                          "organization",
-                          "employer",
-                        ]
-                      )
-
-                    const startDate =
-                      getValue(
-                        item,
-                        [
-                          "startDate",
-                          "start",
-                          "from",
-                        ]
-                      )
-
-                    const endDate =
-                      getValue(
-                        item,
-                        [
-                          "endDate",
-                          "end",
-                          "to",
-                        ]
-                      )
-
-                    const description =
-                      getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                          "responsibilities",
-                        ]
-                      )
-
-                    return (
-                      <article
-                        key={
-                          item?.id || index
-                        }
-                      >
-                        <div
-                          className="
-                            flex
-                            items-start
-                            justify-between
-                            gap-2
-                          "
-                        >
-                          <div className="min-w-0">
-                            {title && (
-                              <h3
-                                className="
-                                  truncate
-                                  text-[7px]
-                                  font-bold
-                                  text-[#111827]
-                                "
-                              >
-                                {title}
-                              </h3>
-                            )}
-
-                            {company && (
-                              <p
-                                className="
-                                  mt-0.5
-                                  truncate
-                                  text-[5.5px]
-                                  font-medium
-                                  text-[#6366F1]
-                                "
-                              >
-                                {company}
-                              </p>
-                            )}
-                          </div>
-
-                          {(startDate ||
-                            endDate) && (
-                            <span
-                              className="
-                                shrink-0
-                                whitespace-nowrap
-                                text-[5px]
-                                text-[#94A3B8]
-                              "
-                            >
-                              {startDate}
-
-                              {startDate &&
-                              endDate
-                                ? " — "
-                                : ""}
-
-                              {endDate}
-                            </span>
-                          )}
-                        </div>
-
-                        {description && (
-                          <p
-                            className="
-                              mt-1
-                              text-[5.5px]
-                              leading-[1.55]
-                              text-[#475569]
-                            "
-                          >
-                            {description}
-                          </p>
-                        )}
-                      </article>
-                    )
-                  })}
-              </div>
-            </section>
-          )}
-
-          {/* =================================================
-              PROJECTS
-          ================================================== */}
-
-          {displayProjects.length > 0 && (
-            <section>
-              <CreativeMainTitle>
-                Selected Projects
-              </CreativeMainTitle>
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {displayProjects
-                  .slice(0, 2)
-                  .map((item, index) => {
-                    const name =
-                      getValue(
-                        item,
-                        [
-                          "name",
-                          "projectName",
-                          "title",
-                        ]
-                      )
-
-                    const technologies =
-                      getValue(
-                        item,
-                        [
-                          "technologies",
-                          "technology",
-                          "techStack",
-                          "stack",
-                        ]
-                      )
-
-                    const description =
-                      getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                        ]
-                      )
-
-                    return (
-                      <div
-                        key={
-                          item?.id || index
-                        }
-                        className="
-                          border
-                          border-[#E2E8F0]
-                          p-2.5
-                        "
-                      >
-                        {name && (
-                          <h3
-                            className="
-                              text-[6.5px]
-                              font-bold
-                              text-[#111827]
-                            "
-                          >
-                            {name}
-                          </h3>
-                        )}
-
-                        {technologies && (
-                          <p
-                            className="
-                              mt-0.5
-                              text-[4.8px]
-                              text-[#6366F1]
-                            "
-                          >
-                            {Array.isArray(
-                              technologies
-                            )
-                              ? technologies.join(
-                                  " • "
-                                )
-                              : technologies}
-                          </p>
-                        )}
-
-                        {description && (
-                          <p
-                            className="
-                              mt-1
-                              text-[5px]
-                              leading-[1.5]
-                              text-[#64748B]
-                            "
-                          >
-                            {description}
-                          </p>
-                        )}
-                      </div>
-                    )
-                  })}
-              </div>
-            </section>
-          )}
-        </main>
       </div>
     </div>
-  )
+  );
 }
 
+/* =========================================================
+   CONTACT
+========================================================= */
 
-// =========================================================
-// SIDEBAR SECTION TITLE
-// =========================================================
-
-function CreativeSectionTitle({ children }) {
+function CreativeContact({ label, value }) {
   return (
-    <div>
-      <h2
+    <div className="min-w-0">
+      <p
         className="
           text-[6px]
-          font-bold
-          uppercase
-          tracking-[0.15em]
-          text-[#6366F1]
-        "
-      >
-        {children}
-      </h2>
-
-      <div
-        className="
-          mt-1.5
-          h-[2px]
-          w-5
-          bg-[#6366F1]
-        "
-      />
-    </div>
-  )
-}
-
-
-// =========================================================
-// MAIN SECTION TITLE
-// =========================================================
-
-function CreativeMainTitle({ children }) {
-  return (
-    <div className="flex items-center gap-2">
-      <h2
-        className="
-          shrink-0
-          text-[7px]
-          font-bold
-          uppercase
+          font-extrabold
           tracking-[0.14em]
-          text-[#111827]
+          text-buildcv-violet
         "
       >
-        {children}
-      </h2>
+        {label}
+      </p>
 
-      <div
+      <p
         className="
-          h-px
-          flex-1
-          bg-[#E2E8F0]
+          mt-1
+          truncate
+          text-[7.5px]
+          font-semibold
+          text-buildcv-text-secondary
         "
-      />
+      >
+        {value}
+      </p>
     </div>
-  )
+  );
 }
 
+/* =========================================================
+   SECTION
+========================================================= */
 
-export default CreativePreview
+function CreativeSection({
+  number,
+  title,
+  children,
+}) {
+  return (
+    <section className="mb-8">
+      <div className="mb-4 flex items-center gap-3">
+        <span
+          className="
+            text-[8px]
+            font-black
+            text-buildcv-violet
+          "
+        >
+          {number}
+        </span>
+
+        <h2
+          className="
+            font-display
+            text-[11px]
+            font-extrabold
+            uppercase
+            tracking-[0.14em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
+
+        <div className="h-px flex-1 bg-buildcv-border" />
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function CreativeSidebar({
+  title,
+  children,
+}) {
+  return (
+    <section
+      className="
+        mb-7
+        rounded-2xl
+        border
+        border-buildcv-border
+        bg-white
+        p-4
+      "
+    >
+      <div className="mb-4 flex items-center gap-2">
+        <span
+          className="
+            h-1.5
+            w-1.5
+            rounded-full
+            bg-buildcv-violet
+          "
+        />
+
+        <h2
+          className="
+            text-[9px]
+            font-extrabold
+            uppercase
+            tracking-[0.15em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+/* =========================================================
+   EXPERIENCE
+========================================================= */
+
+function CreativeExperience({
+  item,
+}) {
+  const title =
+    getExperienceTitle(item);
+
+  const company =
+    getCompany(item);
+
+  const description =
+    getDescription(item);
+
+  const date = getDate(item);
+
+  return (
+    <article
+      className="
+        rounded-2xl
+        border
+        border-buildcv-border
+        bg-white
+        p-4
+      "
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h3
+            className="
+              text-[10px]
+              font-extrabold
+              text-buildcv-ink-900
+            "
+          >
+            {title}
+          </h3>
+
+          {company && (
+            <p
+              className="
+                mt-1
+                text-[8px]
+                font-bold
+                text-buildcv-violet
+              "
+            >
+              {company}
+            </p>
+          )}
+        </div>
+
+        {date && (
+          <span
+            className="
+              shrink-0
+              rounded-full
+              bg-buildcv-surface-soft
+              px-2
+              py-1
+              text-[6.5px]
+              font-bold
+              text-buildcv-text-muted
+            "
+          >
+            {date}
+          </span>
+        )}
+      </div>
+
+      {description && (
+        <p
+          className="
+            mt-2.5
+            text-[8.5px]
+            leading-[1.7]
+            text-buildcv-text-secondary
+          "
+        >
+          {description}
+        </p>
+      )}
+    </article>
+  );
+}
+
+/* =========================================================
+   PROJECT
+========================================================= */
+
+function CreativeProject({
+  project,
+  index,
+}) {
+  const name =
+    getProjectName(project);
+
+  const description =
+    getDescription(project);
+
+  const projectNumbers = [
+    "01",
+    "02",
+    "03",
+    "04",
+  ];
+
+  return (
+    <article
+      className="
+        group
+        rounded-2xl
+        border
+        border-buildcv-border
+        bg-buildcv-surface-soft
+        p-3.5
+      "
+    >
+      <div className="flex items-center justify-between">
+        <span
+          className="
+            text-[7px]
+            font-black
+            text-buildcv-violet
+          "
+        >
+          PROJECT{" "}
+          {projectNumbers[
+            index % 4
+          ]}
+        </span>
+
+        <span
+          className="
+            flex
+            h-5
+            w-5
+            items-center
+            justify-center
+            rounded-full
+            bg-white
+            text-[8px]
+            font-bold
+            text-buildcv-violet
+          "
+        >
+          ↗
+        </span>
+      </div>
+
+      <h3
+        className="
+          mt-3
+          text-[9px]
+          font-extrabold
+          text-buildcv-ink-900
+        "
+      >
+        {name}
+      </h3>
+
+      {description && (
+        <p
+          className="
+            mt-2
+            line-clamp-3
+            text-[7.5px]
+            leading-[1.6]
+            text-buildcv-text-secondary
+          "
+        >
+          {description}
+        </p>
+      )}
+
+      {project.technologies && (
+        <div className="mt-3 flex flex-wrap gap-1">
+          {String(
+            project.technologies
+          )
+            .split(",")
+            .map(
+              (
+                technology,
+                technologyIndex
+              ) => {
+                const value =
+                  technology.trim();
+
+                if (!value)
+                  return null;
+
+                return (
+                  <span
+                    key={
+                      technologyIndex
+                    }
+                    className="
+                      rounded
+                      bg-white
+                      px-1.5
+                      py-0.5
+                      text-[5.5px]
+                      font-semibold
+                      text-buildcv-text-muted
+                    "
+                  >
+                    {value}
+                  </span>
+                );
+              }
+            )}
+        </div>
+      )}
+    </article>
+  );
+}

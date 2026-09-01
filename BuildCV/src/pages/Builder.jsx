@@ -311,26 +311,50 @@ function Builder() {
   // SELECTED TEMPLATE
   // ===================================================
 
+  /*
+    IMPORTANT:
+
+    Priority:
+
+    1. Template selected from Templates.jsx
+       through React Router state
+
+    2. Template saved in localStorage
+
+    3. Modern as fallback
+  */
+
   const selectedTemplate =
     useMemo(() => {
       const stateTemplate =
         location.state
           ?.selectedTemplate
 
-      const savedTemplate =
-        localStorage.getItem(
-          TEMPLATE_STORAGE_KEY
+      let savedTemplate = null
+
+      try {
+        savedTemplate =
+          localStorage.getItem(
+            TEMPLATE_STORAGE_KEY
+          )
+      } catch (error) {
+        console.error(
+          "Failed to read selected template:",
+          error
         )
+      }
 
       return getTemplateId(
         stateTemplate ||
         savedTemplate ||
         "modern"
       )
-    }, [location.state])
+    }, [
+      location.state,
+    ])
 
   // ===================================================
-  // SAVE TEMPLATE
+  // SAVE SELECTED TEMPLATE
   // ===================================================
 
   useEffect(() => {
@@ -339,13 +363,28 @@ function Builder() {
         TEMPLATE_STORAGE_KEY,
         selectedTemplate
       )
+
+      /*
+        Keep the old BuildCV template key
+        synchronized as well.
+
+        This makes the selected template
+        available to older parts of the app.
+      */
+
+      localStorage.setItem(
+        "buildcv-template",
+        selectedTemplate
+      )
     } catch (error) {
       console.error(
-        "Failed to save template:",
+        "Failed to save selected template:",
         error
       )
     }
-  }, [selectedTemplate])
+  }, [
+    selectedTemplate,
+  ])
 
   // ===================================================
   // SAVE FORM DATA
@@ -374,13 +413,14 @@ function Builder() {
       0,
       BUILDER_STEPS.findIndex(
         (step) =>
-          step.id === activeStep
+          step.id ===
+          activeStep
       )
     )
 
   const currentStep =
     BUILDER_STEPS[
-    currentStepIndex
+      currentStepIndex
     ]
 
   const progressPercentage =
@@ -592,6 +632,7 @@ function Builder() {
                 "
               >
                 <span>↗</span>
+
                 <span>
                   Change Template
                 </span>
@@ -693,19 +734,25 @@ function Builder() {
                       text-xs
                       font-semibold
                       whitespace-nowrap
-                      ${isActive
-                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
-                        : "border-[#E2E8F0] bg-white text-[#718096]"
+
+                      ${
+                        isActive
+                          ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
+                          : "border-[#E2E8F0] bg-white text-[#718096]"
                       }
                     `}
                   >
+
                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F8FAFC] text-[10px]">
+
                       {isCompleted
                         ? "✓"
                         : index + 1}
+
                     </span>
 
                     {step.title}
+
                   </button>
                 )
               }
@@ -786,7 +833,6 @@ function Builder() {
 
               <div className="border-b border-[#E2E8F0] px-5 py-6 sm:px-8">
 
-
               </div>
 
               <div className="min-w-0">
@@ -826,7 +872,7 @@ function Builder() {
                     ← Back
                   </button>
 
-                  <div className="hidden sm:flex gap-1.5">
+                  <div className="hidden gap-1.5 sm:flex">
 
                     {BUILDER_STEPS.map(
                       (
@@ -840,13 +886,15 @@ function Builder() {
                           className={`
                             h-1.5
                             rounded-full
-                            ${index ===
+
+                            ${
+                              index ===
                               currentStepIndex
-                              ? "w-6 bg-[#6366F1]"
-                              : index <
-                                currentStepIndex
-                                ? "w-3 bg-[#6366F1]"
-                                : "w-3 bg-[#E2E8F0]"
+                                ? "w-6 bg-[#6366F1]"
+                                : index <
+                                  currentStepIndex
+                                  ? "w-3 bg-[#6366F1]"
+                                  : "w-3 bg-[#E2E8F0]"
                             }
                           `}
                         />
@@ -900,7 +948,7 @@ function Builder() {
                     Live Preview
                   </p>
 
-                  <p className="mt-1 text-[11px] text-[#718096]">
+                  <p className="mt-1 text-[11px] capitalize text-[#718096]">
                     {selectedTemplate} template
                   </p>
 
@@ -911,6 +959,7 @@ function Builder() {
                   <div className="mx-auto w-full max-w-[794px] rounded-lg bg-white shadow-md">
 
                     <ResumePreview
+                      key={`mobile-${selectedTemplate}`}
                       previewId="resume-preview-mobile"
                       formData={
                         formData
@@ -921,6 +970,23 @@ function Builder() {
                     />
 
                   </div>
+
+                </div>
+
+                {/* DOWNLOAD */}
+
+                <div className="border-t border-[#E2E8F0] p-4">
+
+                  <DownloadButton
+                    previewId="resume-preview-mobile"
+                    templateId={
+                      selectedTemplate
+                    }
+                  />
+
+                  <p className="mt-2 text-center text-[10px] text-[#718096]">
+                    Your resume will be exported as PDF
+                  </p>
 
                 </div>
 
@@ -944,7 +1010,7 @@ function Builder() {
                   Live Preview
                 </p>
 
-                <p className="mt-1 text-[11px] text-[#718096]">
+                <p className="mt-1 text-[11px] capitalize text-[#718096]">
                   {selectedTemplate} template
                 </p>
 
@@ -964,6 +1030,7 @@ function Builder() {
                 >
 
                   <ResumePreview
+                    key={`desktop-${selectedTemplate}`}
                     previewId="resume-preview-desktop"
                     formData={
                       formData
@@ -981,7 +1048,12 @@ function Builder() {
 
               <div className="border-t border-[#E2E8F0] p-4">
 
-                <DownloadButton previewId="resume-preview-desktop" />
+                <DownloadButton
+                  previewId="resume-preview-desktop"
+                  templateId={
+                    selectedTemplate
+                  }
+                />
 
                 <p className="mt-2 text-center text-[10px] text-[#718096]">
                   Your resume will be exported as PDF

@@ -1,812 +1,497 @@
-function MinimalPreview({ formData = {} }) {
-  // =====================================================
-  // PERSONAL DATA
-  // =====================================================
+import {
+  getResumeData,
+  getSkillName,
+  getEducationTitle,
+  getInstitution,
+  getExperienceTitle,
+  getCompany,
+  getProjectName,
+  getDescription,
+  getDate,
+} from "../templateUtils";
 
-  const personal = formData.personal || {}
+/*
+=========================================================
+BUILDCV — MINIMAL PREMIUM PREVIEW
+=========================================================
 
-  const {
-    fullName = "Emma Carter",
-    jobTitle = "Software Developer",
-    email = "emma@email.com",
-    phone = "+1 555 987 6543",
-    location = "Austin, TX",
-    linkedin = "linkedin.com/in/emma",
-    github = "github.com/emma",
-    summary =
-      "Focused professional with a strong interest in building simple, reliable, and user-friendly digital experiences.",
-    profileImage = "",
-  } = personal
+Layout:
+• One Column
+• No Photo
+• ATS Friendly
+• Clean editorial typography
+• Strong whitespace
+• Premium minimal hierarchy
+=========================================================
+*/
 
-  // =====================================================
-  // OTHER DATA
-  // =====================================================
+export default function MinimalPreview({ formData = {} }) {
 
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : []
-
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : []
-
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : []
-
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : []
-
-  // =====================================================
-  // CHECK WHETHER USER HAS ENTERED DATA
-  // =====================================================
-
-  const hasResumeData =
-    Boolean(personal.fullName?.trim()) ||
-    Boolean(personal.jobTitle?.trim()) ||
-    Boolean(personal.email?.trim()) ||
-    Boolean(personal.phone?.trim()) ||
-    Boolean(personal.location?.trim()) ||
-    Boolean(personal.linkedin?.trim()) ||
-    Boolean(personal.github?.trim()) ||
-    Boolean(personal.summary?.trim()) ||
-    Boolean(personal.profileImage) ||
-    skills.length > 0 ||
-    experience.length > 0 ||
-    education.length > 0 ||
-    projects.length > 0
-
-  // =====================================================
-  // FALLBACK DATA
-  // =====================================================
-
-  const displayPersonal = hasResumeData
-    ? {
-        fullName: personal.fullName || "",
-        jobTitle: personal.jobTitle || "",
-        email: personal.email || "",
-        phone: personal.phone || "",
-        location: personal.location || "",
-        linkedin: personal.linkedin || "",
-        github: personal.github || "",
-        summary: personal.summary || "",
-        profileImage: personal.profileImage || "",
-      }
-    : {
-        fullName,
-        jobTitle,
-        email,
-        phone,
-        location,
-        linkedin,
-        github,
-        summary,
-        profileImage,
-      }
-
-  const displaySkills =
-    skills.length > 0
-      ? skills
-      : hasResumeData
-        ? []
-        : [
-            "JavaScript",
-            "React",
-            "TypeScript",
-            "Git",
-            "CSS",
-            "Problem Solving",
-          ]
-
-  const displayExperience =
-    experience.length > 0
-      ? experience
-      : hasResumeData
-        ? []
-        : [
-            {
-              jobTitle: "Software Developer",
-              company: "Digital Solutions",
-              startDate: "2022",
-              endDate: "Present",
-              description:
-                "Built responsive web applications and reusable components while collaborating with designers and developers.",
-            },
-            {
-              jobTitle: "Junior Developer",
-              company: "Web Studio",
-              startDate: "2020",
-              endDate: "2022",
-              description:
-                "Developed and maintained websites using modern frontend technologies and best development practices.",
-            },
-          ]
-
-  const displayEducation =
-    education.length > 0
-      ? education
-      : hasResumeData
-        ? []
-        : [
-            {
-              degree: "BS Computer Science",
-              institution: "State University",
-              startDate: "2016",
-              endDate: "2020",
-            },
-          ]
-
-  const displayProjects =
-    projects.length > 0
-      ? projects
-      : hasResumeData
-        ? []
-        : [
-            {
-              name: "Personal Portfolio",
-              technologies:
-                "React • CSS • JavaScript",
-              description:
-                "Created a responsive portfolio website to showcase projects and professional experience.",
-            },
-          ]
-
-  // =====================================================
-  // HELPER
-  // =====================================================
-
-  function getValue(item, keys, fallback = "") {
-    for (const key of keys) {
-      if (
-        item?.[key] !== undefined &&
-        item?.[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key]
-      }
-    }
-
-    return fallback
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
+  // IMPORTANT:
+  // Normalize all resume data through templateUtils
+  const resume = getResumeData(formData);
 
   return (
     <div
       className="
-        h-full
+        min-h-[1123px]
         w-full
-        overflow-visible
         bg-white
-        px-6
-        py-6
-        text-gray-900
+        px-[58px]
+        py-[52px]
+        text-buildcv-ink-900
       "
-      style={{
-        backgroundColor: "#FFFFFF",
-        color: "#111827",
-      }}
     >
 
-      {/* =====================================================
+      {/* =================================================
           HEADER
-      ====================================================== */}
+      ================================================= */}
 
-      <header>
+      <header className="border-b border-buildcv-border pb-7">
 
-        <h1
-          className="
-            text-[24px]
-            font-semibold
-            tracking-tight
-          "
-          style={{
-            color: "#111827",
-          }}
-        >
-          {displayPersonal.fullName}
-        </h1>
+        <div className="flex items-end justify-between gap-8">
 
-        <p
-          className="
-            mt-1
-            text-[11px]
-            font-medium
-            uppercase
-            tracking-[0.16em]
-          "
-          style={{
-            color: "#475569",
-          }}
-        >
-          {displayPersonal.jobTitle}
-        </p>
+          {/* NAME + TITLE */}
 
-        {/* CONTACT */}
+          <div className="min-w-0">
 
-        <div
-          className="
-            mt-3
-            flex
-            flex-wrap
-            gap-x-3
-            gap-y-1
-            text-[8px]
-          "
-          style={{
-            color: "#718096",
-          }}
-        >
+            <h1
+              className="
+                text-[32px]
+                font-extrabold
+                leading-[1]
+                tracking-[-0.04em]
+                text-buildcv-ink-900
+              "
+            >
+              {resume.fullName || "Your Name"}
+            </h1>
 
-          {displayPersonal.email && (
-            <span>
-              {displayPersonal.email}
-            </span>
-          )}
+            <p
+              className="
+                mt-3
+                text-[11px]
+                font-bold
+                uppercase
+                tracking-[0.18em]
+                text-buildcv-violet
+              "
+            >
+              {resume.jobTitle || "Professional Title"}
+            </p>
 
-          {displayPersonal.phone && (
-            <span>
-              {displayPersonal.phone}
-            </span>
-          )}
+          </div>
 
-          {displayPersonal.location && (
-            <span>
-              {displayPersonal.location}
-            </span>
-          )}
+          {/* CONTACT */}
 
-          {displayPersonal.linkedin && (
-            <span>
-              {displayPersonal.linkedin}
-            </span>
-          )}
+          <div
+            className="
+              max-w-[230px]
+              text-right
+              text-[8px]
+              leading-4
+              text-buildcv-text-muted
+            "
+          >
 
-          {displayPersonal.github && (
-            <span>
-              {displayPersonal.github}
-            </span>
-          )}
+            {resume.email && (
+              <div className="break-all">
+                {resume.email}
+              </div>
+            )}
+
+            {resume.phone && (
+              <div>
+                {resume.phone}
+              </div>
+            )}
+
+            {resume.location && (
+              <div>
+                {resume.location}
+              </div>
+            )}
+
+            {resume.linkedin && (
+              <div className="break-all">
+                {resume.linkedin}
+              </div>
+            )}
+
+            {resume.github && (
+              <div className="break-all">
+                {resume.github}
+              </div>
+            )}
+
+          </div>
 
         </div>
 
       </header>
 
-      <div
-        className="my-4 h-px"
-        style={{
-          backgroundColor: "#E2E8F0",
-        }}
-      />
 
-      {/* =====================================================
-          PROFILE
-      ====================================================== */}
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
 
-      {displayPersonal.summary && (
-        <section className="mb-5">
+      <main className="pt-8">
 
-          <MinimalSectionTitle>
-            Profile
-          </MinimalSectionTitle>
+        {/* =================================================
+            SUMMARY
+        ================================================= */}
 
-          <p
-            className="
-              mt-2
-              max-w-[95%]
-              text-[9px]
-              leading-[1.6]
-            "
-            style={{
-              color: "#475569",
-            }}
-          >
-            {displayPersonal.summary}
-          </p>
+        {resume.summary && (
+          <MinimalSection title="PROFILE">
 
-        </section>
-      )}
+            <p
+              className="
+                max-w-[650px]
+                text-[10px]
+                leading-[1.8]
+                text-buildcv-text-secondary
+              "
+            >
+              {resume.summary}
+            </p>
 
-      {/* =====================================================
-          EXPERIENCE
-      ====================================================== */}
+          </MinimalSection>
+        )}
 
-      {displayExperience.length > 0 && (
-        <section className="mb-5">
 
-          <MinimalSectionTitle>
-            Experience
-          </MinimalSectionTitle>
+        {/* =================================================
+            EXPERIENCE
+        ================================================= */}
 
-          <div className="mt-2 space-y-3">
+        {resume.experience.length > 0 && (
+          <MinimalSection title="EXPERIENCE">
 
-            {displayExperience
-              .slice(0, 3)
-              .map((item, index) => {
+            <div className="space-y-7">
 
-                const title = getValue(
-                  item,
-                  [
-                    "jobTitle",
-                    "position",
-                    "title",
-                    "role",
-                  ],
-                  "Software Developer"
-                )
+              {resume.experience.map((item, index) => (
 
-                const company = getValue(
-                  item,
-                  [
-                    "company",
-                    "organization",
-                    "employer",
-                  ],
-                  "Digital Solutions"
-                )
+                <article
+                  key={item?.id || index}
+                  className="
+                    grid
+                    grid-cols-[125px_1fr]
+                    gap-7
+                  "
+                >
 
-                const startDate = getValue(
-                  item,
-                  [
-                    "startDate",
-                    "start",
-                    "from",
-                  ],
-                  "2022"
-                )
+                  {/* DATE */}
 
-                const endDate = getValue(
-                  item,
-                  [
-                    "endDate",
-                    "end",
-                    "to",
-                  ],
-                  "Present"
-                )
+                  <div className="pt-0.5">
 
-                const description = getValue(
-                  item,
-                  [
-                    "description",
-                    "details",
-                    "responsibilities",
-                  ],
-                  "Built responsive web applications using modern technologies."
-                )
+                    <p
+                      className="
+                        text-[8px]
+                        font-semibold
+                        leading-4
+                        text-buildcv-text-muted
+                      "
+                    >
+                      {getDate(item)}
+                    </p>
 
-                return (
-                  <article
-                    key={item.id || index}
-                  >
+                  </div>
+
+
+                  {/* EXPERIENCE */}
+
+                  <div className="relative">
+
+                    {/* Timeline dot */}
 
                     <div
                       className="
-                        flex
-                        items-start
-                        justify-between
-                        gap-3
+                        absolute
+                        -left-4
+                        top-[3px]
+                        h-1.5
+                        w-1.5
+                        rounded-full
+                        bg-buildcv-violet
                       "
-                    >
-
-                      <div className="min-w-0">
-
-                        <h3
-                          className="
-                            truncate
-                            text-[10px]
-                            font-semibold
-                          "
-                          style={{
-                            color: "#111827",
-                          }}
-                        >
-                          {title}
-                        </h3>
-
-                        <p
-                          className="
-                            mt-0.5
-                            truncate
-                            text-[8px]
-                          "
-                          style={{
-                            color: "#475569",
-                          }}
-                        >
-                          {company}
-                        </p>
-
-                      </div>
-
-                      <span
-                        className="
-                          shrink-0
-                          text-[7px]
-                        "
-                        style={{
-                          color: "#718096",
-                        }}
-                      >
-                        {startDate} — {endDate}
-                      </span>
-
-                    </div>
-
-                    {description && (
-                      <p
-                        className="
-                          mt-1
-                          text-[8px]
-                          leading-[1.55]
-                        "
-                        style={{
-                          color: "#475569",
-                        }}
-                      >
-                        {description}
-                      </p>
-                    )}
-
-                  </article>
-                )
-              })}
-
-          </div>
-
-        </section>
-      )}
-
-      {/* =====================================================
-          EDUCATION
-      ====================================================== */}
-
-      {displayEducation.length > 0 && (
-        <section className="mb-5">
-
-          <MinimalSectionTitle>
-            Education
-          </MinimalSectionTitle>
-
-          <div className="mt-2 space-y-2">
-
-            {displayEducation
-              .slice(0, 2)
-              .map((item, index) => {
-
-                const degree = getValue(
-                  item,
-                  [
-                    "degree",
-                    "qualification",
-                    "title",
-                    "program",
-                  ],
-                  "BS Computer Science"
-                )
-
-                const field = getValue(
-                  item,
-                  [
-                    "field",
-                    "major",
-                    "specialization",
-                  ],
-                  ""
-                )
-
-                const institution =
-                  getValue(
-                    item,
-                    [
-                      "institution",
-                      "school",
-                      "university",
-                      "college",
-                    ],
-                    "State University"
-                  )
-
-                const startDate = getValue(
-                  item,
-                  [
-                    "startDate",
-                    "start",
-                    "from",
-                  ],
-                  "2016"
-                )
-
-                const endDate = getValue(
-                  item,
-                  [
-                    "endDate",
-                    "end",
-                    "to",
-                  ],
-                  "2020"
-                )
-
-                return (
-                  <div
-                    key={item.id || index}
-                    className="
-                      flex
-                      items-start
-                      justify-between
-                      gap-3
-                    "
-                  >
-
-                    <div className="min-w-0">
-
-                      <h3
-                        className="
-                          truncate
-                          text-[10px]
-                          font-semibold
-                        "
-                        style={{
-                          color: "#111827",
-                        }}
-                      >
-                        {degree}
-
-                        {field
-                          ? ` — ${field}`
-                          : ""}
-                      </h3>
-
-                      <p
-                        className="
-                          mt-0.5
-                          truncate
-                          text-[8px]
-                        "
-                        style={{
-                          color: "#475569",
-                        }}
-                      >
-                        {institution}
-                      </p>
-
-                    </div>
-
-                    <span
-                      className="
-                        shrink-0
-                        text-[7px]
-                      "
-                      style={{
-                        color: "#718096",
-                      }}
-                    >
-                      {startDate} — {endDate}
-                    </span>
-
-                  </div>
-                )
-              })}
-
-          </div>
-
-        </section>
-      )}
-
-      {/* =====================================================
-          PROJECTS
-      ====================================================== */}
-
-      {displayProjects.length > 0 && (
-        <section className="mb-5">
-
-          <MinimalSectionTitle>
-            Projects
-          </MinimalSectionTitle>
-
-          <div className="mt-2 space-y-2">
-
-            {displayProjects
-              .slice(0, 2)
-              .map((item, index) => {
-
-                const name = getValue(
-                  item,
-                  [
-                    "name",
-                    "projectName",
-                    "title",
-                  ],
-                  "Personal Portfolio"
-                )
-
-                const technologies =
-                  getValue(
-                    item,
-                    [
-                      "technologies",
-                      "technology",
-                      "techStack",
-                      "stack",
-                    ],
-                    ""
-                  )
-
-                const description =
-                  getValue(
-                    item,
-                    [
-                      "description",
-                      "details",
-                    ],
-                    "Created a responsive portfolio website."
-                  )
-
-                return (
-                  <div
-                    key={item.id || index}
-                  >
+                    />
 
                     <h3
                       className="
-                        text-[10px]
-                        font-semibold
+                        text-[12px]
+                        font-bold
+                        leading-4
+                        text-buildcv-ink-900
                       "
-                      style={{
-                        color: "#111827",
-                      }}
                     >
-                      {name}
+                      {getExperienceTitle(item)}
                     </h3>
-
-                    {technologies && (
-                      <p
-                        className="
-                          mt-0.5
-                          text-[7px]
-                        "
-                        style={{
-                          color: "#718096",
-                        }}
-                      >
-                        {Array.isArray(
-                          technologies
-                        )
-                          ? technologies.join(
-                              " • "
-                            )
-                          : technologies}
-                      </p>
-                    )}
 
                     <p
                       className="
                         mt-1
-                        text-[8px]
-                        leading-[1.5]
+                        text-[9px]
+                        font-semibold
+                        text-buildcv-violet
                       "
-                      style={{
-                        color: "#475569",
-                      }}
                     >
-                      {description}
+                      {getCompany(item)}
+                    </p>
+
+                    {getDescription(item) && (
+                      <p
+                        className="
+                          mt-2.5
+                          text-[9px]
+                          leading-[1.7]
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {getDescription(item)}
+                      </p>
+                    )}
+
+                  </div>
+
+                </article>
+
+              ))}
+
+            </div>
+
+          </MinimalSection>
+        )}
+
+
+        {/* =================================================
+            EDUCATION
+        ================================================= */}
+
+        {resume.education.length > 0 && (
+          <MinimalSection title="EDUCATION">
+
+            <div className="space-y-6">
+
+              {resume.education.map((item, index) => (
+
+                <article
+                  key={item?.id || index}
+                  className="
+                    grid
+                    grid-cols-[125px_1fr]
+                    gap-7
+                  "
+                >
+
+                  {/* DATE */}
+
+                  <div className="pt-0.5">
+
+                    <p
+                      className="
+                        text-[8px]
+                        font-semibold
+                        leading-4
+                        text-buildcv-text-muted
+                      "
+                    >
+                      {getDate(item)}
                     </p>
 
                   </div>
-                )
-              })}
 
-          </div>
 
-        </section>
-      )}
+                  {/* EDUCATION */}
 
-      {/* =====================================================
-          SKILLS
-      ====================================================== */}
+                  <div>
 
-      {displaySkills.length > 0 && (
-        <section>
+                    <h3
+                      className="
+                        text-[11px]
+                        font-bold
+                        text-buildcv-ink-900
+                      "
+                    >
+                      {getEducationTitle(item)}
+                    </h3>
 
-          <MinimalSectionTitle>
-            Skills
-          </MinimalSectionTitle>
+                    <p
+                      className="
+                        mt-1
+                        text-[9px]
+                        font-medium
+                        text-buildcv-text-secondary
+                      "
+                    >
+                      {getInstitution(item)}
+                    </p>
 
-          <div
-            className="
-              mt-2
-              flex
-              flex-wrap
-              gap-x-3
-              gap-y-1
-            "
-          >
+                    {getDescription(item) && (
+                      <p
+                        className="
+                          mt-2
+                          text-[9px]
+                          leading-[1.7]
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {getDescription(item)}
+                      </p>
+                    )}
 
-            {displaySkills
-              .slice(0, 10)
-              .map((skill, index) => {
+                  </div>
 
-                const skillName =
-                  typeof skill === "string"
-                    ? skill
-                    : getValue(
-                        skill,
-                        [
-                          "name",
-                          "skill",
-                          "title",
-                        ],
-                        "Skill"
-                      )
+                </article>
 
-                if (!skillName) {
-                  return null
-                }
+              ))}
+
+            </div>
+
+          </MinimalSection>
+        )}
+
+
+        {/* =================================================
+            SKILLS
+        ================================================= */}
+
+        {resume.skills.length > 0 && (
+          <MinimalSection title="CORE SKILLS">
+
+            <div className="flex flex-wrap gap-x-2 gap-y-2">
+
+              {resume.skills.map((skill, index) => {
+
+                const name = getSkillName(skill);
+
+                if (!name) return null;
 
                 return (
                   <span
-                    key={
-                      skill?.id || index
-                    }
+                    key={skill?.id || index}
                     className="
+                      border
+                      border-buildcv-border
+                      bg-buildcv-surface-soft
+                      px-2.5
+                      py-1.5
                       text-[8px]
-                      font-medium
+                      font-semibold
+                      text-buildcv-text-secondary
                     "
-                    style={{
-                      color: "#475569",
-                    }}
                   >
-                    {skillName}
+                    {name}
                   </span>
-                )
+                );
+
               })}
 
-          </div>
+            </div>
 
-        </section>
-      )}
+          </MinimalSection>
+        )}
+
+
+        {/* =================================================
+            PROJECTS
+        ================================================= */}
+
+        {resume.projects.length > 0 && (
+          <MinimalSection title="SELECTED PROJECTS">
+
+            <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+
+              {resume.projects.map((project, index) => (
+
+                <article
+                  key={project?.id || index}
+                >
+
+                  <h3
+                    className="
+                      text-[10px]
+                      font-bold
+                      text-buildcv-ink-900
+                    "
+                  >
+                    {getProjectName(project)}
+                  </h3>
+
+                  {getDescription(project) && (
+                    <p
+                      className="
+                        mt-1.5
+                        text-[8.5px]
+                        leading-[1.7]
+                        text-buildcv-text-secondary
+                      "
+                    >
+                      {getDescription(project)}
+                    </p>
+                  )}
+
+                  {project.technologies && (
+                    <p
+                      className="
+                        mt-2
+                        text-[7.5px]
+                        font-semibold
+                        uppercase
+                        tracking-wide
+                        text-buildcv-violet
+                      "
+                    >
+                      {Array.isArray(project.technologies)
+                        ? project.technologies.join(" • ")
+                        : project.technologies}
+                    </p>
+                  )}
+
+                </article>
+
+              ))}
+
+            </div>
+
+          </MinimalSection>
+        )}
+
+      </main>
 
     </div>
-  )
+  );
 }
 
 
 /* =========================================================
-   SECTION TITLE
+   SECTION COMPONENT
 ========================================================= */
 
-function MinimalSectionTitle({ children }) {
+function MinimalSection({ title, children }) {
+
   return (
-    <div className="flex items-center gap-2">
+    <section className="mb-8">
 
-      <h2
-        className="
-          shrink-0
-          text-[9px]
-          font-bold
-          uppercase
-          tracking-[0.16em]
-        "
-        style={{
-          color: "#111827",
-        }}
-      >
-        {children}
-      </h2>
+      <div className="mb-4 flex items-center gap-3">
 
-      <div
-        className="h-px flex-1"
-        style={{
-          backgroundColor: "#E2E8F0",
-        }}
-      />
+        <h2
+          className="
+            shrink-0
+            text-[8px]
+            font-extrabold
+            uppercase
+            tracking-[0.2em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
 
-    </div>
-  )
+        <div className="h-px flex-1 bg-buildcv-border" />
+
+      </div>
+
+      {children}
+
+    </section>
+  );
 }
-
-
-export default MinimalPreview

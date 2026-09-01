@@ -2,7 +2,13 @@ import { useState } from "react"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 
-function DownloadButton() {
+// =====================================================
+// BUILDCV — DOWNLOAD BUTTON
+// =====================================================
+
+function DownloadButton({
+  previewId = "resume-preview-desktop",
+}) {
   const [isDownloading, setIsDownloading] = useState(false)
 
   const handleDownload = async () => {
@@ -14,21 +20,27 @@ function DownloadButton() {
       setIsDownloading(true)
 
       // =================================================
-      // FIND VISIBLE RESUME
+      // FIND THE EXACT SELECTED PREVIEW
       // =================================================
 
-      const previews = Array.from(
-        document.querySelectorAll(".resume-preview")
-      )
-
-      const preview = previews.find((element) => {
-        const rect = element.getBoundingClientRect()
-
-        return rect.width > 0 && rect.height > 0
-      })
+      const preview = document.getElementById(previewId)
 
       if (!preview) {
-        throw new Error("Resume preview could not be found.")
+        throw new Error(
+          "The selected resume preview could not be found."
+        )
+      }
+
+      // =================================================
+      // MAKE SURE PREVIEW IS VISIBLE
+      // =================================================
+
+      const rect = preview.getBoundingClientRect()
+
+      if (rect.width <= 0 || rect.height <= 0) {
+        throw new Error(
+          "The resume preview is not currently visible."
+        )
       }
 
       // =================================================
@@ -87,7 +99,7 @@ function DownloadButton() {
       document.body.appendChild(printContainer)
 
       // =================================================
-      // CLONE RESUME
+      // CLONE THE EXACT SELECTED TEMPLATE
       // =================================================
 
       const clone = preview.cloneNode(true)
@@ -113,12 +125,13 @@ function DownloadButton() {
         boxSizing: "border-box",
 
         transform: "none",
+        transformOrigin: "top left",
       })
 
       printContainer.appendChild(clone)
 
       // =================================================
-      // FIND INNER RESUME PAGE
+      // FIND INNER TEMPLATE
       // =================================================
 
       const page = clone.querySelector(":scope > div")
@@ -133,13 +146,15 @@ function DownloadButton() {
           minHeight: "0",
           maxHeight: "none",
 
+          margin: "0",
+          padding: page.style.padding,
+
           overflow: "visible",
 
           boxSizing: "border-box",
 
-          margin: "0",
-
           transform: "none",
+          transformOrigin: "top left",
         })
       }
 
@@ -156,17 +171,20 @@ function DownloadButton() {
         })
 
       // =================================================
-      // IMPORTANT:
-      // PRESERVE ORIGINAL FONT SIZES
-      // AND FORCE TEXT WRAPPING
+      // PRESERVE TEMPLATE STYLING
       // =================================================
 
       clone
         .querySelectorAll("*")
         .forEach((element) => {
           element.style.boxSizing = "border-box"
-          element.style.maxWidth = "100%"
+
+          // Do NOT force template-specific colors,
+          // fonts, spacing, sizes, etc.
+          //
+          // Only make long text safe for PDF rendering.
           element.style.overflowWrap = "anywhere"
+          element.style.wordBreak = "break-word"
         })
 
       // =================================================
@@ -180,25 +198,37 @@ function DownloadButton() {
       })
 
       // =================================================
-      // GET ACTUAL RESUME HEIGHT
-      // =================================================
-
-      const resumeWidth = clone.scrollWidth
-      const resumeHeight = clone.scrollHeight
-
-      console.log("PDF resume width:", resumeWidth)
-      console.log("PDF resume height:", resumeHeight)
-
-      // =================================================
       // A4 CSS DIMENSIONS
-      // 794 × 1123 px
       // =================================================
 
       const A4_WIDTH = 794
       const A4_HEIGHT = 1123
 
       // =================================================
-      // SCALE ONLY IF NECESSARY
+      // GET ACTUAL RESUME SIZE
+      // =================================================
+
+      const resumeWidth = Math.max(
+        clone.scrollWidth,
+        A4_WIDTH
+      )
+
+      const resumeHeight = Math.max(
+        clone.scrollHeight,
+        1
+      )
+
+      console.log(
+        "BuildCV PDF:",
+        {
+          previewId,
+          width: resumeWidth,
+          height: resumeHeight,
+        }
+      )
+
+      // =================================================
+      // SCALE IF RESUME IS LONGER THAN A4
       // =================================================
 
       let scale = 1
@@ -212,13 +242,18 @@ function DownloadButton() {
       // =================================================
 
       if (scale < 1) {
-        clone.style.transformOrigin = "top left"
-        clone.style.transform = `scale(${scale})`
+        clone.style.transformOrigin =
+          "top left"
 
-        clone.style.width = `${A4_WIDTH / scale}px`
+        clone.style.transform =
+          `scale(${scale})`
+
+        clone.style.width =
+          `${A4_WIDTH / scale}px`
 
         if (page) {
-          page.style.width = `${A4_WIDTH / scale}px`
+          page.style.width =
+            `${A4_WIDTH / scale}px`
         }
       }
 
@@ -233,35 +268,67 @@ function DownloadButton() {
       })
 
       // =================================================
-      // CAPTURE RESUME
+      // CAPTURE EXACT SELECTED TEMPLATE
       // =================================================
 
-      const canvas = await html2canvas(clone, {
-        scale: 2,
+      const captureWidth =
+        Math.min(
+          Math.max(
+            clone.scrollWidth,
+            A4_WIDTH
+          ),
+          A4_WIDTH / Math.max(scale, 0.01)
+        )
 
-        useCORS: true,
-        allowTaint: false,
+      const captureHeight =
+        Math.min(
+          Math.max(
+            clone.scrollHeight,
+            A4_HEIGHT
+          ),
+          A4_HEIGHT / Math.max(scale, 0.01)
+        )
 
-        backgroundColor: "#FFFFFF",
+      const canvas =
+        await html2canvas(clone, {
+          scale: 2,
 
-        logging: false,
+          useCORS: true,
+          allowTaint: false,
 
-        imageTimeout: 20000,
+          backgroundColor: "#FFFFFF",
 
-        scrollX: 0,
-        scrollY: 0,
+          logging: false,
 
-        width: A4_WIDTH,
+          imageTimeout: 20000,
 
-        windowWidth: A4_WIDTH,
+          scrollX: 0,
+          scrollY: 0,
 
-        height: Math.min(
-          clone.scrollHeight,
-          A4_HEIGHT
-        ),
+          width: captureWidth,
 
-        windowHeight: A4_HEIGHT,
-      })
+          height: captureHeight,
+
+          windowWidth:
+            Math.ceil(captureWidth),
+
+          windowHeight:
+            Math.ceil(captureHeight),
+        })
+
+      // =================================================
+      // VALIDATE CANVAS
+      // =================================================
+
+      if (
+        !canvas ||
+        canvas.width <= 0 ||
+        canvas.height <= 0
+      ) {
+        throw new Error(
+          "The resume could not be rendered for PDF export."
+        )
+      }
 
       // =================================================
       // CREATE A4 PDF
@@ -275,50 +342,62 @@ function DownloadButton() {
       })
 
       // =================================================
-      // A4 SIZE
+      // A4 DIMENSIONS
       // =================================================
 
       const pageWidth = 210
       const pageHeight = 297
 
       // =================================================
-      // IMAGE SIZE
+      // IMAGE DIMENSIONS
       // =================================================
 
       const imageWidth = pageWidth
+
       const imageHeight =
         (canvas.height / canvas.width) *
         imageWidth
 
       // =================================================
-      // ADD IMAGE
+      // ADD EXACT TEMPLATE TO PDF
       // =================================================
 
       pdf.addImage(
-        canvas.toDataURL("image/jpeg", 1),
+        canvas.toDataURL(
+          "image/jpeg",
+          0.98
+        ),
         "JPEG",
         0,
         0,
         imageWidth,
-        Math.min(imageHeight, pageHeight),
+        Math.min(
+          imageHeight,
+          pageHeight
+        ),
         undefined,
         "FAST"
       )
 
       // =================================================
-      // SAVE
+      // SAVE PDF
       // =================================================
 
-      pdf.save("BuildCV-Resume.pdf")
+      pdf.save(
+        "BuildCV-Resume.pdf"
+      )
 
     } catch (error) {
       console.error(
-        "Resume download failed:",
+        "BuildCV resume download failed:",
         error
       )
 
       alert(
-        `Unable to download the resume.\n\n${error.message}`
+        `Unable to download the resume.\n\n${
+          error?.message ||
+          "Something went wrong."
+        }`
       )
     } finally {
       // =================================================
@@ -337,6 +416,10 @@ function DownloadButton() {
       setIsDownloading(false)
     }
   }
+
+  // =====================================================
+  // BUTTON
+  // =====================================================
 
   return (
     <button
@@ -367,7 +450,9 @@ function DownloadButton() {
       "
     >
       <span className="text-base">
-        {isDownloading ? "..." : "↓"}
+        {isDownloading
+          ? "..."
+          : "↓"}
       </span>
 
       <span>

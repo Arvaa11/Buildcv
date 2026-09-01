@@ -1,835 +1,651 @@
-function ElegantPreview({ formData = {} }) {
-  // =====================================================
-  // PERSONAL DATA
-  // =====================================================
+import {
+  getResumeData,
+  getSkillName,
+  getEducationTitle,
+  getInstitution,
+  getExperienceTitle,
+  getCompany,
+  getProjectName,
+  getDescription,
+  getDate,
+} from "../templateUtils";
 
-  const personal = formData.personal || {}
-
-  const {
-    fullName = "",
-    jobTitle = "",
-    email = "",
-    phone = "",
-    location = "",
-    linkedin = "",
-    github = "",
-    summary = "",
-    profileImage = "",
-  } = personal
-
-  // =====================================================
-  // OTHER DATA
-  // =====================================================
-
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : []
-
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : []
-
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : []
-
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : []
-
-  // =====================================================
-  // CHECK WHETHER RESUME HAS REAL DATA
-  // =====================================================
-
-  const hasResumeData = Boolean(
-    fullName.trim() ||
-      jobTitle.trim() ||
-      email.trim() ||
-      phone.trim() ||
-      location.trim() ||
-      linkedin.trim() ||
-      github.trim() ||
-      summary.trim() ||
-      profileImage ||
-      skills.length > 0 ||
-      experience.length > 0 ||
-      education.length > 0 ||
-      projects.length > 0
-  )
-
-  // =====================================================
-  // PERSONAL DISPLAY DATA
-  // =====================================================
-
-  const displayPersonal = hasResumeData
-    ? {
-        fullName,
-        jobTitle,
-        email,
-        phone,
-        location,
-        linkedin,
-        github,
-        summary,
-        profileImage,
-      }
-    : {
-        fullName: "Sophia Williams",
-        jobTitle: "Marketing Strategist",
-        email: "sophia@email.com",
-        phone: "+1 555 456 7890",
-        location: "Boston, MA",
-        linkedin: "linkedin.com/in/sophia",
-        github: "",
-        summary:
-          "Strategic marketing professional with experience developing brand strategies, managing campaigns, and helping organizations achieve sustainable growth.",
-        profileImage: "",
-      }
-
-  // =====================================================
-  // FALLBACK DATA
-  // =====================================================
-
-  const displaySkills =
-    skills.length > 0
-      ? skills
-      : hasResumeData
-        ? []
-        : [
-            "Brand Strategy",
-            "Digital Marketing",
-            "Business Strategy",
-            "Market Research",
-            "Content Strategy",
-            "Analytics",
-            "Campaign Management",
-          ]
-
-  const displayExperience =
-    experience.length > 0
-      ? experience
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-experience-1",
-              jobTitle: "Senior Marketing Strategist",
-              company: "Sterling & Co.",
-              startDate: "2022",
-              endDate: "Present",
-              description:
-                "Developed integrated marketing strategies across digital channels and led campaigns that increased brand awareness and customer engagement.",
-            },
-            {
-              id: "sample-experience-2",
-              jobTitle: "Marketing Manager",
-              company: "Horizon Group",
-              startDate: "2019",
-              endDate: "2022",
-              description:
-                "Managed multi-channel campaigns, collaborated with creative teams, and used analytics to optimize marketing performance.",
-            },
-            {
-              id: "sample-experience-3",
-              jobTitle: "Marketing Associate",
-              company: "Bright Media",
-              startDate: "2017",
-              endDate: "2019",
-              description:
-                "Supported marketing campaigns, market research, content planning, and customer engagement initiatives.",
-            },
-          ]
-
-  const displayEducation =
-    education.length > 0
-      ? education
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-education-1",
-              degree: "MBA, Marketing",
-              institution: "Boston University",
-              startDate: "2015",
-              endDate: "2017",
-            },
-          ]
-
-  const displayProjects =
-    projects.length > 0
-      ? projects
-      : hasResumeData
-        ? []
-        : [
-            {
-              id: "sample-project-1",
-              name: "Brand Growth Strategy",
-              description:
-                "Developed a complete growth strategy that improved customer acquisition and digital engagement.",
-            },
-            {
-              id: "sample-project-2",
-              name: "Digital Campaign",
-              description:
-                "Planned and executed a cross-platform campaign focused on increasing qualified leads.",
-            },
-          ]
-
-  // =====================================================
-  // HELPER
-  // =====================================================
-
-  function getValue(item, keys, fallback = "") {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key]
-      }
-    }
-
-    return fallback
-  }
-
-  function getSkillName(skill) {
-    if (typeof skill === "string") {
-      return skill
-    }
-
-    return getValue(
-      skill,
-      ["name", "skill", "title"],
-      ""
-    )
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
+export default function ElegantPreview({ formData }) {
+  const resume = getResumeData(formData);
 
   return (
     <div
-      className="h-full w-full overflow-hidden"
-      style={{
-        backgroundColor: "#FFFDF9",
-        color: "#292524",
-      }}
+      className="
+        mx-auto
+        min-h-[1123px]
+        w-full
+        max-w-[794px]
+        overflow-hidden
+        bg-white
+        text-buildcv-ink-900
+      "
     >
       {/* =====================================================
-          HEADER
-      ====================================================== */}
+          TOP IDENTITY AREA
+      ===================================================== */}
 
-      <header
-        className="px-6 pb-5 pt-6 text-center"
-        style={{
-          backgroundColor: "#FFFDF9",
-        }}
-      >
-        <p
-          className="text-[5.5px] font-medium uppercase tracking-[0.3em]"
-          style={{
-            color: "#A16207",
-          }}
-        >
-          Professional Resume
-        </p>
+      <header className="relative px-10 pb-8 pt-9">
+        {/* Decorative corner */}
+        <div className="absolute right-0 top-0 h-24 w-24 overflow-hidden">
+          <div
+            className="
+              absolute
+              -right-12
+              -top-12
+              h-24
+              w-24
+              rounded-full
+              border-[10px]
+              border-buildcv-violet-100
+            "
+          />
+        </div>
 
-        {displayPersonal.fullName && (
-          <h1
-            className="mt-2 text-[17px] font-semibold tracking-wide"
-            style={{
-              color: "#292524",
-            }}
-          >
-            {displayPersonal.fullName}
-          </h1>
-        )}
+        <div className="flex items-center gap-6">
+          {/* Profile Image */}
 
-        {displayPersonal.jobTitle && (
-          <p
-            className="mt-1 text-[6.5px] font-medium tracking-wide"
-            style={{
-              color: "#78716C",
-            }}
-          >
-            {displayPersonal.jobTitle}
-          </p>
-        )}
+          {resume.profileImage ? (
+            <img
+              src={resume.profileImage}
+              alt={resume.fullName || "Profile"}
+              className="
+                h-24
+                w-24
+                shrink-0
+                rounded-full
+                object-cover
+                ring-4
+                ring-buildcv-violet-50
+              "
+            />
+          ) : (
+            <div
+              className="
+                flex
+                h-24
+                w-24
+                shrink-0
+                items-center
+                justify-center
+                rounded-full
+                bg-buildcv-violet-50
+                ring-4
+                ring-buildcv-violet-50
+              "
+            >
+              <span className="text-2xl font-bold text-buildcv-violet">
+                {resume.fullName
+                  ? resume.fullName.charAt(0).toUpperCase()
+                  : "A"}
+              </span>
+            </div>
+          )}
+
+          <div className="min-w-0 flex-1">
+            <p
+              className="
+                mb-2
+                text-[9px]
+                font-bold
+                uppercase
+                tracking-[0.25em]
+                text-buildcv-violet
+              "
+            >
+              Professional Resume
+            </p>
+
+            <h1
+              className="
+                font-display
+                text-3xl
+                font-extrabold
+                tracking-tight
+                text-buildcv-ink-900
+              "
+            >
+              {resume.fullName || "Your Name"}
+            </h1>
+
+            {resume.jobTitle && (
+              <p
+                className="
+                  mt-2
+                  text-sm
+                  font-semibold
+                  text-buildcv-text-secondary
+                "
+              >
+                {resume.jobTitle}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Contact row */}
 
         <div
-          className="mx-auto mt-3 h-px w-12"
-          style={{
-            backgroundColor: "#A16207",
-          }}
-        />
-
-        {/* CONTACT */}
-
-        <div
-          className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[5px]"
-          style={{
-            color: "#78716C",
-          }}
+          className="
+            mt-7
+            flex
+            flex-wrap
+            items-center
+            gap-x-5
+            gap-y-2
+            border-t
+            border-buildcv-border
+            pt-4
+          "
         >
-          {displayPersonal.email && (
-            <span>{displayPersonal.email}</span>
+          {resume.email && (
+            <ContactItem
+              icon="✉"
+              value={resume.email}
+            />
           )}
 
-          {displayPersonal.phone && (
-            <span>{displayPersonal.phone}</span>
+          {resume.phone && (
+            <ContactItem
+              icon="☎"
+              value={resume.phone}
+            />
           )}
 
-          {displayPersonal.location && (
-            <span>{displayPersonal.location}</span>
+          {resume.location && (
+            <ContactItem
+              icon="⌖"
+              value={resume.location}
+            />
           )}
 
-          {displayPersonal.linkedin && (
-            <span>{displayPersonal.linkedin}</span>
+          {resume.linkedin && (
+            <ContactItem
+              icon="in"
+              value={resume.linkedin}
+            />
           )}
 
-          {displayPersonal.github && (
-            <span>{displayPersonal.github}</span>
+          {resume.github && (
+            <ContactItem
+              icon="⌘"
+              value={resume.github}
+            />
           )}
         </div>
       </header>
 
       {/* =====================================================
-          MAIN
-      ====================================================== */}
+          MAIN CONTENT
+      ===================================================== */}
 
-      <div
-        className="px-6 pb-6"
-        style={{
-          backgroundColor: "#FFFDF9",
-        }}
-      >
-        {/* =================================================
-            PROFILE
-        ================================================== */}
+      <div className="grid grid-cols-[1fr_245px] gap-9 px-10 pb-10">
+        {/* ===================================================
+            LEFT CONTENT
+        =================================================== */}
 
-        {displayPersonal.summary && (
-          <section className="mb-5">
-            <ElegantTitle>
-              Profile
-            </ElegantTitle>
+        <main className="min-w-0">
+          {/* ABOUT */}
+
+          {resume.summary && (
+            <ElegantSection title="Profile">
+              <p
+                className="
+                  text-[10px]
+                  leading-[1.8]
+                  text-buildcv-text-secondary
+                "
+              >
+                {resume.summary}
+              </p>
+            </ElegantSection>
+          )}
+
+          {/* EXPERIENCE */}
+
+          {resume.experience.length > 0 && (
+            <ElegantSection title="Experience">
+              <div className="space-y-6">
+                {resume.experience.map((item, index) => (
+                  <ExperienceItem
+                    key={item.id || index}
+                    item={item}
+                  />
+                ))}
+              </div>
+            </ElegantSection>
+          )}
+
+          {/* PROJECTS */}
+
+          {resume.projects.length > 0 && (
+            <ElegantSection title="Selected Projects">
+              <div className="space-y-5">
+                {resume.projects.map((project, index) => (
+                  <ProjectItem
+                    key={project.id || index}
+                    project={project}
+                  />
+                ))}
+              </div>
+            </ElegantSection>
+          )}
+        </main>
+
+        {/* ===================================================
+            RIGHT SIDEBAR
+        =================================================== */}
+
+        <aside className="min-w-0 border-l border-buildcv-border pl-7">
+          {/* SKILLS */}
+
+          {resume.skills.length > 0 && (
+            <ElegantSidebarSection title="Skills">
+              <div className="space-y-2.5">
+                {resume.skills.map((skill, index) => {
+                  const name = getSkillName(skill);
+
+                  if (!name) return null;
+
+                  return (
+                    <div
+                      key={index}
+                      className="
+                        flex
+                        items-center
+                        justify-between
+                        gap-2
+                      "
+                    >
+                      <span
+                        className="
+                          text-[9px]
+                          font-semibold
+                          text-buildcv-text-secondary
+                        "
+                      >
+                        {name}
+                      </span>
+
+                      <span
+                        className="
+                          h-1.5
+                          w-1.5
+                          rounded-full
+                          bg-buildcv-violet
+                        "
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </ElegantSidebarSection>
+          )}
+
+          {/* EDUCATION */}
+
+          {resume.education.length > 0 && (
+            <ElegantSidebarSection title="Education">
+              <div className="space-y-5">
+                {resume.education.map((item, index) => (
+                  <div key={item.id || index}>
+                    <h3
+                      className="
+                        text-[10px]
+                        font-bold
+                        leading-4
+                        text-buildcv-ink-900
+                      "
+                    >
+                      {getEducationTitle(item)}
+                    </h3>
+
+                    <p
+                      className="
+                        mt-1
+                        text-[8px]
+                        leading-4
+                        text-buildcv-text-secondary
+                      "
+                    >
+                      {getInstitution(item)}
+                    </p>
+
+                    <p
+                      className="
+                        mt-1
+                        text-[8px]
+                        font-semibold
+                        text-buildcv-violet
+                      "
+                    >
+                      {getDate(item)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </ElegantSidebarSection>
+          )}
+
+          {/* EDUCATION FALLBACK */}
+
+          {resume.education.length === 0 && (
+            <ElegantSidebarSection title="Education">
+              <p className="text-[9px] text-buildcv-text-muted">
+                Add your education details.
+              </p>
+            </ElegantSidebarSection>
+          )}
+
+          {/* DESIGN ELEMENT */}
+
+          <div className="mt-10">
+            <div className="h-px w-12 bg-buildcv-violet-300" />
 
             <p
-              className="mx-auto mt-2 max-w-[90%] text-center text-[5.5px] leading-[1.6]"
-              style={{
-                color: "#78716C",
-              }}
+              className="
+                mt-3
+                text-[7px]
+                font-bold
+                uppercase
+                tracking-[0.18em]
+                text-buildcv-text-muted
+              "
             >
-              {displayPersonal.summary}
+              BuildCV
             </p>
-          </section>
-        )}
-
-        {/* =================================================
-            TWO COLUMN CONTENT
-        ================================================== */}
-
-        <div className="grid grid-cols-[1fr_0.38fr] gap-5">
-          {/* =================================================
-              LEFT COLUMN
-          ================================================== */}
-
-          <main>
-            {/* EXPERIENCE */}
-
-            {displayExperience.length > 0 && (
-              <section className="mb-5">
-                <ElegantMainTitle>
-                  Professional Experience
-                </ElegantMainTitle>
-
-                <div className="mt-3 space-y-3">
-                  {displayExperience
-                    .slice(0, 3)
-                    .map((item, index) => {
-                      const title = getValue(
-                        item,
-                        [
-                          "jobTitle",
-                          "position",
-                          "title",
-                          "role",
-                        ],
-                        ""
-                      )
-
-                      const company = getValue(
-                        item,
-                        [
-                          "company",
-                          "organization",
-                          "employer",
-                        ],
-                        ""
-                      )
-
-                      const startDate = getValue(
-                        item,
-                        [
-                          "startDate",
-                          "start",
-                          "from",
-                        ],
-                        ""
-                      )
-
-                      const endDate = getValue(
-                        item,
-                        [
-                          "endDate",
-                          "end",
-                          "to",
-                        ],
-                        ""
-                      )
-
-                      const description = getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                          "responsibilities",
-                        ],
-                        ""
-                      )
-
-                      return (
-                        <article
-                          key={item?.id || index}
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="min-w-0">
-                              {title && (
-                                <h3
-                                  className="truncate text-[6.5px] font-semibold"
-                                  style={{
-                                    color: "#292524",
-                                  }}
-                                >
-                                  {title}
-                                </h3>
-                              )}
-
-                              {company && (
-                                <p
-                                  className="mt-0.5 truncate text-[5.5px]"
-                                  style={{
-                                    color: "#A16207",
-                                  }}
-                                >
-                                  {company}
-                                </p>
-                              )}
-                            </div>
-
-                            {(startDate || endDate) && (
-                              <span
-                                className="shrink-0 text-[4.8px]"
-                                style={{
-                                  color: "#A8A29E",
-                                }}
-                              >
-                                {startDate}
-
-                                {startDate && endDate
-                                  ? " — "
-                                  : ""}
-
-                                {endDate}
-                              </span>
-                            )}
-                          </div>
-
-                          {description && (
-                            <p
-                              className="mt-1 text-[5.2px] leading-[1.55]"
-                              style={{
-                                color: "#78716C",
-                              }}
-                            >
-                              {description}
-                            </p>
-                          )}
-                        </article>
-                      )
-                    })}
-                </div>
-              </section>
-            )}
-
-            {/* PROJECTS */}
-
-            {displayProjects.length > 0 && (
-              <section>
-                <ElegantMainTitle>
-                  Selected Projects
-                </ElegantMainTitle>
-
-                <div className="mt-3 space-y-2.5">
-                  {displayProjects
-                    .slice(0, 3)
-                    .map((item, index) => {
-                      const name = getValue(
-                        item,
-                        [
-                          "name",
-                          "projectName",
-                          "title",
-                        ],
-                        ""
-                      )
-
-                      const description = getValue(
-                        item,
-                        [
-                          "description",
-                          "details",
-                        ],
-                        ""
-                      )
-
-                      return (
-                        <div
-                          key={item?.id || index}
-                        >
-                          {name && (
-                            <h3
-                              className="text-[6.2px] font-semibold"
-                              style={{
-                                color: "#292524",
-                              }}
-                            >
-                              {name}
-                            </h3>
-                          )}
-
-                          {description && (
-                            <p
-                              className="mt-0.5 text-[5px] leading-[1.5]"
-                              style={{
-                                color: "#78716C",
-                              }}
-                            >
-                              {description}
-                            </p>
-                          )}
-                        </div>
-                      )
-                    })}
-                </div>
-              </section>
-            )}
-          </main>
-
-          {/* =================================================
-              RIGHT COLUMN
-          ================================================== */}
-
-          <aside
-            className="border-l pl-4"
-            style={{
-              borderColor: "#E7E5E4",
-            }}
-          >
-            {/* SKILLS */}
-
-            {displaySkills.length > 0 && (
-              <section className="mb-5">
-                <ElegantSideTitle>
-                  Expertise
-                </ElegantSideTitle>
-
-                <ul
-                  className="mt-2 space-y-1.5 text-[5px] leading-[1.4]"
-                  style={{
-                    color: "#78716C",
-                  }}
-                >
-                  {displaySkills
-                    .slice(0, 8)
-                    .map((skill, index) => {
-                      const skillName =
-                        getSkillName(skill)
-
-                      if (!skillName) {
-                        return null
-                      }
-
-                      return (
-                        <li
-                          key={
-                            skill?.id || index
-                          }
-                        >
-                          {skillName}
-                        </li>
-                      )
-                    })}
-                </ul>
-              </section>
-            )}
-
-            {/* EDUCATION */}
-
-            {displayEducation.length > 0 && (
-              <section className="mb-5">
-                <ElegantSideTitle>
-                  Education
-                </ElegantSideTitle>
-
-                <div className="mt-2 space-y-2">
-                  {displayEducation
-                    .slice(0, 2)
-                    .map((item, index) => {
-                      const degree = getValue(
-                        item,
-                        [
-                          "degree",
-                          "qualification",
-                          "title",
-                          "program",
-                        ],
-                        ""
-                      )
-
-                      const field = getValue(
-                        item,
-                        [
-                          "field",
-                          "major",
-                          "specialization",
-                        ],
-                        ""
-                      )
-
-                      const institution =
-                        getValue(
-                          item,
-                          [
-                            "institution",
-                            "school",
-                            "university",
-                            "college",
-                          ],
-                          ""
-                        )
-
-                      const startDate =
-                        getValue(
-                          item,
-                          [
-                            "startDate",
-                            "start",
-                            "from",
-                          ],
-                          ""
-                        )
-
-                      const endDate =
-                        getValue(
-                          item,
-                          [
-                            "endDate",
-                            "end",
-                            "to",
-                          ],
-                          ""
-                        )
-
-                      return (
-                        <div
-                          key={
-                            item?.id || index
-                          }
-                        >
-                          {degree && (
-                            <h3
-                              className="text-[5.5px] font-semibold leading-[1.4]"
-                              style={{
-                                color: "#292524",
-                              }}
-                            >
-                              {degree}
-
-                              {field
-                                ? ` — ${field}`
-                                : ""}
-                            </h3>
-                          )}
-
-                          {institution && (
-                            <p
-                              className="mt-0.5 text-[4.8px] leading-[1.4]"
-                              style={{
-                                color: "#78716C",
-                              }}
-                            >
-                              {institution}
-                            </p>
-                          )}
-
-                          {(startDate ||
-                            endDate) && (
-                            <p
-                              className="mt-0.5 text-[4.8px]"
-                              style={{
-                                color: "#A8A29E",
-                              }}
-                            >
-                              {startDate}
-
-                              {startDate &&
-                              endDate
-                                ? " — "
-                                : ""}
-
-                              {endDate}
-                            </p>
-                          )}
-                        </div>
-                      )
-                    })}
-                </div>
-              </section>
-            )}
-
-            {/* CERTIFICATIONS */}
-
-            <section className="mb-5">
-              <ElegantSideTitle>
-                Certifications
-              </ElegantSideTitle>
-
-              <ul
-                className="mt-2 space-y-1.5 text-[5px] leading-[1.4]"
-                style={{
-                  color: "#78716C",
-                }}
-              >
-                <li>Google Analytics</li>
-                <li>HubSpot Marketing</li>
-                <li>Meta Blueprint</li>
-              </ul>
-            </section>
-
-            {/* LANGUAGES */}
-
-            <section>
-              <ElegantSideTitle>
-                Languages
-              </ElegantSideTitle>
-
-              <div
-                className="mt-2 space-y-1.5 text-[5px]"
-                style={{
-                  color: "#78716C",
-                }}
-              >
-                <div className="flex justify-between gap-1">
-                  <span>English</span>
-                  <span>Native</span>
-                </div>
-
-                <div className="flex justify-between gap-1">
-                  <span>French</span>
-                  <span>Fluent</span>
-                </div>
-              </div>
-            </section>
-          </aside>
-        </div>
+          </div>
+        </aside>
       </div>
     </div>
-  )
+  );
 }
 
+/* =========================================================
+   CONTACT ITEM
+========================================================= */
 
-// =====================================================
-// CENTER SECTION TITLE
-// =====================================================
-
-function ElegantTitle({ children }) {
+function ContactItem({ icon, value }) {
   return (
-    <>
-      <h2
-        className="text-center text-[7px] font-semibold tracking-wide"
-        style={{
-          color: "#292524",
-        }}
+    <div className="flex items-center gap-1.5">
+      <span
+        className="
+          flex
+          h-4
+          min-w-4
+          items-center
+          justify-center
+          rounded-full
+          bg-buildcv-violet-50
+          px-1
+          text-[6px]
+          font-bold
+          text-buildcv-violet
+        "
       >
-        {children}
-      </h2>
+        {icon}
+      </span>
 
-      <div
-        className="mx-auto mt-1.5 h-px w-5"
-        style={{
-          backgroundColor: "#A16207",
-        }}
-      />
-    </>
-  )
-}
-
-
-// =====================================================
-// MAIN SECTION TITLE
-// =====================================================
-
-function ElegantMainTitle({ children }) {
-  return (
-    <div>
-      <h2
-        className="text-[7px] font-semibold"
-        style={{
-          color: "#292524",
-        }}
+      <span
+        className="
+          max-w-[180px]
+          truncate
+          text-[7.5px]
+          font-medium
+          text-buildcv-text-secondary
+        "
       >
-        {children}
-      </h2>
-
-      <div
-        className="mb-2 mt-1 h-px"
-        style={{
-          backgroundColor: "#E7E5E4",
-        }}
-      />
+        {value}
+      </span>
     </div>
-  )
+  );
 }
 
+/* =========================================================
+   MAIN SECTION
+========================================================= */
 
-// =====================================================
-// SIDEBAR SECTION TITLE
-// =====================================================
-
-function ElegantSideTitle({ children }) {
+function ElegantSection({ title, children }) {
   return (
-    <div>
+    <section className="mb-8">
+      <div className="mb-4 flex items-center gap-3">
+        <span
+          className="
+            h-5
+            w-1
+            rounded-full
+            bg-buildcv-violet
+          "
+        />
+
+        <h2
+          className="
+            font-display
+            text-[10px]
+            font-extrabold
+            uppercase
+            tracking-[0.18em]
+            text-buildcv-ink-900
+          "
+        >
+          {title}
+        </h2>
+
+        <span className="h-px flex-1 bg-buildcv-border" />
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+/* =========================================================
+   SIDEBAR SECTION
+========================================================= */
+
+function ElegantSidebarSection({ title, children }) {
+  return (
+    <section className="mb-8">
       <h2
-        className="text-[6.5px] font-semibold"
-        style={{
-          color: "#292524",
-        }}
+        className="
+          mb-4
+          text-[9px]
+          font-extrabold
+          uppercase
+          tracking-[0.18em]
+          text-buildcv-violet
+        "
       >
-        {children}
+        {title}
       </h2>
 
-      <div
-        className="mt-1.5 h-px w-5"
-        style={{
-          backgroundColor: "#A16207",
-        }}
-      />
-    </div>
-  )
+      {children}
+    </section>
+  );
 }
 
+/* =========================================================
+   EXPERIENCE ITEM
+========================================================= */
 
-export default ElegantPreview
+function ExperienceItem({ item }) {
+  const title = getExperienceTitle(item);
+  const company = getCompany(item);
+  const date = getDate(item);
+  const description = getDescription(item);
+
+  return (
+    <article className="relative pl-5">
+      {/* Timeline */}
+
+      <div
+        className="
+          absolute
+          bottom-0
+          left-0
+          top-1
+          w-px
+          bg-buildcv-violet-100
+        "
+      />
+
+      <div
+        className="
+          absolute
+          left-[-3px]
+          top-1
+          h-1.5
+          w-1.5
+          rounded-full
+          bg-buildcv-violet
+        "
+      />
+
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h3
+            className="
+              text-[11px]
+              font-bold
+              text-buildcv-ink-900
+            "
+          >
+            {title}
+          </h3>
+
+          {company && (
+            <p
+              className="
+                mt-1
+                text-[8.5px]
+                font-semibold
+                text-buildcv-violet
+              "
+            >
+              {company}
+            </p>
+          )}
+        </div>
+
+        {date && (
+          <span
+            className="
+              shrink-0
+              rounded-full
+              bg-buildcv-violet-50
+              px-2
+              py-1
+              text-[7px]
+              font-semibold
+              text-buildcv-violet
+            "
+          >
+            {date}
+          </span>
+        )}
+      </div>
+
+      {description && (
+        <p
+          className="
+            mt-2
+            text-[9px]
+            leading-[1.7]
+            text-buildcv-text-secondary
+          "
+        >
+          {description}
+        </p>
+      )}
+    </article>
+  );
+}
+
+/* =========================================================
+   PROJECT ITEM
+========================================================= */
+
+function ProjectItem({ project }) {
+  const name = getProjectName(project);
+  const description = getDescription(project);
+
+  return (
+    <article
+      className="
+        rounded-xl
+        border
+        border-buildcv-border
+        bg-buildcv-surface-soft
+        p-3.5
+      "
+    >
+      <div className="flex items-start justify-between gap-3">
+        <h3
+          className="
+            text-[10px]
+            font-bold
+            text-buildcv-ink-900
+          "
+        >
+          {name}
+        </h3>
+
+        <span
+          className="
+            h-1.5
+            w-1.5
+            shrink-0
+            rounded-full
+            bg-buildcv-violet
+          "
+        />
+      </div>
+
+      {description && (
+        <p
+          className="
+            mt-2
+            text-[8.5px]
+            leading-[1.7]
+            text-buildcv-text-secondary
+          "
+        >
+          {description}
+        </p>
+      )}
+
+      {project.technologies && (
+        <div className="mt-2.5 flex flex-wrap gap-1">
+          {String(project.technologies)
+            .split(",")
+            .map((technology, index) => {
+              const value = technology.trim();
+
+              if (!value) return null;
+
+              return (
+                <span
+                  key={index}
+                  className="
+                    rounded-full
+                    bg-white
+                    px-2
+                    py-0.5
+                    text-[6.5px]
+                    font-semibold
+                    text-buildcv-violet
+                  "
+                >
+                  {value}
+                </span>
+              );
+            })}
+        </div>
+      )}
+    </article>
+  );
+}
