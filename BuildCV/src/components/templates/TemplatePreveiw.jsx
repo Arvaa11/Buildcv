@@ -1,137 +1,118 @@
-import ModernPreview from "./previews/ModernPreview"
-import ProfessionalPreview from "./previews/ProfessionalPreview"
-import MinimalPreview from "./previews/MinimalPreview"
-import ExecutivePreview from "./previews/ExecutivePreview"
-import CreativePreview from "./previews/CreativePreview"
-import ElegantPreview from "./previews/ElegantPreview"
-import ClassicPreview from "./previews/ClassicPreview"
-import AcademicPreview from "./previews/AcademicPreveiw"
-import TechProPreview from "./previews/TechProPreview"
-import DeveloperPreview from "./previews/DeveloperPreview"
-import StartupPreview from "./previews/StartupPreview"
-import ATSFocusPreview from "./previews/ATSFocusPreview"
-
-// =====================================================
-// BUILDCV — TEMPLATE PREVIEW
-// =====================================================
-
-// Sample data is ONLY used on the Templates page.
-// The actual Builder preview uses the user's real data.
-const sampleData = {
-  personal: {
-    fullName: "Alex Morgan",
-    jobTitle: "Product Designer",
-    email: "alex@example.com",
-    phone: "+1 555 123 4567",
-    location: "New York, USA",
-    linkedin: "linkedin.com/in/alexmorgan",
-    github: "github.com/alexmorgan",
-    summary:
-      "Creative professional with experience building thoughtful digital products and solving complex problems.",
-  },
-
-  education: [
-    {
-      id: "1",
-      degree: "B.S. Computer Science",
-      institution: "University of Technology",
-      field: "",
-      startDate: "",
-      endDate: "",
-      date: "2021 — 2025",
-      description: "",
-    },
-  ],
-
-  experience: [
-    {
-      id: "1",
-      position: "Senior Product Designer",
-      title: "Senior Product Designer",
-      company: "Acme Inc.",
-      startDate: "",
-      endDate: "",
-      date: "2023 — Present",
-      description:
-        "Designed scalable digital experiences and collaborated with cross-functional teams to deliver high-impact products.",
-    },
-  ],
-
-  skills: [
-    { name: "UI/UX Design" },
-    { name: "Figma" },
-    { name: "Product Strategy" },
-    { name: "Prototyping" },
-  ],
-
-  projects: [
-    {
-      id: "1",
-      name: "Design System",
-      description:
-        "Created a scalable design system used across multiple products.",
-      technologies:
-        "Figma · React · Storybook",
-      link: "",
-    },
-  ],
-}
-
-// =====================================================
-// TEMPLATE COMPONENT MAP
-// =====================================================
-
-const templateComponents = {
-  modern: ModernPreview,
-  professional: ProfessionalPreview,
-  minimal: MinimalPreview,
-  executive: ExecutivePreview,
-  creative: CreativePreview,
-  elegant: ElegantPreview,
-  classic: ClassicPreview,
-  academic: AcademicPreview,
-  "tech-pro": TechProPreview,
-  developer: DeveloperPreview,
-  startup: StartupPreview,
-  "ats-focus": ATSFocusPreview,
-}
-
-// =====================================================
-// NORMALIZE TEMPLATE ID
-// =====================================================
-
-function normalizeTemplateId(templateId) {
-  if (!templateId) {
-    return "modern"
-  }
-
-  return String(templateId)
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-}
-
-// =====================================================
-// TEMPLATE PREVIEW
-// =====================================================
+import ClassicPreview from "./ClassicPreview";
+import MinimalPreview from "./MinimalPreview";
+import BoldPreview from "./BoldPreview";
+import CleanPreview from "./CleanPreview";
+import ModernPreview from "./ModernPreview";
+import ProfessionalPreview from "./ProfessionalPreview";
+import ExecutivePreview from "./ExecutivePreview";
+import TechPreview from "./TechPreview";
+import ElegantPreview from "./ElegantPreview";
+import AcademicPreview from "./AcademicPreview";
+import CreativePreview from "./CreativePreview";
+import PortfolioPreview from "./PortfolioPreview";
+import AuroraPreview from "./AuroraPreview";
+import MonarchPreview from "./MonarchPreview";
+import NexusPreview from "./NexusPreview";
+import SagePreview from "./SagePreview";
+import VertexPreview from "./VertexPreview";
+import MusePreview from "./MusePreview";
+import OrbitPreview from "./OrbitPreview";
+import NoirPreview from "./NoirPreview";
+import CoralPreview from "./CoralPreview";
+import OceanPreview from "./OceanPreview";
+import StellarPreview from "./StellarPreview";
+import AtelierPreview from "./AtelierPreview";
 
 function TemplatePreview({
-  templateId,
+  template,
+  formData = {},
+  data = {},
 }) {
-  const normalizedTemplateId =
-    normalizeTemplateId(templateId)
+  if (!template) {
+    return null;
+  }
 
-  const SelectedTemplate =
-    templateComponents[
-      normalizedTemplateId
-    ] || ModernPreview
+  const previewProps = {
+    formData,
+    data,
+  };
 
-  return (
-    <SelectedTemplate
-      formData={sampleData}
-      data={sampleData}
-    />
-  )
+  switch (template.id) {
+    case "classic":
+      return <ClassicPreview {...previewProps} />;
+
+    case "minimal":
+      return <MinimalPreview {...previewProps} />;
+
+    case "bold":
+      return <BoldPreview {...previewProps} />;
+
+    case "clean":
+      return <CleanPreview {...previewProps} />;
+
+    case "modern":
+      return <ModernPreview {...previewProps} />;
+
+    case "professional":
+      return <ProfessionalPreview {...previewProps} />;
+
+    case "executive":
+      return <ExecutivePreview {...previewProps} />;
+
+    case "tech":
+      return <TechPreview {...previewProps} />;
+
+    case "elegant":
+      return <ElegantPreview {...previewProps} />;
+
+    case "academic":
+      return <AcademicPreview {...previewProps} />;
+
+    case "creative":
+      return <CreativePreview {...previewProps} />;
+
+    case "portfolio":
+      return <PortfolioPreview {...previewProps} />;
+
+    case "aurora":
+      return <AuroraPreview {...previewProps} />;
+
+    case "monarch":
+      return <MonarchPreview {...previewProps} />;
+
+    case "nexus":
+      return <NexusPreview {...previewProps} />;
+
+    case "sage":
+      return <SagePreview {...previewProps} />;
+
+    case "vertex":
+      return <VertexPreview {...previewProps} />;
+
+    case "muse":
+      return <MusePreview {...previewProps} />;
+
+    case "orbit":
+      return <OrbitPreview {...previewProps} />;
+
+    case "noir":
+      return <NoirPreview {...previewProps} />;
+
+    case "coral":
+      return <CoralPreview {...previewProps} />;
+
+    case "ocean":
+      return <OceanPreview {...previewProps} />;
+
+    case "stellar":
+      return <StellarPreview {...previewProps} />;
+
+    case "atelier":
+      return <AtelierPreview {...previewProps} />;
+
+    default:
+      return <ModernPreview {...previewProps} />;
+  }
 }
 
-export default TemplatePreview
+export default TemplatePreview;

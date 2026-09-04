@@ -1,212 +1,314 @@
+import TemplatePreview from "./TemplatePreveiw";
+
 function TemplateCard({
   template,
-  selected,
-  onSelect,
-  formData = {},
+  onPreview,
+  onUseTemplate,
 }) {
   return (
-    <button
-      type="button"
-      onClick={() => onSelect(template.id)}
-      className={`
+    <article
+      className="
         group
-        relative
-        w-full
         overflow-hidden
         rounded-2xl
         border
+        border-[#E2E8F0]
         bg-white
-        text-left
+        shadow-sm
         transition-all
         duration-300
-        ${
-          selected
-            ? "border-buildcv-violet ring-2 ring-buildcv-violet/20 shadow-xl"
-            : "border-slate-200 shadow-sm hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
-        }
-      `}
+        hover:-translate-y-1
+        hover:border-[#E0E7FF]
+        hover:shadow-xl
+      "
     >
+      {/* ================================================= */}
+      {/* TEMPLATE PREVIEW */}
+      {/* ================================================= */}
 
-      {/* =====================================================
-          TAG
-      ====================================================== */}
+      <button
+        type="button"
+        onClick={() => onPreview(template)}
+        className="
+          relative
+          block
+          w-full
+          overflow-hidden
+          bg-[#F8FAFC]
+          text-left
+          focus:outline-none
+          focus:ring-2
+          focus:ring-[#6366F1]
+          focus:ring-inset
+        "
+        aria-label={`Preview ${template.name} template`}
+      >
+        {/* ================================================= */}
+        {/* PREVIEW AREA */}
+        {/* ================================================= */}
 
-      {template.tag && (
-        <div className="absolute left-4 top-4 z-20">
+        <div
+          className="
+            flex
+            h-[400px]
+            w-full
+            items-start
+            justify-center
+            overflow-hidden
+            bg-[#F8FAFC]
+            px-4
+            pt-5
+          "
+        >
+          {/* ================================================= */}
+          {/* A4 FRAME */}
+          {/* ================================================= */}
+
+          <div
+            className="
+              relative
+              h-[390px]
+              w-[276px]
+              shrink-0
+              overflow-hidden
+              rounded-[2px]
+              bg-white
+              shadow-[0_8px_30px_rgba(15,23,42,0.12)]
+              transition-transform
+              duration-300
+              group-hover:scale-[1.015]
+            "
+          >
+            {/* ================================================= */}
+            {/* REAL A4 CANVAS */}
+            {/* ================================================= */}
+
+            <div
+              className="
+                absolute
+                left-0
+                top-0
+              "
+              style={{
+                width: "794px",
+                height: "1123px",
+                transform: "scale(0.347607)",
+                transformOrigin: "top left",
+              }}
+            >
+              <TemplatePreview
+                template={template}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ================================================= */}
+        {/* PREVIEW OVERLAY */}
+        {/* ================================================= */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+            flex
+            items-center
+            justify-center
+            bg-[#111827]/10
+            opacity-0
+            transition-all
+            duration-300
+            group-hover:opacity-100
+          "
+        >
           <span
             className="
               rounded-full
               bg-white
+              px-5
+              py-2.5
+              text-sm
+              font-semibold
+              text-[#111827]
+              shadow-lg
+              transition-transform
+              duration-300
+              group-hover:scale-100
+            "
+          >
+            View Template
+          </span>
+        </div>
+
+        {/* ================================================= */}
+        {/* FEATURED */}
+        {/* ================================================= */}
+
+        {template.featured && (
+          <div
+            className="
+              pointer-events-none
+              absolute
+              left-4
+              top-4
+              rounded-full
+              bg-[#6366F1]
               px-3
               py-1.5
-              text-[9px]
+              text-[11px]
               font-bold
-              uppercase
-              tracking-wider
-              text-slate-600
+              text-white
               shadow-md
             "
           >
-            {template.tag}
-          </span>
-        </div>
-      )}
-
-      {/* =====================================================
-          SELECTED
-      ====================================================== */}
-
-      {selected && (
-        <div className="absolute right-4 top-4 z-20">
-          <div
-            className="
-              flex
-              h-7
-              w-7
-              items-center
-              justify-center
-              rounded-full
-              bg-buildcv-violet
-              text-xs
-              font-bold
-              text-white
-              shadow-lg
-            "
-          >
-            ✓
+            Featured
           </div>
-        </div>
-      )}
+        )}
+      </button>
 
-      {/* =====================================================
-          TEMPLATE PREVIEW
-      ====================================================== */}
+      {/* ================================================= */}
+      {/* TEMPLATE INFORMATION */}
+      {/* ================================================= */}
 
-      <div className="relative h-[390px] overflow-hidden bg-slate-100">
+      <div className="p-4.5">
+        {/* ================================================= */}
+        {/* TITLE ROW */}
+        {/* ================================================= */}
 
         <div
           className="
-            absolute
-            left-1/2
-            top-5
-            w-[700px]
-            origin-top
-            -translate-x-1/2
-            scale-[0.48]
-            shadow-2xl
+            flex
+            items-start
+            justify-between
+            gap-3
           "
         >
-          {/* 
-            TemplatePreview should be rendered
-            by the parent component.
-          */}
-          {template.preview}
-        </div>
-
-      </div>
-
-      {/* =====================================================
-          TEMPLATE INFORMATION
-      ====================================================== */}
-
-      <div className="border-t border-slate-100 p-5">
-
-        <div className="flex items-start justify-between gap-3">
-
           <div className="min-w-0">
-
-            <h3 className="text-base font-bold text-buildcv-ink">
+            <h3
+              className="
+                truncate
+                text-[17px]
+                font-bold
+                leading-6
+                text-[#111827]
+              "
+            >
               {template.name}
             </h3>
 
-            <p className="mt-1 text-xs leading-5 text-slate-500">
-              {template.description}
+            <p
+              className="
+                mt-0.5
+                text-[12px]
+                font-medium
+                text-[#6366F1]
+              "
+            >
+              {template.category}
             </p>
-
           </div>
 
-          {/* Accent */}
+          {/* ATS */}
 
-          <span
-            className="mt-1 h-3 w-3 shrink-0 rounded-full"
-            style={{
-              backgroundColor: template.accent,
+          {template.ats && (
+            <span
+              className="
+                shrink-0
+                rounded-full
+                bg-[#EEF2FF]
+                px-2.5
+                py-1
+                text-[10px]
+                font-bold
+                tracking-wide
+                text-[#4F46E5]
+              "
+            >
+              ATS
+            </span>
+          )}
+        </div>
+
+        {/* ================================================= */}
+        {/* DESCRIPTION */}
+        {/* ================================================= */}
+
+        <p
+          className="
+            mt-2.5
+            min-h-[42px]
+            text-[12px]
+            leading-[1.55]
+            text-[#718096]
+          "
+        >
+          {template.description}
+        </p>
+
+        {/* ================================================= */}
+        {/* ACTIONS */}
+        {/* ================================================= */}
+
+        <div className="mt-4 flex gap-2.5">
+          {/* PREVIEW */}
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onPreview(template);
             }}
-          />
-
-        </div>
-
-        {/* =================================================
-            FEATURES
-        ================================================== */}
-
-        {template.features?.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-1.5">
-
-            {template.features
-              .slice(0, 3)
-              .map((feature) => (
-                <span
-                  key={feature}
-                  className="
-                    rounded-md
-                    bg-slate-100
-                    px-2
-                    py-1
-                    text-[9px]
-                    font-medium
-                    text-slate-500
-                  "
-                >
-                  {feature}
-                </span>
-              ))}
-
-          </div>
-        )}
-
-        {/* =================================================
-            SELECT BUTTON TEXT
-        ================================================== */}
-
-        <div className="mt-4 flex items-center justify-between">
-
-          <span
-            className={`
-              text-xs
-              font-bold
-              transition-colors
-              ${
-                selected
-                  ? "text-buildcv-violet"
-                  : "text-slate-400 group-hover:text-buildcv-violet"
-              }
-            `}
-          >
-            {selected ? "Selected" : "Select template"}
-          </span>
-
-          <span
-            className={`
-              text-sm
-              transition-transform
+            className="
+              flex-1
+              rounded-lg
+              border
+              border-[#E2E8F0]
+              bg-white
+              px-3
+              py-2.5
+              text-[12px]
+              font-semibold
+              text-[#111827]
+              transition-all
               duration-200
-              ${
-                selected
-                  ? "translate-x-1 text-buildcv-violet"
-                  : "text-slate-300 group-hover:translate-x-1 group-hover:text-buildcv-violet"
-              }
-            `}
+              hover:border-[#6366F1]
+              hover:bg-[#EEF2FF]
+              hover:text-[#4F46E5]
+            "
           >
-            →
-          </span>
+            Preview
+          </button>
 
+          {/* USE TEMPLATE */}
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onUseTemplate(template);
+            }}
+            className="
+              flex-1
+              rounded-lg
+              bg-[#6366F1]
+              px-3
+              py-2.5
+              text-[12px]
+              font-semibold
+              text-white
+              transition-all
+              duration-200
+              hover:bg-[#4F46E5]
+              active:scale-[0.98]
+            "
+          >
+            Use Template
+          </button>
         </div>
-
       </div>
-
-    </button>
-  )
+    </article>
+  );
 }
 
-export default TemplateCard
+export default TemplateCard;

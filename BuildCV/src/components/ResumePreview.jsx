@@ -1,15 +1,61 @@
-import ModernPreview from "./templates/previews/ModernPreview"
-import ProfessionalPreview from "./templates/previews/ProfessionalPreview"
-import MinimalPreview from "./templates/previews/MinimalPreview"
-import ClassicPreview from "./templates/previews/ClassicPreview"
-import ElegantPreview from "./templates/previews/ElegantPreview"
-import CreativePreview from "./templates/previews/CreativePreview"
-import DeveloperPreview from "./templates/previews/DeveloperPreview"
-import ExecutivePreview from "./templates/previews/ExecutivePreview"
-import AcademicPreview from "./templates/previews/AcademicPreveiw"
-import StartupPreview from "./templates/previews/StartupPreview"
-import TechProPreview from "./templates/previews/TechProPreview"
-import ATSFocusPreview from "./templates/previews/ATSFocusPreview"
+import ClassicPreview from "./templates/ClassicPreview";
+import MinimalPreview from "./templates/MinimalPreview";
+import BoldPreview from "./templates/BoldPreview";
+import CleanPreview from "./templates/CleanPreview";
+import ModernPreview from "./templates/ModernPreview";
+import ProfessionalPreview from "./templates/ProfessionalPreview";
+import ExecutivePreview from "./templates/ExecutivePreview";
+import TechPreview from "./templates/TechPreview";
+import ElegantPreview from "./templates/ElegantPreview";
+import AcademicPreview from "./templates/AcademicPreview";
+import CreativePreview from "./templates/CreativePreview";
+import PortfolioPreview from "./templates/PortfolioPreview";
+import AuroraPreview from "./templates/AuroraPreview";
+import MonarchPreview from "./templates/MonarchPreview";
+import NexusPreview from "./templates/NexusPreview";
+import SagePreview from "./templates/SagePreview";
+import VertexPreview from "./templates/VertexPreview";
+import MusePreview from "./templates/MusePreview";
+import OrbitPreview from "./templates/OrbitPreview";
+import NoirPreview from "./templates/NoirPreview";
+import CoralPreview from "./templates/CoralPreview";
+import OceanPreview from "./templates/OceanPreview";
+import StellarPreview from "./templates/StellarPreview";
+import AtelierPreview from "./templates/AtelierPreview";
+
+// =====================================================
+// BUILDCV — TEMPLATE COMPONENTS
+// =====================================================
+
+const templateComponents = {
+  modern: ModernPreview,
+  professional: ProfessionalPreview,
+  minimal: MinimalPreview,
+  executive: ExecutivePreview,
+  creative: CreativePreview,
+  elegant: ElegantPreview,
+  classic: ClassicPreview,
+  academic: AcademicPreview,
+
+  bold: BoldPreview,
+  clean: CleanPreview,
+  tech: TechPreview,
+  portfolio: PortfolioPreview,
+
+  aurora: AuroraPreview,
+  monarch: MonarchPreview,
+  nexus: NexusPreview,
+  sage: SagePreview,
+  vertex: VertexPreview,
+  muse: MusePreview,
+  orbit: OrbitPreview,
+  noir: NoirPreview,
+  coral: CoralPreview,
+  ocean: OceanPreview,
+  stellar: StellarPreview,
+  atelier: AtelierPreview,
+};
+
 
 // =====================================================
 // BUILDCV — RESUME PREVIEW
@@ -20,39 +66,22 @@ function ResumePreview({
   formData = {},
   previewId = "resume-preview",
 }) {
+
   // ===================================================
-  // NORMALIZE TEMPLATE ID
+  // GET TEMPLATE ID
   // ===================================================
-
-  const normalizeTemplateId = (template) => {
-    if (!template) {
-      return "modern"
-    }
-
-    if (typeof template === "string") {
-      return template
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-    }
-
-    if (typeof template === "object") {
-      return (
-        template.id ||
-        template.slug ||
-        normalizeTemplateId(template.name) ||
-        "modern"
-      )
-    }
-
-    return "modern"
-  }
 
   const templateId =
-    normalizeTemplateId(selectedTemplate)
+    typeof selectedTemplate === "string"
+      ? selectedTemplate.trim().toLowerCase()
+      : selectedTemplate?.id ||
+        selectedTemplate?.slug ||
+        selectedTemplate?.preview ||
+        "modern";
+
 
   // ===================================================
-  // PERSONAL DATA
+  // PERSONAL INFORMATION
   // ===================================================
 
   const personal = {
@@ -65,8 +94,9 @@ function ResumePreview({
     github: "",
     summary: "",
     profileImage: "",
-    ...(formData?.personal || {}),
-  }
+    ...(formData.personal || {}),
+  };
+
 
   // ===================================================
   // NORMALIZED RESUME DATA
@@ -75,25 +105,25 @@ function ResumePreview({
   const normalizedData = {
     personal,
 
-    education: Array.isArray(formData?.education)
+    education: Array.isArray(formData.education)
       ? formData.education
       : [],
 
-    experience: Array.isArray(formData?.experience)
+    experience: Array.isArray(formData.experience)
       ? formData.experience
       : [],
 
-    skills: Array.isArray(formData?.skills)
+    skills: Array.isArray(formData.skills)
       ? formData.skills
       : [],
 
-    projects: Array.isArray(formData?.projects)
+    projects: Array.isArray(formData.projects)
       ? formData.projects
       : [],
 
-    // =================================================
-    // ROOT LEVEL PERSONAL DATA
-    // =================================================
+    // -----------------------------------------------
+    // Flat values for templates that use them
+    // -----------------------------------------------
 
     fullName: personal.fullName,
     jobTitle: personal.jobTitle,
@@ -104,170 +134,29 @@ function ResumePreview({
     github: personal.github,
     summary: personal.summary,
     profileImage: personal.profileImage,
-  }
+  };
+
 
   // ===================================================
-  // COMMON TEMPLATE PROPS
+  // TEMPLATE PROPS
   // ===================================================
 
   const templateProps = {
     formData: normalizedData,
     data: normalizedData,
-  }
+  };
+
 
   // ===================================================
-  // RENDER SELECTED TEMPLATE
+  // SELECT TEMPLATE COMPONENT
   // ===================================================
 
-  const renderTemplate = () => {
-    switch (templateId) {
-      // =================================================
-      // MODERN
-      // =================================================
+  const TemplateComponent =
+    templateComponents[templateId] || ModernPreview;
 
-      case "modern":
-        return (
-          <ModernPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // PROFESSIONAL
-      // =================================================
-
-      case "professional":
-        return (
-          <ProfessionalPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // MINIMAL
-      // =================================================
-
-      case "minimal":
-        return (
-          <MinimalPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // CLASSIC
-      // =================================================
-
-      case "classic":
-        return (
-          <ClassicPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // ELEGANT
-      // =================================================
-
-      case "elegant":
-        return (
-          <ElegantPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // CREATIVE
-      // =================================================
-
-      case "creative":
-        return (
-          <CreativePreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // DEVELOPER
-      // =================================================
-
-      case "developer":
-        return (
-          <DeveloperPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // EXECUTIVE
-      // =================================================
-
-      case "executive":
-        return (
-          <ExecutivePreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // ACADEMIC
-      // =================================================
-
-      case "academic":
-        return (
-          <AcademicPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // STARTUP
-      // =================================================
-
-      case "startup":
-        return (
-          <StartupPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // TECH PRO
-      // =================================================
-
-      case "tech-pro":
-        return (
-          <TechProPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // ATS FOCUS
-      // =================================================
-
-      case "ats-focus":
-        return (
-          <ATSFocusPreview
-            {...templateProps}
-          />
-        )
-
-      // =================================================
-      // FALLBACK
-      // =================================================
-
-      default:
-        return (
-          <ModernPreview
-            {...templateProps}
-          />
-        )
-    }
-  }
 
   // ===================================================
-  // MAIN PREVIEW
+  // RENDER
   // ===================================================
 
   return (
@@ -282,8 +171,8 @@ function ResumePreview({
         height: "297mm",
         minHeight: "297mm",
 
-        margin: "0",
-        padding: "0",
+        margin: 0,
+        padding: 0,
 
         backgroundColor: "#FFFFFF",
         color: "#111827",
@@ -291,14 +180,13 @@ function ResumePreview({
         boxSizing: "border-box",
 
         overflow: "hidden",
-        position: "relative",
 
-        flexShrink: 0,
+        position: "relative",
       }}
     >
-      {renderTemplate()}
+      <TemplateComponent {...templateProps} />
     </div>
-  )
+  );
 }
 
 export default ResumePreview
