@@ -696,23 +696,23 @@ function Builder() {
   const currentStep =
     requiredStepIndex >= 0
       ? BUILDER_STEPS[
-          requiredStepIndex
-        ]
+      requiredStepIndex
+      ]
       : OPTIONAL_SECTIONS.find(
-          (section) =>
-            section.id === activeStep
-        )
+        (section) =>
+          section.id === activeStep
+      )
 
   const progressPercentage =
     isOptionalSection
       ? 100
       : BUILDER_STEPS.length > 1
         ? Math.round(
-            (currentStepIndex /
-              (BUILDER_STEPS.length -
-                1)) *
-            100
-          )
+          (currentStepIndex /
+            (BUILDER_STEPS.length -
+              1)) *
+          100
+        )
         : 0
 
   // ===================================================
@@ -786,8 +786,8 @@ function Builder() {
       const updatedPersonal =
         typeof update === "function"
           ? update(
-              current.personal
-            )
+            current.personal
+          )
           : update
 
       return {
@@ -1117,7 +1117,7 @@ function Builder() {
                 const isCompleted =
                   !isOptionalSection &&
                   index <
-                    currentStepIndex
+                  currentStepIndex
 
                 return (
                   <button
@@ -1140,10 +1140,9 @@ function Builder() {
                       font-semibold
                       whitespace-nowrap
 
-                      ${
-                        isActive
-                          ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
-                          : "border-[#E2E8F0] bg-white text-[#718096]"
+                      ${isActive
+                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
+                        : "border-[#E2E8F0] bg-white text-[#718096]"
                       }
                     `}
                   >
@@ -1194,26 +1193,26 @@ function Builder() {
 
             <div className="sticky top-6 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
 
-              
 
-             
 
-                <BuilderSteps
-                  activeStep={
-                    activeStep
-                  }
-                  onStepChange={
-                    setActiveStep
-                  }
-                  steps={
-                    BUILDER_STEPS
-                  }
-                  optionalSections={
-                    OPTIONAL_SECTIONS
-                  }
-                />
 
-              
+
+              <BuilderSteps
+                activeStep={
+                  activeStep
+                }
+                onStepChange={
+                  setActiveStep
+                }
+                steps={
+                  BUILDER_STEPS
+                }
+                optionalSections={
+                  OPTIONAL_SECTIONS
+                }
+              />
+
+
 
             </div>
 
@@ -1250,7 +1249,7 @@ function Builder() {
                     disabled={
                       !isOptionalSection &&
                       currentStepIndex ===
-                        0
+                      0
                     }
                     className="
                       rounded-lg
@@ -1283,13 +1282,12 @@ function Builder() {
                             h-1.5
                             rounded-full
 
-                            ${
-                              !isOptionalSection &&
+                            ${!isOptionalSection &&
                               index ===
+                              currentStepIndex
+                              ? "w-6 bg-[#6366F1]"
+                              : index <
                                 currentStepIndex
-                                ? "w-6 bg-[#6366F1]"
-                                : index <
-                                  currentStepIndex
                                 ? "w-3 bg-[#6366F1]"
                                 : "w-3 bg-[#E2E8F0]"
                             }
@@ -1308,8 +1306,8 @@ function Builder() {
                     disabled={
                       isOptionalSection ||
                       currentStepIndex ===
-                        BUILDER_STEPS.length -
-                          1
+                      BUILDER_STEPS.length -
+                      1
                     }
                     className="
                       rounded-lg
@@ -1377,9 +1375,6 @@ function Builder() {
 
                   <DownloadButton
                     previewId="resume-preview-mobile"
-                    templateId={
-                      selectedTemplate
-                    }
                   />
 
                   <p className="mt-2 text-center text-[10px] text-[#718096]">
@@ -1394,80 +1389,137 @@ function Builder() {
 
           </section>
 
+          
           {/* =================================================
-              DESKTOP PREVIEW
-          ================================================= */}
+    DESKTOP PREVIEW
+================================================= */}
 
           <aside className="hidden min-w-0 xl:block">
 
-            <div className="sticky top-6 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
+            <div
+              className="
+      sticky
+      top-6
+      overflow-hidden
+      rounded-2xl
+      border
+      border-[#E2E8F0]
+      bg-white
+      shadow-sm
+    "
+            >
 
-              <div className="border-b border-[#E2E8F0] px-5 py-2.5">
+              {/* =================================================
+        HEADER
+    ================================================= */}
 
-                <p className="text-sm font-bold text-[#111827]">
-                  Live Preview
-                </p>
+              <div
+                className="
+        flex
+        items-center
+        justify-between
+        border-b
+        border-[#E2E8F0]
+        px-4
+        py-2.5
+      "
+              >
+                <div>
+                  <p className="text-sm font-bold leading-tight text-[#111827]">
+                    Live Preview
+                  </p>
 
-                <p className="mt-1 text-[11px] capitalize text-[#718096]">
-                  {selectedTemplate} template
-                </p>
+                  <p className="mt-0.5 text-[10px] capitalize text-[#718096]">
+                    {selectedTemplate} template
+                  </p>
+                </div>
 
+                {/* LIVE STATUS */}
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
+
+                  <span className="text-[10px] font-medium text-[#718096]">
+                    Live
+                  </span>
+                </div>
               </div>
 
-              <div className="bg-[#F8FAFC] pl-5">
+              {/* =================================================
+        COMPLETE RESUME PREVIEW
+    ================================================= */}
+
+              <div className="bg-[#F8FAFC] p-3">
 
                 <div
                   className="
-                    max-h-(100vh-230px)
-                    min-h-[620px]
-                    overflow-auto
-                    rounded-lg
-                    bg-white
-                    shadow-md
-                  "
+          flex
+          h-[min(680px,calc(100vh-280px))]
+          min-h-[420px]
+          w-full
+          items-start
+          justify-center
+          overflow-hidden
+          rounded-xl
+          border
+          border-[#E2E8F0]
+          bg-[#F8FAFC]
+        "
                 >
 
                   <ResumePreview
                     key={`desktop-${selectedTemplate}`}
                     previewId="resume-preview-desktop"
-                    formData={
-                      formData
-                    }
-                    selectedTemplate={
-                      selectedTemplate
-                    }
+                    formData={formData}
+                    selectedTemplate={selectedTemplate}
+                    fitToContainer={true}
                   />
 
                 </div>
 
               </div>
 
-              {/* DOWNLOAD */}
+              {/* =================================================
+        DOWNLOAD
+    ================================================= */}
 
-              <div className="border-t border-[#E2E8F0] p-4">
+              <div
+                className="
+        flex
+        items-center
+        gap-3
+        border-t
+        border-[#E2E8F0]
+        px-4
+        py-3
+      "
+              >
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] font-medium text-[#475569]">
+                    Ready to download?
+                  </p>
+
+                  <p className="mt-0.5 truncate text-[9px] text-[#718096]">
+                    Export your resume as PDF
+                  </p>
+                </div>
 
                 <DownloadButton
                   previewId="resume-preview-desktop"
-                  templateId={
-                    selectedTemplate
-                  }
                 />
-
-                <p className="mt-2 text-center text-[10px] text-[#718096]">
-                  Your resume will be exported as PDF
-                </p>
 
               </div>
 
             </div>
 
           </aside>
+           
 
         </div>
 
-      </div>
+      </div >
 
-    </main>
+    </main >
   )
 }
 

@@ -470,7 +470,7 @@ function MonarchPreview({
   // =========================================================
 
   return (
-    <div className="h-[1123px] w-[794px] overflow-hidden bg-[#faf7f2] font-sans text-[#3f2930]">
+    <div className="h-[1000px] w-[594px] overflow-hidden bg-[#faf7f2] font-sans text-[#3f2930]">
       {/* =====================================================
           HEADER
       ===================================================== */}
