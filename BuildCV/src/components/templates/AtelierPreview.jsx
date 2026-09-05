@@ -1,42 +1,305 @@
 import React from "react";
 
-function AtelierPreview({ formData = {}, data = {} }) {
-  const personal = {
-    fullName: "",
-    jobTitle: "",
-    email: "",
-    phone: "",
-    location: "",
-    linkedin: "",
-    github: "",
-    summary: "",
+function AtelierPreview({
+  formData = {},
+  data = {},
+  useSampleData = false,
+}) {
+  // =========================================================
+  // SAMPLE DATA
+  // Same sample data used across all BuildCV templates
+  // =========================================================
+
+  const samplePersonal = {
+    fullName: "Olivia Carter",
+    jobTitle: "Executive Developer",
+    email: "olivia.carter@example.com",
+    phone: "+1 415 555 0198",
+    location: "San Francisco, CA",
+    linkedin: "linkedin.com/in/oliviacarter",
+    github: "github.com/oliviacarter",
+    summary:
+      "Strategic technology professional creating elegant digital products, improving user experiences, and leading thoughtful frontend initiatives.",
     profileImage: "",
-    ...(formData.personal || data.personal || {}),
   };
 
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : Array.isArray(data.education)
-    ? data.education
-    : [];
+  const sampleExperience = [
+    {
+      jobTitle: "Senior Frontend Developer",
+      company: "Northstar Digital",
+      startDate: "2024",
+      endDate: "Present",
+      description:
+        "Led frontend development for customer-facing digital products.\nImproved interface consistency through reusable component systems.\nCollaborated with designers and product teams to deliver polished experiences.",
+    },
+    {
+      jobTitle: "Frontend Developer",
+      company: "Cedar Labs",
+      startDate: "2022",
+      endDate: "2024",
+      description:
+        "Built responsive web interfaces using modern frontend technologies.\nTranslated design concepts into accessible and reusable components.\nWorked closely with cross-functional teams throughout product delivery.",
+    },
+    {
+      jobTitle: "Web Developer",
+      company: "Brightline Studio",
+      startDate: "2021",
+      endDate: "2022",
+      description:
+        "Developed responsive websites for digital products and campaigns.\nMaintained reusable UI patterns and improved page performance.\nSupported testing and refinement across multiple screen sizes.",
+    },
+  ];
 
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : Array.isArray(data.experience)
-    ? data.experience
-    : [];
+  const sampleSkills = [
+    "React",
+    "JavaScript",
+    "TypeScript",
+    "UI Strategy",
+    "Leadership",
+    "UX Design",
+    "HTML & CSS",
+    "Git",
+    "Responsive Design",
+    "Design Systems",
+    "Accessibility",
+    "Product Thinking",
+  ];
 
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : Array.isArray(data.skills)
-    ? data.skills
-    : [];
+  const sampleEducation = [
+    {
+      degree: "Master of Computer Science",
+      institution: "Stanford University",
+      startDate: "2022",
+      endDate: "2024",
+    },
+    {
+      degree: "Bachelor of Computer Science",
+      institution: "University of California",
+      startDate: "2018",
+      endDate: "2022",
+    },
+  ];
 
-  const projects = Array.isArray(formData.projects)
-    ? formData.projects
-    : Array.isArray(data.projects)
-    ? data.projects
-    : [];
+  const sampleProjects = [
+    {
+      title: "Executive Dashboard",
+      name: "Executive Dashboard",
+      description:
+        "Designed a modern analytics dashboard focused on clarity, accessibility, and efficient decision-making.",
+      technologies: ["React", "TypeScript", "CSS"],
+    },
+    {
+      title: "Design System",
+      name: "Design System",
+      description:
+        "Created a reusable component library to improve consistency across multiple digital products.",
+      technologies: ["React", "Storybook", "Figma"],
+    },
+    {
+      title: "Portfolio Platform",
+      name: "Portfolio Platform",
+      description:
+        "Built a responsive portfolio experience combining editorial layouts with interactive project showcases.",
+      technologies: ["React", "JavaScript", "Responsive Design"],
+    },
+  ];
+
+  const sampleCertifications = [
+    {
+      name: "AWS Certified Cloud Practitioner",
+      issuer: "Amazon Web Services",
+      date: "2025",
+    },
+    {
+      name: "Professional Scrum Master I",
+      issuer: "Scrum.org",
+      date: "2024",
+    },
+    {
+      name: "Google UX Design Certificate",
+      issuer: "Google",
+      date: "2023",
+    },
+  ];
+
+  const sampleLanguages = [
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Spanish",
+      level: "Professional",
+    },
+    {
+      name: "French",
+      level: "Conversational",
+    },
+  ];
+
+  const sampleAchievements = [
+    {
+      title: "Design System Initiative",
+      description:
+        "Established reusable interface patterns that improved consistency across product experiences.",
+    },
+    {
+      title: "Frontend Mentorship",
+      description:
+        "Supported junior developers through code reviews, technical guidance, and collaborative learning.",
+    },
+    {
+      title: "Product Experience Improvement",
+      description:
+        "Partnered with product teams to simplify workflows and create more intuitive user experiences.",
+    },
+  ];
+
+  const sampleInterests = [
+    "Digital Design",
+    "Technology",
+    "Photography",
+    "Travel",
+    "Reading",
+    "Creative Coding",
+  ];
+
+  const sampleReferences = [
+    {
+      name: "Daniel Morgan",
+      role: "Product Director",
+      company: "Northstar Digital",
+      email: "daniel.morgan@example.com",
+      phone: "+1 415 555 0124",
+    },
+    {
+      name: "Sophia Bennett",
+      role: "Engineering Manager",
+      company: "Cedar Labs",
+      email: "sophia.bennett@example.com",
+      phone: "+1 415 555 0168",
+    },
+  ];
+
+  // =========================================================
+  // PERSONAL DATA
+  // =========================================================
+
+  const personal = useSampleData
+    ? {
+        ...samplePersonal,
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      }
+    : {
+        fullName: "",
+        jobTitle: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        summary: "",
+        profileImage: "",
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      };
+
+  // =========================================================
+  // ARRAY DATA HELPER
+  // =========================================================
+
+  const getArrayData = (
+    formValue,
+    dataValue,
+    sampleValue
+  ) => {
+    if (useSampleData) {
+      if (
+        Array.isArray(formValue) &&
+        formValue.length > 0
+      ) {
+        return formValue;
+      }
+
+      if (
+        Array.isArray(dataValue) &&
+        dataValue.length > 0
+      ) {
+        return dataValue;
+      }
+
+      return sampleValue;
+    }
+
+    if (Array.isArray(formValue)) {
+      return formValue;
+    }
+
+    if (Array.isArray(dataValue)) {
+      return dataValue;
+    }
+
+    return [];
+  };
+
+  // =========================================================
+  // DATA
+  // =========================================================
+
+  const education = getArrayData(
+    formData.education,
+    data.education,
+    sampleEducation
+  );
+
+  const experience = getArrayData(
+    formData.experience,
+    data.experience,
+    sampleExperience
+  );
+
+  const skills = getArrayData(
+    formData.skills,
+    data.skills,
+    sampleSkills
+  );
+
+  const projects = getArrayData(
+    formData.projects,
+    data.projects,
+    sampleProjects
+  );
+
+  const certifications = getArrayData(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getArrayData(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getArrayData(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const interests = getArrayData(
+    formData.interests,
+    data.interests,
+    sampleInterests
+  );
+
+  const references = getArrayData(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
 
   // =========================================================
   // HELPERS
@@ -58,7 +321,9 @@ function AtelierPreview({ formData = {}, data = {} }) {
   };
 
   const getSkillName = (skill) => {
-    if (typeof skill === "string") return skill;
+    if (typeof skill === "string") {
+      return skill;
+    }
 
     return getValue(skill, [
       "name",
@@ -69,7 +334,9 @@ function AtelierPreview({ formData = {}, data = {} }) {
   };
 
   const getDescriptionLines = (description) => {
-    if (!description) return [];
+    if (!description) {
+      return [];
+    }
 
     if (Array.isArray(description)) {
       return description.filter(Boolean);
@@ -81,61 +348,104 @@ function AtelierPreview({ formData = {}, data = {} }) {
       .filter(Boolean);
   };
 
+  const getTechnologies = (project) => {
+    const technologies = getValue(project, [
+      "technologies",
+      "technology",
+      "techStack",
+      "stack",
+      "tools",
+    ]);
+
+    if (Array.isArray(technologies)) {
+      return technologies.filter(Boolean);
+    }
+
+    if (typeof technologies === "string") {
+      return technologies
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
+  // =========================================================
+  // SMALL TEXT
+  // =========================================================
+
   const TinyText = ({
     children,
     className = "",
     color = "text-[#796b63]",
-  }) => (
-    <p
-      className={`text-[4.5px] leading-[1.65] ${color} ${className}`}
-    >
-      {children}
-    </p>
-  );
+  }) => {
+    if (
+      children === undefined ||
+      children === null ||
+      String(children).trim() === ""
+    ) {
+      return null;
+    }
+
+    return (
+      <p
+        className={`text-[10px] leading-[1.55] ${color} ${className}`}
+      >
+        {children}
+      </p>
+    );
+  };
+
+  // =========================================================
+  // RESUME BULLETS
+  // =========================================================
 
   const ResumeLines = ({
     description,
-    count = 3,
     color = "bg-[#d7c5b8]",
   }) => {
     const lines = getDescriptionLines(description);
 
-    if (lines.length > 0) {
-      return (
-        <ul className="space-y-1.5">
-          {lines.map((line, index) => (
-            <li
-              key={index}
-              className="relative pl-2 text-[4.5px] leading-[1.55] text-[#75665e]"
-            >
-              <span
-                className={`absolute left-0 top-[3px] h-[2px] w-[2px] rounded-full ${color}`}
-              />
-
-              {line}
-            </li>
-          ))}
-        </ul>
-      );
+    if (lines.length === 0) {
+      return null;
     }
 
     return (
       <ul className="space-y-1.5">
-        {Array.from({ length: count }).map((_, index) => (
+        {lines.slice(0, 4).map((line, index) => (
           <li
             key={index}
-            className="relative pl-2 text-[4.5px] leading-[1.55] text-[#8b7c73]"
+            className="
+              relative
+              pl-3.5
+              text-[9.5px]
+              leading-[1.5]
+              text-[#75665e]
+            "
           >
             <span
-              className={`absolute left-0 top-[3px] h-[2px] w-[2px] rounded-full ${color}`}
+              className={`
+                absolute
+                left-0
+                top-[6px]
+                h-[4px]
+                w-[4px]
+                rounded-full
+                ${color}
+              `}
             />
 
-            Professional responsibility or achievement
+            {line}
           </li>
         ))}
       </ul>
     );
   };
+
+  // =========================================================
+  // PROFILE PHOTO
+  // =========================================================
 
   const PhotoCircle = ({
     ring = "ring-[#caa993]",
@@ -144,7 +454,15 @@ function AtelierPreview({ formData = {}, data = {} }) {
     if (personal.profileImage) {
       return (
         <div
-          className={`h-16 w-16 shrink-0 overflow-hidden rounded-full ring-2 ${ring}`}
+          className={`
+            h-16
+            w-16
+            shrink-0
+            overflow-hidden
+            rounded-full
+            ring-2
+            ${ring}
+          `}
         >
           <img
             src={personal.profileImage}
@@ -155,371 +473,896 @@ function AtelierPreview({ formData = {}, data = {} }) {
       );
     }
 
+    if (!useSampleData) {
+      return null;
+    }
+
+    const initials = (personal.fullName || "OC")
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+
     return (
       <div
-        className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-full ring-2 ${ring} ${background}`}
+        className={`
+          flex
+          h-16
+          w-16
+          shrink-0
+          items-center
+          justify-center
+          rounded-full
+          ring-2
+          ${ring}
+          ${background}
+        `}
       >
-        <span className="font-serif text-[8px] font-bold text-[#8a6250]">
-          {(personal.fullName || "YN")
-            .split(" ")
-            .filter(Boolean)
-            .slice(0, 2)
-            .map((word) => word[0])
-            .join("")
-            .toUpperCase()}
+        <span className="font-serif text-[10px] font-bold text-[#8a6250]">
+          {initials}
         </span>
       </div>
     );
   };
 
   // =========================================================
-  // FALLBACK DATA
+  // DISPLAY DATA
   // =========================================================
 
-  const displaySkills = skills.length
-    ? skills
-    : ["Figma", "React", "Adobe", "GSAP"];
-
-  const displayEducation = education.length
-    ? education
-    : [
-        {
-          degree: "Bachelor of Computer Science",
-          institution: "University Name",
-        },
-      ];
-
-  const displayExperience = experience.length
-    ? experience
-    : [
-        {
-          jobTitle: "Frontend Developer",
-          company: "Company Name",
-          startDate: "2024",
-          endDate: "Present",
-          description:
-            "Built responsive interfaces and created useful digital experiences.",
-        },
-      ];
-
-  const displayProjects = projects.length
-    ? projects
-    : [
-        {
-          name: "BuildCV",
-          title: "BuildCV",
-          description: "Digital experience",
-        },
-        {
-          name: "Portfolio",
-          title: "Portfolio",
-          description: "Digital experience",
-        },
-      ];
+  const displaySkills = skills
+    .map(getSkillName)
+    .filter(Boolean);
 
   // =========================================================
   // RENDER
   // =========================================================
 
   return (
-    <div className="h-full bg-[#f7f3ee]">
-      {/* =====================================================
+    <div
+      className="
+        box-border
+        h-[1123px]
+        w-[794px]
+        overflow-hidden
+        bg-[#f7f3ee]
+        px-[52px]
+        py-[48px]
+        font-sans
+        text-[#27221f]
+      "
+    >
+      {/* =================================================
           HEADER
-      ===================================================== */}
+      ================================================= */}
 
-      <header className="px-6 py-6">
+      <header className="pb-6">
         <div className="flex items-start justify-between">
           <div>
-            <div className="font-serif text-[20px] font-bold tracking-[-0.04em] text-[#27221f]">
-              {personal.fullName ? (
-                personal.fullName
+            {personal.fullName && (
+              <div
+                className="
+                  font-serif
+                  text-[38px]
+                  font-bold
+                  leading-[0.98]
+                  tracking-[-0.04em]
+                  text-[#27221f]
+                "
+              >
+                {personal.fullName
                   .split(" ")
                   .filter(Boolean)
-                  .map((word, index) => (
+                  .map((word, index, words) => (
                     <React.Fragment key={index}>
                       {word.toUpperCase()}
-                      {index <
-                        personal.fullName.split(" ").filter(Boolean)
-                          .length -
-                          1 && <br />}
-                    </React.Fragment>
-                  ))
-              ) : (
-                <>
-                  YOUR
-                  <br />
-                  NAME
-                </>
-              )}
-            </div>
 
-            <div className="mt-3 text-[5px] font-semibold uppercase tracking-[0.25em] text-[#8a6250]">
-              {personal.jobTitle || "Creative Developer"}
-            </div>
+                      {index < words.length - 1 && (
+                        <br />
+                      )}
+                    </React.Fragment>
+                  ))}
+              </div>
+            )}
+
+            {personal.jobTitle && (
+              <div
+                className="
+                  mt-3
+                  text-[13px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.2em]
+                  text-[#8a6250]
+                "
+              >
+                {personal.jobTitle}
+              </div>
+            )}
           </div>
 
-          <PhotoCircle
-            ring="ring-[#caa993]"
-            background="bg-[#eadbd0]"
-          />
+          {(personal.profileImage || useSampleData) && (
+            <PhotoCircle
+              ring="ring-[#caa993]"
+              background="bg-[#eadbd0]"
+            />
+          )}
         </div>
 
-        <div className="mt-5 h-px bg-[#cdb9aa]" />
+        {(personal.fullName ||
+          personal.jobTitle ||
+          personal.profileImage) && (
+          <div className="mt-6 h-px bg-[#cdb9aa]" />
+        )}
       </header>
 
-      {/* =====================================================
+      {/* =================================================
           MAIN
-      ===================================================== */}
+      ================================================= */}
 
-      <main className="px-6 pb-6">
-        <div className="grid grid-cols-[0.72fr_1.5fr] gap-5">
+      <main>
+        <div className="grid grid-cols-[0.72fr_1.5fr] gap-8">
           {/* =================================================
-              LEFT SIDEBAR
+              LEFT COLUMN
           ================================================= */}
 
-          <aside>
-            {/* Contact */}
+          <aside className="min-w-0">
+            {/* CONTACT */}
 
-            <div className="font-serif text-[7px] font-bold text-[#493b34]">
-              Contact
-            </div>
+            {[
+              personal.email,
+              personal.phone,
+              personal.location,
+              personal.linkedin,
+              personal.github,
+            ].some(Boolean) && (
+              <section>
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Contact
+                </div>
 
-            <TinyText className="mt-3">
-              {personal.email || "email@example.com"}
+                <TinyText className="mt-4">
+                  {personal.email && (
+                    <>
+                      {personal.email}
+                      <br />
+                    </>
+                  )}
 
-              <br />
+                  {personal.phone && (
+                    <>
+                      {personal.phone}
+                      <br />
+                    </>
+                  )}
 
-              {personal.phone || "+92 300 0000000"}
+                  {personal.location && (
+                    <>
+                      {personal.location}
+                      <br />
+                    </>
+                  )}
 
-              <br />
+                  {personal.linkedin && (
+                    <>
+                      {personal.linkedin}
+                      <br />
+                    </>
+                  )}
 
-              {personal.location || "Location"}
+                  {personal.github && (
+                    <>
+                      {personal.github}
+                    </>
+                  )}
+                </TinyText>
+              </section>
+            )}
 
-              {personal.linkedin && (
-                <>
-                  <br />
-                  {personal.linkedin}
-                </>
-              )}
-            </TinyText>
+            {/* TOOLS */}
 
-            {/* Tools */}
+            {displaySkills.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Tools
+                </div>
 
-            <div className="mt-7 font-serif text-[7px] font-bold text-[#493b34]">
-              Tools
-            </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {displaySkills
+                    .slice(0, 8)
+                    .map((skill, index) => (
+                      <span
+                        key={`${skill}-${index}`}
+                        className="
+                          inline-flex
+                          items-center
+                          rounded-full
+                          border
+                          border-[#cdb9aa]
+                          px-2.5
+                          py-1.5
+                          text-[9px]
+                          leading-none
+                          text-[#634e43]
+                        "
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                </div>
+              </section>
+            )}
 
-            <div className="mt-3 flex flex-wrap gap-1">
-              {displaySkills.slice(0, 8).map((skill, index) => {
-                const skillName = getSkillName(skill);
+            {/* EDUCATION */}
 
-                return (
-                  <span
-                    key={`${skillName}-${index}`}
-                    className="rounded-full border border-[#cdb9aa] px-2 py-1 text-[3.5px] text-[#634e43]"
-                  >
-                    {skillName || "Skill"}
-                  </span>
-                );
-              })}
-            </div>
+            {education.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Education
+                </div>
 
-            {/* Education */}
+                <div className="mt-4 space-y-4">
+                  {education
+                    .slice(0, 3)
+                    .map((item, index) => {
+                      const degree = getValue(item, [
+                        "degree",
+                        "program",
+                        "qualification",
+                        "title",
+                      ]);
 
-            <div className="mt-7 font-serif text-[7px] font-bold text-[#493b34]">
-              Education
-            </div>
+                      const field = getValue(item, [
+                        "field",
+                        "major",
+                        "specialization",
+                      ]);
 
-            <div className="mt-3 space-y-3">
-              {displayEducation.slice(0, 3).map((item, index) => {
-                const degree = getValue(item, [
-                  "degree",
-                  "program",
-                  "qualification",
-                  "title",
-                ]);
+                      const institution = getValue(
+                        item,
+                        [
+                          "institution",
+                          "university",
+                          "school",
+                          "college",
+                        ]
+                      );
 
-                const institution = getValue(item, [
-                  "institution",
-                  "university",
-                  "school",
-                  "college",
-                ]);
+                      const startDate = getValue(
+                        item,
+                        [
+                          "startDate",
+                          "start",
+                          "from",
+                        ]
+                      );
 
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
+                      const endDate = getValue(item, [
+                        "endDate",
+                        "end",
+                        "to",
+                      ]);
 
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
+                      const description = getValue(
+                        item,
+                        [
+                          "description",
+                          "details",
+                        ]
+                      );
 
-                return (
-                  <div key={index}>
-                    <TinyText>
-                      {degree || "Bachelor of Computer Science"}
-                    </TinyText>
+                      if (
+                        !degree &&
+                        !field &&
+                        !institution &&
+                        !startDate &&
+                        !endDate &&
+                        !description
+                      ) {
+                        return null;
+                      }
 
-                    <TinyText color="text-[#8a6250]">
-                      {institution || "University Name"}
+                      return (
+                        <div key={index}>
+                          {degree && (
+                            <TinyText>
+                              {degree}
+                            </TinyText>
+                          )}
 
-                      {(startDate || endDate) && (
-                        <>
-                          {" "}
-                          • {startDate || ""} —{" "}
-                          {endDate || "Present"}
-                        </>
-                      )}
-                    </TinyText>
-                  </div>
-                );
-              })}
-            </div>
+                          {field && (
+                            <TinyText>
+                              {field}
+                            </TinyText>
+                          )}
+
+                          {(institution ||
+                            startDate ||
+                            endDate) && (
+                            <TinyText color="text-[#8a6250]">
+                              {institution}
+
+                              {(startDate ||
+                                endDate) && (
+                                <>
+                                  {institution
+                                    ? " • "
+                                    : ""}
+                                  {startDate || ""}
+                                  {startDate &&
+                                  endDate
+                                    ? " — "
+                                    : ""}
+                                  {endDate || ""}
+                                </>
+                              )}
+                            </TinyText>
+                          )}
+
+                          {description && (
+                            <TinyText className="mt-1">
+                              {description}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
+
+            {/* LANGUAGES */}
+
+            {languages.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Languages
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {languages
+                    .slice(0, 4)
+                    .map((language, index) => {
+                      const name = getValue(language, [
+                        "name",
+                        "language",
+                        "title",
+                      ]);
+
+                      const level = getValue(language, [
+                        "level",
+                        "proficiency",
+                        "fluency",
+                      ]);
+
+                      if (!name && !level) {
+                        return null;
+                      }
+
+                      return (
+                        <div key={index}>
+                          {name && (
+                            <TinyText>
+                              {name}
+                            </TinyText>
+                          )}
+
+                          {level && (
+                            <TinyText
+                              color="text-[#8a6250]"
+                            >
+                              {level}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
+
+            {/* INTERESTS */}
+
+            {interests.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Interests
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {interests
+                    .slice(0, 8)
+                    .map((interest, index) => {
+                      const name =
+                        typeof interest === "string"
+                          ? interest
+                          : getValue(interest, [
+                              "name",
+                              "title",
+                              "interest",
+                            ]);
+
+                      if (!name) {
+                        return null;
+                      }
+
+                      return (
+                        <span
+                          key={`${name}-${index}`}
+                          className="
+                            inline-flex
+                            items-center
+                            rounded-full
+                            border
+                            border-[#cdb9aa]
+                            px-2.5
+                            py-1.5
+                            text-[9px]
+                            leading-none
+                            text-[#634e43]
+                          "
+                        >
+                          {name}
+                        </span>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
           </aside>
 
           {/* =================================================
-              RIGHT CONTENT
+              RIGHT COLUMN
           ================================================= */}
 
-          <main>
-            {/* Intro Card */}
+          <main className="min-w-0">
+            {/* SUMMARY */}
 
-            <div className="rounded-2xl bg-[#e8ddd5] p-4">
-              <div className="font-serif text-[8px] font-bold leading-tight text-[#342a25]">
-                {personal.summary ? (
-                  personal.summary
-                ) : (
-                  <>
-                    Design meets
-                    <br />
-                    technology.
-                  </>
-                )}
-              </div>
+            {personal.summary && (
+              <section>
+                <div className="rounded-2xl bg-[#e8ddd5] p-5">
+                  <div
+                    className="
+                      font-serif
+                      text-[25px]
+                      font-bold
+                      leading-[1.12]
+                      tracking-[-0.02em]
+                      text-[#342a25]
+                    "
+                  >
+                    {useSampleData ? (
+                      <>
+                        Design meets
+                        <br />
+                        technology.
+                      </>
+                    ) : (
+                      personal.summary
+                    )}
+                  </div>
 
-              <TinyText
-                className="mt-3"
-                color="text-[#75665e]"
-              >
-                {personal.summary
-                  ? personal.summary
-                  : "Developer crafting visual, useful and memorable digital experiences."}
-              </TinyText>
-            </div>
-
-            {/* Experience */}
-
-            <section className="mt-6">
-              <div className="font-serif text-[7px] font-bold text-[#493b34]">
-                Experience
-              </div>
-
-              <div className="mt-3 space-y-5 border-l border-[#caa993] pl-4">
-                {displayExperience.slice(0, 4).map((item, index) => {
-                  const jobTitle = getValue(item, [
-                    "jobTitle",
-                    "title",
-                    "position",
-                    "role",
-                  ]);
-
-                  const company = getValue(item, [
-                    "company",
-                    "companyName",
-                    "organization",
-                  ]);
-
-                  const startDate = getValue(item, [
-                    "startDate",
-                    "start",
-                    "from",
-                  ]);
-
-                  const endDate = getValue(item, [
-                    "endDate",
-                    "end",
-                    "to",
-                  ]);
-
-                  const description = getValue(item, [
-                    "description",
-                    "details",
-                    "responsibilities",
-                  ]);
-
-                  return (
-                    <div key={index}>
-                      <div className="text-[6px] font-bold text-[#342a25]">
-                        {jobTitle || "Frontend Developer"}
-                      </div>
-
-                      <div className="mt-1 text-[4px] text-[#8a6250]">
-                        {company || "Company Name"}
-
-                        {(startDate || endDate) && (
-                          <>
-                            {" "}
-                            • {startDate || ""} —{" "}
-                            {endDate || "Present"}
-                          </>
-                        )}
-                      </div>
-
-                      <div className="mt-2">
-                        <ResumeLines
-                          description={description}
-                          count={3}
-                          color="bg-[#d7c5b8]"
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Selected Work */}
-
-            <section className="mt-6">
-              <div className="font-serif text-[7px] font-bold text-[#493b34]">
-                Selected Work
-              </div>
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {displayProjects.slice(0, 4).map((project, index) => {
-                  const projectName = getValue(project, [
-                    "name",
-                    "title",
-                    "projectName",
-                  ]);
-
-                  const description = getValue(project, [
-                    "description",
-                    "details",
-                    "summary",
-                  ]);
-
-                  return (
-                    <div
-                      key={index}
-                      className="rounded-xl border border-[#d9c9be] bg-[#faf7f4] p-3"
+                  {useSampleData && (
+                    <TinyText
+                      className="mt-4"
+                      color="text-[#75665e]"
                     >
-                      <div className="font-serif text-[6px] font-bold text-[#342a25]">
-                        {projectName || "Project"}
-                      </div>
+                      {personal.summary}
+                    </TinyText>
+                  )}
+                </div>
+              </section>
+            )}
 
-                      <TinyText className="mt-1">
-                        {description || "Digital experience"}
-                      </TinyText>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
+            {/* EXPERIENCE */}
+
+            {experience.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Experience
+                </div>
+
+                <div className="mt-5 space-y-5 border-l border-[#caa993] pl-5">
+                  {experience
+                    .slice(0, 4)
+                    .map((item, index) => {
+                      const jobTitle = getValue(
+                        item,
+                        [
+                          "position",
+                          "jobTitle",
+                          "title",
+                          "role",
+                        ]
+                      );
+
+                      const company = getValue(
+                        item,
+                        [
+                          "company",
+                          "companyName",
+                          "organization",
+                        ]
+                      );
+
+                      const startDate = getValue(
+                        item,
+                        [
+                          "startDate",
+                          "start",
+                          "from",
+                        ]
+                      );
+
+                      const endDate = getValue(item, [
+                        "endDate",
+                        "end",
+                        "to",
+                      ]);
+
+                      const description =
+                        getValue(item, [
+                          "description",
+                          "details",
+                          "responsibilities",
+                        ]);
+
+                      if (
+                        !jobTitle &&
+                        !company &&
+                        !startDate &&
+                        !endDate &&
+                        !description
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <div key={index}>
+                          {jobTitle && (
+                            <div className="text-[11px] font-bold leading-[1.4] text-[#342a25]">
+                              {jobTitle}
+                            </div>
+                          )}
+
+                          {(company ||
+                            startDate ||
+                            endDate) && (
+                            <div className="mt-1 text-[9.5px] leading-[1.4] text-[#8a6250]">
+                              {company}
+
+                              {(startDate ||
+                                endDate) && (
+                                <>
+                                  {company
+                                    ? " • "
+                                    : ""}
+                                  {startDate || ""}
+                                  {startDate &&
+                                  endDate
+                                    ? " — "
+                                    : ""}
+                                  {endDate || ""}
+                                </>
+                              )}
+                            </div>
+                          )}
+
+                          {description && (
+                            <div className="mt-3">
+                              <ResumeLines
+                                description={
+                                  description
+                                }
+                                color="bg-[#d7c5b8]"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
+
+            {/* SELECTED WORK */}
+
+            {projects.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Selected Work
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  {projects
+                    .slice(0, 4)
+                    .map((project, index) => {
+                      const projectName =
+                        getValue(project, [
+                          "name",
+                          "title",
+                          "projectName",
+                        ]);
+
+                      const description =
+                        getValue(project, [
+                          "description",
+                          "details",
+                          "summary",
+                        ]);
+
+                      const technologies =
+                        getTechnologies(project);
+
+                      const link = getValue(project, [
+                        "link",
+                        "url",
+                        "projectLink",
+                        "github",
+                      ]);
+
+                      if (
+                        !projectName &&
+                        !description &&
+                        technologies.length === 0 &&
+                        !link
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <div
+                          key={index}
+                          className="
+                            rounded-xl
+                            border
+                            border-[#d9c9be]
+                            bg-[#faf7f4]
+                            p-4
+                          "
+                        >
+                          {projectName && (
+                            <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#342a25]">
+                              {projectName}
+                            </div>
+                          )}
+
+                          {description && (
+                            <TinyText className="mt-2">
+                              {description}
+                            </TinyText>
+                          )}
+
+                          {technologies.length > 0 && (
+                            <div className="mt-2 flex flex-wrap gap-1.5">
+                              {technologies.map(
+                                (
+                                  technology,
+                                  techIndex
+                                ) => (
+                                  <span
+                                    key={`${technology}-${techIndex}`}
+                                    className="
+                                      rounded-full
+                                      bg-[#eadbd0]
+                                      px-2
+                                      py-1
+                                      text-[8px]
+                                      font-semibold
+                                      text-[#634e43]
+                                    "
+                                  >
+                                    {technology}
+                                  </span>
+                                )
+                              )}
+                            </div>
+                          )}
+
+                          {link && (
+                            <TinyText
+                              className="mt-2 break-all"
+                              color="text-[#8a6250]"
+                            >
+                              {link}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
+
+            {/* ACHIEVEMENTS */}
+
+            {achievements.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Achievements
+                </div>
+
+                <div className="mt-5 space-y-4">
+                  {achievements
+                    .slice(0, 3)
+                    .map((item, index) => {
+                      const title = getValue(item, [
+                        "title",
+                        "name",
+                      ]);
+
+                      const description =
+                        getValue(item, [
+                          "description",
+                          "details",
+                          "summary",
+                        ]);
+
+                      if (!title && !description) {
+                        return null;
+                      }
+
+                      return (
+                        <div key={index}>
+                          {title && (
+                            <div className="text-[10.5px] font-bold text-[#342a25]">
+                              {title}
+                            </div>
+                          )}
+
+                          {description && (
+                            <TinyText className="mt-1">
+                              {description}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
+
+            {/* CERTIFICATIONS */}
+
+            {certifications.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  Certifications
+                </div>
+
+                <div className="mt-5 space-y-4">
+                  {certifications
+                    .slice(0, 3)
+                    .map((item, index) => {
+                      const name = getValue(item, [
+                        "name",
+                        "title",
+                        "certificate",
+                      ]);
+
+                      const issuer = getValue(item, [
+                        "issuer",
+                        "organization",
+                        "provider",
+                      ]);
+
+                      const date = getValue(item, [
+                        "date",
+                        "year",
+                      ]);
+
+                      if (!name && !issuer && !date) {
+                        return null;
+                      }
+
+                      return (
+                        <div key={index}>
+                          {name && (
+                            <div className="text-[10.5px] font-bold text-[#342a25]">
+                              {name}
+                            </div>
+                          )}
+
+                          {(issuer || date) && (
+                            <TinyText
+                              className="mt-1"
+                              color="text-[#8a6250]"
+                            >
+                              {[issuer, date]
+                                .filter(Boolean)
+                                .join(" • ")}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
+
+            {/* REFERENCES */}
+
+            {references.length > 0 && (
+              <section className="mt-7">
+                <div className="font-serif text-[11px] font-bold leading-[1.3] text-[#493b34]">
+                  References
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-4">
+                  {references
+                    .slice(0, 2)
+                    .map((item, index) => {
+                      const name = getValue(item, [
+                        "name",
+                        "fullName",
+                      ]);
+
+                      const role = getValue(item, [
+                        "role",
+                        "position",
+                        "title",
+                      ]);
+
+                      const company = getValue(item, [
+                        "company",
+                        "organization",
+                      ]);
+
+                      const email = getValue(item, [
+                        "email",
+                      ]);
+
+                      const phone = getValue(item, [
+                        "phone",
+                        "telephone",
+                      ]);
+
+                      if (
+                        !name &&
+                        !role &&
+                        !company &&
+                        !email &&
+                        !phone
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <div key={index}>
+                          {name && (
+                            <div className="text-[10.5px] font-bold text-[#342a25]">
+                              {name}
+                            </div>
+                          )}
+
+                          {(role || company) && (
+                            <TinyText
+                              className="mt-1"
+                              color="text-[#8a6250]"
+                            >
+                              {[role, company]
+                                .filter(Boolean)
+                                .join(" • ")}
+                            </TinyText>
+                          )}
+
+                          {(email || phone) && (
+                            <TinyText
+                              className="mt-1"
+                              color="text-[#75665e]"
+                            >
+                              {[email, phone]
+                                .filter(Boolean)
+                                .join(" • ")}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </section>
+            )}
           </main>
         </div>
       </main>

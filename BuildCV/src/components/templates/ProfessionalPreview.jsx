@@ -1,46 +1,301 @@
 import React from "react";
 
-function ProfessionalPreview({ formData = {}, data = {} }) {
+function ProfessionalPreview({
+  formData = {},
+  data = {},
+  useSampleData = false,
+}) {
+  // =========================================================
+  // SAMPLE DATA
+  // Same sample data used across all BuildCV templates
+  // =========================================================
+
+  const samplePersonal = {
+    fullName: "Olivia Carter",
+    jobTitle: "Executive Developer",
+    email: "olivia.carter@example.com",
+    phone: "+1 415 555 0198",
+    location: "San Francisco, CA",
+    linkedin: "linkedin.com/in/oliviacarter",
+    github: "github.com/oliviacarter",
+    summary:
+      "Strategic technology professional creating elegant digital products, improving user experiences, and leading thoughtful frontend initiatives.",
+    profileImage: "",
+  };
+
+  const sampleExperience = [
+    {
+      jobTitle: "Senior Frontend Developer",
+      company: "Northstar Digital",
+      startDate: "2024",
+      endDate: "Present",
+      description:
+        "Led frontend development for customer-facing digital products.\nImproved interface consistency through reusable component systems.\nCollaborated with designers and product teams to deliver polished experiences.",
+    },
+    {
+      jobTitle: "Frontend Developer",
+      company: "Cedar Labs",
+      startDate: "2022",
+      endDate: "2024",
+      description:
+        "Built responsive web interfaces using modern frontend technologies.\nTranslated design concepts into accessible and reusable components.\nWorked closely with cross-functional teams throughout product delivery.",
+    },
+    {
+      jobTitle: "Web Developer",
+      company: "Brightline Studio",
+      startDate: "2021",
+      endDate: "2022",
+      description:
+        "Developed responsive websites for digital products and campaigns.\nMaintained reusable UI patterns and improved page performance.\nSupported testing and refinement across multiple screen sizes.",
+    },
+  ];
+
+  const sampleSkills = [
+    "React",
+    "JavaScript",
+    "TypeScript",
+    "UI Strategy",
+    "Leadership",
+    "UX Design",
+    "HTML & CSS",
+    "Git",
+    "Responsive Design",
+    "Design Systems",
+    "Accessibility",
+    "Product Thinking",
+  ];
+
+  const sampleEducation = [
+    {
+      degree: "Master of Computer Science",
+      institution: "Stanford University",
+      startDate: "2022",
+      endDate: "2024",
+    },
+    {
+      degree: "Bachelor of Computer Science",
+      institution: "University of California",
+      startDate: "2018",
+      endDate: "2022",
+    },
+  ];
+
+  const sampleProjects = [
+    {
+      title: "Executive Dashboard",
+      name: "Executive Dashboard",
+      description:
+        "Designed a modern analytics dashboard focused on clarity, accessibility, and efficient decision-making.",
+      technologies: ["React", "TypeScript", "CSS"],
+    },
+    {
+      title: "Design System",
+      name: "Design System",
+      description:
+        "Created a reusable component library to improve consistency across multiple digital products.",
+      technologies: ["React", "Storybook", "Figma"],
+    },
+    {
+      title: "Portfolio Platform",
+      name: "Portfolio Platform",
+      description:
+        "Built a responsive portfolio experience combining editorial layouts with interactive project showcases.",
+      technologies: ["React", "JavaScript", "Responsive Design"],
+    },
+  ];
+
+  const sampleCertifications = [
+    {
+      name: "AWS Certified Cloud Practitioner",
+      issuer: "Amazon Web Services",
+      date: "2025",
+    },
+    {
+      name: "Professional Scrum Master I",
+      issuer: "Scrum.org",
+      date: "2024",
+    },
+    {
+      name: "Google UX Design Certificate",
+      issuer: "Google",
+      date: "2023",
+    },
+  ];
+
+  const sampleLanguages = [
+    { name: "English", level: "Native" },
+    { name: "Spanish", level: "Professional" },
+    { name: "French", level: "Conversational" },
+  ];
+
+  const sampleAchievements = [
+    {
+      title: "Design System Initiative",
+      description:
+        "Established reusable interface patterns that improved consistency across product experiences.",
+    },
+    {
+      title: "Frontend Mentorship",
+      description:
+        "Supported junior developers through code reviews, technical guidance, and collaborative learning.",
+    },
+    {
+      title: "Product Experience Improvement",
+      description:
+        "Partnered with product teams to simplify workflows and create more intuitive user experiences.",
+    },
+  ];
+
+  const sampleInterests = [
+    "Digital Design",
+    "Technology",
+    "Photography",
+    "Travel",
+    "Reading",
+    "Creative Coding",
+  ];
+
+  const sampleReferences = [
+    {
+      name: "Daniel Morgan",
+      role: "Product Director",
+      company: "Northstar Digital",
+      email: "daniel.morgan@example.com",
+      phone: "+1 415 555 0124",
+    },
+    {
+      name: "Sophia Bennett",
+      role: "Engineering Manager",
+      company: "Cedar Labs",
+      email: "sophia.bennett@example.com",
+      phone: "+1 415 555 0168",
+    },
+  ];
+
   // =========================================================
   // PERSONAL DATA
   // =========================================================
-  const personal = {
-    fullName: "",
-    jobTitle: "",
-    email: "",
-    phone: "",
-    location: "",
-    linkedin: "",
-    github: "",
-    summary: "",
-    profileImage: "",
-    ...(formData.personal || data.personal || {}),
+
+  const personal = useSampleData
+    ? {
+        ...samplePersonal,
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      }
+    : {
+        fullName: "",
+        jobTitle: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        summary: "",
+        profileImage: "",
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      };
+
+  // =========================================================
+  // ARRAY DATA HELPER
+  // =========================================================
+
+  const getArrayData = (
+    formValue,
+    dataValue,
+    sampleValue
+  ) => {
+    if (useSampleData) {
+      if (
+        Array.isArray(formValue) &&
+        formValue.length > 0
+      ) {
+        return formValue;
+      }
+
+      if (
+        Array.isArray(dataValue) &&
+        dataValue.length > 0
+      ) {
+        return dataValue;
+      }
+
+      return sampleValue;
+    }
+
+    if (Array.isArray(formValue)) {
+      return formValue;
+    }
+
+    if (Array.isArray(dataValue)) {
+      return dataValue;
+    }
+
+    return [];
   };
 
   // =========================================================
   // RESUME SECTIONS
   // =========================================================
-  const education = Array.isArray(formData.education)
-    ? formData.education
-    : Array.isArray(data.education)
-    ? data.education
-    : [];
 
-  const experience = Array.isArray(formData.experience)
-    ? formData.experience
-    : Array.isArray(data.experience)
-    ? data.experience
-    : [];
+  const education = getArrayData(
+    formData.education,
+    data.education,
+    sampleEducation
+  );
 
-  const skills = Array.isArray(formData.skills)
-    ? formData.skills
-    : Array.isArray(data.skills)
-    ? data.skills
-    : [];
+  const experience = getArrayData(
+    formData.experience,
+    data.experience,
+    sampleExperience
+  );
+
+  const skills = getArrayData(
+    formData.skills,
+    data.skills,
+    sampleSkills
+  );
+
+  const projects = getArrayData(
+    formData.projects,
+    data.projects,
+    sampleProjects
+  );
+
+  const certifications = getArrayData(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getArrayData(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getArrayData(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const interests = getArrayData(
+    formData.interests,
+    data.interests,
+    sampleInterests
+  );
+
+  const references = getArrayData(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
 
   // =========================================================
   // HELPERS
   // =========================================================
+
   const getValue = (item, keys) => {
     for (const key of keys) {
       if (
@@ -84,26 +339,61 @@ function ProfessionalPreview({ formData = {}, data = {} }) {
       .filter(Boolean);
   };
 
+  const getTechnologies = (project) => {
+    const technologies = getValue(project, [
+      "technologies",
+      "technology",
+      "tech",
+      "stack",
+      "tools",
+    ]);
+
+    if (Array.isArray(technologies)) {
+      return technologies.filter(Boolean);
+    }
+
+    if (typeof technologies === "string") {
+      return technologies
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
   // =========================================================
   // SMALL TEXT
   // =========================================================
+
   const TinyText = ({
     children,
     className = "",
     color = "text-slate-500",
-  }) => (
-    <p
-      className={`text-[4.5px] leading-[1.65] ${color} ${className}`}
-    >
-      {children}
-    </p>
-  );
+  }) => {
+    if (
+      children === undefined ||
+      children === null ||
+      String(children).trim() === ""
+    ) {
+      return null;
+    }
+
+    return (
+      <p
+        className={`text-[10px] leading-[1.55] ${color} ${className}`}
+      >
+        {children}
+      </p>
+    );
+  };
 
   // =========================================================
   // SECTION TITLE
   // =========================================================
+
   const SectionTitle = ({ children }) => (
-    <div className="text-[5px] font-bold tracking-[0.18em] text-slate-900">
+    <div className="text-[11px] font-bold tracking-[0.18em] text-slate-900">
       {children}
     </div>
   );
@@ -111,37 +401,23 @@ function ProfessionalPreview({ formData = {}, data = {} }) {
   // =========================================================
   // EXPERIENCE DESCRIPTION
   // =========================================================
-  const ResumeLines = ({
-    description,
-    count = 4,
-  }) => {
+
+  const ResumeLines = ({ description }) => {
     const lines = getDescriptionLines(description);
 
-    if (lines.length > 0) {
-      return (
-        <ul className="space-y-1.5">
-          {lines.map((line, index) => (
-            <li
-              key={index}
-              className="relative pl-2 text-[4.5px] leading-[1.55] text-slate-600"
-            >
-              <span className="absolute left-0 top-[3px] h-[2px] w-[2px] rounded-full bg-slate-400" />
-              {line}
-            </li>
-          ))}
-        </ul>
-      );
+    if (lines.length === 0) {
+      return null;
     }
 
     return (
       <ul className="space-y-1.5">
-        {Array.from({ length: count }).map((_, index) => (
+        {lines.map((line, index) => (
           <li
             key={index}
-            className="relative pl-2 text-[4.5px] leading-[1.55] text-slate-400"
+            className="relative pl-3 text-[10px] leading-[1.55] text-slate-600"
           >
-            <span className="absolute left-0 top-[3px] h-[2px] w-[2px] rounded-full bg-slate-300" />
-            Professional responsibility or achievement
+            <span className="absolute left-0 top-[6px] h-[3px] w-[3px] rounded-full bg-slate-400" />
+            {line}
           </li>
         ))}
       </ul>
@@ -149,281 +425,673 @@ function ProfessionalPreview({ formData = {}, data = {} }) {
   };
 
   // =========================================================
-  // FALLBACK DATA
+  // RETURN
   // =========================================================
-  const displayExperience = experience.length
-    ? experience
-    : [
-        {
-          jobTitle: "Frontend Developer",
-          company: "Company Name",
-          startDate: "2024",
-          endDate: "Present",
-          description:
-            "Created scalable interfaces and modern web applications.",
-        },
-      ];
-
-  const displayEducation = education.length
-    ? education
-    : [
-        {
-          degree: "Bachelor of Computer Science",
-          institution: "University Name",
-          startDate: "2021",
-          endDate: "2025",
-        },
-      ];
-
-  const displaySkills = skills.length
-    ? skills
-    : [
-        "React",
-        "JavaScript",
-        "TypeScript",
-        "Node.js",
-        "SQL",
-        "Git",
-      ];
-
-  // =========================================================
-  // DISPLAY VALUES
-  // =========================================================
-  const displayName = personal.fullName || "ARWA KHAN";
-
-  const displayJobTitle =
-    personal.jobTitle || "FRONTEND ENGINEER";
-
-  const displaySummary =
-    personal.summary ||
-    "Results-driven frontend developer with experience creating scalable interfaces and modern web applications.";
 
   return (
-    <div className="h-full bg-white px-6 py-6">
+    <div className="h-[1123px] w-[794px] overflow-hidden bg-white px-[52px] py-[48px] font-sans">
       {/* =====================================================
           HEADER
       ===================================================== */}
-      <header className="border-b-4 border-slate-900 pb-5">
-        <div className="text-[18px] font-black">
-          {displayName.toUpperCase()}
-        </div>
 
-        <div className="mt-1 text-[5px] font-semibold tracking-[0.18em] text-slate-500">
-          {displayJobTitle.toUpperCase()}
-        </div>
+      <header className="border-b-4 border-slate-900 pb-6">
+        {/* NAME */}
 
-        <div className="mt-3 flex flex-wrap gap-x-1 text-[4px] text-slate-500">
-          {personal.email && (
-            <span>{personal.email}</span>
-          )}
+        {personal.fullName && (
+          <div className="text-[36px] font-black leading-none text-slate-900">
+            {personal.fullName.toUpperCase()}
+          </div>
+        )}
 
-          {personal.email && personal.phone && (
-            <span>•</span>
-          )}
+        {/* JOB TITLE */}
 
-          {personal.phone && (
-            <span>{personal.phone}</span>
-          )}
+        {personal.jobTitle && (
+          <div className="mt-3 text-[12px] font-semibold tracking-[0.18em] text-slate-500">
+            {personal.jobTitle.toUpperCase()}
+          </div>
+        )}
 
-          {(personal.email || personal.phone) &&
-            personal.location && <span>•</span>}
+        {/* CONTACT INFORMATION */}
 
-          {personal.location && (
-            <span>{personal.location}</span>
-          )}
+        {(personal.email ||
+          personal.phone ||
+          personal.location ||
+          personal.linkedin ||
+          personal.github) && (
+          <div className="mt-4 flex flex-wrap gap-x-2 gap-y-1 text-[10px] text-slate-500">
+            {personal.email && (
+              <span>{personal.email}</span>
+            )}
 
-          {personal.linkedin && (
-            <>
+            {personal.email && personal.phone && (
               <span>•</span>
-              <span>{personal.linkedin}</span>
-            </>
-          )}
+            )}
 
-          {!personal.email &&
-            !personal.phone &&
-            !personal.location &&
-            !personal.linkedin && (
+            {personal.phone && (
+              <span>{personal.phone}</span>
+            )}
+
+            {(personal.email || personal.phone) &&
+              personal.location && (
+                <span>•</span>
+              )}
+
+            {personal.location && (
+              <span>{personal.location}</span>
+            )}
+
+            {(personal.email ||
+              personal.phone ||
+              personal.location) &&
+              personal.linkedin && (
+                <span>•</span>
+              )}
+
+            {personal.linkedin && (
+              <span className="break-all">
+                {personal.linkedin}
+              </span>
+            )}
+
+            {personal.github && (
               <>
-                <span>email@example.com</span>
-                <span>•</span>
-                <span>+92 300 0000000</span>
-                <span>•</span>
-                <span>Rawalpindi</span>
-                <span>•</span>
-                <span>LinkedIn</span>
+                {(personal.email ||
+                  personal.phone ||
+                  personal.location ||
+                  personal.linkedin) && (
+                  <span>•</span>
+                )}
+
+                <span className="break-all">
+                  {personal.github}
+                </span>
               </>
             )}
-        </div>
+          </div>
+        )}
       </header>
 
       {/* =====================================================
           MAIN
       ===================================================== */}
-      <main className="mt-5">
-        {/* PROFESSIONAL SUMMARY */}
-        <section>
-          <SectionTitle>
+
+      <main className="mt-8">
+        {/* ===================================================
             PROFESSIONAL SUMMARY
-          </SectionTitle>
+        =================================================== */}
 
-          <TinyText className="mt-3">
-            {displaySummary}
-          </TinyText>
-        </section>
+        {personal.summary && (
+          <section>
+            <SectionTitle>
+              PROFESSIONAL SUMMARY
+            </SectionTitle>
 
-        {/* PROFESSIONAL EXPERIENCE */}
-        <section className="mt-6">
-          <SectionTitle>
+            <TinyText className="mt-4 max-w-[680px]">
+              {personal.summary}
+            </TinyText>
+          </section>
+        )}
+
+        {/* ===================================================
             PROFESSIONAL EXPERIENCE
-          </SectionTitle>
+        =================================================== */}
 
-          <div className="mt-3 space-y-5">
-            {displayExperience
-              .slice(0, 5)
-              .map((item, index) => {
-                const jobTitle = getValue(item, [
-                  "jobTitle",
-                  "title",
-                  "position",
-                  "role",
-                ]);
+        {experience.length > 0 && (
+          <section className="mt-9">
+            <SectionTitle>
+              PROFESSIONAL EXPERIENCE
+            </SectionTitle>
 
-                const company = getValue(item, [
-                  "company",
-                  "companyName",
-                  "organization",
-                ]);
+            <div className="mt-5 space-y-7">
+              {experience
+                .slice(0, 5)
+                .map((item, index) => {
+                  const jobTitle = getValue(item, [
+                    "jobTitle",
+                    "title",
+                    "position",
+                    "role",
+                  ]);
 
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
+                  const company = getValue(item, [
+                    "company",
+                    "companyName",
+                    "organization",
+                  ]);
 
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
 
-                const description = getValue(item, [
-                  "description",
-                  "details",
-                  "responsibilities",
-                  "summary",
-                ]);
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                return (
-                  <div key={index}>
-                    <div className="flex justify-between">
-                      <div className="text-[6px] font-bold">
-                        {jobTitle || "Frontend Developer"}
-                      </div>
+                  const description = getValue(item, [
+                    "description",
+                    "details",
+                    "responsibilities",
+                    "summary",
+                  ]);
 
-                      {(startDate || endDate) && (
-                        <div className="text-[4px] text-slate-500">
-                          {startDate || ""} —{" "}
-                          {endDate || "Present"}
+                  if (
+                    !jobTitle &&
+                    !company &&
+                    !startDate &&
+                    !endDate &&
+                    !description
+                  ) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={index}>
+                      {/* JOB HEADER */}
+
+                      {(jobTitle ||
+                        startDate ||
+                        endDate) && (
+                        <div className="flex items-start justify-between gap-6">
+                          {jobTitle && (
+                            <div className="text-[13px] font-bold text-slate-900">
+                              {jobTitle}
+                            </div>
+                          )}
+
+                          {(startDate || endDate) && (
+                            <div className="shrink-0 text-[10px] text-slate-500">
+                              {startDate || ""} —{" "}
+                              {endDate || "Present"}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* COMPANY */}
+
+                      {company && (
+                        <div className="mt-1.5 text-[10px] font-semibold text-indigo-600">
+                          {company}
+                        </div>
+                      )}
+
+                      {/* DESCRIPTION */}
+
+                      {description && (
+                        <div className="mt-3">
+                          <ResumeLines
+                            description={description}
+                          />
                         </div>
                       )}
                     </div>
+                  );
+                })}
+            </div>
+          </section>
+        )}
 
-                    <div className="mt-1 text-[4px] font-semibold text-indigo-600">
-                      {company || "Company Name"}
-                    </div>
+        {/* ===================================================
+            EDUCATION
+        =================================================== */}
 
-                    <div className="mt-2">
-                      <ResumeLines
-                        description={description}
-                        count={4}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </section>
+        {education.length > 0 && (
+          <section className="mt-9">
+            <SectionTitle>EDUCATION</SectionTitle>
 
-        {/* EDUCATION */}
-        <section className="mt-6">
-          <SectionTitle>EDUCATION</SectionTitle>
+            <div className="mt-5 space-y-5">
+              {education
+                .slice(0, 3)
+                .map((item, index) => {
+                  const degree = getValue(item, [
+                    "degree",
+                    "program",
+                    "qualification",
+                    "title",
+                  ]);
 
-          <div className="mt-3 space-y-4">
-            {displayEducation
-              .slice(0, 3)
-              .map((item, index) => {
-                const degree = getValue(item, [
-                  "degree",
-                  "program",
-                  "qualification",
-                  "title",
-                ]);
+                  const institution = getValue(item, [
+                    "institution",
+                    "university",
+                    "school",
+                    "college",
+                  ]);
 
-                const institution = getValue(item, [
-                  "institution",
-                  "university",
-                  "school",
-                  "college",
-                ]);
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
 
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
+                  if (
+                    !degree &&
+                    !institution &&
+                    !startDate &&
+                    !endDate
+                  ) {
+                    return null;
+                  }
 
-                return (
-                  <div key={index}>
-                    <div className="text-[6px] font-bold">
-                      {degree ||
-                        "Bachelor of Computer Science"}
-                    </div>
-
-                    <TinyText className="mt-1">
-                      {institution ||
-                        "University Name"}
-
-                      {(startDate || endDate) && (
-                        <>
-                          {" "}
-                          • {startDate || ""} —{" "}
-                          {endDate || ""}
-                        </>
+                  return (
+                    <div key={index}>
+                      {degree && (
+                        <div className="text-[13px] font-bold text-slate-900">
+                          {degree}
+                        </div>
                       )}
-                    </TinyText>
-                  </div>
-                );
-              })}
-          </div>
-        </section>
 
-        {/* TECHNICAL SKILLS */}
-        <section className="mt-6">
-          <SectionTitle>
+                      {(institution ||
+                        startDate ||
+                        endDate) && (
+                        <TinyText className="mt-1.5">
+                          {institution}
+
+                          {institution &&
+                            (startDate || endDate) && (
+                              <> • </>
+                            )}
+
+                          {(startDate || endDate) && (
+                            <>
+                              {startDate || ""} —{" "}
+                              {endDate || ""}
+                            </>
+                          )}
+                        </TinyText>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </section>
+        )}
+
+        {/* ===================================================
             TECHNICAL SKILLS
-          </SectionTitle>
+        =================================================== */}
 
-          <TinyText className="mt-3">
-            {displaySkills
-              .slice(0, 12)
-              .map((skill, index) => {
-                const skillName = getSkillName(skill);
+        {skills.length > 0 && (
+          <section className="mt-9">
+            <SectionTitle>
+              TECHNICAL SKILLS
+            </SectionTitle>
 
-                return (
-                  <React.Fragment key={`${skillName}-${index}`}>
-                    {index > 0 && " • "}
-                    {skillName || "Skill"}
-                  </React.Fragment>
-                );
-              })}
-          </TinyText>
-        </section>
+            <TinyText className="mt-4">
+              {skills
+                .slice(0, 12)
+                .map((skill, index) => {
+                  const skillName =
+                    getSkillName(skill);
+
+                  if (!skillName) {
+                    return null;
+                  }
+
+                  return (
+                    <React.Fragment
+                      key={`${skillName}-${index}`}
+                    >
+                      {index > 0 && " • "}
+                      {skillName}
+                    </React.Fragment>
+                  );
+                })}
+            </TinyText>
+          </section>
+        )}
+
+        {/* ===================================================
+            SELECTED PROJECTS
+        =================================================== */}
+
+        {projects.length > 0 && (
+          <section className="mt-9">
+            <SectionTitle>
+              SELECTED PROJECTS
+            </SectionTitle>
+
+            <div className="mt-5 grid grid-cols-2 gap-x-8 gap-y-5">
+              {projects
+                .slice(0, 4)
+                .map((project, index) => {
+                  const projectName = getValue(
+                    project,
+                    [
+                      "name",
+                      "title",
+                      "projectName",
+                    ]
+                  );
+
+                  const description = getValue(
+                    project,
+                    [
+                      "description",
+                      "details",
+                      "summary",
+                    ]
+                  );
+
+                  const technologies =
+                    getTechnologies(project);
+
+                  if (
+                    !projectName &&
+                    !description &&
+                    technologies.length === 0
+                  ) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={`project-${index}`}>
+                      {projectName && (
+                        <div className="text-[11px] font-bold text-slate-900">
+                          {projectName}
+                        </div>
+                      )}
+
+                      {description && (
+                        <TinyText className="mt-1.5">
+                          {description}
+                        </TinyText>
+                      )}
+
+                      {technologies.length > 0 && (
+                        <div className="mt-2 text-[8px] font-semibold text-indigo-600">
+                          {technologies
+                            .slice(0, 4)
+                            .join(" • ")}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </section>
+        )}
+
+        {/* ===================================================
+            ACHIEVEMENTS
+        =================================================== */}
+
+        {achievements.length > 0 && (
+          <section className="mt-9">
+            <SectionTitle>
+              ACHIEVEMENTS
+            </SectionTitle>
+
+            <div className="mt-5 grid grid-cols-2 gap-6">
+              {achievements
+                .slice(0, 3)
+                .map((item, index) => {
+                  const title = getValue(item, [
+                    "title",
+                    "name",
+                  ]);
+
+                  const description = getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                      "summary",
+                    ]
+                  );
+
+                  if (!title && !description) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={`achievement-${index}`}>
+                      {title && (
+                        <div className="text-[10.5px] font-bold text-slate-900">
+                          {title}
+                        </div>
+                      )}
+
+                      {description && (
+                        <TinyText className="mt-1.5">
+                          {description}
+                        </TinyText>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </section>
+        )}
+
+        {/* ===================================================
+            CERTIFICATIONS
+        =================================================== */}
+
+        {certifications.length > 0 && (
+          <section className="mt-9">
+            <SectionTitle>
+              CERTIFICATIONS
+            </SectionTitle>
+
+            <div className="mt-5 grid grid-cols-3 gap-5">
+              {certifications
+                .slice(0, 3)
+                .map((item, index) => {
+                  const name = getValue(item, [
+                    "name",
+                    "title",
+                    "certificate",
+                  ]);
+
+                  const issuer = getValue(item, [
+                    "issuer",
+                    "organization",
+                    "company",
+                  ]);
+
+                  const date = getValue(item, [
+                    "date",
+                    "year",
+                    "issuedDate",
+                  ]);
+
+                  if (!name && !issuer && !date) {
+                    return null;
+                  }
+
+                  return (
+                    <div key={`cert-${index}`}>
+                      {name && (
+                        <div className="text-[9.5px] font-bold text-slate-900">
+                          {name}
+                        </div>
+                      )}
+
+                      {issuer && (
+                        <TinyText className="mt-1">
+                          {issuer}
+                        </TinyText>
+                      )}
+
+                      {date && (
+                        <div className="mt-1 text-[8px] font-semibold text-indigo-600">
+                          {date}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </section>
+        )}
+
+        {/* ===================================================
+            LANGUAGES / INTERESTS / REFERENCES
+        =================================================== */}
+
+        {(languages.length > 0 ||
+          interests.length > 0 ||
+          references.length > 0) && (
+          <section className="mt-9 grid grid-cols-3 gap-7">
+            {/* LANGUAGES */}
+
+            {languages.length > 0 && (
+              <div>
+                <SectionTitle>
+                  LANGUAGES
+                </SectionTitle>
+
+                <div className="mt-4 space-y-2.5">
+                  {languages
+                    .slice(0, 4)
+                    .map((item, index) => {
+                      const name = getValue(item, [
+                        "name",
+                        "language",
+                        "title",
+                      ]);
+
+                      const level = getValue(item, [
+                        "level",
+                        "proficiency",
+                        "fluency",
+                      ]);
+
+                      if (!name) {
+                        return null;
+                      }
+
+                      return (
+                        <div
+                          key={`language-${index}`}
+                        >
+                          <div className="text-[9.5px] font-semibold text-slate-700">
+                            {name}
+                          </div>
+
+                          {level && (
+                            <TinyText className="mt-0.5">
+                              {level}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+
+            {/* INTERESTS */}
+
+            {interests.length > 0 && (
+              <div>
+                <SectionTitle>
+                  INTERESTS
+                </SectionTitle>
+
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {interests
+                    .slice(0, 6)
+                    .map((interest, index) => {
+                      const name =
+                        typeof interest === "string"
+                          ? interest
+                          : getValue(interest, [
+                              "name",
+                              "title",
+                              "interest",
+                            ]);
+
+                      if (!name) {
+                        return null;
+                      }
+
+                      return (
+                        <span
+                          key={`interest-${index}`}
+                          className="rounded-full bg-slate-100 px-2 py-1 text-[8px] font-semibold text-slate-500"
+                        >
+                          {name}
+                        </span>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+
+            {/* REFERENCES */}
+
+            {references.length > 0 && (
+              <div>
+                <SectionTitle>
+                  REFERENCES
+                </SectionTitle>
+
+                <div className="mt-4 space-y-3">
+                  {references
+                    .slice(0, 2)
+                    .map((item, index) => {
+                      const name = getValue(item, [
+                        "name",
+                        "fullName",
+                      ]);
+
+                      const role = getValue(item, [
+                        "role",
+                        "position",
+                        "jobTitle",
+                      ]);
+
+                      const company = getValue(item, [
+                        "company",
+                        "organization",
+                      ]);
+
+                      if (
+                        !name &&
+                        !role &&
+                        !company
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <div
+                          key={`reference-${index}`}
+                        >
+                          {name && (
+                            <div className="text-[9.5px] font-bold text-slate-900">
+                              {name}
+                            </div>
+                          )}
+
+                          {(role || company) && (
+                            <TinyText className="mt-0.5">
+                              {role}
+                              {role && company
+                                ? " • "
+                                : ""}
+                              {company}
+                            </TinyText>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
       </main>
     </div>
   );

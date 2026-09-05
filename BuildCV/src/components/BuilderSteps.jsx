@@ -36,6 +36,7 @@ export const BUILDER_STEPS = [
     title: "Projects",
     description: "Your best projects.",
   },
+  
 ]
 
 // =====================================================
@@ -54,6 +55,7 @@ function getStepState(index, activeIndex) {
 
 const RING_SIZE = 44
 const RING_STROKE = 3
+
 const RING_RADIUS =
   (RING_SIZE - RING_STROKE) / 2
 
@@ -68,32 +70,48 @@ function BuilderSteps({
   activeStep,
   onStepChange,
   steps = BUILDER_STEPS,
+  optionalSections = [],
 }) {
   const navRef = useRef(null)
   const ringRef = useRef(null)
   const isFirstRender = useRef(true)
 
   // ===================================================
-  // CURRENT STEP
+  // CURRENT REQUIRED STEP
   // ===================================================
 
   const currentStepIndex = steps.findIndex(
     (step) => step.id === activeStep
   )
 
+  const isOptionalActive =
+    optionalSections.some(
+      (section) => section.id === activeStep
+    )
+
   const safeStepIndex =
     currentStepIndex >= 0
       ? currentStepIndex
-      : 0
+      : steps.length - 1
 
   // ===================================================
   // PROGRESS
   // ===================================================
 
-  const progress =
-    steps.length > 0
+  const progress = isOptionalActive
+    ? 100
+    : steps.length > 0
       ? ((safeStepIndex + 1) / steps.length) * 100
       : 0
+
+  // ===================================================
+  // ACTIVE OPTIONAL SECTION
+  // ===================================================
+
+  const activeOptionalSection =
+    optionalSections.find(
+      (section) => section.id === activeStep
+    )
 
   // ===================================================
   // STEP CHANGE
@@ -266,7 +284,6 @@ function BuilderSteps({
 
             </div>
 
-
             {/* =================================================
                 PROGRESS RING
             ================================================= */}
@@ -337,9 +354,8 @@ function BuilderSteps({
 
         </div>
 
-
         {/* =================================================
-            STEPS
+            NAVIGATION
         ================================================= */}
 
         <nav
@@ -353,6 +369,10 @@ function BuilderSteps({
           aria-label="Resume builder steps"
         >
 
+          {/* =================================================
+              REQUIRED STEPS
+          ================================================= */}
+
           {steps.map((step, index) => {
 
             const state = getStepState(
@@ -361,6 +381,7 @@ function BuilderSteps({
             )
 
             const isActive =
+              !isOptionalActive &&
               state === "active"
 
             const isCompleted =
@@ -373,9 +394,7 @@ function BuilderSteps({
                 className="relative"
               >
 
-                {/* =================================================
-                    CONNECTOR
-                ================================================= */}
+                {/* CONNECTOR */}
 
                 {index < steps.length - 1 && (
                   <span
@@ -388,7 +407,6 @@ function BuilderSteps({
                       w-px
                       transition-colors
                       duration-300
-
                       ${
                         isCompleted
                           ? "bg-[#C7D2FE]"
@@ -398,10 +416,7 @@ function BuilderSteps({
                   />
                 )}
 
-
-                {/* =================================================
-                    STEP BUTTON
-                ================================================= */}
+                {/* STEP BUTTON */}
 
                 <button
                   type="button"
@@ -427,7 +442,6 @@ function BuilderSteps({
                     text-left
                     transition-all
                     duration-200
-
                     ${
                       isActive
                         ? "border-[#C7D2FE] bg-[#EEF2FF] shadow-sm"
@@ -436,9 +450,7 @@ function BuilderSteps({
                   `}
                 >
 
-                  {/* =================================================
-                      NUMBER / INDICATOR
-                  ================================================= */}
+                  {/* NUMBER */}
 
                   <span
                     className={`
@@ -456,7 +468,6 @@ function BuilderSteps({
                       font-black
                       transition-all
                       duration-200
-
                       ${
                         isCompleted
                           ? "border-[#6366F1] bg-[#6366F1] text-white shadow-md shadow-[#6366F1]/20"
@@ -480,10 +491,7 @@ function BuilderSteps({
 
                   </span>
 
-
-                  {/* =================================================
-                      TEXT
-                  ================================================= */}
+                  {/* TEXT */}
 
                   <span className="min-w-0 flex-1">
 
@@ -496,7 +504,6 @@ function BuilderSteps({
                         leading-5
                         transition-colors
                         duration-200
-
                         ${
                           isActive
                             ? "text-[#4F46E5]"
@@ -509,7 +516,6 @@ function BuilderSteps({
                       {step.title}
                     </span>
 
-
                     <span
                       className={`
                         mt-0.5
@@ -517,7 +523,6 @@ function BuilderSteps({
                         truncate
                         text-[10px]
                         leading-4
-
                         ${
                           isActive
                             ? "text-[#6366F1]/70"
@@ -532,10 +537,7 @@ function BuilderSteps({
 
                   </span>
 
-
-                  {/* =================================================
-                      ACTIVE ARROW
-                  ================================================= */}
+                  {/* ACTIVE ARROW */}
 
                   {isActive && (
                     <span
@@ -563,10 +565,7 @@ function BuilderSteps({
                     </span>
                   )}
 
-
-                  {/* =================================================
-                      COMPLETED LABEL
-                  ================================================= */}
+                  {/* DONE */}
 
                   {isCompleted && (
                     <span
@@ -588,8 +587,190 @@ function BuilderSteps({
             )
           })}
 
-        </nav>
+          {/* =================================================
+              MORE INFORMATION
+          ================================================= */}
 
+          {optionalSections.length > 0 && (
+            <>
+              {/* DIVIDER */}
+
+              <div
+                data-step-item
+                className="px-2 pb-1 pt-4"
+              >
+                <div className="flex items-center gap-2">
+
+                  <span
+                    className="
+                      h-px
+                      flex-1
+                      bg-[#E2E8F0]
+                    "
+                  />
+
+                  <span
+                    className="
+                      shrink-0
+                      text-[9px]
+                      font-bold
+                      uppercase
+                      tracking-[0.16em]
+                      text-[#94A3B8]
+                    "
+                  >
+                    More information
+                  </span>
+
+                  <span
+                    className="
+                      h-px
+                      flex-1
+                      bg-[#E2E8F0]
+                    "
+                  />
+
+                </div>
+              </div>
+
+              {/* =================================================
+                  OPTIONAL GRID
+              ================================================= */}
+
+              <div
+                className="
+                  grid
+                  grid-cols-2
+                  gap-1.5
+                "
+              >
+
+                {optionalSections.map(
+                  (section) => {
+
+                    const isActive =
+                      activeStep ===
+                      section.id
+
+                    return (
+                      <div
+                        key={section.id}
+                        data-step-item
+                        className="relative"
+                      >
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleStepChange(
+                              section.id
+                            )
+                          }
+                          aria-current={
+                            isActive
+                              ? "step"
+                              : undefined
+                          }
+                          className={`
+                            group
+                            relative
+                            flex
+                            min-h-[72px]
+                            w-full
+                            flex-col
+                            items-start
+                            justify-center
+                            rounded-xl
+                            border
+                            px-3
+                            py-2.5
+                            text-left
+                            transition-all
+                            duration-200
+                            ${
+                              isActive
+                                ? "border-[#C7D2FE] bg-[#EEF2FF] shadow-sm"
+                                : "border-transparent bg-white hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
+                            }
+                          `}
+                        >
+
+                          {/* PLUS ICON */}
+
+                          <span
+                            className={`
+                              flex
+                              h-6
+                              w-6
+                              items-center
+                              justify-center
+                              rounded-full
+                              border
+                              text-[13px]
+                              font-semibold
+                              transition-all
+                              duration-200
+                              ${
+                                isActive
+                                  ? "border-[#6366F1] bg-[#6366F1] text-white"
+                                  : "border-[#E2E8F0] bg-white text-[#64748B] group-hover:border-[#A5B4FC] group-hover:bg-[#EEF2FF] group-hover:text-[#4F46E5]"
+                              }
+                            `}
+                          >
+                            +
+                          </span>
+
+                          {/* TITLE */}
+
+                          <span
+                            className={`
+                              mt-1.5
+                              block
+                              w-full
+                              truncate
+                              text-[11px]
+                              font-bold
+                              leading-4
+                              ${
+                                isActive
+                                  ? "text-[#4F46E5]"
+                                  : "text-[#334155] group-hover:text-[#111827]"
+                              }
+                            `}
+                          >
+                            {section.title}
+                          </span>
+
+                          {/* ACTIVE ARROW */}
+
+                          {isActive && (
+                            <span
+                              className="
+                                absolute
+                                right-2.5
+                                top-2.5
+                                text-[11px]
+                                font-black
+                                text-[#4F46E5]
+                              "
+                              aria-hidden="true"
+                            >
+                              →
+                            </span>
+                          )}
+
+                        </button>
+
+                      </div>
+                    )
+                  }
+                )}
+
+              </div>
+            </>
+          )}
+
+        </nav>
 
         {/* =================================================
             PROGRESS SUMMARY
@@ -616,7 +797,10 @@ function BuilderSteps({
                   text-[#111827]
                 "
               >
-                Your progress
+                {isOptionalActive
+                  ? activeOptionalSection?.title ||
+                    "Additional information"
+                  : "Your progress"}
               </p>
 
               <p
@@ -626,8 +810,9 @@ function BuilderSteps({
                   text-[#94A3B8]
                 "
               >
-                Step {safeStepIndex + 1} of{" "}
-                {steps.length}
+                {isOptionalActive
+                  ? "Optional section"
+                  : `Step ${safeStepIndex + 1} of ${steps.length}`}
               </p>
 
             </div>
@@ -643,7 +828,6 @@ function BuilderSteps({
             </span>
 
           </div>
-
 
           {/* PROGRESS BAR */}
 
@@ -673,7 +857,6 @@ function BuilderSteps({
 
           </div>
 
-
           {/* MESSAGE */}
 
           <p
@@ -684,14 +867,15 @@ function BuilderSteps({
               text-[#94A3B8]
             "
           >
-            {safeStepIndex ===
-            steps.length - 1
-              ? "Almost there — review your resume and download it."
-              : "Keep going — each section makes your resume stronger."}
+            {isOptionalActive
+              ? "Optional information can make your resume more complete."
+              : safeStepIndex ===
+                steps.length - 1
+                ? "Almost there — review your resume and download it."
+                : "Keep going — each section makes your resume stronger."}
           </p>
 
         </div>
-
 
         {/* =================================================
             RESUME TIP

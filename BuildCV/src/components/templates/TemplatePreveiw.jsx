@@ -23,18 +23,34 @@ import OceanPreview from "./OceanPreview";
 import StellarPreview from "./StellarPreview";
 import AtelierPreview from "./AtelierPreview";
 
+/* =========================================================
+   TEMPLATE PREVIEW
+========================================================= */
+
 function TemplatePreview({
   template,
   formData = {},
   data = {},
+  useSampleData = false,
 }) {
   if (!template) {
     return null;
   }
 
+  /*
+   * IMPORTANT
+   *
+   * useSampleData = true
+   * → Template cards / preview modal can show sample information.
+   *
+   * useSampleData = false
+   * → Builder live preview shows ONLY the user's formData.
+   */
+
   const previewProps = {
     formData,
     data,
+    useSampleData,
   };
 
   switch (template.id) {

@@ -1,46 +1,389 @@
 import React from "react";
 
-function CleanPreview({ formData = {}, data = {} }) {
+function CleanPreview({
+  formData = {},
+  data = {},
+  useSampleData = false,
+}) {
   // =========================================================
-  // DATA
+  // SAMPLE PERSONAL DATA
   // =========================================================
 
-  const personal = {
-    fullName: "",
-    jobTitle: "",
-    email: "",
-    phone: "",
-    location: "",
-    linkedin: "",
-    github: "",
-    summary: "",
+  const samplePersonal = {
+    fullName: "Olivia Carter",
+    jobTitle: "Senior Frontend Developer",
+    email: "olivia.carter@example.com",
+    phone: "+1 415 555 0187",
+    location: "San Francisco, CA",
+    linkedin: "linkedin.com/in/oliviacarter",
+    github: "github.com/oliviacarter",
+    summary:
+      "Frontend developer with 5+ years of experience building responsive, accessible, and high-performance web applications. Passionate about creating clean interfaces, reusable components, and thoughtful digital experiences.",
     profileImage: "",
-    ...(formData.personal || data.personal || {}),
   };
 
-  const education = Array.isArray(formData.education)
+  // =========================================================
+  // SAMPLE EDUCATION
+  // =========================================================
+
+  const sampleEducation = [
+    {
+      degree: "Bachelor of Computer Science",
+      institution: "University of California",
+      startDate: "2015",
+      endDate: "2019",
+    },
+    {
+      degree: "Higher Secondary Education",
+      institution: "Lincoln High School",
+      startDate: "2013",
+      endDate: "2015",
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE EXPERIENCE
+  // =========================================================
+
+  const sampleExperience = [
+    {
+      jobTitle: "Senior Frontend Developer",
+      company: "PixelCraft Studio",
+      startDate: "2023",
+      endDate: "Present",
+      description: [
+        "Built responsive web applications using React and TypeScript.",
+        "Created reusable UI components and improved application performance.",
+        "Collaborated with designers and backend developers to deliver polished user experiences.",
+      ],
+    },
+    {
+      jobTitle: "Frontend Developer",
+      company: "Nova Technologies",
+      startDate: "2021",
+      endDate: "2023",
+      description: [
+        "Developed modern interfaces using React, JavaScript, and CSS.",
+        "Integrated REST APIs and created reusable frontend features.",
+        "Improved usability, accessibility, and cross-browser compatibility.",
+      ],
+    },
+    {
+      jobTitle: "Junior Web Developer",
+      company: "Bright Digital",
+      startDate: "2019",
+      endDate: "2021",
+      description: [
+        "Implemented responsive layouts for client websites.",
+        "Maintained frontend features and fixed UI issues.",
+        "Worked with the design team to translate mockups into functional pages.",
+      ],
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE SKILLS
+  // =========================================================
+
+  const sampleSkills = [
+    "React",
+    "JavaScript",
+    "TypeScript",
+    "HTML",
+    "CSS",
+    "Tailwind CSS",
+    "Git",
+    "REST APIs",
+    "Next.js",
+    "Figma",
+    "Responsive Design",
+    "UI Development",
+  ];
+
+  // =========================================================
+  // SAMPLE PROJECTS
+  // =========================================================
+
+  const sampleProjects = [
+    {
+      name: "E-Commerce Platform",
+      description:
+        "Developed a responsive shopping platform with reusable React components, product filtering, authentication, and REST API integration.",
+      technologies: [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "REST API",
+      ],
+      liveUrl: "shoply-demo.com",
+      githubUrl: "github.com/oliviacarter/shoply",
+    },
+    {
+      name: "Task Management Dashboard",
+      description:
+        "Created a productivity dashboard with interactive task management, responsive layouts, charts, and organized project workflows.",
+      technologies: [
+        "React",
+        "JavaScript",
+        "Chart.js",
+        "CSS",
+      ],
+      liveUrl: "taskflow-demo.com",
+      githubUrl: "github.com/oliviacarter/taskflow",
+    },
+    {
+      name: "Portfolio Website",
+      description:
+        "Designed and developed a personal portfolio focused on accessibility, performance, responsive design, and modern visual presentation.",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+      ],
+      liveUrl: "oliviacarter.dev",
+      githubUrl: "github.com/oliviacarter/portfolio",
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE CERTIFICATIONS
+  // =========================================================
+
+  const sampleCertifications = [
+    {
+      name: "Meta Front-End Developer",
+      organization: "Meta",
+      date: "2022",
+    },
+    {
+      name: "JavaScript Algorithms and Data Structures",
+      organization: "freeCodeCamp",
+      date: "2021",
+    },
+    {
+      name: "Responsive Web Design",
+      organization: "freeCodeCamp",
+      date: "2020",
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE LANGUAGES
+  // =========================================================
+
+  const sampleLanguages = [
+    {
+      language: "English",
+      level: "Fluent",
+    },
+    {
+      language: "Spanish",
+      level: "Intermediate",
+    },
+    {
+      language: "French",
+      level: "Basic",
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE ACHIEVEMENTS
+  // =========================================================
+
+  const sampleAchievements = [
+    {
+      title: "Employee of the Year",
+      description:
+        "Recognized for outstanding contribution to product development and team collaboration.",
+      date: "2024",
+    },
+    {
+      title: "Best UI Implementation",
+      description:
+        "Recognized for delivering a polished and accessible interface for a major product release.",
+      date: "2023",
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE INTERESTS
+  // =========================================================
+
+  const sampleInterests =
+    "UI/UX Design, Open Source, Photography, Technology";
+
+  // =========================================================
+  // SAMPLE REFERENCES
+  // =========================================================
+
+  const sampleReferences = [
+    {
+      name: "Daniel Wilson",
+      position: "Product Manager",
+      company: "PixelCraft Studio",
+      email: "daniel.wilson@example.com",
+    },
+    {
+      name: "Sarah Mitchell",
+      position: "Engineering Manager",
+      company: "Nova Technologies",
+      email: "sarah.mitchell@example.com",
+    },
+  ];
+
+  // =========================================================
+  // PERSONAL DATA
+  // =========================================================
+
+  const personal = useSampleData
+    ? {
+        ...samplePersonal,
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      }
+    : {
+        fullName: "",
+        jobTitle: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        summary: "",
+        profileImage: "",
+        ...(formData.personal || {}),
+      };
+
+  // =========================================================
+  // REQUIRED SECTIONS
+  // =========================================================
+
+  const education = useSampleData
+    ? Array.isArray(formData.education) &&
+      formData.education.length > 0
+      ? formData.education
+      : Array.isArray(data.education) &&
+        data.education.length > 0
+      ? data.education
+      : sampleEducation
+    : Array.isArray(formData.education)
     ? formData.education
-    : Array.isArray(data.education)
-    ? data.education
     : [];
 
-  const experience = Array.isArray(formData.experience)
+  const experience = useSampleData
+    ? Array.isArray(formData.experience) &&
+      formData.experience.length > 0
+      ? formData.experience
+      : Array.isArray(data.experience) &&
+        data.experience.length > 0
+      ? data.experience
+      : sampleExperience
+    : Array.isArray(formData.experience)
     ? formData.experience
-    : Array.isArray(data.experience)
-    ? data.experience
     : [];
 
-  const skills = Array.isArray(formData.skills)
+  const skills = useSampleData
+    ? Array.isArray(formData.skills) &&
+      formData.skills.length > 0
+      ? formData.skills
+      : Array.isArray(data.skills) &&
+        data.skills.length > 0
+      ? data.skills
+      : sampleSkills
+    : Array.isArray(formData.skills)
     ? formData.skills
-    : Array.isArray(data.skills)
-    ? data.skills
     : [];
 
-  const projects = Array.isArray(formData.projects)
+  const projects = useSampleData
+    ? Array.isArray(formData.projects) &&
+      formData.projects.length > 0
+      ? formData.projects
+      : Array.isArray(data.projects) &&
+        data.projects.length > 0
+      ? data.projects
+      : sampleProjects
+    : Array.isArray(formData.projects)
     ? formData.projects
-    : Array.isArray(data.projects)
-    ? data.projects
     : [];
+
+  // =========================================================
+  // OPTIONAL SECTION HELPER
+  // =========================================================
+
+  const getOptionalSection = (
+    formSection,
+    dataSection,
+    sampleItems
+  ) => {
+    // User has explicitly configured this section.
+    if (formSection !== undefined) {
+      return formSection.enabled &&
+        Array.isArray(formSection.items)
+        ? formSection.items
+        : [];
+    }
+
+    // Builder / PDF mode NEVER uses sample data.
+    if (!useSampleData) {
+      return [];
+    }
+
+    // Template preview can use saved data.
+    if (dataSection !== undefined) {
+      return dataSection.enabled &&
+        Array.isArray(dataSection.items)
+        ? dataSection.items
+        : [];
+    }
+
+    // Gallery / modal gets sample content.
+    return sampleItems;
+  };
+
+  const certifications = getOptionalSection(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getOptionalSection(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getOptionalSection(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const references = getOptionalSection(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // =========================================================
+
+  let interests = "";
+
+  if (formData.interests !== undefined) {
+    interests = formData.interests.enabled
+      ? String(formData.interests.value || "").trim()
+      : "";
+  } else if (useSampleData) {
+    if (data.interests !== undefined) {
+      interests = data.interests.enabled
+        ? String(data.interests.value || "").trim()
+        : "";
+    } else {
+      interests = sampleInterests;
+    }
+  }
 
   // =========================================================
   // HELPERS
@@ -62,7 +405,9 @@ function CleanPreview({ formData = {}, data = {} }) {
   };
 
   const getSkillName = (skill) => {
-    if (typeof skill === "string") return skill;
+    if (typeof skill === "string") {
+      return skill;
+    }
 
     return getValue(skill, [
       "name",
@@ -72,8 +417,29 @@ function CleanPreview({ formData = {}, data = {} }) {
     ]);
   };
 
+  const getTechnologies = (project) => {
+    if (!project) {
+      return [];
+    }
+
+    if (Array.isArray(project.technologies)) {
+      return project.technologies.filter(Boolean);
+    }
+
+    if (typeof project.technologies === "string") {
+      return project.technologies
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
   const getDescriptionLines = (description) => {
-    if (!description) return [];
+    if (!description) {
+      return [];
+    }
 
     if (Array.isArray(description)) {
       return description.filter(Boolean);
@@ -84,6 +450,58 @@ function CleanPreview({ formData = {}, data = {} }) {
       .map((line) => line.trim())
       .filter(Boolean);
   };
+
+  // =========================================================
+  // VALID OPTIONAL DATA
+  // =========================================================
+
+  const validCertifications = certifications.filter(
+    (item) =>
+      getValue(item, ["name", "title"]) ||
+      getValue(item, ["organization", "issuer"]) ||
+      getValue(item, ["date"])
+  );
+
+  const validLanguages = languages.filter(
+    (item) =>
+      getValue(item, ["language", "name"]) ||
+      getValue(item, ["level", "proficiency"])
+  );
+
+  const validAchievements = achievements.filter(
+    (item) =>
+      getValue(item, ["title", "name"]) ||
+      getValue(item, ["description", "details"]) ||
+      getValue(item, ["date"])
+  );
+
+  const validReferences = references.filter(
+    (item) =>
+      getValue(item, ["name"]) ||
+      getValue(item, ["position", "role"]) ||
+      getValue(item, ["company", "organization"]) ||
+      getValue(item, ["email"]) ||
+      getValue(item, ["phone"])
+  );
+
+  const validProjects = projects.filter(
+    (project) =>
+      getValue(project, ["name", "title", "projectName"]) ||
+      getValue(project, [
+        "description",
+        "details",
+        "summary",
+      ]) ||
+      getTechnologies(project).length > 0
+  );
+
+  // =========================================================
+  // DISPLAY SKILLS
+  // =========================================================
+
+  const displaySkills = skills
+    .map(getSkillName)
+    .filter(Boolean);
 
   // =========================================================
   // SMALL COMPONENTS
@@ -103,7 +521,10 @@ function CleanPreview({ formData = {}, data = {} }) {
     </h2>
   );
 
-  const TinyText = ({ children, className = "" }) => (
+  const TinyText = ({
+    children,
+    className = "",
+  }) => (
     <p
       className={`
         text-[10px]
@@ -119,23 +540,22 @@ function CleanPreview({ formData = {}, data = {} }) {
   const ResumeLines = ({ description }) => {
     const lines = getDescriptionLines(description);
 
-    if (!lines.length) {
-      return (
-        <ul className="mt-2 space-y-1.5 pl-4">
-          <li className="text-[9.5px] leading-[1.5] text-slate-500">
-            Built responsive interfaces and created polished digital
-            experiences.
-          </li>
-          <li className="text-[9.5px] leading-[1.5] text-slate-500">
-            Collaborated with teams to improve usability and performance.
-          </li>
-        </ul>
-      );
+    // Live Builder: no fake content.
+    if (!useSampleData && lines.length === 0) {
+      return null;
     }
+
+    const displayLines = lines.length
+      ? lines
+      : [
+          "Built responsive interfaces and created polished digital experiences.",
+          "Collaborated with teams to improve usability and performance.",
+          "Implemented reusable components and maintained clean frontend architecture.",
+        ];
 
     return (
       <ul className="mt-2 space-y-1.5 pl-4">
-        {lines.map((line, index) => (
+        {displayLines.map((line, index) => (
           <li
             key={index}
             className="
@@ -165,79 +585,13 @@ function CleanPreview({ formData = {}, data = {} }) {
   };
 
   // =========================================================
-  // FALLBACK DATA
-  // =========================================================
-
-  const displaySkills = skills.length
-    ? skills
-    : ["React", "JavaScript", "CSS", "Git"];
-
-  const displayEducation = education.length
-    ? education
-    : [
-        {
-          degree: "Bachelor of Computer Science",
-          institution: "University Name",
-          startDate: "",
-          endDate: "",
-        },
-      ];
-
-  const displayExperience = experience.length
-    ? experience
-    : [
-        {
-          jobTitle: "Frontend Developer",
-          company: "Company Name",
-          startDate: "2024",
-          endDate: "Present",
-          description:
-            "Built responsive interfaces and created polished digital experiences.",
-        },
-        {
-          jobTitle: "Junior Developer",
-          company: "Company Name",
-          startDate: "2022",
-          endDate: "2024",
-          description:
-            "Worked on web development projects and collaborated with teams.",
-        },
-      ];
-
-  const displayProjects = projects.length
-    ? projects
-    : [
-        {
-          name: "BuildCV",
-          description: "Resume builder project",
-        },
-        {
-          name: "Dashboard",
-          description: "Web application dashboard",
-        },
-      ];
-
-  // =========================================================
-  // DISPLAY VALUES
-  // =========================================================
-
-  const fullName =
-    personal.fullName || "YOUR NAME";
-
-  const jobTitle =
-    personal.jobTitle || "Frontend Developer";
-
-  const summary =
-    personal.summary ||
-    "Creative developer focused on building clean, responsive, and user-friendly digital experiences.";
-
-  // =========================================================
   // RENDER
   // =========================================================
 
   return (
     <div
       className="
+        box-border
         h-[1123px]
         w-[794px]
         overflow-hidden
@@ -263,75 +617,83 @@ function CleanPreview({ formData = {}, data = {} }) {
           pb-7
         "
       >
-        {/* LEFT */}
         <div className="min-w-0 flex-1">
-          <h1
-            className="
-              text-[36px]
-              font-bold
-              uppercase
-              leading-[1.05]
-              tracking-[-0.03em]
-              text-slate-900
-            "
-          >
-            {fullName}
-          </h1>
-
-          <p
-            className="
-              mt-3
-              text-[13px]
-              font-medium
-              uppercase
-              tracking-[0.16em]
-              text-slate-500
-            "
-          >
-            {jobTitle}
-          </p>
-        </div>
-
-        {/* RIGHT */}
-        <div
-          className="
-            w-[245px]
-            shrink-0
-            space-y-1.5
-            pt-1
-            text-right
-          "
-        >
-          {personal.email && (
-            <p className="truncate text-[9px] text-slate-500">
-              {personal.email}
-            </p>
+          {personal.fullName && (
+            <h1
+              className="
+                text-[36px]
+                font-bold
+                uppercase
+                leading-[1.05]
+                tracking-[-0.03em]
+                text-slate-900
+              "
+            >
+              {personal.fullName}
+            </h1>
           )}
 
-          {personal.phone && (
-            <p className="truncate text-[9px] text-slate-500">
-              {personal.phone}
-            </p>
-          )}
-
-          {personal.location && (
-            <p className="truncate text-[9px] text-slate-500">
-              {personal.location}
-            </p>
-          )}
-
-          {personal.linkedin && (
-            <p className="truncate text-[9px] text-slate-500">
-              {personal.linkedin}
-            </p>
-          )}
-
-          {personal.github && (
-            <p className="truncate text-[9px] text-slate-500">
-              {personal.github}
+          {personal.jobTitle && (
+            <p
+              className="
+                mt-3
+                text-[13px]
+                font-medium
+                uppercase
+                tracking-[0.16em]
+                text-slate-500
+              "
+            >
+              {personal.jobTitle}
             </p>
           )}
         </div>
+
+        {(personal.email ||
+          personal.phone ||
+          personal.location ||
+          personal.linkedin ||
+          personal.github) && (
+          <div
+            className="
+              w-[245px]
+              shrink-0
+              space-y-1.5
+              pt-1
+              text-right
+            "
+          >
+            {personal.email && (
+              <p className="truncate text-[9px] text-slate-500">
+                {personal.email}
+              </p>
+            )}
+
+            {personal.phone && (
+              <p className="truncate text-[9px] text-slate-500">
+                {personal.phone}
+              </p>
+            )}
+
+            {personal.location && (
+              <p className="truncate text-[9px] text-slate-500">
+                {personal.location}
+              </p>
+            )}
+
+            {personal.linkedin && (
+              <p className="truncate text-[9px] text-slate-500">
+                {personal.linkedin}
+              </p>
+            )}
+
+            {personal.github && (
+              <p className="truncate text-[9px] text-slate-500">
+                {personal.github}
+              </p>
+            )}
+          </div>
+        )}
       </header>
 
       {/* =====================================================
@@ -352,144 +714,300 @@ function CleanPreview({ formData = {}, data = {} }) {
 
         <aside className="space-y-8">
           {/* CONTACT */}
-          <section>
-            <SectionTitle>Contact</SectionTitle>
 
-            <div className="mt-3 space-y-2">
-              {personal.email && (
-                <TinyText>{personal.email}</TinyText>
-              )}
+          {(personal.email ||
+            personal.phone ||
+            personal.location ||
+            personal.linkedin ||
+            personal.github) && (
+            <section>
+              <SectionTitle>Contact</SectionTitle>
 
-              {personal.phone && (
-                <TinyText>{personal.phone}</TinyText>
-              )}
-
-              {personal.location && (
-                <TinyText>{personal.location}</TinyText>
-              )}
-
-              {personal.linkedin && (
-                <TinyText>{personal.linkedin}</TinyText>
-              )}
-
-              {personal.github && (
-                <TinyText>{personal.github}</TinyText>
-              )}
-
-              {!personal.email &&
-                !personal.phone &&
-                !personal.location &&
-                !personal.linkedin &&
-                !personal.github && (
-                  <>
-                    <TinyText>email@example.com</TinyText>
-                    <TinyText>+00 000 000 000</TinyText>
-                    <TinyText>City, Country</TinyText>
-                  </>
+              <div className="mt-3 space-y-2">
+                {personal.email && (
+                  <TinyText>{personal.email}</TinyText>
                 )}
-            </div>
-          </section>
+
+                {personal.phone && (
+                  <TinyText>{personal.phone}</TinyText>
+                )}
+
+                {personal.location && (
+                  <TinyText>{personal.location}</TinyText>
+                )}
+
+                {personal.linkedin && (
+                  <TinyText>{personal.linkedin}</TinyText>
+                )}
+
+                {personal.github && (
+                  <TinyText>{personal.github}</TinyText>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* SKILLS */}
-          <section>
-            <SectionTitle>Skills</SectionTitle>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              {displaySkills.map((skill, index) => {
-                const skillName = getSkillName(skill);
+          {displaySkills.length > 0 && (
+            <section>
+              <SectionTitle>Skills</SectionTitle>
 
-                if (!skillName) return null;
-
-                return (
-                  <span
-                    key={index}
-                    className="
-                      rounded-md
-                      border
-                      border-slate-200
-                      bg-slate-50
-                      px-2.5
-                      py-1.5
-                      text-[9px]
-                      font-medium
-                      text-slate-600
-                    "
-                  >
-                    {skillName}
-                  </span>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* EDUCATION */}
-          <section>
-            <SectionTitle>Education</SectionTitle>
-
-            <div className="mt-4 space-y-5">
-              {displayEducation.map((item, index) => {
-                const degree = getValue(item, [
-                  "degree",
-                  "title",
-                  "qualification",
-                ]);
-
-                const institution = getValue(item, [
-                  "institution",
-                  "school",
-                  "university",
-                  "college",
-                ]);
-
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
-
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
-
-                return (
-                  <div key={index}>
-                    <p
+              <div className="mt-3 flex flex-wrap gap-2">
+                {displaySkills.map(
+                  (skill, index) => (
+                    <span
+                      key={`${skill}-${index}`}
                       className="
-                        text-[10.5px]
-                        font-semibold
-                        leading-[1.35]
-                        text-slate-800
+                        rounded-md
+                        border
+                        border-slate-200
+                        bg-slate-50
+                        px-2.5
+                        py-1.5
+                        text-[9px]
+                        font-medium
+                        text-slate-600
                       "
                     >
-                      {degree || "Degree Name"}
-                    </p>
+                      {skill}
+                    </span>
+                  )
+                )}
+              </div>
+            </section>
+          )}
 
-                    {institution && (
-                      <TinyText className="mt-1">
-                        {institution}
-                      </TinyText>
-                    )}
+          {/* EDUCATION */}
 
-                    {(startDate || endDate) && (
-                      <p
-                        className="
-                          mt-1
-                          text-[9px]
-                          text-slate-400
-                        "
+          {education.length > 0 && (
+            <section>
+              <SectionTitle>Education</SectionTitle>
+
+              <div className="mt-4 space-y-5">
+                {education.map((item, index) => {
+                  const degree = getValue(item, [
+                    "degree",
+                    "title",
+                    "qualification",
+                    "program",
+                  ]);
+
+                  const institution = getValue(
+                    item,
+                    [
+                      "institution",
+                      "school",
+                      "university",
+                      "college",
+                    ]
+                  );
+
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
+
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
+
+                  if (
+                    !degree &&
+                    !institution &&
+                    !startDate &&
+                    !endDate
+                  ) {
+                    return null;
+                  }
+
+                  return (
+                    <article key={item.id || index}>
+                      {degree && (
+                        <p
+                          className="
+                            text-[10.5px]
+                            font-semibold
+                            leading-[1.35]
+                            text-slate-800
+                          "
+                        >
+                          {degree}
+                        </p>
+                      )}
+
+                      {institution && (
+                        <TinyText className="mt-1">
+                          {institution}
+                        </TinyText>
+                      )}
+
+                      {(startDate || endDate) && (
+                        <p
+                          className="
+                            mt-1
+                            text-[9px]
+                            text-slate-400
+                          "
+                        >
+                          {startDate}
+                          {startDate && endDate
+                            ? " — "
+                            : ""}
+                          {endDate}
+                        </p>
+                      )}
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* LANGUAGES */}
+
+          {validLanguages.length > 0 && (
+            <section>
+              <SectionTitle>
+                Languages
+              </SectionTitle>
+
+              <div className="mt-4 space-y-4">
+                {validLanguages.map(
+                  (item, index) => {
+                    const language = getValue(
+                      item,
+                      ["language", "name"]
+                    );
+
+                    const level = getValue(
+                      item,
+                      ["level", "proficiency"]
+                    );
+
+                    if (!language && !level) {
+                      return null;
+                    }
+
+                    return (
+                      <div
+                        key={
+                          item.id ||
+                          `${language}-${index}`
+                        }
                       >
-                        {startDate}
-                        {startDate && endDate ? " — " : ""}
-                        {endDate}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
+                        <div className="flex items-center justify-between gap-2">
+                          {language && (
+                            <span
+                              className="
+                                text-[10px]
+                                font-semibold
+                                text-slate-700
+                              "
+                            >
+                              {language}
+                            </span>
+                          )}
+
+                          {level && (
+                            <span className="text-[8.5px] text-slate-400">
+                              {level}
+                            </span>
+                          )}
+                        </div>
+
+                        <div
+                          className="
+                            mt-1.5
+                            h-1
+                            rounded-full
+                            bg-slate-100
+                          "
+                        >
+                          <div
+                            className="
+                              h-1
+                              w-full
+                              rounded-full
+                              bg-slate-300
+                            "
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* CERTIFICATIONS */}
+
+          {validCertifications.length > 0 && (
+            <section>
+              <SectionTitle>
+                Certifications
+              </SectionTitle>
+
+              <div className="mt-4 space-y-4">
+                {validCertifications.map(
+                  (item, index) => {
+                    const name = getValue(
+                      item,
+                      ["name", "title"]
+                    );
+
+                    const organization =
+                      getValue(item, [
+                        "organization",
+                        "issuer",
+                      ]);
+
+                    const date = getValue(item, [
+                      "date",
+                    ]);
+
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${name}-${index}`
+                        }
+                      >
+                        {name && (
+                          <p
+                            className="
+                              text-[10px]
+                              font-semibold
+                              leading-[1.4]
+                              text-slate-800
+                            "
+                          >
+                            {name}
+                          </p>
+                        )}
+
+                        {organization && (
+                          <TinyText className="mt-1">
+                            {organization}
+                          </TinyText>
+                        )}
+
+                        {date && (
+                          <p className="mt-1 text-[8.5px] text-slate-400">
+                            {date}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
         </aside>
 
         {/* ===================================================
@@ -498,197 +1016,471 @@ function CleanPreview({ formData = {}, data = {} }) {
 
         <div className="min-w-0 space-y-8">
           {/* PROFILE */}
-          <section>
-            <SectionTitle>Profile</SectionTitle>
 
-            <p
-              className="
-                mt-4
-                text-[10.5px]
-                leading-[1.65]
-                text-slate-500
-              "
-            >
-              {summary}
-            </p>
-          </section>
+          {personal.summary && (
+            <section>
+              <SectionTitle>Profile</SectionTitle>
+
+              <p
+                className="
+                  mt-4
+                  text-[10.5px]
+                  leading-[1.65]
+                  text-slate-500
+                "
+              >
+                {personal.summary}
+              </p>
+            </section>
+          )}
 
           {/* EXPERIENCE */}
-          <section>
-            <SectionTitle>Experience</SectionTitle>
 
-            <div className="mt-5 space-y-6">
-              {displayExperience.map((item, index) => {
-                const title = getValue(item, [
-                  "jobTitle",
-                  "position",
-                  "role",
-                  "title",
-                ]);
+          {experience.length > 0 && (
+            <section>
+              <SectionTitle>
+                Experience
+              </SectionTitle>
 
-                const company = getValue(item, [
-                  "company",
-                  "organization",
-                  "employer",
-                ]);
+              <div className="mt-5 space-y-6">
+                {experience.map((item, index) => {
+                  const title = getValue(item, [
+                    "jobTitle",
+                    "position",
+                    "role",
+                    "title",
+                  ]);
 
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
+                  const company = getValue(item, [
+                    "company",
+                    "organization",
+                    "employer",
+                  ]);
 
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
+                  const startDate = getValue(
+                    item,
+                    [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]
+                  );
 
-                const description = getValue(item, [
-                  "description",
-                  "details",
-                  "responsibilities",
-                ]);
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                return (
-                  <article key={index}>
-                    <div
-                      className="
-                        flex
-                        items-start
-                        justify-between
-                        gap-6
-                      "
+                  const description = getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                      "responsibilities",
+                    ]
+                  );
+
+                  if (
+                    !title &&
+                    !company &&
+                    !startDate &&
+                    !endDate &&
+                    !description
+                  ) {
+                    return null;
+                  }
+
+                  return (
+                    <article
+                      key={item.id || index}
+                      className="break-inside-avoid"
                     >
-                      <div className="min-w-0">
-                        <h3
-                          className="
-                            text-[12px]
-                            font-semibold
-                            leading-[1.3]
-                            text-slate-800
-                          "
-                        >
-                          {title || "Frontend Developer"}
-                        </h3>
+                      <div
+                        className="
+                          flex
+                          items-start
+                          justify-between
+                          gap-6
+                        "
+                      >
+                        <div className="min-w-0">
+                          {title && (
+                            <h3
+                              className="
+                                text-[12px]
+                                font-semibold
+                                leading-[1.3]
+                                text-slate-800
+                              "
+                            >
+                              {title}
+                            </h3>
+                          )}
 
-                        <p
-                          className="
-                            mt-1
-                            text-[9.5px]
-                            font-medium
-                            text-slate-400
-                          "
-                        >
-                          {company || "Company Name"}
-                        </p>
+                          {company && (
+                            <p
+                              className="
+                                mt-1
+                                text-[9.5px]
+                                font-medium
+                                text-slate-400
+                              "
+                            >
+                              {company}
+                            </p>
+                          )}
+                        </div>
+
+                        {(startDate ||
+                          endDate) && (
+                          <p
+                            className="
+                              shrink-0
+                              pt-0.5
+                              text-[9px]
+                              text-slate-400
+                            "
+                          >
+                            {startDate}
+                            {startDate && endDate
+                              ? " — "
+                              : ""}
+                            {endDate}
+                          </p>
+                        )}
                       </div>
 
-                      {(startDate || endDate) && (
-                        <p
-                          className="
-                            shrink-0
-                            pt-0.5
-                            text-[9px]
-                            text-slate-400
-                          "
-                        >
-                          {startDate}
-                          {startDate && endDate ? " — " : ""}
-                          {endDate}
-                        </p>
+                      {description && (
+                        <ResumeLines
+                          description={description}
+                        />
                       )}
-                    </div>
-
-                    <ResumeLines description={description} />
-                  </article>
-                );
-              })}
-            </div>
-          </section>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           {/* PROJECTS */}
-          <section>
-            <SectionTitle>Projects</SectionTitle>
 
-            <div className="mt-5 space-y-5">
-              {displayProjects.map((project, index) => {
-                const projectName = getValue(project, [
-                  "name",
-                  "title",
-                  "projectName",
-                ]);
+          {validProjects.length > 0 && (
+            <section>
+              <SectionTitle>
+                Projects
+              </SectionTitle>
 
-                const projectDescription = getValue(project, [
-                  "description",
-                  "details",
-                  "summary",
-                ]);
+              <div className="mt-5 space-y-5">
+                {validProjects.map(
+                  (project, index) => {
+                    const projectName =
+                      getValue(project, [
+                        "name",
+                        "title",
+                        "projectName",
+                      ]);
 
-                const projectLink = getValue(project, [
-                  "link",
-                  "url",
-                  "projectUrl",
-                ]);
+                    const projectDescription =
+                      getValue(project, [
+                        "description",
+                        "details",
+                        "summary",
+                      ]);
 
-                return (
-                  <article key={index}>
-                    <div className="flex items-start justify-between gap-5">
-                      <h3
-                        className="
-                          text-[10.5px]
-                          font-semibold
-                          text-slate-800
-                        "
+                    const projectLink =
+                      getValue(project, [
+                        "liveUrl",
+                        "link",
+                        "url",
+                        "projectUrl",
+                      ]);
+
+                    const githubUrl =
+                      getValue(project, [
+                        "githubUrl",
+                        "github",
+                      ]);
+
+                    const technologies =
+                      getTechnologies(project);
+
+                    return (
+                      <article
+                        key={
+                          project.id ||
+                          `${projectName}-${index}`
+                        }
+                        className="break-inside-avoid"
                       >
-                        {projectName || "Project Name"}
-                      </h3>
+                        {(projectName ||
+                          projectLink ||
+                          githubUrl) && (
+                          <div
+                            className="
+                              flex
+                              items-start
+                              justify-between
+                              gap-5
+                            "
+                          >
+                            {projectName && (
+                              <h3
+                                className="
+                                  text-[10.5px]
+                                  font-semibold
+                                  text-slate-800
+                                "
+                              >
+                                {projectName}
+                              </h3>
+                            )}
 
-                      {projectLink && (
-                        <p
-                          className="
-                            max-w-[180px]
-                            truncate
-                            text-[8.5px]
-                            text-slate-400
-                          "
-                        >
-                          {projectLink}
-                        </p>
-                      )}
-                    </div>
+                            {(projectLink ||
+                              githubUrl) && (
+                              <p
+                                className="
+                                  max-w-[180px]
+                                  truncate
+                                  text-right
+                                  text-[8.5px]
+                                  text-slate-400
+                                "
+                              >
+                                {projectLink ||
+                                  githubUrl}
+                              </p>
+                            )}
+                          </div>
+                        )}
 
-                    {projectDescription && (
-                      <p
-                        className="
-                          mt-2
-                          text-[9.5px]
-                          leading-[1.55]
-                          text-slate-500
-                        "
+                        {projectDescription && (
+                          <p
+                            className="
+                              mt-2
+                              text-[9.5px]
+                              leading-[1.55]
+                              text-slate-500
+                            "
+                          >
+                            {projectDescription}
+                          </p>
+                        )}
+
+                        {technologies.length >
+                          0 && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {technologies.map(
+                              (
+                                technology,
+                                technologyIndex
+                              ) => (
+                                <span
+                                  key={`${technology}-${technologyIndex}`}
+                                  className="
+                                    rounded
+                                    border
+                                    border-slate-200
+                                    bg-slate-50
+                                    px-2
+                                    py-1
+                                    text-[8px]
+                                    font-medium
+                                    text-slate-500
+                                  "
+                                >
+                                  {technology}
+                                </span>
+                              )
+                            )}
+                          </div>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* ACHIEVEMENTS */}
+
+          {validAchievements.length > 0 && (
+            <section>
+              <SectionTitle>
+                Achievements
+              </SectionTitle>
+
+              <div className="mt-5 space-y-5">
+                {validAchievements.map(
+                  (item, index) => {
+                    const title = getValue(
+                      item,
+                      ["title", "name"]
+                    );
+
+                    const description =
+                      getValue(item, [
+                        "description",
+                        "details",
+                      ]);
+
+                    const date = getValue(item, [
+                      "date",
+                    ]);
+
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${title}-${index}`
+                        }
+                        className="break-inside-avoid"
                       >
-                        {projectDescription}
-                      </p>
-                    )}
+                        <div className="flex items-start justify-between gap-4">
+                          {title && (
+                            <h3
+                              className="
+                                text-[10.5px]
+                                font-semibold
+                                text-slate-800
+                              "
+                            >
+                              {title}
+                            </h3>
+                          )}
 
-                    {!projectDescription && (
-                      <p
-                        className="
-                          mt-2
-                          text-[9.5px]
-                          leading-[1.55]
-                          text-slate-500
-                        "
+                          {date && (
+                            <span className="shrink-0 text-[8.5px] text-slate-400">
+                              {date}
+                            </span>
+                          )}
+                        </div>
+
+                        {description && (
+                          <TinyText className="mt-2">
+                            {description}
+                          </TinyText>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* INTERESTS */}
+
+          {interests && (
+            <section>
+              <SectionTitle>
+                Interests
+              </SectionTitle>
+
+              <p
+                className="
+                  mt-4
+                  text-[9.5px]
+                  leading-[1.6]
+                  text-slate-500
+                "
+              >
+                {interests}
+              </p>
+            </section>
+          )}
+
+          {/* REFERENCES */}
+
+          {validReferences.length > 0 && (
+            <section>
+              <SectionTitle>
+                References
+              </SectionTitle>
+
+              <div className="mt-5 grid grid-cols-2 gap-5">
+                {validReferences.map(
+                  (item, index) => {
+                    const name = getValue(item, [
+                      "name",
+                    ]);
+
+                    const position = getValue(
+                      item,
+                      ["position", "role"]
+                    );
+
+                    const company = getValue(
+                      item,
+                      [
+                        "company",
+                        "organization",
+                      ]
+                    );
+
+                    const email = getValue(item, [
+                      "email",
+                    ]);
+
+                    const phone = getValue(item, [
+                      "phone",
+                    ]);
+
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${name}-${index}`
+                        }
+                        className="break-inside-avoid"
                       >
-                        Web application project focused on creating a
-                        clean and useful digital experience.
-                      </p>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
-          </section>
+                        {name && (
+                          <h3
+                            className="
+                              text-[10.5px]
+                              font-semibold
+                              text-slate-800
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
+
+                        {(position ||
+                          company) && (
+                          <TinyText className="mt-1">
+                            {[
+                              position,
+                              company,
+                            ]
+                              .filter(Boolean)
+                              .join(" • ")}
+                          </TinyText>
+                        )}
+
+                        {(email || phone) && (
+                          <p
+                            className="
+                              mt-1
+                              break-all
+                              text-[8.5px]
+                              leading-[1.5]
+                              text-slate-400
+                            "
+                          >
+                            {[email, phone]
+                              .filter(Boolean)
+                              .join(" • ")}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
         </div>
       </main>
     </div>

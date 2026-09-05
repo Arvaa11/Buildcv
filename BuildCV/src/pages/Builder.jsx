@@ -18,6 +18,13 @@ import Education from "../components/builder/Education"
 import Experience from "../components/builder/Experience"
 import Skills from "../components/builder/Skills"
 import Projects from "../components/builder/Projects"
+
+import Certifications from "../components/builder/Certifications"
+import Languages from "../components/builder/Languages"
+import Achievements from "../components/builder/Achievements"
+import Interests from "../components/builder/Interests"
+import References from "../components/builder/References"
+
 import DownloadButton from "../components/builder/DownloadButton"
 
 import ResumePreview from "../components/ResumePreview"
@@ -31,6 +38,43 @@ const STORAGE_KEY =
 
 const TEMPLATE_STORAGE_KEY =
   "buildcv-selected-template"
+
+// =====================================================
+// OPTIONAL SECTIONS
+//
+// IMPORTANT:
+// These are NOT BuilderSteps.
+// They do NOT affect the 5-step progress.
+// They only appear underneath the required steps.
+// =====================================================
+
+const OPTIONAL_SECTIONS = [
+  {
+    id: "certifications",
+    title: "Certifications",
+    description: "Certificates and credentials.",
+  },
+  {
+    id: "languages",
+    title: "Languages",
+    description: "Languages and proficiency.",
+  },
+  {
+    id: "achievements",
+    title: "Achievements",
+    description: "Awards and accomplishments.",
+  },
+  {
+    id: "interests",
+    title: "Interests",
+    description: "Hobbies and interests.",
+  },
+  {
+    id: "references",
+    title: "References",
+    description: "Professional references.",
+  },
+]
 
 // =====================================================
 // ID
@@ -101,6 +145,35 @@ function createDefaultFormData() {
         link: "",
       },
     ],
+
+    // =================================================
+    // OPTIONAL SECTIONS
+    // =================================================
+
+    certifications: {
+      enabled: false,
+      items: [],
+    },
+
+    languages: {
+      enabled: false,
+      items: [],
+    },
+
+    achievements: {
+      enabled: false,
+      items: [],
+    },
+
+    interests: {
+      enabled: false,
+      value: "",
+    },
+
+    references: {
+      enabled: false,
+      items: [],
+    },
   }
 }
 
@@ -120,10 +193,18 @@ function normalizeFormData(data) {
   }
 
   return {
+    // =================================================
+    // PERSONAL
+    // =================================================
+
     personal: {
       ...defaults.personal,
       ...(data.personal || {}),
     },
+
+    // =================================================
+    // EDUCATION
+    // =================================================
 
     education:
       Array.isArray(data.education)
@@ -160,6 +241,10 @@ function normalizeFormData(data) {
         )
         : defaults.education,
 
+    // =================================================
+    // EXPERIENCE
+    // =================================================
+
     experience:
       Array.isArray(data.experience)
         ? data.experience.map(
@@ -192,10 +277,18 @@ function normalizeFormData(data) {
         )
         : defaults.experience,
 
+    // =================================================
+    // SKILLS
+    // =================================================
+
     skills:
       Array.isArray(data.skills)
         ? data.skills
         : [],
+
+    // =================================================
+    // PROJECTS
+    // =================================================
 
     projects:
       Array.isArray(data.projects)
@@ -220,9 +313,176 @@ function normalizeFormData(data) {
             link:
               item.link ||
               "",
+
+            // Preserve these if older/newer
+            // project data already contains them.
+            liveUrl:
+              item.liveUrl ||
+              "",
+
+            githubUrl:
+              item.githubUrl ||
+              "",
           })
         )
         : defaults.projects,
+
+    // =================================================
+    // CERTIFICATIONS
+    // =================================================
+
+    certifications: {
+      enabled:
+        data.certifications?.enabled === true,
+
+      items:
+        Array.isArray(
+          data.certifications?.items
+        )
+          ? data.certifications.items.map(
+            (item) => ({
+              id:
+                item.id ||
+                createId(),
+
+              name:
+                item.name ||
+                "",
+
+              organization:
+                item.organization ||
+                "",
+
+              date:
+                item.date ||
+                "",
+
+              link:
+                item.link ||
+                "",
+            })
+          )
+          : [],
+    },
+
+    // =================================================
+    // LANGUAGES
+    // =================================================
+
+    languages: {
+      enabled:
+        data.languages?.enabled === true,
+
+      items:
+        Array.isArray(
+          data.languages?.items
+        )
+          ? data.languages.items.map(
+            (item) => ({
+              id:
+                item.id ||
+                createId(),
+
+              language:
+                item.language ||
+                "",
+
+              level:
+                item.level ||
+                "",
+            })
+          )
+          : [],
+    },
+
+    // =================================================
+    // ACHIEVEMENTS
+    // =================================================
+
+    achievements: {
+      enabled:
+        data.achievements?.enabled === true,
+
+      items:
+        Array.isArray(
+          data.achievements?.items
+        )
+          ? data.achievements.items.map(
+            (item) => ({
+              id:
+                item.id ||
+                createId(),
+
+              title:
+                item.title ||
+                "",
+
+              description:
+                item.description ||
+                "",
+
+              date:
+                item.date ||
+                "",
+            })
+          )
+          : [],
+    },
+
+    // =================================================
+    // INTERESTS
+    // =================================================
+
+    interests: {
+      enabled:
+        data.interests?.enabled === true,
+
+      value:
+        data.interests?.value ||
+        "",
+    },
+
+    // =================================================
+    // REFERENCES
+    // =================================================
+
+    references: {
+      enabled:
+        data.references?.enabled === true,
+
+      items:
+        Array.isArray(
+          data.references?.items
+        )
+          ? data.references.items.map(
+            (item) => ({
+              id:
+                item.id ||
+                createId(),
+
+              name:
+                item.name ||
+                "",
+
+              position:
+                item.position ||
+                "",
+
+              company:
+                item.company ||
+                "",
+
+              email:
+                item.email ||
+                "",
+
+              phone:
+                item.phone ||
+                "",
+            })
+          )
+          : [],
+    },
   }
 }
 
@@ -405,39 +665,70 @@ function Builder() {
   }, [formData])
 
   // ===================================================
-  // CURRENT STEP
+  // REQUIRED STEP INFORMATION
+  //
+  // IMPORTANT:
+  // Optional sections are NOT included here.
   // ===================================================
 
-  const currentStepIndex =
-    Math.max(
-      0,
-      BUILDER_STEPS.findIndex(
-        (step) =>
-          step.id ===
-          activeStep
-      )
+  const requiredStepIndex =
+    BUILDER_STEPS.findIndex(
+      (step) =>
+        step.id === activeStep
     )
 
+  const isOptionalSection =
+    OPTIONAL_SECTIONS.some(
+      (section) =>
+        section.id === activeStep
+    )
+
+  /*
+    If an optional section is active,
+    keep the required-step progress at 100%.
+  */
+
+  const currentStepIndex =
+    requiredStepIndex >= 0
+      ? requiredStepIndex
+      : BUILDER_STEPS.length - 1
+
   const currentStep =
-    BUILDER_STEPS[
-      currentStepIndex
-    ]
+    requiredStepIndex >= 0
+      ? BUILDER_STEPS[
+          requiredStepIndex
+        ]
+      : OPTIONAL_SECTIONS.find(
+          (section) =>
+            section.id === activeStep
+        )
 
   const progressPercentage =
-    BUILDER_STEPS.length > 1
-      ? Math.round(
-        (currentStepIndex /
-          (BUILDER_STEPS.length -
-            1)) *
-        100
-      )
-      : 0
+    isOptionalSection
+      ? 100
+      : BUILDER_STEPS.length > 1
+        ? Math.round(
+            (currentStepIndex /
+              (BUILDER_STEPS.length -
+                1)) *
+            100
+          )
+        : 0
 
   // ===================================================
   // NAVIGATION
   // ===================================================
 
   const goNext = () => {
+    /*
+      Optional sections are separate
+      from the required step navigation.
+    */
+
+    if (isOptionalSection) {
+      return
+    }
+
     if (
       currentStepIndex >=
       BUILDER_STEPS.length - 1
@@ -453,6 +744,16 @@ function Builder() {
   }
 
   const goPrevious = () => {
+    /*
+      When viewing an optional section,
+      Back returns to Projects.
+    */
+
+    if (isOptionalSection) {
+      setActiveStep("projects")
+      return
+    }
+
     if (
       currentStepIndex <= 0
     ) {
@@ -485,8 +786,8 @@ function Builder() {
       const updatedPersonal =
         typeof update === "function"
           ? update(
-            current.personal
-          )
+              current.personal
+            )
           : update
 
       return {
@@ -506,6 +807,11 @@ function Builder() {
 
   const renderStepContent = () => {
     switch (activeStep) {
+
+      // ===============================================
+      // PERSONAL
+      // ===============================================
+
       case "personal":
         return (
           <PersonalInfo
@@ -518,6 +824,10 @@ function Builder() {
           />
         )
 
+      // ===============================================
+      // EDUCATION
+      // ===============================================
+
       case "education":
         return (
           <Education
@@ -527,6 +837,10 @@ function Builder() {
             }
           />
         )
+
+      // ===============================================
+      // EXPERIENCE
+      // ===============================================
 
       case "experience":
         return (
@@ -538,6 +852,10 @@ function Builder() {
           />
         )
 
+      // ===============================================
+      // SKILLS
+      // ===============================================
+
       case "skills":
         return (
           <Skills
@@ -548,9 +866,88 @@ function Builder() {
           />
         )
 
+      // ===============================================
+      // PROJECTS
+      // ===============================================
+
       case "projects":
         return (
           <Projects
+            formData={formData}
+            setFormData={
+              setFormData
+            }
+          />
+        )
+
+      // ===============================================
+      // OPTIONAL:
+      // CERTIFICATIONS
+      // ===============================================
+
+      case "certifications":
+        return (
+          <Certifications
+            formData={formData}
+            setFormData={
+              setFormData
+            }
+          />
+        )
+
+      // ===============================================
+      // OPTIONAL:
+      // LANGUAGES
+      // ===============================================
+
+      case "languages":
+        return (
+          <Languages
+            formData={formData}
+            setFormData={
+              setFormData
+            }
+          />
+        )
+
+      // ===============================================
+      // OPTIONAL:
+      // ACHIEVEMENTS
+      // ===============================================
+
+      case "achievements":
+        return (
+          <Achievements
+            formData={formData}
+            setFormData={
+              setFormData
+            }
+          />
+        )
+
+      // ===============================================
+      // OPTIONAL:
+      // INTERESTS
+      // ===============================================
+
+      case "interests":
+        return (
+          <Interests
+            formData={formData}
+            setFormData={
+              setFormData
+            }
+          />
+        )
+
+      // ===============================================
+      // OPTIONAL:
+      // REFERENCES
+      // ===============================================
+
+      case "references":
+        return (
+          <References
             formData={formData}
             setFormData={
               setFormData
@@ -568,7 +965,7 @@ function Builder() {
   // ===================================================
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-[#111827] pt-45">
+    <main className="min-h-screen bg-[#F8FAFC] text-[#111827] pt-20">
 
       {/* =================================================
           HEADER
@@ -651,7 +1048,9 @@ function Builder() {
               <div className="flex items-center gap-2.5">
 
                 <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#EEF2FF] text-[10px] font-bold text-[#6366F1]">
-                  {currentStepIndex + 1}
+                  {isOptionalSection
+                    ? "✓"
+                    : currentStepIndex + 1}
                 </span>
 
                 <p className="text-xs font-semibold text-[#475569]">
@@ -695,6 +1094,11 @@ function Builder() {
 
       {/* =================================================
           MOBILE STEPS
+          
+          IMPORTANT:
+          Only the five required steps appear here.
+          Optional sections stay in the desktop
+          BuilderSteps sidebar.
       ================================================= */}
 
       <div className="border-b border-[#E2E8F0] bg-white lg:hidden">
@@ -711,8 +1115,9 @@ function Builder() {
                   activeStep
 
                 const isCompleted =
+                  !isOptionalSection &&
                   index <
-                  currentStepIndex
+                    currentStepIndex
 
                 return (
                   <button
@@ -789,19 +1194,9 @@ function Builder() {
 
             <div className="sticky top-6 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
 
-              <div className="border-b border-[#E2E8F0] px-5 py-5">
+              
 
-                <p className="text-sm font-bold text-[#111827]">
-                  Resume sections
-                </p>
-
-                <p className="mt-1 text-xs leading-5 text-[#718096]">
-                  Complete each step to build your CV.
-                </p>
-
-              </div>
-
-              <div className="p-3">
+             
 
                 <BuilderSteps
                   activeStep={
@@ -813,9 +1208,12 @@ function Builder() {
                   steps={
                     BUILDER_STEPS
                   }
+                  optionalSections={
+                    OPTIONAL_SECTIONS
+                  }
                 />
 
-              </div>
+              
 
             </div>
 
@@ -831,9 +1229,6 @@ function Builder() {
 
             <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
 
-              <div className="border-b border-[#E2E8F0] px-5 py-6 sm:px-8">
-
-              </div>
 
               <div className="min-w-0">
 
@@ -853,8 +1248,9 @@ function Builder() {
                       goPrevious
                     }
                     disabled={
+                      !isOptionalSection &&
                       currentStepIndex ===
-                      0
+                        0
                     }
                     className="
                       rounded-lg
@@ -888,13 +1284,14 @@ function Builder() {
                             rounded-full
 
                             ${
+                              !isOptionalSection &&
                               index ===
-                              currentStepIndex
+                                currentStepIndex
                                 ? "w-6 bg-[#6366F1]"
                                 : index <
                                   currentStepIndex
-                                  ? "w-3 bg-[#6366F1]"
-                                  : "w-3 bg-[#E2E8F0]"
+                                ? "w-3 bg-[#6366F1]"
+                                : "w-3 bg-[#E2E8F0]"
                             }
                           `}
                         />
@@ -909,9 +1306,10 @@ function Builder() {
                       goNext
                     }
                     disabled={
+                      isOptionalSection ||
                       currentStepIndex ===
-                      BUILDER_STEPS.length -
-                      1
+                        BUILDER_STEPS.length -
+                          1
                     }
                     className="
                       rounded-lg
@@ -1004,7 +1402,7 @@ function Builder() {
 
             <div className="sticky top-6 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
 
-              <div className="border-b border-[#E2E8F0] px-5 py-4">
+              <div className="border-b border-[#E2E8F0] px-5 py-2.5">
 
                 <p className="text-sm font-bold text-[#111827]">
                   Live Preview
@@ -1016,11 +1414,11 @@ function Builder() {
 
               </div>
 
-              <div className="bg-[#F8FAFC] p-4">
+              <div className="bg-[#F8FAFC] pl-5">
 
                 <div
                   className="
-                    max-h-[calc(100vh-230px)]
+                    max-h-(100vh-230px)
                     min-h-[620px]
                     overflow-auto
                     rounded-lg

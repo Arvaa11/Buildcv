@@ -1,40 +1,393 @@
 import React from "react";
 
-function ClassicPreview({ formData = {}, data = {} }) {
+function ClassicPreview({
+  formData = {},
+  data = {},
+  useSampleData = false,
+}) {
   // =========================================================
-  // DATA
+  // SAMPLE PERSONAL DATA
   // =========================================================
 
-  const personal = {
-    fullName: "",
-    jobTitle: "",
-    email: "",
-    phone: "",
-    location: "",
-    linkedin: "",
-    github: "",
-    summary: "",
+  const samplePersonal = {
+    fullName: "Olivia Carter",
+    jobTitle: "Senior Frontend Developer",
+    email: "olivia.carter@email.com",
+    phone: "+1 415 555 0187",
+    location: "San Francisco, CA",
+    linkedin: "linkedin.com/in/oliviacarter",
+    github: "github.com/oliviacarter",
+    summary:
+      "Frontend developer with 5+ years of experience building responsive, accessible, and high-performance web applications. Passionate about creating clean interfaces and thoughtful digital experiences.",
     profileImage: "",
-    ...(formData.personal || data.personal || {}),
   };
 
-  const education = Array.isArray(formData.education)
+  // =========================================================
+  // PERSONAL DATA
+  // =========================================================
+
+  const personal = useSampleData
+    ? {
+        ...samplePersonal,
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      }
+    : {
+        fullName: "",
+        jobTitle: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        summary: "",
+        profileImage: "",
+        ...(formData.personal || {}),
+      };
+
+  // =========================================================
+  // SAMPLE EDUCATION
+  // =========================================================
+
+  const sampleEducation = [
+    {
+      degree: "Bachelor of Computer Science",
+      institution: "University of California",
+      startDate: "2015",
+      endDate: "2019",
+    },
+    {
+      degree: "Higher Secondary Education",
+      institution: "Lincoln High School",
+      startDate: "2013",
+      endDate: "2015",
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE EXPERIENCE
+  // =========================================================
+
+  const sampleExperience = [
+    {
+      jobTitle: "Senior Frontend Developer",
+      company: "PixelCraft Studio",
+      startDate: "2023",
+      endDate: "Present",
+      description: [
+        "Built responsive web applications using React and TypeScript.",
+        "Created reusable UI components and improved application performance.",
+      ],
+    },
+    {
+      jobTitle: "Frontend Developer",
+      company: "Nova Technologies",
+      startDate: "2021",
+      endDate: "2023",
+      description: [
+        "Developed modern interfaces using React, JavaScript and CSS.",
+        "Worked closely with designers to deliver polished user experiences.",
+      ],
+    },
+    {
+      jobTitle: "Junior Web Developer",
+      company: "Bright Digital",
+      startDate: "2019",
+      endDate: "2021",
+      description: [
+        "Implemented responsive layouts for client websites.",
+        "Maintained frontend features and improved cross-browser compatibility.",
+      ],
+    },
+  ];
+
+  // =========================================================
+  // SAMPLE SKILLS
+  // =========================================================
+
+  const sampleSkills = [
+    "React",
+    "JavaScript",
+    "TypeScript",
+    "HTML",
+    "CSS",
+    "Tailwind CSS",
+    "Git",
+    "REST APIs",
+    "Next.js",
+    "Figma",
+    "Responsive Design",
+    "UI Development",
+  ];
+
+  // =========================================================
+  // SAMPLE PROJECTS
+  // =========================================================
+
+  const sampleProjects = [
+    {
+      name: "E-Commerce Platform",
+      description:
+        "Developed a responsive shopping platform with reusable React components, product filtering and REST API integration.",
+      technologies: [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "REST API",
+      ],
+      liveUrl: "shoply-demo.com",
+      githubUrl: "github.com/oliviacarter/shoply",
+    },
+    {
+      name: "Task Management Dashboard",
+      description:
+        "Created a productivity dashboard with interactive task management, responsive layouts and data visualization.",
+      technologies: [
+        "React",
+        "JavaScript",
+        "Chart.js",
+        "CSS",
+      ],
+      liveUrl: "taskflow-demo.com",
+      githubUrl: "github.com/oliviacarter/taskflow",
+    },
+    {
+      name: "Portfolio Website",
+      description:
+        "Designed and developed a personal portfolio focused on accessibility, performance and modern visual design.",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+      ],
+      liveUrl: "oliviacarter.dev",
+      githubUrl: "github.com/oliviacarter/portfolio",
+    },
+  ];
+
+  // =========================================================
+  // REQUIRED SECTIONS
+  // =========================================================
+
+  const education = useSampleData
+    ? Array.isArray(formData.education) &&
+      formData.education.length > 0
+      ? formData.education
+      : Array.isArray(data.education) &&
+        data.education.length > 0
+      ? data.education
+      : sampleEducation
+    : Array.isArray(formData.education)
     ? formData.education
-    : Array.isArray(data.education)
-    ? data.education
     : [];
 
-  const experience = Array.isArray(formData.experience)
+  const experience = useSampleData
+    ? Array.isArray(formData.experience) &&
+      formData.experience.length > 0
+      ? formData.experience
+      : Array.isArray(data.experience) &&
+        data.experience.length > 0
+      ? data.experience
+      : sampleExperience
+    : Array.isArray(formData.experience)
     ? formData.experience
-    : Array.isArray(data.experience)
-    ? data.experience
     : [];
 
-  const skills = Array.isArray(formData.skills)
+  const skills = useSampleData
+    ? Array.isArray(formData.skills) &&
+      formData.skills.length > 0
+      ? formData.skills
+      : Array.isArray(data.skills) &&
+        data.skills.length > 0
+      ? data.skills
+      : sampleSkills
+    : Array.isArray(formData.skills)
     ? formData.skills
-    : Array.isArray(data.skills)
-    ? data.skills
     : [];
+
+  const projects = useSampleData
+    ? Array.isArray(formData.projects) &&
+      formData.projects.length > 0
+      ? formData.projects
+      : Array.isArray(data.projects) &&
+        data.projects.length > 0
+      ? data.projects
+      : sampleProjects
+    : Array.isArray(formData.projects)
+    ? formData.projects
+    : [];
+
+
+
+  // =========================================================
+  // SAMPLE OPTIONAL DATA
+  // =========================================================
+
+  const sampleCertifications = [
+    {
+      name: "Meta Front-End Developer",
+      organization: "Meta",
+      date: "2022",
+    },
+    {
+      name: "JavaScript Algorithms and Data Structures",
+      organization: "freeCodeCamp",
+      date: "2021",
+    },
+  ];
+
+  const sampleLanguages = [
+    {
+      language: "English",
+      level: "Fluent",
+    },
+    {
+      language: "Spanish",
+      level: "Intermediate",
+    },
+    {
+      language: "French",
+      level: "Basic",
+    },
+  ];
+
+  const sampleAchievements = [
+    {
+      title: "Employee of the Year",
+      description:
+        "Recognized for outstanding contribution to product development and team collaboration.",
+      date: "2024",
+    },
+    {
+      title: "Best UI Implementation",
+      description:
+        "Recognized for delivering a polished and accessible interface for a major product release.",
+      date: "2023",
+    },
+  ];
+
+  const sampleInterests =
+    "UI/UX Design, Open Source, Photography, Technology";
+
+  const sampleReferences = [
+    {
+      name: "Daniel Wilson",
+      position: "Product Manager",
+      company: "PixelCraft Studio",
+      email: "daniel.wilson@email.com",
+    },
+    {
+      name: "Sarah Mitchell",
+      position: "Engineering Manager",
+      company: "Nova Technologies",
+      email: "sarah.mitchell@email.com",
+    },
+  ];
+
+  // =========================================================
+  // OPTIONAL SECTION SOURCE
+  // =========================================================
+
+const getOptionalSection = (
+  formSection,
+  dataSection,
+  sampleItems
+) => {
+  // =====================================================
+  // LIVE BUILDER
+  // =====================================================
+
+  if (!useSampleData) {
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items)
+    ) {
+      return formSection.items;
+    }
+
+    return [];
+  }
+
+  // =====================================================
+  // SAMPLE / TEMPLATE PREVIEW
+  // =====================================================
+
+  if (
+    formSection?.enabled &&
+    Array.isArray(formSection.items) &&
+    formSection.items.length > 0
+  ) {
+    return formSection.items;
+  }
+
+  if (
+    dataSection?.enabled &&
+    Array.isArray(dataSection.items) &&
+    dataSection.items.length > 0
+  ) {
+    return dataSection.items;
+  }
+
+  return sampleItems;
+};
+
+
+  const certifications = getOptionalSection(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getOptionalSection(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getOptionalSection(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const references = getOptionalSection(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // =========================================================
+
+let interests = "";
+
+if (!useSampleData) {
+  if (formData.interests?.enabled) {
+    interests = String(
+      formData.interests.value || ""
+    ).trim();
+  }
+} else {
+  if (
+    formData.interests?.enabled &&
+    String(formData.interests.value || "").trim()
+  ) {
+    interests = String(
+      formData.interests.value
+    ).trim();
+  } else if (
+    data.interests?.enabled &&
+    String(data.interests.value || "").trim()
+  ) {
+    interests = String(
+      data.interests.value
+    ).trim();
+  } else {
+    interests = sampleInterests;
+  }
+}
 
   // =========================================================
   // HELPERS
@@ -68,20 +421,130 @@ function ClassicPreview({ formData = {}, data = {} }) {
     ]);
   };
 
+  const getTechnologies = (project) => {
+    if (!project) {
+      return [];
+    }
+
+    if (Array.isArray(project.technologies)) {
+      return project.technologies.filter(Boolean);
+    }
+
+    if (typeof project.technologies === "string") {
+      return project.technologies
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
   // =========================================================
-  // UI COMPONENTS
+  // FILTER OPTIONAL ITEMS
+  // =========================================================
+
+  const validCertifications = certifications.filter(
+    (item) =>
+      getValue(item, ["name", "title"]) ||
+      getValue(item, ["organization", "issuer"]) ||
+      getValue(item, ["date"]) ||
+      getValue(item, ["link", "url"])
+  );
+
+  const validLanguages = languages.filter(
+    (item) =>
+      getValue(item, ["language", "name"]) ||
+      getValue(item, ["level", "proficiency"])
+  );
+
+  const validAchievements = achievements.filter(
+    (item) =>
+      getValue(item, ["title", "name"]) ||
+      getValue(item, [
+        "description",
+        "details",
+      ]) ||
+      getValue(item, ["date"])
+  );
+
+  const validReferences = references.filter(
+    (item) =>
+      getValue(item, ["name"]) ||
+      getValue(item, [
+        "position",
+        "role",
+      ]) ||
+      getValue(item, [
+        "company",
+        "organization",
+      ]) ||
+      getValue(item, ["email"]) ||
+      getValue(item, ["phone"])
+  );
+
+  const validProjects = projects.filter(
+    (project) =>
+      getValue(project, [
+        "name",
+        "title",
+      ]) ||
+      getValue(project, [
+        "description",
+        "details",
+      ]) ||
+      getTechnologies(project).length > 0
+  );
+
+  // =========================================================
+  // DISPLAY SKILLS
+  // =========================================================
+
+  const displaySkills = skills
+    .map(getSkillName)
+    .filter(Boolean);
+
+  const finalSkills = useSampleData
+    ? displaySkills.length > 0
+      ? displaySkills
+      : sampleSkills
+    : displaySkills;
+
+  // =========================================================
+  // CONTACT INFORMATION
+  // =========================================================
+
+  const contactItems = [
+    personal.email,
+    personal.phone,
+    personal.location,
+    personal.linkedin,
+    personal.github,
+  ].filter(Boolean);
+
+  // =========================================================
+  // SECTION TITLE
   // =========================================================
 
   const SectionTitle = ({ children }) => (
-    <div className="mb-3 flex items-center gap-2.5">
-      <span className="h-[3px] w-5 rounded-full bg-indigo-600" />
+    <div className="mb-3.5 flex items-center gap-2.5">
+      <span
+        className="
+          h-[3px]
+          w-6
+          shrink-0
+          rounded-full
+          bg-indigo-600
+        "
+      />
 
       <h2
         className="
-          text-[11px]
+          text-[12px]
           font-extrabold
           uppercase
           tracking-[0.2em]
+          leading-none
           text-slate-900
         "
       >
@@ -90,14 +553,18 @@ function ClassicPreview({ formData = {}, data = {} }) {
     </div>
   );
 
+  // =========================================================
+  // BODY TEXT
+  // =========================================================
+
   const TinyText = ({
     children,
     className = "",
   }) => (
     <p
       className={`
-        text-[10.5px]
-        leading-[1.55]
+        text-[11px]
+        leading-[1.6]
         text-slate-500
         ${className}
       `}
@@ -106,8 +573,14 @@ function ClassicPreview({ formData = {}, data = {} }) {
     </p>
   );
 
+  // =========================================================
+  // BULLET LIST
+  // =========================================================
+
   const ResumeLines = ({ text }) => {
-    if (!text) return null;
+    if (!text) {
+      return null;
+    }
 
     const lines = Array.isArray(text)
       ? text.filter(Boolean)
@@ -116,6 +589,10 @@ function ClassicPreview({ formData = {}, data = {} }) {
           .map((line) => line.trim())
           .filter(Boolean);
 
+    if (lines.length === 0) {
+      return null;
+    }
+
     return (
       <ul className="space-y-1.5">
         {lines.slice(0, 4).map((line, index) => (
@@ -123,9 +600,9 @@ function ClassicPreview({ formData = {}, data = {} }) {
             key={index}
             className="
               relative
-              pl-3.5
-              text-[9.5px]
-              leading-[1.5]
+              pl-4
+              text-[10px]
+              leading-[1.55]
               text-slate-600
             "
           >
@@ -134,8 +611,8 @@ function ClassicPreview({ formData = {}, data = {} }) {
                 absolute
                 left-0
                 top-[6px]
-                h-[4px]
-                w-[4px]
+                h-[5px]
+                w-[5px]
                 rounded-full
                 bg-indigo-600
               "
@@ -148,6 +625,10 @@ function ClassicPreview({ formData = {}, data = {} }) {
     );
   };
 
+  // =========================================================
+  // SKILL PILL
+  // =========================================================
+
   const SkillPill = ({ children }) => (
     <span
       className="
@@ -157,9 +638,9 @@ function ClassicPreview({ formData = {}, data = {} }) {
         border
         border-slate-200
         bg-slate-50
-        px-2
-        py-1.5
-        text-[9px]
+        px-2.5
+        py-2
+        text-[9.5px]
         font-semibold
         leading-none
         text-slate-700
@@ -170,96 +651,7 @@ function ClassicPreview({ formData = {}, data = {} }) {
   );
 
   // =========================================================
-  // CONTACT
-  // =========================================================
-
-  const contactItems = [
-    personal.email,
-    personal.phone,
-    personal.location,
-    personal.linkedin,
-  ].filter(Boolean);
-
-  // =========================================================
-  // FALLBACK EXPERIENCE
-  // =========================================================
-
-  const displayExperience = experience.length
-    ? experience
-    : [
-        {
-          jobTitle: "Senior Frontend Developer",
-          company: "Creative Digital Studio",
-          startDate: "2023",
-          endDate: "Present",
-          description:
-            "Built responsive web applications and reusable UI systems while improving performance, accessibility, and user experience.",
-        },
-        {
-          jobTitle: "Frontend Developer",
-          company: "Technology Company",
-          startDate: "2021",
-          endDate: "2023",
-          description:
-            "Developed modern interfaces using React and JavaScript and collaborated with designers to deliver polished digital products.",
-        },
-        {
-          jobTitle: "Web Developer Intern",
-          company: "Digital Agency",
-          startDate: "2020",
-          endDate: "2021",
-          description:
-            "Supported frontend development, implemented responsive layouts, and contributed to client-facing web projects.",
-        },
-      ];
-
-  // =========================================================
-  // FALLBACK EDUCATION
-  // =========================================================
-
-  const displayEducation = education.length
-    ? education
-    : [
-        {
-          degree: "Bachelor of Computer Science",
-          institution: "University Name",
-          startDate: "2017",
-          endDate: "2021",
-        },
-        {
-          degree: "Higher Secondary Education",
-          institution: "College Name",
-          startDate: "2015",
-          endDate: "2017",
-        },
-      ];
-
-  // =========================================================
-  // FALLBACK SKILLS
-  // =========================================================
-
-  const displaySkills = skills
-    .map(getSkillName)
-    .filter(Boolean);
-
-  const finalSkills =
-    displaySkills.length > 0
-      ? displaySkills
-      : [
-          "React",
-          "JavaScript",
-          "TypeScript",
-          "HTML",
-          "CSS",
-          "Tailwind CSS",
-          "Git",
-          "REST APIs",
-          "Responsive Design",
-          "UI Development",
-        ];
-
-  // =========================================================
-  // MAIN A4 DOCUMENT
+  // A4 RESUME
   // =========================================================
 
   return (
@@ -278,71 +670,73 @@ function ClassicPreview({ formData = {}, data = {} }) {
     >
       {/* =====================================================
           HEADER
-      ===================================================== */}
+      ====================================================== */}
 
       <header className="border-b border-slate-200 pb-6">
         <div className="flex items-end justify-between gap-8">
-
-          {/* NAME + TITLE */}
-
           <div className="min-w-0">
-            <h1
-              className="
-                text-[38px]
-                font-black
-                leading-none
-                tracking-[-0.035em]
-                text-slate-900
-              "
-            >
-              {personal.fullName || "Your Name"}
-            </h1>
+            {personal.fullName && (
+              <h1
+                className="
+                  text-[44px]
+                  font-black
+                  leading-none
+                  tracking-[-0.04em]
+                  text-slate-900
+                "
+              >
+                {personal.fullName}
+              </h1>
+            )}
 
-            <div
-              className="
-                mt-3
-                text-[13px]
-                font-bold
-                uppercase
-                tracking-[0.22em]
-                text-indigo-600
-              "
-            >
-              {personal.jobTitle || "Frontend Developer"}
-            </div>
+            {personal.jobTitle && (
+              <div
+                className="
+                  mt-3
+                  text-[15px]
+                  font-bold
+                  uppercase
+                  tracking-[0.22em]
+                  text-indigo-600
+                "
+              >
+                {personal.jobTitle}
+              </div>
+            )}
           </div>
 
-          {/* SMALL ACCENT */}
-
-          <div
-            className="
-              mb-1
-              h-10
-              w-1
-              shrink-0
-              rounded-full
-              bg-indigo-600
-            "
-          />
+          {(personal.fullName ||
+            personal.jobTitle) && (
+            <div
+              className="
+                mb-1
+                h-11
+                w-1
+                shrink-0
+                rounded-full
+                bg-indigo-600
+              "
+            />
+          )}
         </div>
 
         {/* CONTACT */}
 
-        <div
-          className="
-            mt-5
-            flex
-            flex-wrap
-            items-center
-            gap-x-3
-            gap-y-1.5
-            text-[9.5px]
-            font-medium
-            text-slate-500
-          "
-        >
-          {contactItems.length > 0 ? (
-            contactItems.map((item, index) => (
+        {contactItems.length > 0 && (
+          <div
+            className="
+              mt-5
+              flex
+              flex-wrap
+              items-center
+              gap-x-3
+              gap-y-2
+              text-[10.5px]
+              font-medium
+              text-slate-500
+            "
+          >
+            {contactItems.map((item, index) => (
               <React.Fragment
                 key={`${item}-${index}`}
               >
@@ -354,34 +748,18 @@ function ClassicPreview({ formData = {}, data = {} }) {
 
                 <span>{item}</span>
               </React.Fragment>
-            ))
-          ) : (
-            <>
-              <span>email@example.com</span>
-              <span className="text-slate-300">
-                •
-              </span>
-              <span>+1 234 567 890</span>
-              <span className="text-slate-300">
-                •
-              </span>
-              <span>City, Country</span>
-              <span className="text-slate-300">
-                •
-              </span>
-              <span>linkedin.com/in/username</span>
-            </>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </header>
 
       {/* =====================================================
-          MAIN CONTENT
-      ===================================================== */}
+          TWO COLUMN CONTENT
+      ====================================================== */}
 
       <div
         className="
-          mt-7
+          mt-8
           grid
           grid-cols-[1.7fr_0.9fr]
           gap-8
@@ -389,204 +767,531 @@ function ClassicPreview({ formData = {}, data = {} }) {
       >
         {/* ===================================================
             LEFT COLUMN
-        =================================================== */}
+        ==================================================== */}
 
         <main className="min-w-0">
+          {/* PROFILE */}
 
-          {/* =================================================
-              PROFILE
-          ================================================= */}
+          {personal.summary && (
+            <section>
+              <SectionTitle>
+                Profile
+              </SectionTitle>
 
-          <section>
-            <SectionTitle>
-              Profile
-            </SectionTitle>
+              <TinyText>
+                {personal.summary}
+              </TinyText>
+            </section>
+          )}
 
-            <TinyText>
-              {personal.summary ||
-                "Results-driven professional with a strong foundation in modern web development and user-focused design. Experienced in building responsive digital experiences, solving complex problems, and turning ideas into clean, reliable products."}
-            </TinyText>
-          </section>
+          {/* EXPERIENCE */}
 
-          {/* =================================================
-              EXPERIENCE
-          ================================================= */}
+          {experience.length > 0 && (
+            <section
+              className={
+                personal.summary
+                  ? "mt-8"
+                  : ""
+              }
+            >
+              <SectionTitle>
+                Experience
+              </SectionTitle>
 
-          <section className="mt-7">
-            <SectionTitle>
-              Experience
-            </SectionTitle>
+              <div className="space-y-7">
+                {experience
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const jobTitle =
+                      getValue(item, [
+                        "jobTitle",
+                        "title",
+                        "position",
+                        "role",
+                      ]);
 
-            <div className="space-y-6">
-              {displayExperience
-                .slice(0, 3)
-                .map((item, index) => {
-                  const jobTitle =
-                    getValue(item, [
-                      "jobTitle",
-                      "title",
-                      "position",
-                      "role",
-                    ]);
+                    const company =
+                      getValue(item, [
+                        "company",
+                        "companyName",
+                        "organization",
+                      ]);
 
-                  const company =
-                    getValue(item, [
-                      "company",
-                      "companyName",
-                      "organization",
-                    ]);
+                    const startDate =
+                      getValue(item, [
+                        "startDate",
+                        "start",
+                        "from",
+                      ]);
 
-                  const startDate =
-                    getValue(item, [
-                      "startDate",
-                      "start",
-                      "from",
-                    ]);
+                    const endDate =
+                      getValue(item, [
+                        "endDate",
+                        "end",
+                        "to",
+                      ]);
 
-                  const endDate =
-                    getValue(item, [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]);
+                    const description =
+                      getValue(item, [
+                        "description",
+                        "details",
+                        "responsibilities",
+                      ]);
 
-                  const description =
-                    getValue(item, [
-                      "description",
-                      "details",
-                      "responsibilities",
-                    ]);
+                    if (
+                      !jobTitle &&
+                      !company &&
+                      !startDate &&
+                      !endDate &&
+                      !description
+                    ) {
+                      return null;
+                    }
 
-                  return (
-                    <article
-                      key={index}
-                      className="
-                        relative
-                        break-inside-avoid
-                        pl-4
-                      "
-                    >
-                      {/* TIMELINE */}
-
-                      <span
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${jobTitle}-${index}`
+                        }
                         className="
-                          absolute
-                          left-0
-                          top-[5px]
-                          h-2
-                          w-2
-                          rounded-full
-                          bg-indigo-600
+                          relative
+                          break-inside-avoid
+                          pl-5
                         "
-                      />
+                      >
+                        {/* DOT */}
 
-                      {/* VERTICAL LINE */}
-
-                      {index <
-                        displayExperience.slice(
-                          0,
-                          3
-                        ).length -
-                          1 && (
                         <span
                           className="
                             absolute
-                            left-[3px]
-                            top-4
-                            h-[calc(100%+24px)]
-                            w-px
-                            bg-slate-200
+                            left-0
+                            top-[5px]
+                            h-2.5
+                            w-2.5
+                            rounded-full
+                            bg-indigo-600
                           "
                         />
-                      )}
 
-                      {/* JOB */}
+                        {/* LINE */}
 
-                      <h3
-                        className="
-                          text-[12px]
-                          font-bold
-                          leading-[1.3]
-                          text-slate-900
-                        "
-                      >
-                        {jobTitle ||
-                          "Job Title"}
-                      </h3>
-
-                      {/* COMPANY */}
-
-                      <div
-                        className="
-                          mt-1
-                          flex
-                          flex-wrap
-                          items-center
-                          gap-1.5
-                          text-[9.5px]
-                          font-semibold
-                        "
-                      >
-                        <span className="text-indigo-600">
-                          {company ||
-                            "Company Name"}
-                        </span>
-
-                        {(startDate ||
-                          endDate) && (
-                          <>
-                            <span className="text-slate-300">
-                              •
-                            </span>
-
-                            <span className="text-slate-400">
-                              {startDate ||
-                                ""}{" "}
-                              —{" "}
-                              {endDate ||
-                                "Present"}
-                            </span>
-                          </>
-                        )}
-                      </div>
-
-                      {/* DESCRIPTION */}
-
-                      {description && (
-                        <div className="mt-2">
-                          <ResumeLines
-                            text={description}
+                        {index <
+                          Math.min(
+                            experience.length,
+                            3
+                          ) -
+                            1 && (
+                          <span
+                            className="
+                              absolute
+                              left-[4px]
+                              top-5
+                              h-[calc(100%+28px)]
+                              w-px
+                              bg-slate-200
+                            "
                           />
+                        )}
+
+                        {jobTitle && (
+                          <h3
+                            className="
+                              text-[13px]
+                              font-bold
+                              leading-[1.35]
+                              text-slate-900
+                            "
+                          >
+                            {jobTitle}
+                          </h3>
+                        )}
+
+                        {(company ||
+                          startDate ||
+                          endDate) && (
+                          <div
+                            className="
+                              mt-1.5
+                              flex
+                              flex-wrap
+                              items-center
+                              gap-1.5
+                              text-[10px]
+                              font-semibold
+                            "
+                          >
+                            {company && (
+                              <span className="text-indigo-600">
+                                {company}
+                              </span>
+                            )}
+
+                            {company &&
+                              (startDate ||
+                                endDate) && (
+                                <span className="text-slate-300">
+                                  •
+                                </span>
+                              )}
+
+                            {(startDate ||
+                              endDate) && (
+                              <span className="text-slate-400">
+                                {startDate || ""}
+                                {" — "}
+                                {endDate ||
+                                  "Present"}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {description && (
+                          <div className="mt-2.5">
+                            <ResumeLines
+                              text={
+                                description
+                              }
+                            />
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* PROJECTS */}
+
+          {validProjects.length > 0 && (
+            <section className="mt-8">
+              <SectionTitle>
+                Projects
+              </SectionTitle>
+
+              <div className="space-y-5">
+                {validProjects
+                  .slice(0, 3)
+                  .map((project, index) => {
+                    const name =
+                      getValue(project, [
+                        "name",
+                        "title",
+                      ]);
+
+                    const description =
+                      getValue(project, [
+                        "description",
+                        "details",
+                      ]);
+
+                    const technologies =
+                      getTechnologies(
+                        project
+                      );
+
+                    const liveUrl =
+                      getValue(project, [
+                        "liveUrl",
+                        "link",
+                        "url",
+                      ]);
+
+                    const githubUrl =
+                      getValue(project, [
+                        "githubUrl",
+                        "github",
+                      ]);
+
+                    return (
+                      <article
+                        key={
+                          project.id ||
+                          `${name}-${index}`
+                        }
+                        className="
+                          break-inside-avoid
+                        "
+                      >
+                        <div
+                          className="
+                            flex
+                            items-start
+                            justify-between
+                            gap-3
+                          "
+                        >
+                          {name && (
+                            <h3
+                              className="
+                                text-[12px]
+                                font-bold
+                                leading-[1.35]
+                                text-slate-900
+                              "
+                            >
+                              {name}
+                            </h3>
+                          )}
+
+                          {(liveUrl ||
+                            githubUrl) && (
+                            <span
+                              className="
+                                max-w-[150px]
+                                shrink-0
+                                truncate
+                                text-[8.5px]
+                                font-semibold
+                                text-indigo-600
+                              "
+                            >
+                              {liveUrl ||
+                                githubUrl}
+                            </span>
+                          )}
                         </div>
-                      )}
-                    </article>
-                  );
-                })}
-            </div>
-          </section>
 
-          {/* =================================================
-              PROJECTS / HIGHLIGHTS
-          ================================================= */}
+                        {description && (
+                          <div className="mt-1.5">
+                            <TinyText>
+                              {description}
+                            </TinyText>
+                          </div>
+                        )}
 
-          <section className="mt-7">
-            <SectionTitle>
-              Highlights
-            </SectionTitle>
+                        {technologies.length >
+                          0 && (
+                          <div
+                            className="
+                              mt-2.5
+                              flex
+                              flex-wrap
+                              gap-1.5
+                            "
+                          >
+                            {technologies
+                              .slice(0, 6)
+                              .map(
+                                (
+                                  technology,
+                                  technologyIndex
+                                ) => (
+                                  <SkillPill
+                                    key={`${technology}-${technologyIndex}`}
+                                  >
+                                    {
+                                      technology
+                                    }
+                                  </SkillPill>
+                                )
+                              )}
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
 
-            <ResumeLines
-              text={[
-                "Strong focus on clean, maintainable and responsive interfaces.",
-                "Comfortable collaborating across design and development workflows.",
-                "Focused on performance, accessibility and intuitive user experiences.",
-              ]}
-            />
-          </section>
+          {/* CERTIFICATIONS */}
+
+          {validCertifications.length > 0 && (
+            <section className="mt-8">
+              <SectionTitle>
+                Certifications
+              </SectionTitle>
+
+              <div className="space-y-4">
+                {validCertifications
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const name =
+                      getValue(item, [
+                        "name",
+                        "title",
+                      ]);
+
+                    const organization =
+                      getValue(item, [
+                        "organization",
+                        "issuer",
+                      ]);
+
+                    const date =
+                      getValue(item, [
+                        "date",
+                      ]);
+
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${name}-${index}`
+                        }
+                        className="break-inside-avoid"
+                      >
+                        {name && (
+                          <h3
+                            className="
+                              text-[11px]
+                              font-bold
+                              leading-[1.35]
+                              text-slate-900
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
+
+                        {(organization ||
+                          date) && (
+                          <div
+                            className="
+                              mt-1
+                              flex
+                              flex-wrap
+                              items-center
+                              gap-1.5
+                              text-[9.5px]
+                            "
+                          >
+                            {organization && (
+                              <span className="font-semibold text-indigo-600">
+                                {
+                                  organization
+                                }
+                              </span>
+                            )}
+
+                            {organization &&
+                              date && (
+                                <span className="text-slate-300">
+                                  •
+                                </span>
+                              )}
+
+                            {date && (
+                              <span className="text-slate-400">
+                                {date}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* ACHIEVEMENTS */}
+
+          {validAchievements.length > 0 && (
+            <section className="mt-8">
+              <SectionTitle>
+                Achievements
+              </SectionTitle>
+
+              <div className="space-y-4">
+                {validAchievements
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const title =
+                      getValue(item, [
+                        "title",
+                        "name",
+                      ]);
+
+                    const description =
+                      getValue(item, [
+                        "description",
+                        "details",
+                      ]);
+
+                    const date =
+                      getValue(item, [
+                        "date",
+                      ]);
+
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${title}-${index}`
+                        }
+                        className="break-inside-avoid"
+                      >
+                        <div
+                          className="
+                            flex
+                            items-start
+                            justify-between
+                            gap-3
+                          "
+                        >
+                          {title && (
+                            <h3
+                              className="
+                                text-[11px]
+                                font-bold
+                                leading-[1.35]
+                                text-slate-900
+                              "
+                            >
+                              {title}
+                            </h3>
+                          )}
+
+                          {date && (
+                            <span
+                              className="
+                                shrink-0
+                                text-[8.5px]
+                                font-semibold
+                                text-indigo-600
+                              "
+                            >
+                              {date}
+                            </span>
+                          )}
+                        </div>
+
+                        {description && (
+                          <div className="mt-1.5">
+                            <TinyText>
+                              {description}
+                            </TinyText>
+                          </div>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* INTERESTS */}
+
+          {interests && (
+            <section className="mt-8">
+              <SectionTitle>
+                Interests
+              </SectionTitle>
+
+              <TinyText>
+                {interests}
+              </TinyText>
+            </section>
+          )}
         </main>
 
         {/* ===================================================
             RIGHT COLUMN
-        =================================================== */}
+        ==================================================== */}
 
         <aside
           className="
@@ -596,222 +1301,361 @@ function ClassicPreview({ formData = {}, data = {} }) {
             pl-6
           "
         >
-          {/* =================================================
-              EDUCATION
-          ================================================= */}
+          {/* EDUCATION */}
 
-          <section>
-            <SectionTitle>
-              Education
-            </SectionTitle>
+          {education.length > 0 && (
+            <section>
+              <SectionTitle>
+                Education
+              </SectionTitle>
 
-            <div className="space-y-5">
-              {displayEducation
-                .slice(0, 3)
-                .map((item, index) => {
-                  const degree =
-                    getValue(item, [
-                      "degree",
-                      "program",
-                      "qualification",
-                      "title",
-                    ]);
+              <div className="space-y-6">
+                {education
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const degree =
+                      getValue(item, [
+                        "degree",
+                        "program",
+                        "qualification",
+                        "title",
+                      ]);
 
-                  const institution =
-                    getValue(item, [
-                      "institution",
-                      "school",
-                      "university",
-                      "college",
-                    ]);
+                    const institution =
+                      getValue(item, [
+                        "institution",
+                        "school",
+                        "university",
+                        "college",
+                      ]);
 
-                  const startDate =
-                    getValue(item, [
-                      "startDate",
-                      "start",
-                      "from",
-                    ]);
+                    const startDate =
+                      getValue(item, [
+                        "startDate",
+                        "start",
+                        "from",
+                      ]);
 
-                  const endDate =
-                    getValue(item, [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]);
+                    const endDate =
+                      getValue(item, [
+                        "endDate",
+                        "end",
+                        "to",
+                      ]);
 
-                  return (
-                    <article
-                      key={index}
-                      className="break-inside-avoid"
-                    >
-                      <h3
-                        className="
-                          text-[10.5px]
-                          font-bold
-                          leading-[1.4]
-                          text-slate-900
-                        "
+                    if (
+                      !degree &&
+                      !institution &&
+                      !startDate &&
+                      !endDate
+                    ) {
+                      return null;
+                    }
+
+                    return (
+                      <article
+                        key={
+                          item.id || index
+                        }
+                        className="break-inside-avoid"
                       >
-                        {degree ||
-                          "Degree / Program"}
-                      </h3>
+                        {degree && (
+                          <h3
+                            className="
+                              text-[11.5px]
+                              font-bold
+                              leading-[1.4]
+                              text-slate-900
+                            "
+                          >
+                            {degree}
+                          </h3>
+                        )}
 
-                      <TinyText className="mt-1">
-                        {institution ||
-                          "University Name"}
-                      </TinyText>
+                        {institution && (
+                          <TinyText className="mt-1">
+                            {institution}
+                          </TinyText>
+                        )}
 
-                      {(startDate ||
-                        endDate) && (
-                        <p
+                        {(startDate ||
+                          endDate) && (
+                          <p
+                            className="
+                              mt-1.5
+                              text-[9.5px]
+                              font-semibold
+                              text-indigo-600
+                            "
+                          >
+                            {startDate || ""}
+                            {" — "}
+                            {endDate ||
+                              "Present"}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* SKILLS */}
+
+          {finalSkills.length > 0 && (
+            <section
+              className={
+                education.length > 0
+                  ? "mt-9"
+                  : ""
+              }
+            >
+              <SectionTitle>
+                Skills
+              </SectionTitle>
+
+              <div className="flex flex-wrap gap-1.5">
+                {finalSkills
+                  .slice(0, 14)
+                  .map((skill, index) => (
+                    <SkillPill
+                      key={`${skill}-${index}`}
+                    >
+                      {skill}
+                    </SkillPill>
+                  ))}
+              </div>
+            </section>
+          )}
+
+          {/* LANGUAGES */}
+
+          {validLanguages.length > 0 && (
+            <section className="mt-9">
+              <SectionTitle>
+                Languages
+              </SectionTitle>
+
+              <div className="space-y-4">
+                {validLanguages
+                  .slice(0, 5)
+                  .map((item, index) => {
+                    const language =
+                      getValue(item, [
+                        "language",
+                        "name",
+                      ]);
+
+                    const level =
+                      getValue(item, [
+                        "level",
+                        "proficiency",
+                      ]);
+
+                    return (
+                      <div
+                        key={
+                          item.id ||
+                          `${language}-${index}`
+                        }
+                        className="break-inside-avoid"
+                      >
+                        <div
                           className="
-                            mt-1.5
-                            text-[9px]
-                            font-semibold
-                            text-indigo-600
+                            flex
+                            items-center
+                            justify-between
+                            gap-2
                           "
                         >
-                          {startDate || ""}
-                          {" — "}
-                          {endDate ||
-                            "Present"}
-                        </p>
-                      )}
-                    </article>
-                  );
-                })}
-            </div>
-          </section>
+                          {language && (
+                            <span
+                              className="
+                                text-[10.5px]
+                                font-bold
+                                text-slate-800
+                              "
+                            >
+                              {language}
+                            </span>
+                          )}
 
-          {/* =================================================
-              SKILLS
-          ================================================= */}
+                          {level && (
+                            <span
+                              className="
+                                text-[9px]
+                                text-slate-400
+                              "
+                            >
+                              {level}
+                            </span>
+                          )}
+                        </div>
 
-          <section className="mt-8">
-            <SectionTitle>
-              Skills
-            </SectionTitle>
+                        {(language ||
+                          level) && (
+                          <div
+                            className="
+                              mt-1.5
+                              h-1
+                              rounded-full
+                              bg-slate-100
+                            "
+                          >
+                            <div
+                              className="
+                                h-1
+                                w-full
+                                rounded-full
+                                bg-indigo-600
+                              "
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
 
-            <div className="flex flex-wrap gap-1.5">
-              {finalSkills
-                .slice(0, 14)
-                .map((skill, index) => (
-                  <SkillPill
-                    key={`${skill}-${index}`}
+          {/* REFERENCES */}
+
+          {validReferences.length > 0 && (
+            <section className="mt-9">
+              <SectionTitle>
+                References
+              </SectionTitle>
+
+              <div className="space-y-5">
+                {validReferences
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const name =
+                      getValue(item, [
+                        "name",
+                      ]);
+
+                    const position =
+                      getValue(item, [
+                        "position",
+                        "role",
+                      ]);
+
+                    const company =
+                      getValue(item, [
+                        "company",
+                        "organization",
+                      ]);
+
+                    const email =
+                      getValue(item, [
+                        "email",
+                      ]);
+
+                    const phone =
+                      getValue(item, [
+                        "phone",
+                      ]);
+
+                    return (
+                      <article
+                        key={
+                          item.id ||
+                          `${name}-${index}`
+                        }
+                        className="break-inside-avoid"
+                      >
+                        {name && (
+                          <h3
+                            className="
+                              text-[11px]
+                              font-bold
+                              leading-[1.35]
+                              text-slate-900
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
+
+                        {(position ||
+                          company) && (
+                          <TinyText className="mt-1">
+                            {[position, company]
+                              .filter(Boolean)
+                              .join(" • ")}
+                          </TinyText>
+                        )}
+
+                        {(email ||
+                          phone) && (
+                          <p
+                            className="
+                              mt-1
+                              break-all
+                              text-[8.5px]
+                              leading-[1.5]
+                              text-slate-500
+                            "
+                          >
+                            {[email, phone]
+                              .filter(Boolean)
+                              .join(
+                                " • "
+                              )}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* STRENGTHS */}
+
+          {useSampleData && (
+            <section className="mt-9">
+              <SectionTitle>
+                Strengths
+              </SectionTitle>
+
+              <div className="space-y-2.5">
+                {[
+                  "Problem Solving",
+                  "Communication",
+                  "Teamwork",
+                  "Attention to Detail",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="
+                      flex
+                      items-center
+                      gap-2.5
+                      text-[10px]
+                      font-medium
+                      text-slate-600
+                    "
                   >
-                    {skill}
-                  </SkillPill>
+                    <span
+                      className="
+                        h-1.5
+                        w-1.5
+                        shrink-0
+                        rounded-full
+                        bg-indigo-600
+                      "
+                    />
+
+                    {item}
+                  </div>
                 ))}
-            </div>
-          </section>
-
-          {/* =================================================
-              LANGUAGES
-          ================================================= */}
-
-          <section className="mt-8">
-            <SectionTitle>
-              Languages
-            </SectionTitle>
-
-            <div className="space-y-3">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className="
-                      text-[10px]
-                      font-bold
-                      text-slate-800
-                    "
-                  >
-                    English
-                  </span>
-
-                  <span
-                    className="
-                      text-[8.5px]
-                      text-slate-400
-                    "
-                  >
-                    Professional
-                  </span>
-                </div>
-
-                <div className="mt-1.5 h-1 rounded-full bg-slate-100">
-                  <div className="h-1 w-[88%] rounded-full bg-indigo-600" />
-                </div>
               </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className="
-                      text-[10px]
-                      font-bold
-                      text-slate-800
-                    "
-                  >
-                    Spanish
-                  </span>
-
-                  <span
-                    className="
-                      text-[8.5px]
-                      text-slate-400
-                    "
-                  >
-                    Conversational
-                  </span>
-                </div>
-
-                <div className="mt-1.5 h-1 rounded-full bg-slate-100">
-                  <div className="h-1 w-[65%] rounded-full bg-indigo-600" />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* =================================================
-              CORE STRENGTHS
-          ================================================= */}
-
-          <section className="mt-8">
-            <SectionTitle>
-              Strengths
-            </SectionTitle>
-
-            <div className="space-y-2">
-              {[
-                "Problem Solving",
-                "Communication",
-                "Teamwork",
-                "Attention to Detail",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="
-                    flex
-                    items-center
-                    gap-2
-                    text-[9.5px]
-                    font-medium
-                    text-slate-600
-                  "
-                >
-                  <span
-                    className="
-                      h-1.5
-                      w-1.5
-                      rounded-full
-                      bg-indigo-600
-                    "
-                  />
-
-                  {item}
-                </div>
-              ))}
-            </div>
-          </section>
+            </section>
+          )}
         </aside>
       </div>
     </div>

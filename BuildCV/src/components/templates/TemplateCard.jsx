@@ -98,6 +98,7 @@ function TemplateCard({
             >
               <TemplatePreview
                 template={template}
+                useSampleData={true}
               />
             </div>
           </div>

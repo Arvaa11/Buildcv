@@ -56,7 +56,6 @@ const templateComponents = {
   atelier: AtelierPreview,
 };
 
-
 // =====================================================
 // BUILDCV — RESUME PREVIEW
 // =====================================================
@@ -66,7 +65,6 @@ function ResumePreview({
   formData = {},
   previewId = "resume-preview",
 }) {
-
   // ===================================================
   // GET TEMPLATE ID
   // ===================================================
@@ -78,7 +76,6 @@ function ResumePreview({
         selectedTemplate?.slug ||
         selectedTemplate?.preview ||
         "modern";
-
 
   // ===================================================
   // PERSONAL INFORMATION
@@ -97,13 +94,20 @@ function ResumePreview({
     ...(formData.personal || {}),
   };
 
-
   // ===================================================
   // NORMALIZED RESUME DATA
   // ===================================================
 
   const normalizedData = {
+    // -----------------------------------------------
+    // Personal
+    // -----------------------------------------------
+
     personal,
+
+    // -----------------------------------------------
+    // Required sections
+    // -----------------------------------------------
 
     education: Array.isArray(formData.education)
       ? formData.education
@@ -122,6 +126,35 @@ function ResumePreview({
       : [],
 
     // -----------------------------------------------
+    // OPTIONAL SECTIONS
+    // -----------------------------------------------
+
+    certifications: formData.certifications || {
+      enabled: false,
+      items: [],
+    },
+
+    languages: formData.languages || {
+      enabled: false,
+      items: [],
+    },
+
+    achievements: formData.achievements || {
+      enabled: false,
+      items: [],
+    },
+
+    interests: formData.interests || {
+      enabled: false,
+      value: "",
+    },
+
+    references: formData.references || {
+      enabled: false,
+      items: [],
+    },
+
+    // -----------------------------------------------
     // Flat values for templates that use them
     // -----------------------------------------------
 
@@ -136,7 +169,6 @@ function ResumePreview({
     profileImage: personal.profileImage,
   };
 
-
   // ===================================================
   // TEMPLATE PROPS
   // ===================================================
@@ -146,14 +178,12 @@ function ResumePreview({
     data: normalizedData,
   };
 
-
   // ===================================================
   // SELECT TEMPLATE COMPONENT
   // ===================================================
 
   const TemplateComponent =
     templateComponents[templateId] || ModernPreview;
-
 
   // ===================================================
   // RENDER
@@ -189,4 +219,4 @@ function ResumePreview({
   );
 }
 
-export default ResumePreview
+export default ResumePreview;

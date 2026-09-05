@@ -128,6 +128,7 @@ function PreviewModal({
               >
                 <TemplatePreview
                   template={template}
+                  useSampleData={true}
                 />
               </div>
             </div>
@@ -168,7 +169,7 @@ function PreviewModal({
               hover:text-[#111827]
             "
           >
-            Close
+            Continue Browsing
           </button>
 
           <button

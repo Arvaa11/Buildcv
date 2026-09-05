@@ -1,5 +1,18 @@
 import { useEffect, useState } from "react"
 
+function createId() {
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
+  ) {
+    return crypto.randomUUID()
+  }
+
+  return `${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}`
+}
+
 function Projects({ formData, setFormData }) {
   const [projects, setProjects] = useState(
     formData.projects || []
@@ -89,7 +102,8 @@ function Projects({ formData, setFormData }) {
   // =====================================================
 
   const addTechnology = (projectId) => {
-    const input = technologyInputs[projectId]?.trim()
+    const input =
+      technologyInputs[projectId]?.trim()
 
     if (!input) return
 
@@ -99,12 +113,15 @@ function Projects({ formData, setFormData }) {
 
     if (!project) return
 
-    const technologies = project.technologies || []
+    const technologies =
+      project.technologies || []
 
-    const alreadyExists = technologies.some(
-      (technology) =>
-        technology.toLowerCase() === input.toLowerCase()
-    )
+    const alreadyExists =
+      technologies.some(
+        (technology) =>
+          technology.toLowerCase() ===
+          input.toLowerCase()
+      )
 
     if (alreadyExists) {
       setTechnologyInputs((previous) => ({
@@ -141,7 +158,8 @@ function Projects({ formData, setFormData }) {
 
     if (!project) return
 
-    const technologies = project.technologies || []
+    const technologies =
+      project.technologies || []
 
     updateProject(
       projectId,
@@ -174,23 +192,208 @@ function Projects({ formData, setFormData }) {
   const inputClass = `
     w-full
     rounded-lg
-                  border
-                  border-[#E2E8F0]
-                  bg-white
-                  px-4
-                  py-3
-                  text-sm
-                  font-medium
-                  text-[#111827]
-                  outline-none
-                  transition-all
-                  duration-200
-                  placeholder:text-[#718096]
-                  hover:border-[#CBD5E1]
-                  focus:border-[#6366F1]
-                  focus:ring-4
-                  focus:ring-[#6366F1]/10
+    border
+    border-[#E2E8F0]
+    bg-white
+    px-4
+    py-3
+    text-sm
+    font-medium
+    text-[#111827]
+    outline-none
+    transition-all
+    duration-200
+    placeholder:text-[#718096]
+    hover:border-[#CBD5E1]
+    focus:border-[#6366F1]
+    focus:ring-4
+    focus:ring-[#6366F1]/10
   `
+
+  // =====================================================
+  // OPTIONAL SECTION HELPERS
+  // =====================================================
+
+  const optionalSections = [
+    {
+      key: "certifications",
+      label: "Certifications",
+    },
+    {
+      key: "languages",
+      label: "Languages",
+    },
+    {
+      key: "achievements",
+      label: "Achievements",
+    },
+    {
+      key: "interests",
+      label: "Interests",
+    },
+    {
+      key: "references",
+      label: "References",
+    },
+  ]
+
+  const isOptionalEnabled = (key) =>
+    Boolean(formData?.[key]?.enabled)
+
+  const toggleOptionalSection = (key) => {
+    setFormData((previous) => {
+      const currentlyEnabled =
+        Boolean(previous?.[key]?.enabled)
+
+      if (key === "certifications") {
+        return {
+          ...previous,
+          certifications: {
+            enabled: !currentlyEnabled,
+            items:
+              previous?.certifications?.items ||
+              [],
+          },
+        }
+      }
+
+      if (key === "languages") {
+        return {
+          ...previous,
+          languages: {
+            enabled: !currentlyEnabled,
+            items:
+              previous?.languages?.items ||
+              [],
+          },
+        }
+      }
+
+      if (key === "achievements") {
+        return {
+          ...previous,
+          achievements: {
+            enabled: !currentlyEnabled,
+            items:
+              previous?.achievements?.items ||
+              [],
+          },
+        }
+      }
+
+      if (key === "interests") {
+        return {
+          ...previous,
+          interests: {
+            enabled: !currentlyEnabled,
+            value:
+              previous?.interests?.value ||
+              "",
+          },
+        }
+      }
+
+      if (key === "references") {
+        return {
+          ...previous,
+          references: {
+            enabled: !currentlyEnabled,
+            items:
+              previous?.references?.items ||
+              [],
+          },
+        }
+      }
+
+      return previous
+    })
+  }
+
+  // =====================================================
+  // OPTIONAL SECTION UPDATE
+  // =====================================================
+
+  const updateOptionalSection = (
+    section,
+    value
+  ) => {
+    setFormData((previous) => ({
+      ...previous,
+      [section]: value,
+    }))
+  }
+
+  // =====================================================
+  // ADD OPTIONAL ITEM
+  // =====================================================
+
+  const addOptionalItem = (
+    section,
+    item
+  ) => {
+    setFormData((previous) => ({
+      ...previous,
+      [section]: {
+        ...previous[section],
+        items: [
+          ...(previous?.[section]?.items || []),
+          {
+            id: createId(),
+            ...item,
+          },
+        ],
+      },
+    }))
+  }
+
+  // =====================================================
+  // REMOVE OPTIONAL ITEM
+  // =====================================================
+
+  const removeOptionalItem = (
+    section,
+    id
+  ) => {
+    setFormData((previous) => ({
+      ...previous,
+      [section]: {
+        ...previous[section],
+        items: (
+          previous?.[section]?.items || []
+        ).filter(
+          (item) => item.id !== id
+        ),
+      },
+    }))
+  }
+
+  // =====================================================
+  // UPDATE OPTIONAL ITEM
+  // =====================================================
+
+  const updateOptionalItem = (
+    section,
+    id,
+    field,
+    value
+  ) => {
+    setFormData((previous) => ({
+      ...previous,
+      [section]: {
+        ...previous[section],
+        items: (
+          previous?.[section]?.items || []
+        ).map((item) =>
+          item.id === id
+            ? {
+              ...item,
+              [field]: value,
+            }
+            : item
+        ),
+      },
+    }))
+  }
 
   return (
     <section
@@ -317,12 +520,16 @@ function Projects({ formData, setFormData }) {
           CONTENT
       ====================================================== */}
 
-      <div className="min-h-0
+      <div
+        className="
+          min-h-0
           flex-1
           overflow-y-auto
           overscroll-contain
           p-5
-          sm:p-7">
+          sm:p-7
+        "
+      >
 
         {/* =================================================
             PROJECT LIST
@@ -352,9 +559,7 @@ function Projects({ formData, setFormData }) {
                 "
               >
 
-                {/* =========================================
-                    PROJECT HEADER
-                ========================================= */}
+                {/* PROJECT HEADER */}
 
                 <div
                   className="
@@ -390,7 +595,8 @@ function Projects({ formData, setFormData }) {
                         text-buildcv-text
                       "
                     >
-                      {project.name || "New project"}
+                      {project.name ||
+                        "New project"}
                     </h3>
 
                     {project.technologies?.length > 0 && (
@@ -409,9 +615,6 @@ function Projects({ formData, setFormData }) {
                     )}
 
                   </div>
-
-
-                  {/* Remove */}
 
                   <button
                     type="button"
@@ -440,9 +643,7 @@ function Projects({ formData, setFormData }) {
                 </div>
 
 
-                {/* =========================================
-                    FIELDS
-                ========================================= */}
+                {/* FIELDS */}
 
                 <div className="grid grid-cols-1 gap-5">
 
@@ -466,7 +667,9 @@ function Projects({ formData, setFormData }) {
                     <input
                       id={`project-name-${project.id}`}
                       type="text"
-                      value={project.name || ""}
+                      value={
+                        project.name || ""
+                      }
                       onChange={(event) =>
                         updateProject(
                           project.id,
@@ -512,7 +715,10 @@ function Projects({ formData, setFormData }) {
                     <textarea
                       id={`project-description-${project.id}`}
                       rows={5}
-                      value={project.description || ""}
+                      value={
+                        project.description ||
+                        ""
+                      }
                       maxLength={1000}
                       onChange={(event) =>
                         updateProject(
@@ -555,7 +761,8 @@ function Projects({ formData, setFormData }) {
                           text-buildcv-text-muted
                         "
                       >
-                        {project.description?.length || 0}/1000
+                        {project.description?.length ||
+                          0}/1000
                       </span>
 
                     </div>
@@ -593,7 +800,9 @@ function Projects({ formData, setFormData }) {
                         id={`technology-${project.id}`}
                         type="text"
                         value={
-                          technologyInputs[project.id] || ""
+                          technologyInputs[
+                            project.id
+                          ] || ""
                         }
                         onChange={(event) =>
                           setTechnologyInputs(
@@ -620,7 +829,9 @@ function Projects({ formData, setFormData }) {
                       <button
                         type="button"
                         onClick={() =>
-                          addTechnology(project.id)
+                          addTechnology(
+                            project.id
+                          )
                         }
                         className="
                           rounded-buildcv-lg
@@ -734,9 +945,7 @@ function Projects({ formData, setFormData }) {
                   </div>
 
 
-                  {/* =======================================
-                      PROJECT LINKS
-                  ======================================= */}
+                  {/* PROJECT LINKS */}
 
                   <div
                     className="
@@ -767,7 +976,9 @@ function Projects({ formData, setFormData }) {
                       <input
                         id={`live-url-${project.id}`}
                         type="url"
-                        value={project.liveUrl || ""}
+                        value={
+                          project.liveUrl || ""
+                        }
                         onChange={(event) =>
                           updateProject(
                             project.id,
@@ -803,7 +1014,9 @@ function Projects({ formData, setFormData }) {
                       <input
                         id={`github-url-${project.id}`}
                         type="url"
-                        value={project.githubUrl || ""}
+                        value={
+                          project.githubUrl || ""
+                        }
                         onChange={(event) =>
                           updateProject(
                             project.id,
@@ -823,6 +1036,7 @@ function Projects({ formData, setFormData }) {
                 </div>
 
               </article>
+
             )
           })}
 
