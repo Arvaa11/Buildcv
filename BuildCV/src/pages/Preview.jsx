@@ -406,6 +406,7 @@ function Preview() {
       <div
         className="
           relative
+          overflow-hidden
           mx-auto
           max-w-7xl
           px-5
@@ -646,7 +647,7 @@ function Preview() {
 
             <div
               className="
-                overflow-hidden
+                resume-preview-frame
                 rounded-2xl
                 bg-white
                 shadow-[0_30px_80px_rgba(0,0,0,0.35)]
@@ -658,6 +659,7 @@ function Preview() {
                 selectedTemplate={
                   selectedTemplate
                 }
+                fitToContainer={true}
               />
 
             </div>

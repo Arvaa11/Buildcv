@@ -353,13 +353,18 @@ canvas {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  width: 92%;
+  width: 100%;
   margin-inline: auto;
   overflow: hidden;
 }
 
 .resume-preview--fit {
-  zoom: calc(min(1, calc(100cqw / 794px)) * 0.82);
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  transform: scale(calc(min(1, 100cqw / 794px) * 0.82));
+  transform-origin: top center;
 }
 
 .builder-center-scroll {
@@ -388,6 +393,14 @@ canvas {
 }
 
 @media (max-width: 640px) {
+  html {
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    min-width: 0;
+  }
+
   .buildcv-ambient {
     width: 260px;
     height: 260px;
@@ -395,6 +408,10 @@ canvas {
 
   #resume-preview {
     min-width: 0;
+  }
+
+  .resume-preview-frame {
+    border-radius: 0.75rem;
   }
 }
 

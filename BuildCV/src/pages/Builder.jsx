@@ -25,9 +25,9 @@ import Achievements from "../components/builder/Achievements"
 import Interests from "../components/builder/Interests"
 import References from "../components/builder/References"
 
-import DownloadButton from "../components/builder/DownloadButton"
-import ResumePreview from "../components/ResumePreview"
 
+import ResumePreview from "../components/ResumePreview"
+import DownloadPDF from "../components/builder/DownloadPDF";
 // =====================================================
 // STORAGE
 // =====================================================
@@ -1070,7 +1070,7 @@ function Builder() {
               className="
                 flex
                 h-full
-                min-h-[850px]
+                min-h-[620px]
                 flex-col
                 overflow-hidden
                 rounded-2xl
@@ -1118,9 +1118,9 @@ function Builder() {
 
               {/* NAVIGATION */}
 
-              <div className="shrink-0 border-t border-[#E2E8F0] bg-[#F8FAFC] px-5 py-5 sm:px-8">
+              <div className="shrink-0 border-t border-[#E2E8F0] bg-[#F8FAFC] px-4 py-4 sm:px-8 sm:py-5">
 
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-2 sm:gap-3">
 
                   {/* BACK */}
 
@@ -1139,7 +1139,8 @@ function Builder() {
                       border
                       border-[#E2E8F0]
                       bg-white
-                      px-4
+                      min-h-11
+                      px-3
                       py-2.5
                       text-sm
                       font-semibold
@@ -1204,7 +1205,8 @@ function Builder() {
                       gap-2
                       rounded-xl
                       bg-[#6366F1]
-                      px-5
+                      min-h-11
+                      px-4
                       py-2.5
                       text-sm
                       font-semibold
@@ -1304,7 +1306,7 @@ function Builder() {
 
                 <div className="border-t border-[#E2E8F0] bg-white p-4">
 
-                  <DownloadButton
+                  <DownloadPDF
                     previewId="resume-preview-mobile"
                   />
 
@@ -1511,7 +1513,7 @@ function Builder() {
 
                 <div className="shrink-0">
 
-                  <DownloadButton
+                  <DownloadPDF
                     previewId="resume-preview-desktop"
                   />
 
@@ -1738,7 +1740,7 @@ function Builder() {
                   Close
                 </button>
 
-                <DownloadButton
+                <DownloadPDF
                   previewId="resume-preview-expanded"
                 />
 

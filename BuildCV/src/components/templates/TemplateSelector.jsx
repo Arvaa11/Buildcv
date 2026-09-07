@@ -122,7 +122,7 @@ function TemplateSelector({
   }, [activeCategory])
 
   return (
-    <section className="min-w-0 space-y-8 pt-25 p-7">
+    <section className="min-w-0 space-y-6 px-4 pb-8 pt-24 sm:space-y-8 sm:px-7 sm:pb-10 sm:pt-25">
 
       {/* =================================================
     HERO
@@ -136,9 +136,11 @@ function TemplateSelector({
     border
     border-buildcv-border
     bg-buildcv-surface
-    px-8
-    py-10
+    px-5
+    py-7
     shadow-buildcv-md
+    sm:px-8
+    sm:py-10
     lg:px-10
     lg:py-12
   "
@@ -715,6 +717,7 @@ function TemplateCard({
       <button
         type="button"
         onClick={onSelect}
+        aria-pressed={isSelected}
         className="block w-full text-left"
       >
 
@@ -725,9 +728,12 @@ function TemplateCard({
             border-b
             border-buildcv-border
             bg-[#F8FAFC]
-            px-4
-            pb-10
-            pt-10
+            px-3
+            pb-5
+            pt-5
+            sm:px-4
+            sm:pb-10
+            sm:pt-10
           "
         >
 
@@ -735,7 +741,7 @@ function TemplateCard({
             className="
               relative
               mx-auto
-              w-[80%]
+              w-full
               max-w-[280px]
               overflow-hidden
               rounded-md
@@ -759,7 +765,7 @@ function TemplateCard({
 
       </button>
 
-      <div className="bg-buildcv-background p-6">
+      <div className="bg-buildcv-background p-4 sm:p-6">
 
         <div className="flex items-start justify-between gap-3">
 
@@ -768,10 +774,11 @@ function TemplateCard({
             <h3
               className="
                 font-display
-                text-xl
+                text-lg
                 font-bold
                 tracking-tight
                 text-buildcv-text
+                sm:text-xl
               "
             >
               {template.name}
@@ -840,13 +847,14 @@ function TemplateCard({
           </div>
         )}
 
-        <div className="mt-6 border-t border-buildcv-border pt-5">
+        <div className="mt-5 border-t border-buildcv-border pt-4 sm:mt-6 sm:pt-5">
 
           <button
             type="button"
             onClick={onSelect}
             className={`
               flex
+              min-h-11
               w-full
               items-center
               justify-between
