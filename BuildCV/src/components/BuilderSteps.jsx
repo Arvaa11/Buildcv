@@ -36,7 +36,6 @@ export const BUILDER_STEPS = [
     title: "Projects",
     description: "Your best projects.",
   },
-  
 ]
 
 // =====================================================
@@ -53,7 +52,7 @@ function getStepState(index, activeIndex) {
 // PROGRESS RING
 // =====================================================
 
-const RING_SIZE = 44
+const RING_SIZE = 46
 const RING_STROKE = 3
 
 const RING_RADIUS =
@@ -195,22 +194,23 @@ function BuilderSteps({
 
   // ===================================================
   // RENDER
-  // ===================================================
+  // =====================================================
 
   return (
-    <aside className="w-full">
-
+    <aside className="h-full w-full">
       <div
         className="
+          flex
+          h-full
+          flex-col
           overflow-hidden
           rounded-2xl
           border
           border-[#E2E8F0]
           bg-white
-          shadow-sm
+          shadow-[0_12px_35px_rgba(79,70,229,0.08)]
         "
       >
-
         {/* =================================================
             HEADER
         ================================================= */}
@@ -219,20 +219,19 @@ function BuilderSteps({
           className="
             border-b
             border-[#E2E8F0]
-            bg-white
+            bg-gradient-to-br
+            from-[#F8FAFC]
+            via-white
+            to-[#EEF2FF]
             px-5
             py-5
           "
         >
-
           <div className="flex items-start justify-between gap-4">
-
             {/* HEADER CONTENT */}
 
             <div className="min-w-0">
-
               <div className="flex items-center gap-2">
-
                 <span
                   className="
                     h-1.5
@@ -254,7 +253,6 @@ function BuilderSteps({
                 >
                   Resume Builder
                 </p>
-
               </div>
 
               <h2
@@ -272,16 +270,15 @@ function BuilderSteps({
               <p
                 className="
                   mt-1
-                  max-w-[190px]
+                  max-w-[200px]
                   text-xs
                   leading-5
-                  text-[#64748B]
+                  text-[#718096]
                 "
               >
                 Complete each section to create
                 a professional resume.
               </p>
-
             </div>
 
             {/* =================================================
@@ -292,14 +289,13 @@ function BuilderSteps({
               className="
                 relative
                 flex
-                h-11
-                w-11
+                h-[46px]
+                w-[46px]
                 shrink-0
                 items-center
                 justify-center
               "
             >
-
               <svg
                 width={RING_SIZE}
                 height={RING_SIZE}
@@ -307,7 +303,6 @@ function BuilderSteps({
                 className="-rotate-90"
                 aria-hidden="true"
               >
-
                 {/* TRACK */}
 
                 <circle
@@ -329,12 +324,9 @@ function BuilderSteps({
                   fill="none"
                   strokeWidth={RING_STROKE}
                   strokeLinecap="round"
-                  strokeDasharray={
-                    RING_CIRCUMFERENCE
-                  }
+                  strokeDasharray={RING_CIRCUMFERENCE}
                   className="stroke-[#6366F1]"
                 />
-
               </svg>
 
               <span
@@ -347,11 +339,8 @@ function BuilderSteps({
               >
                 {Math.round(progress)}%
               </span>
-
             </div>
-
           </div>
-
         </div>
 
         {/* =================================================
@@ -362,19 +351,19 @@ function BuilderSteps({
           ref={navRef}
           className="
             relative
+            flex-1
             space-y-1
+            overflow-y-auto
             bg-white
             p-3
           "
           aria-label="Resume builder steps"
         >
-
           {/* =================================================
               REQUIRED STEPS
           ================================================= */}
 
           {steps.map((step, index) => {
-
             const state = getStepState(
               index,
               safeStepIndex
@@ -393,7 +382,6 @@ function BuilderSteps({
                 data-step-item
                 className="relative"
               >
-
                 {/* CONNECTOR */}
 
                 {index < steps.length - 1 && (
@@ -401,15 +389,15 @@ function BuilderSteps({
                     aria-hidden="true"
                     className={`
                       absolute
-                      left-[22px]
+                      left-[21px]
                       top-[43px]
-                      h-[calc(100%-22px)]
+                      h-[calc(100%-20px)]
                       w-px
                       transition-colors
                       duration-300
                       ${
                         isCompleted
-                          ? "bg-[#C7D2FE]"
+                          ? "bg-[#A5B4FC]"
                           : "bg-[#E2E8F0]"
                       }
                     `}
@@ -442,14 +430,27 @@ function BuilderSteps({
                     text-left
                     transition-all
                     duration-200
+                    focus-visible:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-[#6366F1]
+                    focus-visible:ring-offset-2
                     ${
                       isActive
-                        ? "border-[#C7D2FE] bg-[#EEF2FF] shadow-sm"
-                        : "border-transparent bg-white hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
+                        ? `
+                          border-[#C7D2FE]
+                          bg-[#EEF2FF]
+                          shadow-[0_4px_14px_rgba(99,102,241,0.10)]
+                        `
+                        : `
+                          border-transparent
+                          bg-white
+                          hover:border-[#E2E8F0]
+                          hover:bg-[#F8FAFC]
+                          hover:shadow-sm
+                        `
                     }
                   `}
                 >
-
                   {/* NUMBER */}
 
                   <span
@@ -470,14 +471,30 @@ function BuilderSteps({
                       duration-200
                       ${
                         isCompleted
-                          ? "border-[#6366F1] bg-[#6366F1] text-white shadow-md shadow-[#6366F1]/20"
+                          ? `
+                            border-[#6366F1]
+                            bg-[#6366F1]
+                            text-white
+                            shadow-[0_4px_10px_rgba(99,102,241,0.20)]
+                          `
                           : isActive
-                            ? "border-[#6366F1] bg-[#6366F1] text-white shadow-[0_0_0_4px_rgba(99,102,241,0.10)]"
-                            : "border-[#E2E8F0] bg-white text-[#64748B] group-hover:border-[#A5B4FC] group-hover:bg-[#EEF2FF] group-hover:text-[#4F46E5]"
+                            ? `
+                              border-[#6366F1]
+                              bg-[#6366F1]
+                              text-white
+                              shadow-[0_0_0_4px_rgba(99,102,241,0.10)]
+                            `
+                            : `
+                              border-[#E2E8F0]
+                              bg-white
+                              text-[#718096]
+                              group-hover:border-[#A5B4FC]
+                              group-hover:bg-[#EEF2FF]
+                              group-hover:text-[#4F46E5]
+                            `
                       }
                     `}
                   >
-
                     {isCompleted ? (
                       <span
                         className="text-[12px]"
@@ -488,13 +505,11 @@ function BuilderSteps({
                     ) : (
                       step.number
                     )}
-
                   </span>
 
                   {/* TEXT */}
 
                   <span className="min-w-0 flex-1">
-
                     <span
                       className={`
                         block
@@ -525,16 +540,15 @@ function BuilderSteps({
                         leading-4
                         ${
                           isActive
-                            ? "text-[#6366F1]/70"
+                            ? "text-[#6366F1]"
                             : isCompleted
-                              ? "text-[#64748B]"
-                              : "text-[#94A3B8]"
+                              ? "text-[#718096]"
+                              : "text-[#718096]"
                         }
                       `}
                     >
                       {step.description}
                     </span>
-
                   </span>
 
                   {/* ACTIVE ARROW */}
@@ -555,6 +569,7 @@ function BuilderSteps({
                         text-xs
                         font-black
                         text-[#4F46E5]
+                        shadow-sm
                         transition-transform
                         duration-200
                         group-hover:translate-x-0.5
@@ -571,205 +586,355 @@ function BuilderSteps({
                     <span
                       className="
                         hidden
+                        rounded-full
+                        bg-[#EEF2FF]
+                        px-2
+                        py-1
                         text-[9px]
                         font-bold
-                        text-[#6366F1]
+                        text-[#4F46E5]
                         sm:block
                       "
                     >
                       Done
                     </span>
                   )}
-
                 </button>
-
               </div>
             )
           })}
 
           {/* =================================================
-              MORE INFORMATION
+              OPTIONAL SECTIONS
           ================================================= */}
 
           {optionalSections.length > 0 && (
-            <>
-              {/* DIVIDER */}
+            <div
+              data-step-item
+              className="
+                mt-4
+                rounded-2xl
+                border
+                border-[#E0E7FF]
+                bg-[#F8FAFC]
+                p-3
+              "
+            >
+              {/* OPTIONAL HEADER */}
 
               <div
-                data-step-item
-                className="px-2 pb-1 pt-4"
+                className="
+                  flex
+                  items-start
+                  justify-between
+                  gap-3
+                  px-1
+                  pb-3
+                "
               >
-                <div className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="
+                        flex
+                        h-6
+                        w-6
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-lg
+                        bg-[#6366F1]
+                        text-sm
+                        font-bold
+                        text-white
+                        shadow-sm
+                      "
+                    >
+                      +
+                    </span>
 
-                  <span
-                    className="
-                      h-px
-                      flex-1
-                      bg-[#E2E8F0]
-                    "
-                  />
+                    <div>
+                      <p
+                        className="
+                          text-[12px]
+                          font-black
+                          text-[#111827]
+                        "
+                      >
+                        Add more sections
+                      </p>
 
-                  <span
-                    className="
-                      shrink-0
-                      text-[9px]
-                      font-bold
-                      uppercase
-                      tracking-[0.16em]
-                      text-[#94A3B8]
-                    "
-                  >
-                    More information
-                  </span>
-
-                  <span
-                    className="
-                      h-px
-                      flex-1
-                      bg-[#E2E8F0]
-                    "
-                  />
-
+                      <p
+                        className="
+                          mt-0.5
+                          text-[9px]
+                          font-medium
+                          text-[#718096]
+                        "
+                      >
+                        Optional — choose what fits your resume.
+                      </p>
+                    </div>
+                  </div>
                 </div>
+
+                <span
+                  className="
+                    shrink-0
+                    rounded-full
+                    border
+                    border-[#E0E7FF]
+                    bg-white
+                    px-2
+                    py-1
+                    text-[8px]
+                    font-bold
+                    uppercase
+                    tracking-wider
+                    text-[#6366F1]
+                  "
+                >
+                  Optional
+                </span>
               </div>
 
-              {/* =================================================
-                  OPTIONAL GRID
-              ================================================= */}
+              {/* OPTIONAL GRID */}
 
               <div
                 className="
                   grid
                   grid-cols-2
-                  gap-1.5
+                  gap-2
                 "
               >
-
                 {optionalSections.map(
                   (section) => {
-
                     const isActive =
                       activeStep ===
                       section.id
 
                     return (
-                      <div
+                      <button
                         key={section.id}
-                        data-step-item
-                        className="relative"
-                      >
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleStepChange(
-                              section.id
-                            )
-                          }
-                          aria-current={
+                        type="button"
+                        onClick={() =>
+                          handleStepChange(
+                            section.id
+                          )
+                        }
+                        aria-current={
+                          isActive
+                            ? "step"
+                            : undefined
+                        }
+                        className={`
+                          group
+                          relative
+                          flex
+                          min-h-[82px]
+                          w-full
+                          flex-col
+                          items-start
+                          justify-between
+                          rounded-xl
+                          border
+                          p-3
+                          text-left
+                          transition-all
+                          duration-200
+                          focus-visible:outline-none
+                          focus-visible:ring-2
+                          focus-visible:ring-[#6366F1]
+                          focus-visible:ring-offset-2
+                          ${
                             isActive
-                              ? "step"
-                              : undefined
+                              ? `
+                                border-[#6366F1]
+                                bg-[#EEF2FF]
+                                shadow-[0_5px_16px_rgba(99,102,241,0.13)]
+                              `
+                              : `
+                                border-[#E2E8F0]
+                                bg-white
+                                hover:-translate-y-0.5
+                                hover:border-[#A5B4FC]
+                                hover:bg-[#EEF2FF]
+                                hover:shadow-sm
+                              `
                           }
-                          className={`
-                            group
-                            relative
-                            flex
-                            min-h-[72px]
-                            w-full
-                            flex-col
-                            items-start
-                            justify-center
-                            rounded-xl
-                            border
-                            px-3
-                            py-2.5
-                            text-left
-                            transition-all
-                            duration-200
-                            ${
-                              isActive
-                                ? "border-[#C7D2FE] bg-[#EEF2FF] shadow-sm"
-                                : "border-transparent bg-white hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
-                            }
-                          `}
-                        >
+                        `}
+                      >
+                        {/* TOP ROW */}
 
-                          {/* PLUS ICON */}
+                        <div
+                          className="
+                            flex
+                            w-full
+                            items-center
+                            justify-between
+                            gap-2
+                          "
+                        >
+                          {/* ICON */}
 
                           <span
                             className={`
                               flex
-                              h-6
-                              w-6
+                              h-7
+                              w-7
+                              shrink-0
                               items-center
                               justify-center
-                              rounded-full
+                              rounded-lg
                               border
-                              text-[13px]
-                              font-semibold
+                              text-sm
+                              font-bold
                               transition-all
                               duration-200
                               ${
                                 isActive
-                                  ? "border-[#6366F1] bg-[#6366F1] text-white"
-                                  : "border-[#E2E8F0] bg-white text-[#64748B] group-hover:border-[#A5B4FC] group-hover:bg-[#EEF2FF] group-hover:text-[#4F46E5]"
+                                  ? `
+                                    border-[#6366F1]
+                                    bg-[#6366F1]
+                                    text-white
+                                    shadow-sm
+                                  `
+                                  : `
+                                    border-[#E2E8F0]
+                                    bg-[#F8FAFC]
+                                    text-[#718096]
+                                    group-hover:border-[#A5B4FC]
+                                    group-hover:bg-white
+                                    group-hover:text-[#4F46E5]
+                                  `
                               }
                             `}
                           >
-                            +
+                            {isActive ? "✓" : "+"}
                           </span>
 
-                          {/* TITLE */}
+                          {/* SELECTED LABEL */}
 
+                          {isActive && (
+                            <span
+                              className="
+                                rounded-full
+                                bg-[#6366F1]
+                                px-1.5
+                                py-0.5
+                                text-[7px]
+                                font-black
+                                uppercase
+                                tracking-wider
+                                text-white
+                              "
+                            >
+                              Added
+                            </span>
+                          )}
+                        </div>
+
+                        {/* TITLE */}
+
+                        <div className="w-full">
                           <span
                             className={`
-                              mt-1.5
                               block
-                              w-full
                               truncate
                               text-[11px]
-                              font-bold
+                              font-black
                               leading-4
+                              transition-colors
+                              duration-200
                               ${
                                 isActive
                                   ? "text-[#4F46E5]"
-                                  : "text-[#334155] group-hover:text-[#111827]"
+                                  : "text-[#111827] group-hover:text-[#4F46E5]"
                               }
                             `}
                           >
                             {section.title}
                           </span>
 
-                          {/* ACTIVE ARROW */}
+                          {/* DESCRIPTION */}
 
-                          {isActive && (
+                          {section.description && (
                             <span
-                              className="
-                                absolute
-                                right-2.5
-                                top-2.5
-                                text-[11px]
-                                font-black
-                                text-[#4F46E5]
-                              "
-                              aria-hidden="true"
+                              className={`
+                                mt-0.5
+                                block
+                                truncate
+                                text-[8px]
+                                leading-3
+                                ${
+                                  isActive
+                                    ? "text-[#6366F1]"
+                                    : "text-[#718096]"
+                                }
+                              `}
                             >
-                              →
+                              {section.description}
                             </span>
                           )}
+                        </div>
 
-                        </button>
+                        {/* ACTIVE INDICATOR */}
 
-                      </div>
+                        {isActive && (
+                          <span
+                            className="
+                              absolute
+                              right-2
+                              top-2
+                              h-1.5
+                              w-1.5
+                              rounded-full
+                              bg-[#6366F1]
+                            "
+                            aria-hidden="true"
+                          />
+                        )}
+                      </button>
                     )
                   }
                 )}
-
               </div>
-            </>
-          )}
 
+              {/* OPTIONAL HELPER */}
+
+              <div
+                className="
+                  mt-3
+                  flex
+                  items-center
+                  gap-1.5
+                  px-1
+                "
+              >
+                <span
+                  className="
+                    h-1
+                    w-1
+                    shrink-0
+                    rounded-full
+                    bg-[#6366F1]
+                  "
+                />
+
+                <p
+                  className="
+                    text-[8px]
+                    font-medium
+                    leading-3
+                    text-[#718096]
+                  "
+                >
+                  Select a section to add more detail
+                  to your resume.
+                </p>
+              </div>
+            </div>
+          )}
         </nav>
 
         {/* =================================================
@@ -780,16 +945,13 @@ function BuilderSteps({
           className="
             border-t
             border-[#E2E8F0]
-            bg-[#FAFBFC]
+            bg-[#F8FAFC]
             px-5
             py-5
           "
         >
-
           <div className="flex items-center justify-between">
-
             <div>
-
               <p
                 className="
                   text-xs
@@ -807,18 +969,21 @@ function BuilderSteps({
                 className="
                   mt-0.5
                   text-[10px]
-                  text-[#94A3B8]
+                  text-[#718096]
                 "
               >
                 {isOptionalActive
                   ? "Optional section"
                   : `Step ${safeStepIndex + 1} of ${steps.length}`}
               </p>
-
             </div>
 
             <span
               className="
+                rounded-full
+                bg-[#EEF2FF]
+                px-2.5
+                py-1
                 text-xs
                 font-black
                 text-[#4F46E5]
@@ -826,7 +991,6 @@ function BuilderSteps({
             >
               {Math.round(progress)}%
             </span>
-
           </div>
 
           {/* PROGRESS BAR */}
@@ -840,7 +1004,6 @@ function BuilderSteps({
               bg-[#E0E7FF]
             "
           >
-
             <div
               className="
                 h-full
@@ -854,7 +1017,6 @@ function BuilderSteps({
                 width: `${progress}%`,
               }}
             />
-
           </div>
 
           {/* MESSAGE */}
@@ -864,17 +1026,16 @@ function BuilderSteps({
               mt-3
               text-[10px]
               leading-4
-              text-[#94A3B8]
+              text-[#718096]
             "
           >
             {isOptionalActive
               ? "Optional information can make your resume more complete."
               : safeStepIndex ===
-                steps.length - 1
+                  steps.length - 1
                 ? "Almost there — review your resume and download it."
                 : "Keep going — each section makes your resume stronger."}
           </p>
-
         </div>
 
         {/* =================================================
@@ -891,19 +1052,16 @@ function BuilderSteps({
             pt-3
           "
         >
-
           <div
             className="
               rounded-xl
               border
-              border-[#C7D2FE]
+              border-[#E0E7FF]
               bg-[#EEF2FF]
               p-3
             "
           >
-
             <div className="flex items-start gap-2.5">
-
               <span
                 className="
                   flex
@@ -925,7 +1083,6 @@ function BuilderSteps({
               </span>
 
               <div className="min-w-0">
-
                 <p
                   className="
                     text-[10px]
@@ -941,24 +1098,18 @@ function BuilderSteps({
                     mt-0.5
                     text-[10px]
                     leading-4
-                    text-[#64748B]
+                    text-[#718096]
                   "
                 >
                   Highlight measurable results
                   instead of only listing your
                   responsibilities.
                 </p>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </aside>
   )
 }

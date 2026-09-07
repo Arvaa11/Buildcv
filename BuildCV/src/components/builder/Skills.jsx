@@ -77,16 +77,13 @@ function Skills({ formData, setFormData }) {
   return (
     <section
       className="
-        flex
-        h-[calc(100vh-190px)]
-        min-h-[740px]
-        flex-col
-        overflow-hidden
-        rounded-xl
-        border
-        border-[#E2E8F0]
-        bg-white
-      "
+    flex
+    h-full
+    min-h-0
+    flex-col
+    overflow-hidden
+    bg-white
+  "
     >
       {/* =====================================================
           HEADER
@@ -617,15 +614,14 @@ function Skills({ formData, setFormData }) {
                     transition-all
                     duration-200
 
-                    ${
-                      isAdded
-                        ? `
+                    ${isAdded
+                      ? `
                           cursor-not-allowed
                           border-[#E0E7FF]
                           bg-[#EEF2FF]
                           text-[#6366F1]/50
                         `
-                        : `
+                      : `
                           border-[#E2E8F0]
                           bg-white
                           text-[#475569]

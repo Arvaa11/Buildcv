@@ -53,82 +53,120 @@ function TemplatePreview({
     useSampleData,
   };
 
+  let PreviewComponent;
+
   switch (template.id) {
     case "classic":
-      return <ClassicPreview {...previewProps} />;
+      PreviewComponent = ClassicPreview;
+      break;
 
     case "minimal":
-      return <MinimalPreview {...previewProps} />;
+      PreviewComponent = MinimalPreview;
+      break;
 
     case "bold":
-      return <BoldPreview {...previewProps} />;
+      PreviewComponent = BoldPreview;
+      break;
 
     case "clean":
-      return <CleanPreview {...previewProps} />;
+      PreviewComponent = CleanPreview;
+      break;
 
     case "modern":
-      return <ModernPreview {...previewProps} />;
+      PreviewComponent = ModernPreview;
+      break;
 
     case "professional":
-      return <ProfessionalPreview {...previewProps} />;
+      PreviewComponent = ProfessionalPreview;
+      break;
 
     case "executive":
-      return <ExecutivePreview {...previewProps} />;
+      PreviewComponent = ExecutivePreview;
+      break;
 
     case "tech":
-      return <TechPreview {...previewProps} />;
+      PreviewComponent = TechPreview;
+      break;
 
     case "elegant":
-      return <ElegantPreview {...previewProps} />;
+      PreviewComponent = ElegantPreview;
+      break;
 
     case "academic":
-      return <AcademicPreview {...previewProps} />;
+      PreviewComponent = AcademicPreview;
+      break;
 
     case "creative":
-      return <CreativePreview {...previewProps} />;
+      PreviewComponent = CreativePreview;
+      break;
 
     case "portfolio":
-      return <PortfolioPreview {...previewProps} />;
+      PreviewComponent = PortfolioPreview;
+      break;
 
     case "aurora":
-      return <AuroraPreview {...previewProps} />;
+      PreviewComponent = AuroraPreview;
+      break;
 
     case "monarch":
-      return <MonarchPreview {...previewProps} />;
+      PreviewComponent = MonarchPreview;
+      break;
 
     case "nexus":
-      return <NexusPreview {...previewProps} />;
+      PreviewComponent = NexusPreview;
+      break;
 
     case "sage":
-      return <SagePreview {...previewProps} />;
+      PreviewComponent = SagePreview;
+      break;
 
     case "vertex":
-      return <VertexPreview {...previewProps} />;
+      PreviewComponent = VertexPreview;
+      break;
 
     case "muse":
-      return <MusePreview {...previewProps} />;
+      PreviewComponent = MusePreview;
+      break;
 
     case "orbit":
-      return <OrbitPreview {...previewProps} />;
+      PreviewComponent = OrbitPreview;
+      break;
 
     case "noir":
-      return <NoirPreview {...previewProps} />;
+      PreviewComponent = NoirPreview;
+      break;
 
     case "coral":
-      return <CoralPreview {...previewProps} />;
+      PreviewComponent = CoralPreview;
+      break;
 
     case "ocean":
-      return <OceanPreview {...previewProps} />;
+      PreviewComponent = OceanPreview;
+      break;
 
     case "stellar":
-      return <StellarPreview {...previewProps} />;
+      PreviewComponent = StellarPreview;
+      break;
 
     case "atelier":
-      return <AtelierPreview {...previewProps} />;
+      PreviewComponent = AtelierPreview;
+      break;
 
     default:
-      return <ModernPreview {...previewProps} />;
+      PreviewComponent = ModernPreview;
+      break;
   }
+
+  return (
+    <div
+      id="resume-preview"
+      data-template-id={template.id}
+      className="w-fit"
+    >
+      <PreviewComponent {...previewProps} />
+    </div>
+  );
 }
 
 export default TemplatePreview;
+ 

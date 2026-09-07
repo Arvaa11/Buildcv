@@ -1,32 +1,30 @@
-import { useEffect, useRef, useState } from "react"
-
-import ClassicPreview from "./templates/ClassicPreview"
-import MinimalPreview from "./templates/MinimalPreview"
-import BoldPreview from "./templates/BoldPreview"
-import CleanPreview from "./templates/CleanPreview"
-import ModernPreview from "./templates/ModernPreview"
-import ProfessionalPreview from "./templates/ProfessionalPreview"
-import ExecutivePreview from "./templates/ExecutivePreview"
-import TechPreview from "./templates/TechPreview"
-import ElegantPreview from "./templates/ElegantPreview"
-import AcademicPreview from "./templates/AcademicPreview"
-import CreativePreview from "./templates/CreativePreview"
-import PortfolioPreview from "./templates/PortfolioPreview"
-import AuroraPreview from "./templates/AuroraPreview"
-import MonarchPreview from "./templates/MonarchPreview"
-import NexusPreview from "./templates/NexusPreview"
-import SagePreview from "./templates/SagePreview"
-import VertexPreview from "./templates/VertexPreview"
-import MusePreview from "./templates/MusePreview"
-import OrbitPreview from "./templates/OrbitPreview"
-import NoirPreview from "./templates/NoirPreview"
-import CoralPreview from "./templates/CoralPreview"
-import OceanPreview from "./templates/OceanPreview"
-import StellarPreview from "./templates/StellarPreview"
-import AtelierPreview from "./templates/AtelierPreview"
+import ClassicPreview from "./templates/ClassicPreview";
+import MinimalPreview from "./templates/MinimalPreview";
+import BoldPreview from "./templates/BoldPreview";
+import CleanPreview from "./templates/CleanPreview";
+import ModernPreview from "./templates/ModernPreview";
+import ProfessionalPreview from "./templates/ProfessionalPreview";
+import ExecutivePreview from "./templates/ExecutivePreview";
+import TechPreview from "./templates/TechPreview";
+import ElegantPreview from "./templates/ElegantPreview";
+import AcademicPreview from "./templates/AcademicPreview";
+import CreativePreview from "./templates/CreativePreview";
+import PortfolioPreview from "./templates/PortfolioPreview";
+import AuroraPreview from "./templates/AuroraPreview";
+import MonarchPreview from "./templates/MonarchPreview";
+import NexusPreview from "./templates/NexusPreview";
+import SagePreview from "./templates/SagePreview";
+import VertexPreview from "./templates/VertexPreview";
+import MusePreview from "./templates/MusePreview";
+import OrbitPreview from "./templates/OrbitPreview";
+import NoirPreview from "./templates/NoirPreview";
+import CoralPreview from "./templates/CoralPreview";
+import OceanPreview from "./templates/OceanPreview";
+import StellarPreview from "./templates/StellarPreview";
+import AtelierPreview from "./templates/AtelierPreview";
 
 // =====================================================
-// TEMPLATE COMPONENTS
+// BUILDCV — TEMPLATE COMPONENTS
 // =====================================================
 
 const templateComponents = {
@@ -38,10 +36,12 @@ const templateComponents = {
   elegant: ElegantPreview,
   classic: ClassicPreview,
   academic: AcademicPreview,
+
   bold: BoldPreview,
   clean: CleanPreview,
   tech: TechPreview,
   portfolio: PortfolioPreview,
+
   aurora: AuroraPreview,
   monarch: MonarchPreview,
   nexus: NexusPreview,
@@ -54,23 +54,22 @@ const templateComponents = {
   ocean: OceanPreview,
   stellar: StellarPreview,
   atelier: AtelierPreview,
-}
+};
+
 
 // =====================================================
-// RESUME PREVIEW
+// BUILDCV — RESUME PREVIEW
 // =====================================================
+
 function ResumePreview({
   selectedTemplate = "modern",
   formData = {},
   previewId = "resume-preview",
   fitToContainer = false,
 }) {
-  const containerRef = useRef(null)
-
-  const [scale, setScale] = useState(1)
 
   // ===================================================
-  // TEMPLATE ID
+  // GET TEMPLATE ID
   // ===================================================
 
   const templateId =
@@ -79,10 +78,11 @@ function ResumePreview({
       : selectedTemplate?.id ||
         selectedTemplate?.slug ||
         selectedTemplate?.preview ||
-        "modern"
+        "modern";
+
 
   // ===================================================
-  // PERSONAL
+  // PERSONAL INFORMATION
   // ===================================================
 
   const personal = {
@@ -96,10 +96,11 @@ function ResumePreview({
     summary: "",
     profileImage: "",
     ...(formData.personal || {}),
-  }
+  };
+
 
   // ===================================================
-  // NORMALIZED DATA
+  // NORMALIZED RESUME DATA
   // ===================================================
 
   const normalizedData = {
@@ -121,35 +122,9 @@ function ResumePreview({
       ? formData.projects
       : [],
 
-    certifications:
-      formData.certifications || {
-        enabled: false,
-        items: [],
-      },
-
-    languages:
-      formData.languages || {
-        enabled: false,
-        items: [],
-      },
-
-    achievements:
-      formData.achievements || {
-        enabled: false,
-        items: [],
-      },
-
-    interests:
-      formData.interests || {
-        enabled: false,
-        value: "",
-      },
-
-    references:
-      formData.references || {
-        enabled: false,
-        items: [],
-      },
+    // -----------------------------------------------
+    // Flat values for templates that use them
+    // -----------------------------------------------
 
     fullName: personal.fullName,
     jobTitle: personal.jobTitle,
@@ -160,185 +135,42 @@ function ResumePreview({
     github: personal.github,
     summary: personal.summary,
     profileImage: personal.profileImage,
-  }
+  };
+
 
   // ===================================================
-  // TEMPLATE
+  // TEMPLATE PROPS
   // ===================================================
 
   const templateProps = {
     formData: normalizedData,
     data: normalizedData,
-  }
+  };
+
+
+  // ===================================================
+  // SELECT TEMPLATE COMPONENT
+  // ===================================================
 
   const TemplateComponent =
-    templateComponents[templateId] ||
-    ModernPreview
+    templateComponents[templateId] || ModernPreview;
+
 
   // ===================================================
-  // A4 FIT CALCULATION
-  // ===================================================
-
-  useEffect(() => {
-    if (!fitToContainer) {
-      setScale(1)
-      return
-    }
-
-    const container =
-      containerRef.current
-
-    if (!container) {
-      return
-    }
-
-    const updateScale = () => {
-      const availableWidth =
-        container.clientWidth
-
-      const availableHeight =
-        container.clientHeight
-
-      if (
-        availableWidth <= 0 ||
-        availableHeight <= 0
-      ) {
-        return
-      }
-
-      // A4 dimensions in CSS pixels
-      const A4_WIDTH = 794
-      const A4_HEIGHT = 1123
-
-      // Fit based on BOTH width and height.
-      const widthScale =
-        availableWidth / A4_WIDTH
-
-      const heightScale =
-        availableHeight / A4_HEIGHT
-
-      const fittedScale =
-        Math.min(
-          widthScale,
-          heightScale
-        )
-
-      setScale(fittedScale)
-    }
-
-    updateScale()
-
-    const resizeObserver =
-      new ResizeObserver(
-        updateScale
-      )
-
-    resizeObserver.observe(container)
-
-    window.addEventListener(
-      "resize",
-      updateScale
-    )
-
-    return () => {
-      resizeObserver.disconnect()
-
-      window.removeEventListener(
-        "resize",
-        updateScale
-      )
-    }
-  }, [fitToContainer])
-
-  // ===================================================
-  // FITTED PREVIEW
-  // ===================================================
-
-  if (fitToContainer) {
-    return (
-      <div
-        ref={containerRef}
-        style={{
-          width: "100%",
-          height: "100%",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          overflow: "hidden",
-
-          backgroundColor: "#F8FAFC",
-
-          position: "relative",
-        }}
-      >
-
-        <div
-          id={previewId}
-          className="resume-preview"
-          data-template={templateId}
-          style={{
-            width: "794px",
-            height: "1123px",
-
-            minWidth: "794px",
-            minHeight: "1123px",
-
-            margin: 0,
-            padding: 0,
-
-            backgroundColor: "#FFFFFF",
-            color: "#111827",
-
-            boxSizing: "border-box",
-
-            overflow: "visible",
-
-            position: "absolute",
-
-            top: "50%",
-            left: "50%",
-
-            transform: `
-              translate(-50%, -50%)
-              scale(${scale})
-            `,
-
-            transformOrigin: "center center",
-
-            boxShadow:
-              "0 4px 18px rgba(15, 23, 42, 0.10)",
-          }}
-        >
-
-          <TemplateComponent
-            {...templateProps}
-          />
-
-        </div>
-
-      </div>
-    )
-  }
-
-  // ===================================================
-  // FULL A4 VERSION
-  //
-  // Used for PDF/export.
+  // RENDER
   // ===================================================
 
   return (
     <div
       id={previewId}
-      className="resume-preview"
+      className={`resume-preview${fitToContainer ? " resume-preview--fit" : ""}`}
       data-template={templateId}
       style={{
-        width: "794px",
-        height: "1123px",
+        width: "210mm",
+        minWidth: "210mm",
 
-        minWidth: "794px",
-        minHeight: "1123px",
+        height: "297mm",
+        minHeight: "297mm",
 
         margin: 0,
         padding: 0,
@@ -348,57 +180,14 @@ function ResumePreview({
 
         boxSizing: "border-box",
 
-        overflow: "visible",
+        overflow: "hidden",
 
         position: "relative",
       }}
     >
-
-      <TemplateComponent
-        {...templateProps}
-      />
-
+      <TemplateComponent {...templateProps} />
     </div>
-  )
+  );
 }
-  // ===================================================
-  // NORMAL A4 VERSION
-  //
-  // Used by PDF/download logic.
-  // ===================================================
-
-  return (
-    <div
-      id={previewId}
-      className="resume-preview"
-      data-template={templateId}
-      style={{
-        width: "794px",
-        minWidth: "794px",
-
-        height: "1123px",
-        minHeight: "1123px",
-
-        margin: 0,
-        padding: 0,
-
-        backgroundColor: "#FFFFFF",
-        color: "#111827",
-
-        boxSizing: "border-box",
-
-        overflow: "visible",
-
-        position: "relative",
-      }}
-    >
-
-      <TemplateComponent
-        {...templateProps}
-      />
-
-    </div>
-  )
-
 
 export default ResumePreview

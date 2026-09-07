@@ -1,106 +1,146 @@
-
 import { useState } from "react";
+
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 
 /* =========================================================
-   BUILD CV — SAFE COLOR CONVERTER
+   COLOR HELPERS
 ========================================================= */
 
-function colorToRgb(color) {
-  if (!color) return color;
+function isUnsupportedColor(value) {
+  if (!value) return false;
 
-  const value = String(color).trim();
+  const color = String(value).toLowerCase();
 
-  if (
-    !value ||
-    value === "transparent" ||
-    value.startsWith("rgb(") ||
-    value.startsWith("rgba(") ||
-    value.startsWith("#")
-  ) {
-    return value;
-  }
-
-  try {
-    const helper = document.createElement("div");
-
-    helper.style.position = "absolute";
-    helper.style.visibility = "hidden";
-    helper.style.pointerEvents = "none";
-    helper.style.color = value;
-
-    document.body.appendChild(helper);
-
-    const computed =
-      window.getComputedStyle(helper).color;
-
-    helper.remove();
-
-    return computed || value;
-  } catch {
-    return value;
-  }
-}
-
-/* =========================================================
-   REPLACE OKLCH COLORS
-========================================================= */
-
-function replaceOklchInCss(css) {
-  if (!css || typeof css !== "string") {
-    return css;
-  }
-
-  if (!css.toLowerCase().includes("oklch")) {
-    return css;
-  }
-
-  return css.replace(
-    /oklch\([^)]*\)/gi,
-    (match) => {
-      const converted = colorToRgb(match);
-
-      if (
-        converted &&
-        (
-          converted.startsWith("rgb(") ||
-          converted.startsWith("rgba(")
-        )
-      ) {
-        return converted;
-      }
-
-      return "#000000";
-    }
+  return (
+    color.includes("oklch(") ||
+    color.includes("oklab(") ||
+    color.includes("color-mix(") ||
+    color.includes("lab(") ||
+    color.includes("lch(")
   );
 }
 
+function safeColor(value, property = "", element = null) {
+  if (!value) return value;
+
+  if (!isUnsupportedColor(value)) {
+    return value;
+  }
+
+  const normalizedValue =
+    String(value).toLowerCase();
+
+  const className =
+    typeof element?.className === "string"
+      ? element.className
+      : "";
+
+  const propertyName =
+    String(property).toLowerCase();
+
+  if (propertyName.includes("background")) {
+    if (className.includes("bg-fuchsia-50")) {
+      return "#FDF4FF";
+    }
+
+    if (className.includes("bg-indigo-50")) {
+      return "#EEF2FF";
+    }
+
+    if (className.includes("bg-indigo-100")) {
+      return "#E0E7FF";
+    }
+
+    if (className.includes("bg-slate-50")) {
+      return "#F8FAFC";
+    }
+
+    if (className.includes("bg-white")) {
+      return "#FFFFFF";
+    }
+
+    if (normalizedValue.includes("fuchsia")) {
+      return "#FDF4FF";
+    }
+
+    if (normalizedValue.includes("indigo")) {
+      return "#EEF2FF";
+    }
+
+    if (normalizedValue.includes("slate")) {
+      return "#F8FAFC";
+    }
+
+    return "#FFFFFF";
+  }
+
+  if (propertyName.includes("border")) {
+    return "#E2E8F0";
+  }
+
+  if (
+    propertyName === "fill" ||
+    propertyName === "stroke"
+  ) {
+    return "#6366F1";
+  }
+
+  return "#111827";
+}
+
 /* =========================================================
-   SANITIZE STYLE TAGS
+   CSS SANITIZATION
 ========================================================= */
 
-function sanitizeStyleElements(root) {
+function sanitizeCssText(cssText) {
+  if (!cssText) return "";
+
+  return String(cssText)
+    .replace(
+      /color-mix\([^;{}]*\)/gi,
+      "#111827"
+    )
+    .replace(
+      /oklch\([^)]*\)/gi,
+      "#111827"
+    )
+    .replace(
+      /oklab\([^)]*\)/gi,
+      "#111827"
+    )
+    .replace(
+      /lab\([^)]*\)/gi,
+      "#111827"
+    )
+    .replace(
+      /lch\([^)]*\)/gi,
+      "#111827"
+    );
+}
+
+function sanitizeStyleTags(root) {
   if (!root) return;
 
-  const styleElements =
-    root.querySelectorAll?.("style") || [];
+  const styles =
+    root.querySelectorAll("style");
 
-  styleElements.forEach((styleElement) => {
-    const css =
-      styleElement.textContent || "";
+  styles.forEach((style) => {
+    try {
+      if (!style.textContent) return;
 
-    if (
-      css.toLowerCase().includes("oklch")
-    ) {
-      styleElement.textContent =
-        replaceOklchInCss(css);
+      style.textContent =
+        sanitizeCssText(
+          style.textContent
+        );
+    } catch {
+      // Ignore.
     }
   });
 }
 
 /* =========================================================
-   SANITIZE INLINE STYLES
+   SANITIZE COMPUTED COLORS
 ========================================================= */
 
 function sanitizeInlineStyles(root) {
@@ -108,107 +148,347 @@ function sanitizeInlineStyles(root) {
 
   const elements = [
     root,
-    ...(root.querySelectorAll?.("*") || []),
+    ...Array.from(
+      root.querySelectorAll("*")
+    ),
   ];
 
-  elements.forEach((element) => {
-    const style =
-      element.getAttribute("style");
-
-    if (
-      style &&
-      style.toLowerCase().includes("oklch")
-    ) {
-      element.setAttribute(
-        "style",
-        replaceOklchInCss(style)
-      );
-    }
-  });
-}
-
-/* =========================================================
-   MAKE CLONED ELEMENT COLORS SAFE
-
-   IMPORTANT:
-   We only replace unsafe colors.
-   We DO NOT overwrite normal template colors.
-========================================================= */
-
-function makeColorsSafe(source, target) {
-  if (!source || !target) return;
-
-  const sourceStyle =
-    window.getComputedStyle(source);
-
-  const properties = [
+  const colorProperties = [
     "color",
     "backgroundColor",
+    "borderColor",
     "borderTopColor",
     "borderRightColor",
     "borderBottomColor",
     "borderLeftColor",
     "outlineColor",
     "textDecorationColor",
-    "caretColor",
-    "columnRuleColor",
+    "fill",
+    "stroke",
   ];
 
-  properties.forEach((property) => {
-    const value =
-      sourceStyle[property];
+  elements.forEach((element) => {
+    try {
+      const computed =
+        window.getComputedStyle(
+          element
+        );
 
-    if (!value) return;
+      colorProperties.forEach(
+        (property) => {
+          const value =
+            computed[property];
 
-    if (
-      value.toLowerCase().includes("oklch")
-    ) {
-      const safeValue =
-        colorToRgb(value);
+          if (!value) return;
 
-      if (safeValue) {
-        target.style[property] =
-          safeValue;
-      }
+          if (
+            isUnsupportedColor(value)
+          ) {
+            element.style.setProperty(
+              property,
+              safeColor(
+                value,
+                property,
+                element
+              ),
+              "important"
+            );
+          }
+        }
+      );
+    } catch {
+      // Ignore.
     }
   });
-
-  /* Box shadow */
-
-  if (
-    sourceStyle.boxShadow &&
-    sourceStyle.boxShadow
-      .toLowerCase()
-      .includes("oklch")
-  ) {
-    target.style.boxShadow =
-      replaceOklchInCss(
-        sourceStyle.boxShadow
-      );
-  }
-
-  /* Text shadow */
-
-  if (
-    sourceStyle.textShadow &&
-    sourceStyle.textShadow
-      .toLowerCase()
-      .includes("oklch")
-  ) {
-    target.style.textShadow =
-      replaceOklchInCss(
-        sourceStyle.textShadow
-      );
-  }
 }
 
 /* =========================================================
-   WAIT FOR IMAGES
+   COPY COMPUTED STYLES
+
+   IMPORTANT:
+   NO !important here.
+
+   Otherwise copied fixed heights can become
+   impossible to override later.
 ========================================================= */
 
-async function waitForImages(container) {
+function inlineComputedStyles(
+  sourceRoot,
+  targetRoot
+) {
+  if (!sourceRoot || !targetRoot) {
+    return;
+  }
+
+  const sourceElements = [
+    sourceRoot,
+    ...Array.from(
+      sourceRoot.querySelectorAll("*")
+    ),
+  ];
+
+  const targetElements = [
+    targetRoot,
+    ...Array.from(
+      targetRoot.querySelectorAll("*")
+    ),
+  ];
+
+  sourceElements.forEach(
+    (sourceElement, index) => {
+      const targetElement =
+        targetElements[index];
+
+      if (!targetElement) return;
+
+      try {
+        const computed =
+          window.getComputedStyle(
+            sourceElement
+          );
+
+        for (
+          let i = 0;
+          i < computed.length;
+          i += 1
+        ) {
+          const property =
+            computed[i];
+
+          let value =
+            computed.getPropertyValue(
+              property
+            );
+
+          if (
+            isUnsupportedColor(value)
+          ) {
+            value = safeColor(
+              value,
+              property,
+              sourceElement
+            );
+          }
+
+          targetElement.style.setProperty(
+            property,
+            value
+          );
+        }
+      } catch {
+        // Ignore.
+      }
+    }
+  );
+}
+
+/* =========================================================
+   IMPORTANT FIX
+   EXPAND CLIPPED CONTENT
+
+   This searches the COMPLETE cloned resume.
+
+   Example:
+
+   height: 1123px
+   overflow: hidden
+
+   while:
+
+   scrollHeight: 1780px
+
+   means the template is clipping content.
+
+   We change that element to:
+
+   height: auto
+   max-height: none
+   overflow: visible
+========================================================= */
+
+function expandClippedElements(
+  root,
+  targetDocument = document
+) {
+  if (!root) return;
+
+  const elements = [
+    root,
+    ...Array.from(
+      root.querySelectorAll("*")
+    ),
+  ];
+
+  const getStyle =
+    targetDocument.defaultView?.getComputedStyle ||
+    window.getComputedStyle;
+
+  let expandedCount = 0;
+
+  elements.forEach((element) => {
+    try {
+      const computed =
+        getStyle(element);
+
+      const clientHeight =
+        element.clientHeight || 0;
+
+      const scrollHeight =
+        element.scrollHeight || 0;
+
+      /*
+       * Only modify an element when its
+       * content is actually taller than
+       * the element itself.
+       */
+      const isActuallyClipping =
+        scrollHeight >
+        clientHeight + 2;
+
+      if (!isActuallyClipping) {
+        return;
+      }
+
+      const overflow =
+        `${computed.overflow} ${computed.overflowY}`
+          .toLowerCase();
+
+      const hasFixedHeight =
+        computed.height !== "auto" ||
+        computed.maxHeight !== "none";
+
+      const isClipped =
+        overflow.includes("hidden") ||
+        overflow.includes("clip");
+
+      if (
+        isClipped ||
+        hasFixedHeight
+      ) {
+        element.style.setProperty(
+          "height",
+          "auto",
+          "important"
+        );
+
+        element.style.setProperty(
+          "max-height",
+          "none",
+          "important"
+        );
+
+        element.style.setProperty(
+          "overflow",
+          "visible",
+          "important"
+        );
+
+        element.style.setProperty(
+          "overflow-y",
+          "visible",
+          "important"
+        );
+
+        expandedCount += 1;
+      }
+    } catch {
+      // Ignore individual elements.
+    }
+  });
+
+  console.log(
+    "BUILD CV: EXPANDED CLIPPED ELEMENTS:",
+    expandedCount
+  );
+}
+
+/* =========================================================
+   SVG
+========================================================= */
+
+function sanitizeSvg(root) {
+  if (!root) return;
+
+  const svgElements =
+    root.querySelectorAll(
+      "svg *"
+    );
+
+  svgElements.forEach((element) => {
+    try {
+      const fill =
+        element.getAttribute("fill");
+
+      const stroke =
+        element.getAttribute("stroke");
+
+      if (
+        fill &&
+        isUnsupportedColor(fill)
+      ) {
+        element.setAttribute(
+          "fill",
+          "#6366F1"
+        );
+      }
+
+      if (
+        stroke &&
+        isUnsupportedColor(stroke)
+      ) {
+        element.setAttribute(
+          "stroke",
+          "#6366F1"
+        );
+      }
+    } catch {
+      // Ignore.
+    }
+  });
+}
+
+/* =========================================================
+   STYLE ATTRIBUTE SANITIZATION
+========================================================= */
+
+function sanitizeAttributes(root) {
+  if (!root) return;
+
+  const elements = [
+    root,
+    ...Array.from(
+      root.querySelectorAll("*")
+    ),
+  ];
+
+  elements.forEach((element) => {
+    try {
+      const style =
+        element.getAttribute(
+          "style"
+        );
+
+      if (style) {
+        element.setAttribute(
+          "style",
+          sanitizeCssText(style)
+        );
+      }
+    } catch {
+      // Ignore.
+    }
+  });
+}
+
+/* =========================================================
+   IMAGES
+========================================================= */
+
+async function waitForImages(root) {
+  if (!root) return;
+
   const images = Array.from(
-    container.querySelectorAll("img")
+    root.querySelectorAll("img")
   );
 
   await Promise.all(
@@ -218,32 +498,37 @@ async function waitForImages(container) {
       }
 
       return new Promise((resolve) => {
-        const done = () => resolve();
-
-        img.addEventListener(
-          "load",
-          done,
-          { once: true }
-        );
-
-        img.addEventListener(
-          "error",
-          done,
-          { once: true }
-        );
+        img.onload = resolve;
+        img.onerror = resolve;
       });
     })
   );
 }
 
 /* =========================================================
-   WAIT FOR BROWSER PAINT
+   FONTS
+========================================================= */
+
+async function waitForFonts() {
+  try {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+  } catch {
+    // Ignore.
+  }
+}
+
+/* =========================================================
+   PAINT
 ========================================================= */
 
 function waitForPaint() {
   return new Promise((resolve) => {
     requestAnimationFrame(() => {
-      requestAnimationFrame(resolve);
+      requestAnimationFrame(() => {
+        resolve();
+      });
     });
   });
 }
@@ -255,496 +540,599 @@ function waitForPaint() {
 function DownloadButton({
   previewId = "resume-preview",
 }) {
-  const [downloading, setDownloading] =
-    useState(false);
+  const [
+    isDownloading,
+    setIsDownloading,
+  ] = useState(false);
 
   const handleDownload = async () => {
-    if (downloading) return;
+    if (isDownloading) return;
 
-    setDownloading(true);
+    setIsDownloading(true);
 
-    let printContainer = null;
+    let captureHost = null;
 
     try {
       /* =====================================================
-         1. FIND SELECTED TEMPLATE
+         1. FIND PREVIEW
       ===================================================== */
 
-      const preview =
-        document.getElementById(previewId);
-
-      if (!preview) {
-        throw new Error(
-          `Resume preview "${previewId}" was not found.`
+      const originalPreview =
+        document.getElementById(
+          previewId
         );
-      }
 
-      const previewRect =
-        preview.getBoundingClientRect();
-
-      if (
-        previewRect.width <= 0 ||
-        previewRect.height <= 0
-      ) {
+      if (!originalPreview) {
         throw new Error(
-          "The selected resume template is not visible."
+          `Resume preview not found: #${previewId}`
         );
       }
 
       /* =====================================================
-         2. WAIT FOR FONTS
+         2. ORIGINAL SIZE
       ===================================================== */
 
-      if (document.fonts?.ready) {
-        await document.fonts.ready;
-      }
+      const originalRect =
+        originalPreview.getBoundingClientRect();
+
+      console.log(
+        "BUILD CV: ORIGINAL SIZE:",
+        originalRect.width,
+        "x",
+        originalRect.height
+      );
+
+      console.log(
+        "BUILD CV: ORIGINAL SCROLL SIZE:",
+        originalPreview.scrollWidth,
+        "x",
+        originalPreview.scrollHeight
+      );
 
       /* =====================================================
-         3. WAIT FOR IMAGES
+         3. CAPTURE HOST
       ===================================================== */
 
-      await waitForImages(preview);
+      captureHost =
+        document.createElement(
+          "div"
+        );
 
-      /* =====================================================
-         4. WAIT FOR RENDER
-      ===================================================== */
+      captureHost.setAttribute(
+        "data-buildcv-pdf-host",
+        "true"
+      );
 
-      await waitForPaint();
-
-      /* =====================================================
-         5. CREATE PRINT CONTAINER
-      ===================================================== */
-
-      printContainer =
-        document.createElement("div");
-
-      printContainer.id =
-        "buildcv-pdf-container";
-
-      printContainer.style.position =
-        "fixed";
-
-      printContainer.style.left =
-        "-100000px";
-
-      printContainer.style.top =
-        "0";
-
-      printContainer.style.width =
-        "794px";
-
-      printContainer.style.margin =
-        "0";
-
-      printContainer.style.padding =
-        "0";
-
-      printContainer.style.backgroundColor =
-        "#FFFFFF";
-
-      printContainer.style.visibility =
-        "visible";
-
-      printContainer.style.pointerEvents =
-        "none";
-
-      printContainer.style.zIndex =
-        "-999999";
+      Object.assign(
+        captureHost.style,
+        {
+          position: "fixed",
+          left: "0",
+          top: "0",
+          width: "794px",
+          minWidth: "794px",
+          maxWidth: "794px",
+          height: "auto",
+          minHeight: "0",
+          margin: "0",
+          padding: "0",
+          display: "block",
+          visibility: "visible",
+          opacity: "1",
+          overflow: "visible",
+          transform: "none",
+          pointerEvents: "none",
+          zIndex: "2147483647",
+          background: "#FFFFFF",
+        }
+      );
 
       document.body.appendChild(
-        printContainer
+        captureHost
       );
 
       /* =====================================================
-         6. CLONE SELECTED TEMPLATE
+         4. CLONE
       ===================================================== */
 
-      const clone =
-        preview.cloneNode(true);
+      const resumeClone =
+        originalPreview.cloneNode(
+          true
+        );
 
-      clone.id =
-        `${previewId}-pdf-clone`;
+      resumeClone.removeAttribute(
+        "id"
+      );
 
-      clone.style.width =
-        "794px";
+      resumeClone.setAttribute(
+        "data-buildcv-pdf-clone",
+        "true"
+      );
 
-      clone.style.maxWidth =
-        "794px";
-
-      clone.style.minWidth =
-        "794px";
-
-      clone.style.height =
-        "auto";
-
-      clone.style.minHeight =
-        "0";
-
-      clone.style.margin =
-        "0";
-
-      clone.style.boxSizing =
-        "border-box";
-
-      clone.style.transform =
-        "none";
-
-      clone.style.backgroundColor =
-        "#FFFFFF";
-
-      printContainer.appendChild(
-        clone
+      captureHost.appendChild(
+        resumeClone
       );
 
       /* =====================================================
-         7. REMOVE BUILDER UI
-
-         We only remove controls.
-         Resume content remains untouched.
+         5. COPY LIVE STYLES
       ===================================================== */
 
-      clone
-        .querySelectorAll(
-          "button, input, textarea, select"
-        )
-        .forEach((element) => {
-          element.remove();
-        });
+      inlineComputedStyles(
+        originalPreview,
+        resumeClone
+      );
 
       /* =====================================================
-         8. FIX CLONED ELEMENT SIZING
+         6. ROOT PDF OVERRIDES
       ===================================================== */
 
-      const cloneElements = [
-        clone,
-        ...clone.querySelectorAll("*"),
-      ];
+      resumeClone.style.setProperty(
+        "display",
+        "block",
+        "important"
+      );
 
-      cloneElements.forEach((element) => {
-        element.style.boxSizing =
-          "border-box";
+      resumeClone.style.setProperty(
+        "visibility",
+        "visible",
+        "important"
+      );
 
-        element.style.overflowWrap =
-          "break-word";
+      resumeClone.style.setProperty(
+        "opacity",
+        "1",
+        "important"
+      );
 
-        element.style.wordBreak =
-          "break-word";
+      resumeClone.style.setProperty(
+        "position",
+        "relative",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "width",
+        "794px",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "min-width",
+        "794px",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "max-width",
+        "794px",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "height",
+        "auto",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "min-height",
+        "0",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "max-height",
+        "none",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "overflow",
+        "visible",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "overflow-y",
+        "visible",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "transform",
+        "none",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "margin",
+        "0",
+        "important"
+      );
+
+      resumeClone.style.setProperty(
+        "background",
+        "#FFFFFF",
+        "important"
+      );
+
+      /* =====================================================
+         7. HIDE CONTROLS
+      ===================================================== */
+
+      const controls =
+        resumeClone.querySelectorAll(
+          "button, .pdf-hide, .no-print, [data-pdf-hide]"
+        );
+
+      controls.forEach((element) => {
+        element.style.setProperty(
+          "display",
+          "none",
+          "important"
+        );
       });
 
       /* =====================================================
-         9. COPY ONLY SAFE COLORS
+         8. EXPAND EVERY ACTUALLY CLIPPED ELEMENT
 
-         Normal colors remain unchanged.
+         THIS IS THE MAIN FIX.
       ===================================================== */
 
-      const originalElements = [
-        preview,
-        ...preview.querySelectorAll("*"),
-      ];
-
-      const copiedElements = [
-        clone,
-        ...clone.querySelectorAll("*"),
-      ];
-
-      copiedElements.forEach(
-        (element, index) => {
-          const original =
-            originalElements[index];
-
-          if (!original) return;
-
-          makeColorsSafe(
-            original,
-            element
-          );
-        }
+      expandClippedElements(
+        resumeClone,
+        document
       );
 
       /* =====================================================
-         10. SANITIZE CLONE
-
-         IMPORTANT:
-         We sanitize the CLONE,
-         not the real application document.
+         9. SANITIZE
       ===================================================== */
 
-      sanitizeStyleElements(
-        printContainer
+      sanitizeStyleTags(
+        resumeClone
       );
 
       sanitizeInlineStyles(
-        printContainer
+        resumeClone
+      );
+
+      sanitizeSvg(
+        resumeClone
+      );
+
+      sanitizeAttributes(
+        resumeClone
       );
 
       /* =====================================================
-         11. FIND ACTUAL RESUME PAGE
-
-         Some templates have:
-
-         preview
-           └── resume-page
-
-         Others use preview directly.
+         10. WAIT
       ===================================================== */
 
-      let resumePage = clone;
+      await waitForImages(
+        resumeClone
+      );
 
-      const children =
-        Array.from(clone.children);
-
-      if (children.length === 1) {
-        const possiblePage =
-          children[0];
-
-        const possibleRect =
-          possiblePage.getBoundingClientRect();
-
-        if (
-          possibleRect.width >= 700
-        ) {
-          resumePage =
-            possiblePage;
-        }
-      }
-
-      /* =====================================================
-         12. FORCE A4 WIDTH
-      ===================================================== */
-
-      const A4_WIDTH_PX = 794;
-      const A4_HEIGHT_PX = 1123;
-
-      resumePage.style.width =
-        `${A4_WIDTH_PX}px`;
-
-      resumePage.style.maxWidth =
-        `${A4_WIDTH_PX}px`;
-
-      resumePage.style.minWidth =
-        `${A4_WIDTH_PX}px`;
-
-      resumePage.style.margin =
-        "0";
-
-      resumePage.style.boxSizing =
-        "border-box";
-
-      resumePage.style.transform =
-        "none";
-
-      resumePage.style.transformOrigin =
-        "top left";
-
-      /* =====================================================
-         13. MEASURE CONTENT
-      ===================================================== */
+      await waitForFonts();
 
       await waitForPaint();
 
-      let contentHeight =
-        Math.max(
-          resumePage.scrollHeight,
-          resumePage.getBoundingClientRect()
-            .height
-        );
+      /*
+       * Run expansion a second time.
 
-      if (
-        !contentHeight ||
-        contentHeight < 100
-      ) {
-        throw new Error(
-          "The selected resume template contains no printable content."
-        );
-      }
+       * Why?
 
-      /* =====================================================
-         14. SCALE TEMPLATE TO FIT ONE A4 PAGE
+       * Fonts/images can change the content height.
+       */
 
-         We scale only when necessary.
-
-         This keeps smaller templates at their
-         original size.
-      ===================================================== */
-
-      if (
-        contentHeight >
-        A4_HEIGHT_PX
-      ) {
-        const scale =
-          A4_HEIGHT_PX /
-          contentHeight;
-
-        resumePage.style.transform =
-          `scale(${scale})`;
-
-        resumePage.style.transformOrigin =
-          "top left";
-
-        /*
-          Increase layout width so the
-          transformed page still renders
-          correctly.
-        */
-
-        resumePage.style.width =
-          `${A4_WIDTH_PX / scale}px`;
-      }
-
-      /* =====================================================
-         15. FINAL CLONE SANITIZATION
-      ===================================================== */
-
-      sanitizeStyleElements(
-        printContainer
-      );
-
-      sanitizeInlineStyles(
-        printContainer
+      expandClippedElements(
+        resumeClone,
+        document
       );
 
       await waitForPaint();
 
       /* =====================================================
-         16. RENDER SELECTED TEMPLATE
+         11. MEASURE
       ===================================================== */
 
-      const finalHeight =
-        Math.min(
-          A4_HEIGHT_PX,
+      const cloneRect =
+        resumeClone.getBoundingClientRect();
+
+      const cloneWidth =
+        Math.ceil(
           Math.max(
-            A4_HEIGHT_PX,
-            resumePage.getBoundingClientRect()
-              .height
+            cloneRect.width || 0,
+            resumeClone.scrollWidth || 0,
+            resumeClone.offsetWidth || 0,
+            794
           )
         );
 
+      const cloneHeight =
+        Math.ceil(
+          Math.max(
+            cloneRect.height || 0,
+            resumeClone.scrollHeight || 0,
+            resumeClone.offsetHeight || 0
+          )
+        );
+
+      console.log(
+        "BUILD CV: FINAL CLONE RECT:",
+        cloneRect.width,
+        "x",
+        cloneRect.height
+      );
+
+      console.log(
+        "BUILD CV: FINAL CLONE SCROLL:",
+        resumeClone.scrollWidth,
+        "x",
+        resumeClone.scrollHeight
+      );
+
+      console.log(
+        "BUILD CV: FINAL CLONE SIZE:",
+        cloneWidth,
+        "x",
+        cloneHeight
+      );
+
+      if (
+        cloneWidth <= 0 ||
+        cloneHeight <= 0
+      ) {
+        throw new Error(
+          `Invalid PDF clone dimensions: ${cloneWidth} x ${cloneHeight}`
+        );
+      }
+
+      /* =====================================================
+         12. HTML2CANVAS
+      ===================================================== */
+
       const canvas =
         await html2canvas(
-          resumePage,
+          resumeClone,
           {
             scale: 2,
+
+            backgroundColor:
+              "#FFFFFF",
 
             useCORS: true,
 
             allowTaint: false,
 
-            backgroundColor:
-              "#FFFFFF",
-
             logging: false,
 
-            imageTimeout: 20000,
+            imageTimeout: 15000,
 
-            width:
-              A4_WIDTH_PX,
+            width: cloneWidth,
 
-            height:
-              A4_HEIGHT_PX,
+            height: cloneHeight,
 
-            windowWidth:
-              A4_WIDTH_PX,
+            x: 0,
 
-            windowHeight:
-              A4_HEIGHT_PX,
+            y: 0,
 
             scrollX: 0,
 
             scrollY: 0,
 
+            windowWidth: Math.max(
+              window.innerWidth,
+              cloneWidth
+            ),
+
+            windowHeight: Math.max(
+              window.innerHeight,
+              cloneHeight
+            ),
+
             onclone: (
               clonedDocument
             ) => {
-              /* ---------------------------------------------
-                 SANITIZE ONLY HTML2CANVAS CLONE
-              --------------------------------------------- */
+              try {
+                /* -----------------------------------------
+                   FIND CLONED RESUME
+                ----------------------------------------- */
 
-              sanitizeStyleElements(
-                clonedDocument
-              );
+                const clonedResume =
+                  clonedDocument.querySelector(
+                    "[data-buildcv-pdf-clone='true']"
+                  );
 
-              sanitizeInlineStyles(
-                clonedDocument
-              );
-
-              /* ---------------------------------------------
-                 FIND OUR SELECTED TEMPLATE
-              --------------------------------------------- */
-
-              const clonedPreview =
-                clonedDocument.getElementById(
-                  `${previewId}-pdf-clone`
-                );
-
-              if (!clonedPreview) {
-                return;
-              }
-
-              /* ---------------------------------------------
-                 REMOVE UI
-              --------------------------------------------- */
-
-              clonedPreview
-                .querySelectorAll(
-                  "button, input, textarea, select"
-                )
-                .forEach(
-                  (element) => {
-                    element.remove();
-                  }
-                );
-
-              /* ---------------------------------------------
-                 FINAL COLOR SAFETY
-              --------------------------------------------- */
-
-              const elements = [
-                clonedPreview,
-                ...clonedPreview.querySelectorAll("*"),
-              ];
-
-              elements.forEach(
-                (element) => {
-                  const style =
-                    element.getAttribute(
-                      "style"
-                    );
-
-                  if (
-                    style &&
-                    style
-                      .toLowerCase()
-                      .includes("oklch")
-                  ) {
-                    element.setAttribute(
-                      "style",
-                      replaceOklchInCss(
-                        style
-                      )
-                    );
-                  }
+                if (!clonedResume) {
+                  return;
                 }
-              );
+
+                /* -----------------------------------------
+                   ROOT
+                ----------------------------------------- */
+
+                clonedResume.style.setProperty(
+                  "display",
+                  "block",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "visibility",
+                  "visible",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "opacity",
+                  "1",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "width",
+                  `${cloneWidth}px`,
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "min-width",
+                  `${cloneWidth}px`,
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "max-width",
+                  `${cloneWidth}px`,
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "height",
+                  "auto",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "min-height",
+                  "0",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "max-height",
+                  "none",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "overflow",
+                  "visible",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "overflow-y",
+                  "visible",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "transform",
+                  "none",
+                  "important"
+                );
+
+                clonedResume.style.setProperty(
+                  "background",
+                  "#FFFFFF",
+                  "important"
+                );
+
+                /* -----------------------------------------
+                   HIDE CONTROLS
+                ----------------------------------------- */
+
+                const clonedControls =
+                  clonedResume.querySelectorAll(
+                    "button, .pdf-hide, .no-print, [data-pdf-hide]"
+                  );
+
+                clonedControls.forEach(
+                  (element) => {
+                    element.style.setProperty(
+                      "display",
+                      "none",
+                      "important"
+                    );
+                  }
+                );
+
+                /* -----------------------------------------
+                   EXPAND CLIPPED CONTENT AGAIN
+                ----------------------------------------- */
+
+                expandClippedElements(
+                  clonedResume,
+                  clonedDocument
+                );
+
+                /* -----------------------------------------
+                   COLORS
+                ----------------------------------------- */
+
+                sanitizeStyleTags(
+                  clonedDocument
+                );
+
+                sanitizeInlineStyles(
+                  clonedResume
+                );
+
+                sanitizeSvg(
+                  clonedResume
+                );
+
+                sanitizeAttributes(
+                  clonedResume
+                );
+              } catch (error) {
+                console.warn(
+                  "BUILD CV: ONCLONE WARNING:",
+                  error
+                );
+              }
             },
           }
         );
 
       /* =====================================================
-         17. VALIDATE CANVAS
+         13. CANVAS CHECK
       ===================================================== */
 
+      console.log(
+        "BUILD CV: CANVAS:",
+        canvas.width,
+        "x",
+        canvas.height
+      );
+
       if (
-        !canvas ||
         canvas.width <= 0 ||
         canvas.height <= 0
       ) {
         throw new Error(
-          "Could not create the PDF canvas."
+          `html2canvas returned invalid canvas: ${canvas.width} x ${canvas.height}`
         );
       }
 
       /* =====================================================
-         18. CREATE A4 PDF
+         14. PNG
+      ===================================================== */
+
+      const imageData =
+        canvas.toDataURL(
+          "image/png"
+        );
+
+      if (
+        !imageData ||
+        !imageData.startsWith(
+          "data:image/png"
+        )
+      ) {
+        throw new Error(
+          "Unable to convert resume canvas into PNG."
+        );
+      }
+
+      console.log(
+        "BUILD CV: IMAGE DATA LENGTH:",
+        imageData.length
+      );
+
+      /* =====================================================
+         15. PDF
       ===================================================== */
 
       const pdf =
@@ -756,135 +1144,254 @@ function DownloadButton({
         });
 
       const pageWidth =
-        210;
+        pdf.internal.pageSize.getWidth();
 
       const pageHeight =
-        297;
+        pdf.internal.pageSize.getHeight();
 
       /*
-        Keep the complete canvas inside A4.
-      */
+       * Canvas pixels corresponding to
+       * one A4 page.
+       */
 
-      const imageRatio =
-        canvas.height /
-        canvas.width;
+      const pagePixelHeight =
+        Math.floor(
+          canvas.width *
+            (pageHeight /
+              pageWidth)
+        );
 
-      let imageWidth =
-        pageWidth;
+      const totalPages =
+        Math.ceil(
+          canvas.height /
+            pagePixelHeight
+        );
 
-      let imageHeight =
-        imageWidth *
-        imageRatio;
+      console.log(
+        "BUILD CV: TOTAL PDF PAGES:",
+        totalPages
+      );
 
-      /*
-        Never allow the image to exceed
-        the A4 page.
-      */
+      /* =====================================================
+         16. ADD PAGES
+      ===================================================== */
 
-      if (
-        imageHeight >
-        pageHeight
+      for (
+        let pageIndex = 0;
+        pageIndex < totalPages;
+        pageIndex += 1
       ) {
-        imageHeight =
-          pageHeight;
+        if (pageIndex > 0) {
+          pdf.addPage();
+        }
 
-        imageWidth =
-          imageHeight /
-          imageRatio;
+        const sourceY =
+          pageIndex *
+          pagePixelHeight;
+
+        const remaining =
+          canvas.height -
+          sourceY;
+
+        const currentHeight =
+          Math.min(
+            pagePixelHeight,
+            remaining
+          );
+
+        const pageCanvas =
+          document.createElement(
+            "canvas"
+          );
+
+        pageCanvas.width =
+          canvas.width;
+
+        pageCanvas.height =
+          currentHeight;
+
+        const context =
+          pageCanvas.getContext(
+            "2d"
+          );
+
+        if (!context) {
+          throw new Error(
+            "Unable to create PDF page canvas."
+          );
+        }
+
+        context.drawImage(
+          canvas,
+
+          0,
+          sourceY,
+          canvas.width,
+          currentHeight,
+
+          0,
+          0,
+          canvas.width,
+          currentHeight
+        );
+
+        const pageImage =
+          pageCanvas.toDataURL(
+            "image/png"
+          );
+
+        const pdfWidth =
+          pageWidth;
+
+        const pdfHeight =
+          (currentHeight /
+            canvas.width) *
+          pdfWidth;
+
+        pdf.addImage(
+          pageImage,
+          "PNG",
+          0,
+          0,
+          pdfWidth,
+          pdfHeight,
+          undefined,
+          "FAST"
+        );
       }
 
-      /*
-        Center horizontally.
-      */
-
-      const x =
-        (pageWidth -
-          imageWidth) /
-        2;
-
-      const y = 0;
-
       /* =====================================================
-         19. ADD RESUME TO PDF
+         17. SAVE
       ===================================================== */
 
-      pdf.addImage(
-        canvas,
-        "PNG",
-        x,
-        y,
-        imageWidth,
-        imageHeight,
-        undefined,
-        "FAST"
+      const pdfBlob =
+        pdf.output("blob");
+
+      const downloadUrl =
+        URL.createObjectURL(
+          pdfBlob
+        );
+
+      const downloadLink =
+        document.createElement(
+          "a"
+        );
+
+      downloadLink.href =
+        downloadUrl;
+
+      downloadLink.download =
+        "BuildCV-Resume.pdf";
+
+      downloadLink.style.display =
+        "none";
+
+      document.body.appendChild(
+        downloadLink
       );
 
-      /* =====================================================
-         20. SAVE PDF
-      ===================================================== */
+      downloadLink.click();
 
-      pdf.save(
-        "BuildCV-Resume.pdf"
+      downloadLink.remove();
+
+      window.setTimeout(() => {
+        URL.revokeObjectURL(
+          downloadUrl
+        );
+      }, 1000);
+
+      console.log(
+        "BUILD CV: PDF SAVED SUCCESSFULLY"
       );
-
     } catch (error) {
       console.error(
         "BUILD CV PDF DOWNLOAD ERROR:",
         error
       );
 
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unknown PDF generation error";
+
       alert(
-        `Unable to download the resume.\n\n${
-          error?.message ||
-          "Something went wrong while generating the PDF."
-        }`
+        `Unable to generate PDF: ${message}`
       );
-
     } finally {
-      /* =====================================================
-         CLEANUP
-      ===================================================== */
-
-      if (printContainer) {
-        printContainer.remove();
+      if (captureHost) {
+        try {
+          captureHost.remove();
+        } catch {
+          // Ignore.
+        }
       }
 
-      setDownloading(false);
+      setIsDownloading(false);
     }
   };
 
   return (
-    <div className="w-full">
-      <button
-        type="button"
-        onClick={handleDownload}
-        disabled={downloading}
-        className="
-          w-full
-          rounded-xl
-          bg-indigo-600
-          px-6
-          py-4
-          text-base
-          font-semibold
-          text-white
-          transition
-          hover:bg-indigo-700
-          disabled:cursor-not-allowed
-          disabled:opacity-70
-        "
-      >
-        {downloading
-          ? "... Generating PDF..."
-          : "↓ Download Resume"}
-      </button>
+    <button
+      type="button"
+      onClick={handleDownload}
+      disabled={isDownloading}
+      className="
+        inline-flex
+        items-center
+        justify-center
+        gap-2
+        rounded-lg
+        bg-[#6366F1]
+        px-5
+        py-3
+        text-sm
+        font-semibold
+        text-white
+        transition
+        hover:bg-[#4F46E5]
+        disabled:cursor-not-allowed
+        disabled:opacity-60
+      "
+    >
+      {isDownloading ? (
+        <>
+          <span
+            className="
+              h-4
+              w-4
+              animate-spin
+              rounded-full
+              border-2
+              border-white
+              border-t-transparent
+            "
+          />
 
-      <p className="mt-2 text-center text-sm text-slate-500">
-        Your resume will be exported as PDF
-      </p>
-    </div>
+          Generating PDF...
+        </>
+      ) : (
+        <>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 3v12" />
+            <path d="m7 10 5 5 5-5" />
+            <path d="M5 21h14" />
+          </svg>
+
+          Download PDF
+        </>
+      )}
+    </button>
   );
 }
 
 export default DownloadButton;
- 

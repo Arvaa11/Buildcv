@@ -79,17 +79,17 @@ function Experience({ formData, setFormData }) {
   }
 
   // =====================================================
-  // SHARED INPUT STYLE
+  // SHARED STYLES
   // =====================================================
 
   const inputClass = `
+    h-12
     w-full
-    rounded-lg
+    rounded-xl
     border
     border-[#E2E8F0]
-    bg-white
+    bg-[#F8FAFC]
     px-4
-    py-3
     text-sm
     font-medium
     text-[#111827]
@@ -98,28 +98,102 @@ function Experience({ formData, setFormData }) {
     duration-200
     placeholder:text-[#718096]
     hover:border-[#CBD5E1]
+    hover:bg-white
     focus:border-[#6366F1]
+    focus:bg-white
     focus:ring-4
-    focus:ring-[#6366F1]/10
+    focus:ring-[#EEF2FF]
   `
+
+  const labelClass = `
+    mb-2
+    block
+    text-[12px]
+    font-bold
+    tracking-wide
+    text-[#334155]
+  `
+
+  const sectionTitleClass = `
+    text-[15px]
+    font-black
+    tracking-tight
+    text-[#111827]
+  `
+
+  const sectionDescriptionClass = `
+    mt-1
+    text-xs
+    leading-5
+    text-[#718096]
+  `
+
+  // =====================================================
+  // SECTION HEADER
+  // =====================================================
+
+  const SectionHeader = ({
+    title,
+    description,
+    optional = false,
+  }) => (
+    <div className="mb-5">
+      <div className="flex items-center gap-3">
+        <h3 className={sectionTitleClass}>
+          {title}
+        </h3>
+
+        <div className="h-px flex-1 bg-[#E2E8F0]" />
+
+        {optional && (
+          <span
+            className="
+              shrink-0
+              rounded-full
+              border
+              border-[#E2E8F0]
+              bg-[#F8FAFC]
+              px-2.5
+              py-1
+              text-[9px]
+              font-bold
+              uppercase
+              tracking-wider
+              text-[#718096]
+            "
+          >
+            Optional
+          </span>
+        )}
+      </div>
+
+      {description && (
+        <p className={sectionDescriptionClass}>
+          {description}
+        </p>
+      )}
+    </div>
+  )
+
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
     <section
       className="
         flex
-        h-[calc(100vh-190px)]
-        min-h-[740px]
+        h-full
+        min-h-0
+        min-w-0
         flex-col
         overflow-hidden
-        rounded-xl
-        border
-        border-[#E2E8F0]
         bg-white
       "
     >
       {/* =====================================================
           HEADER
-      ====================================================== */}
+      ===================================================== */}
 
       <div
         className="
@@ -127,10 +201,10 @@ function Experience({ formData, setFormData }) {
           border-b
           border-[#E2E8F0]
           bg-white
-          px-5
-          py-5
-          sm:px-7
-          sm:py-6
+          px-6
+          py-6
+          sm:px-8
+          sm:py-7
         "
       >
         <div className="flex items-start gap-4">
@@ -145,7 +219,7 @@ function Experience({ formData, setFormData }) {
               shrink-0
               items-center
               justify-center
-              rounded-lg
+              rounded-xl
               border
               border-[#E0E7FF]
               bg-[#EEF2FF]
@@ -189,9 +263,9 @@ function Experience({ formData, setFormData }) {
               <span
                 className="
                   text-[10px]
-                  font-bold
+                  font-black
                   uppercase
-                  tracking-[0.16em]
+                  tracking-[0.18em]
                   text-[#6366F1]
                 "
               >
@@ -203,7 +277,7 @@ function Experience({ formData, setFormData }) {
               className="
                 mt-1.5
                 text-2xl
-                font-bold
+                font-black
                 tracking-tight
                 text-[#111827]
                 sm:text-3xl
@@ -214,11 +288,11 @@ function Experience({ formData, setFormData }) {
 
             <p
               className="
-                mt-2
-                max-w-xl
+                mt-1.5
+                max-w-2xl
                 text-sm
                 leading-6
-                text-[#475569]
+                text-[#718096]
               "
             >
               Add your previous roles and highlight the
@@ -230,114 +304,98 @@ function Experience({ formData, setFormData }) {
       </div>
 
       {/* =====================================================
-          SCROLLABLE CONTENT
-      ====================================================== */}
+          FORM CONTENT
+      ===================================================== */}
 
       <div
         className="
           min-h-0
+          min-w-0
           flex-1
           overflow-y-auto
           overscroll-contain
-          p-5
-          sm:p-7
+          bg-[#F8FAFC]
+          px-5
+          py-7
+          sm:px-8
+          sm:py-8
         "
       >
-        {/* =====================================================
-            EXPERIENCE LIST
-        ====================================================== */}
+        <div className="mx-auto w-full max-w-[960px]">
 
-        <div className="space-y-5">
+          {/* =================================================
+              EXPERIENCE ENTRIES
+          ================================================== */}
 
           {experiences.map((experience, index) => (
-            <article
+            <section
               key={experience.id}
               className="
-                rounded-xl
+                rounded-2xl
                 border
                 border-[#E2E8F0]
-                bg-[#F8FAFC]
+                bg-white
                 p-5
-                transition-all
-                duration-200
-                hover:border-[#CBD5E1]
+                shadow-[0_3px_16px_rgba(15,23,42,0.035)]
                 sm:p-6
               "
+              style={{
+                marginTop: index === 0 ? "0" : "28px",
+              }}
             >
+              <SectionHeader
+                title={`Experience ${index + 1}`}
+                description={
+                  experience.current
+                    ? "Your current professional role."
+                    : "Add the details of this professional position."
+                }
+              />
 
-              {/* ENTRY HEADER */}
+              {/* =================================================
+                  ENTRY TOP INFO
+              ================================================== */}
 
-              <div
-                className="
-                  mb-6
-                  flex
-                  items-start
-                  justify-between
-                  gap-4
-                "
-              >
-                <div className="min-w-0">
+              <div className="mb-6 flex items-center justify-between gap-4">
 
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+
+                  {experience.current && (
                     <span
                       className="
                         rounded-full
-                        bg-[#EEF2FF]
-                        px-2
+                        bg-[#E0E7FF]
+                        px-2.5
                         py-1
-                        text-[10px]
+                        text-[9px]
                         font-bold
                         uppercase
-                        tracking-wide
-                        text-[#6366F1]
+                        tracking-wider
+                        text-[#4F46E5]
                       "
                     >
-                      Experience {index + 1}
+                      Current position
                     </span>
+                  )}
 
-                    {experience.current && (
-                      <span
-                        className="
-                          rounded-full
-                          bg-[#E0E7FF]
-                          px-2
-                          py-1
-                          text-[10px]
-                          font-semibold
-                          text-[#4F46E5]
-                        "
-                      >
-                        Current
-                      </span>
-                    )}
-                  </div>
-
-                  <h3
-                    className="
-                      mt-2
-                      truncate
-                      text-lg
-                      font-bold
-                      text-[#111827]
-                    "
-                  >
-                    {experience.jobTitle || "New position"}
-                  </h3>
-
-                  {experience.company && (
-                    <p
+                  {!experience.current && (
+                    <span
                       className="
-                        mt-1
-                        text-xs
+                        rounded-full
+                        bg-[#F8FAFC]
+                        px-2.5
+                        py-1
+                        text-[9px]
+                        font-bold
+                        uppercase
+                        tracking-wider
                         text-[#718096]
                       "
                     >
-                      {experience.company}
-                    </p>
+                      Previous position
+                    </span>
                   )}
                 </div>
-
-                {/* REMOVE */}
 
                 <button
                   type="button"
@@ -346,20 +404,20 @@ function Experience({ formData, setFormData }) {
                   }
                   className="
                     shrink-0
-                    rounded-lg
+                    rounded-xl
                     border
                     border-[#E2E8F0]
                     bg-white
-                    px-3
-                    py-2
+                    px-3.5
+                    py-2.5
                     text-xs
-                    font-semibold
+                    font-bold
                     text-[#475569]
                     transition-all
                     duration-200
-                    hover:border-red-200
-                    hover:bg-red-50
-                    hover:text-red-500
+                    hover:border-[#E0E7FF]
+                    hover:bg-[#EEF2FF]
+                    hover:text-[#4F46E5]
                   "
                 >
                   Remove
@@ -367,25 +425,22 @@ function Experience({ formData, setFormData }) {
               </div>
 
               {/* =================================================
-                  FORM FIELDS
+                  BASIC EXPERIENCE INFORMATION
               ================================================== */}
 
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
                 {/* JOB TITLE */}
 
-                <div className="sm:col-span-2">
+                <div className="md:col-span-2">
                   <label
                     htmlFor={`jobTitle-${experience.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-[#111827]
-                    "
+                    className={labelClass}
                   >
                     Job title
+                    <span className="ml-1 text-[#6366F1]">
+                      *
+                    </span>
                   </label>
 
                   <input
@@ -410,15 +465,12 @@ function Experience({ formData, setFormData }) {
                 <div>
                   <label
                     htmlFor={`company-${experience.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-[#111827]
-                    "
+                    className={labelClass}
                   >
                     Company
+                    <span className="ml-1 text-[#6366F1]">
+                      *
+                    </span>
                   </label>
 
                   <input
@@ -443,13 +495,7 @@ function Experience({ formData, setFormData }) {
                 <div>
                   <label
                     htmlFor={`experience-location-${experience.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-[#111827]
-                    "
+                    className={labelClass}
                   >
                     Location
                   </label>
@@ -476,13 +522,7 @@ function Experience({ formData, setFormData }) {
                 <div>
                   <label
                     htmlFor={`experience-start-${experience.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-[#111827]
-                    "
+                    className={labelClass}
                   >
                     Start date
                   </label>
@@ -507,13 +547,7 @@ function Experience({ formData, setFormData }) {
                 <div>
                   <label
                     htmlFor={`experience-end-${experience.id}`}
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-semibold
-                      text-[#111827]
-                    "
+                    className={labelClass}
                   >
                     End date
                   </label>
@@ -533,7 +567,7 @@ function Experience({ formData, setFormData }) {
                     className={`
                       ${inputClass}
                       disabled:cursor-not-allowed
-                      disabled:bg-[#F1F5F9]
+                      disabled:bg-[#F8FAFC]
                       disabled:text-[#94A3B8]
                       disabled:opacity-70
                     `}
@@ -542,8 +576,7 @@ function Experience({ formData, setFormData }) {
 
                 {/* CURRENT JOB */}
 
-                <div className="sm:col-span-2">
-
+                <div className="md:col-span-2">
                   <label
                     className="
                       group
@@ -551,7 +584,7 @@ function Experience({ formData, setFormData }) {
                       cursor-pointer
                       items-center
                       gap-3
-                      rounded-lg
+                      rounded-xl
                       border
                       border-[#E2E8F0]
                       bg-white
@@ -559,8 +592,8 @@ function Experience({ formData, setFormData }) {
                       py-3
                       transition-all
                       duration-200
-                      hover:border-[#C7D2FE]
-                      hover:bg-[#F8FAFC]
+                      hover:border-[#E0E7FF]
+                      hover:bg-[#EEF2FF]
                     "
                   >
                     <input
@@ -599,16 +632,16 @@ function Experience({ formData, setFormData }) {
 
                 {/* DESCRIPTION */}
 
-                <div className="sm:col-span-2">
+                <div className="md:col-span-2">
 
                   <div className="mb-2 flex items-center justify-between">
-
                     <label
                       htmlFor={`experience-description-${experience.id}`}
                       className="
-                        text-sm
-                        font-semibold
-                        text-[#111827]
+                        text-[12px]
+                        font-bold
+                        tracking-wide
+                        text-[#334155]
                       "
                     >
                       Description
@@ -627,7 +660,7 @@ function Experience({ formData, setFormData }) {
 
                   <textarea
                     id={`experience-description-${experience.id}`}
-                    rows={6}
+                    rows={7}
                     value={experience.description}
                     maxLength={1000}
                     onChange={(event) =>
@@ -638,25 +671,37 @@ function Experience({ formData, setFormData }) {
                       )
                     }
                     placeholder="Describe your responsibilities, achievements, and impact..."
-                    className={`
-                      ${inputClass}
-                      resize-none
+                    className="
+                      min-h-[170px]
+                      w-full
+                      resize-y
+                      rounded-xl
+                      border
+                      border-[#E2E8F0]
+                      bg-[#F8FAFC]
+                      px-4
+                      py-3.5
+                      text-sm
                       leading-6
-                    `}
+                      text-[#111827]
+                      outline-none
+                      transition-all
+                      duration-200
+                      placeholder:text-[#718096]
+                      hover:border-[#CBD5E1]
+                      hover:bg-white
+                      focus:border-[#6366F1]
+                      focus:bg-white
+                      focus:ring-4
+                      focus:ring-[#EEF2FF]
+                    "
                   />
 
-                  <div
-                    className="
-                      mt-2
-                      flex
-                      items-center
-                      justify-between
-                      gap-4
-                    "
-                  >
+                  <div className="mt-2 flex items-center justify-between gap-4">
+
                     <p
                       className="
-                        text-xs
+                        text-[11px]
                         leading-5
                         text-[#718096]
                       "
@@ -669,7 +714,7 @@ function Experience({ formData, setFormData }) {
                       className="
                         shrink-0
                         text-[10px]
-                        font-medium
+                        font-semibold
                         text-[#718096]
                       "
                     >
@@ -678,112 +723,132 @@ function Experience({ formData, setFormData }) {
                   </div>
                 </div>
               </div>
-            </article>
+            </section>
           ))}
-        </div>
 
-        {/* =====================================================
-            EMPTY STATE
-        ====================================================== */}
+          {/* =================================================
+              EMPTY STATE
+          ================================================== */}
 
-        {experiences.length === 0 && (
-          <div
+          {experiences.length === 0 && (
+            <section
+              className="
+                rounded-2xl
+                border
+                border-[#E2E8F0]
+                bg-white
+                p-5
+                shadow-[0_3px_16px_rgba(15,23,42,0.035)]
+                sm:p-6
+              "
+            >
+              <SectionHeader
+                title="Work experience"
+                description="Add your previous roles and professional experience."
+              />
+
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  border-dashed
+                  border-[#E2E8F0]
+                  bg-[#F8FAFC]
+                  px-6
+                  py-12
+                  text-center
+                "
+              >
+                <div
+                  className="
+                    mx-auto
+                    flex
+                    h-14
+                    w-14
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-[#EEF2FF]
+                    text-2xl
+                    font-bold
+                    text-[#6366F1]
+                  "
+                >
+                  +
+                </div>
+
+                <h3
+                  className="
+                    mt-4
+                    text-base
+                    font-black
+                    tracking-tight
+                    text-[#111827]
+                  "
+                >
+                  Add your work experience
+                </h3>
+
+                <p
+                  className="
+                    mx-auto
+                    mt-2
+                    max-w-md
+                    text-xs
+                    leading-5
+                    text-[#718096]
+                  "
+                >
+                  Add your current or previous positions to
+                  show employers what you have accomplished.
+                </p>
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              ADD EXPERIENCE
+          ================================================== */}
+
+          <button
+            type="button"
+            onClick={addExperience}
             className="
+              mt-7
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-2
               rounded-xl
               border
               border-dashed
-              border-[#E2E8F0]
-              bg-[#F8FAFC]
-              px-6
-              py-12
-              text-center
+              border-[#C7D2FE]
+              bg-[#EEF2FF]
+              px-5
+              py-3.5
+              text-sm
+              font-bold
+              text-[#6366F1]
+              transition-all
+              duration-200
+              hover:border-[#A5B4FC]
+              hover:bg-[#E0E7FF]
             "
           >
-            <div
-              className="
-                mx-auto
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-full
-                bg-[#EEF2FF]
-                text-xl
-                font-semibold
-                text-[#6366F1]
-              "
-            >
+            <span className="text-lg leading-none">
               +
-            </div>
+            </span>
 
-            <h3
-              className="
-                mt-4
-                text-lg
-                font-bold
-                text-[#111827]
-              "
-            >
-              Add your work experience
-            </h3>
+            Add another experience
+          </button>
 
-            <p
-              className="
-                mx-auto
-                mt-2
-                max-w-md
-                text-sm
-                leading-6
-                text-[#475569]
-              "
-            >
-              Add your current or previous positions to show
-              employers what you have accomplished.
-            </p>
-          </div>
-        )}
+          {/* =================================================
+              BOTTOM SPACE
+          ================================================== */}
 
-        {/* =====================================================
-            ADD EXPERIENCE
-        ====================================================== */}
-
-        <button
-          type="button"
-          onClick={addExperience}
-          className="
-            mt-6
-            flex
-            w-full
-            items-center
-            justify-center
-            gap-2
-            rounded-lg
-            border
-            border-dashed
-            border-[#C7D2FE]
-            bg-[#EEF2FF]
-            px-5
-            py-3.5
-            text-sm
-            font-semibold
-            text-[#6366F1]
-            transition-all
-            duration-200
-            hover:border-[#A5B4FC]
-            hover:bg-[#E0E7FF]
-          "
-        >
-          <span className="text-lg leading-none">
-            +
-          </span>
-
-          Add another experience
-        </button>
-
-        {/* BOTTOM SPACE */}
-
-        <div className="h-2" />
+          <div className="h-4" />
+        </div>
       </div>
     </section>
   )

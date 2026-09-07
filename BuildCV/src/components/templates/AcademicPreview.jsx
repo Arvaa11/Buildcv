@@ -119,22 +119,22 @@ function AcademicPreview({
 
   const personal = useSampleData
     ? {
-        ...samplePersonal,
-        ...(data.personal || {}),
-        ...(formData.personal || {}),
-      }
+      ...samplePersonal,
+      ...(data.personal || {}),
+      ...(formData.personal || {}),
+    }
     : {
-        fullName: "",
-        jobTitle: "",
-        email: "",
-        phone: "",
-        location: "",
-        linkedin: "",
-        github: "",
-        summary: "",
-        profileImage: "",
-        ...(formData.personal || {}),
-      };
+      fullName: "",
+      jobTitle: "",
+      email: "",
+      phone: "",
+      location: "",
+      linkedin: "",
+      github: "",
+      summary: "",
+      profileImage: "",
+      ...(formData.personal || {}),
+    };
 
   // =========================================================
   // REQUIRED SECTIONS
@@ -146,11 +146,11 @@ function AcademicPreview({
       ? formData.education
       : Array.isArray(data.education) &&
         data.education.length > 0
-      ? data.education
-      : sampleEducation
+        ? data.education
+        : sampleEducation
     : Array.isArray(formData.education)
-    ? formData.education
-    : [];
+      ? formData.education
+      : [];
 
   const experience = useSampleData
     ? Array.isArray(formData.experience) &&
@@ -158,11 +158,11 @@ function AcademicPreview({
       ? formData.experience
       : Array.isArray(data.experience) &&
         data.experience.length > 0
-      ? data.experience
-      : sampleExperience
+        ? data.experience
+        : sampleExperience
     : Array.isArray(formData.experience)
-    ? formData.experience
-    : [];
+      ? formData.experience
+      : [];
 
   const skills = useSampleData
     ? Array.isArray(formData.skills) &&
@@ -170,11 +170,11 @@ function AcademicPreview({
       ? formData.skills
       : Array.isArray(data.skills) &&
         data.skills.length > 0
-      ? data.skills
-      : sampleSkills
+        ? data.skills
+        : sampleSkills
     : Array.isArray(formData.skills)
-    ? formData.skills
-    : [];
+      ? formData.skills
+      : [];
 
   const projects = useSampleData
     ? Array.isArray(formData.projects) &&
@@ -182,11 +182,11 @@ function AcademicPreview({
       ? formData.projects
       : Array.isArray(data.projects) &&
         data.projects.length > 0
-      ? data.projects
-      : sampleProjects
+        ? data.projects
+        : sampleProjects
     : Array.isArray(formData.projects)
-    ? formData.projects
-    : [];
+      ? formData.projects
+      : [];
 
   const publications = useSampleData
     ? Array.isArray(formData.publications) &&
@@ -194,11 +194,11 @@ function AcademicPreview({
       ? formData.publications
       : Array.isArray(data.publications) &&
         data.publications.length > 0
-      ? data.publications
-      : samplePublications
+        ? data.publications
+        : samplePublications
     : Array.isArray(formData.publications)
-    ? formData.publications
-    : [];
+      ? formData.publications
+      : [];
 
   // =========================================================
   // DISPLAY SKILLS
@@ -243,8 +243,8 @@ function AcademicPreview({
   const researchInterests = useSampleData
     ? sampleResearchInterests
     : Array.isArray(formData.researchInterests)
-    ? formData.researchInterests
-    : [];
+      ? formData.researchInterests
+      : [];
 
   // =========================================================
   // ACADEMIC FOCUS
@@ -253,8 +253,8 @@ function AcademicPreview({
   const academicFocus = useSampleData
     ? sampleAcademicFocus
     : Array.isArray(formData.academicFocus)
-    ? formData.academicFocus
-    : [];
+      ? formData.academicFocus
+      : [];
 
   // =========================================================
   // HELPERS
@@ -479,17 +479,20 @@ function AcademicPreview({
 
   return (
     <div
+      id="resume-preview"
       className="
-        box-border
-        h-[1123px]
-        w-[794px]
-        overflow-hidden
-        bg-white
-        px-[52px]
-        py-[48px]
-        font-sans
-        text-slate-900
-      "
+    box-border
+    min-h-[1123px]
+h-auto
+overflow-visible
+    w-[794px]
+    overflow-hidden
+    bg-white
+    px-[52px]
+    py-[48px]
+    font-sans
+    text-slate-900
+  "
     >
       {/* =====================================================
           HEADER
@@ -750,22 +753,22 @@ function AcademicPreview({
 
                         {(startDate ||
                           endDate) && (
-                          <div
-                            className="
+                            <div
+                              className="
                               mt-1
                               text-[9.5px]
                               font-semibold
                               text-indigo-600
                             "
-                          >
-                            {startDate || ""}
-                            {startDate &&
-                            endDate
-                              ? " — "
-                              : ""}
-                            {endDate || ""}
-                          </div>
-                        )}
+                            >
+                              {startDate || ""}
+                              {startDate &&
+                                endDate
+                                ? " — "
+                                : ""}
+                              {endDate || ""}
+                            </div>
+                          )}
                       </article>
                     );
                   })}
@@ -853,9 +856,9 @@ function AcademicPreview({
                           experience
                             .slice(0, 3)
                             .length -
-                            1 && (
-                          <span
-                            className="
+                          1 && (
+                            <span
+                              className="
                               absolute
                               left-[3px]
                               top-4
@@ -863,8 +866,8 @@ function AcademicPreview({
                               w-px
                               bg-slate-200
                             "
-                          />
-                        )}
+                            />
+                          )}
 
                         {/* ROLE */}
 
@@ -886,8 +889,8 @@ function AcademicPreview({
                         {(company ||
                           startDate ||
                           endDate) && (
-                          <div
-                            className="
+                            <div
+                              className="
                               mt-1
                               flex
                               flex-wrap
@@ -896,36 +899,36 @@ function AcademicPreview({
                               text-[9.5px]
                               font-semibold
                             "
-                          >
-                            {company && (
-                              <span className="text-indigo-600">
-                                {company}
-                              </span>
-                            )}
-
-                            {(startDate ||
-                              endDate) && (
-                              <>
-                                {company && (
-                                  <span className="text-slate-300">
-                                    •
-                                  </span>
-                                )}
-
-                                <span className="text-slate-400">
-                                  {startDate ||
-                                    ""}
-                                  {startDate &&
-                                  endDate
-                                    ? " — "
-                                    : ""}
-                                  {endDate ||
-                                    ""}
+                            >
+                              {company && (
+                                <span className="text-indigo-600">
+                                  {company}
                                 </span>
-                              </>
-                            )}
-                          </div>
-                        )}
+                              )}
+
+                              {(startDate ||
+                                endDate) && (
+                                  <>
+                                    {company && (
+                                      <span className="text-slate-300">
+                                        •
+                                      </span>
+                                    )}
+
+                                    <span className="text-slate-400">
+                                      {startDate ||
+                                        ""}
+                                      {startDate &&
+                                        endDate
+                                        ? " — "
+                                        : ""}
+                                      {endDate ||
+                                        ""}
+                                    </span>
+                                  </>
+                                )}
+                            </div>
+                          )}
 
                         {/* DESCRIPTION */}
 
@@ -966,15 +969,15 @@ function AcademicPreview({
                     ) => {
                       const title =
                         typeof publication ===
-                        "string"
+                          "string"
                           ? publication
                           : getValue(
-                              publication,
-                              [
-                                "title",
-                                "name",
-                              ]
-                            );
+                            publication,
+                            [
+                              "title",
+                              "name",
+                            ]
+                          );
 
                       const publisher =
                         getValue(
@@ -1016,24 +1019,24 @@ function AcademicPreview({
 
                           {(publisher ||
                             year) && (
-                            <p
-                              className="
+                              <p
+                                className="
                                 mt-1
                                 text-[9.5px]
                                 leading-[1.4]
                                 text-slate-500
                               "
-                            >
-                              {publisher}
+                              >
+                                {publisher}
 
-                              {publisher &&
-                              year
-                                ? " • "
-                                : ""}
+                                {publisher &&
+                                  year
+                                  ? " • "
+                                  : ""}
 
-                              {year}
-                            </p>
-                          )}
+                                {year}
+                              </p>
+                            )}
                         </article>
                       );
                     }
@@ -1139,27 +1142,27 @@ function AcademicPreview({
                   .map((project, index) => {
                     const title =
                       typeof project ===
-                      "string"
+                        "string"
                         ? project
                         : getValue(
-                            project,
-                            [
-                              "title",
-                              "name",
-                            ]
-                          );
+                          project,
+                          [
+                            "title",
+                            "name",
+                          ]
+                        );
 
                     const description =
                       typeof project ===
-                      "string"
+                        "string"
                         ? ""
                         : getValue(
-                            project,
-                            [
-                              "description",
-                              "details",
-                            ]
-                          );
+                          project,
+                          [
+                            "description",
+                            "details",
+                          ]
+                        );
 
                     return (
                       <article

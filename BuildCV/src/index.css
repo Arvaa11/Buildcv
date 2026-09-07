@@ -347,6 +347,46 @@ canvas {
   max-width: 100%;
 }
 
+.resume-preview-frame {
+  container-type: inline-size;
+  aspect-ratio: 794 / 1123;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 92%;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.resume-preview--fit {
+  zoom: calc(min(1, calc(100cqw / 794px)) * 0.82);
+}
+
+.builder-center-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 transparent;
+  scrollbar-gutter: stable;
+}
+
+.builder-center-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.builder-center-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.builder-center-scroll::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+  background-color: #CBD5E1;
+}
+
+.builder-center-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #94A3B8;
+}
+
 @media (max-width: 640px) {
   .buildcv-ambient {
     width: 260px;

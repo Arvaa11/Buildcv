@@ -26,26 +26,17 @@ import Interests from "../components/builder/Interests"
 import References from "../components/builder/References"
 
 import DownloadButton from "../components/builder/DownloadButton"
-
 import ResumePreview from "../components/ResumePreview"
 
 // =====================================================
 // STORAGE
 // =====================================================
 
-const STORAGE_KEY =
-  "buildcv-form-data"
-
-const TEMPLATE_STORAGE_KEY =
-  "buildcv-selected-template"
+const STORAGE_KEY = "buildcv-form-data"
+const TEMPLATE_STORAGE_KEY = "buildcv-selected-template"
 
 // =====================================================
 // OPTIONAL SECTIONS
-//
-// IMPORTANT:
-// These are NOT BuilderSteps.
-// They do NOT affect the 5-step progress.
-// They only appear underneath the required steps.
 // =====================================================
 
 const OPTIONAL_SECTIONS = [
@@ -146,10 +137,6 @@ function createDefaultFormData() {
       },
     ],
 
-    // =================================================
-    // OPTIONAL SECTIONS
-    // =================================================
-
     certifications: {
       enabled: false,
       items: [],
@@ -182,306 +169,142 @@ function createDefaultFormData() {
 // =====================================================
 
 function normalizeFormData(data) {
-  const defaults =
-    createDefaultFormData()
+  const defaults = createDefaultFormData()
 
-  if (
-    !data ||
-    typeof data !== "object"
-  ) {
+  if (!data || typeof data !== "object") {
     return defaults
   }
 
   return {
-    // =================================================
-    // PERSONAL
-    // =================================================
-
     personal: {
       ...defaults.personal,
       ...(data.personal || {}),
     },
 
-    // =================================================
-    // EDUCATION
-    // =================================================
+    education: Array.isArray(data.education)
+      ? data.education.map((item) => ({
+        id: item.id || createId(),
+        institution: item.institution || "",
+        degree: item.degree || "",
+        field: item.field || "",
+        startDate: item.startDate || "",
+        endDate: item.endDate || "",
+        description: item.description || "",
+      }))
+      : defaults.education,
 
-    education:
-      Array.isArray(data.education)
-        ? data.education.map(
-          (item) => ({
-            id:
-              item.id ||
-              createId(),
+    experience: Array.isArray(data.experience)
+      ? data.experience.map((item) => ({
+        id: item.id || createId(),
+        company: item.company || "",
+        position:
+          item.position ||
+          item.jobTitle ||
+          "",
+        startDate: item.startDate || "",
+        endDate: item.endDate || "",
+        description: item.description || "",
+      }))
+      : defaults.experience,
 
-            institution:
-              item.institution ||
-              "",
+    skills: Array.isArray(data.skills)
+      ? data.skills
+      : [],
 
-            degree:
-              item.degree ||
-              "",
-
-            field:
-              item.field ||
-              "",
-
-            startDate:
-              item.startDate ||
-              "",
-
-            endDate:
-              item.endDate ||
-              "",
-
-            description:
-              item.description ||
-              "",
-          })
-        )
-        : defaults.education,
-
-    // =================================================
-    // EXPERIENCE
-    // =================================================
-
-    experience:
-      Array.isArray(data.experience)
-        ? data.experience.map(
-          (item) => ({
-            id:
-              item.id ||
-              createId(),
-
-            company:
-              item.company ||
-              "",
-
-            position:
-              item.position ||
-              item.jobTitle ||
-              "",
-
-            startDate:
-              item.startDate ||
-              "",
-
-            endDate:
-              item.endDate ||
-              "",
-
-            description:
-              item.description ||
-              "",
-          })
-        )
-        : defaults.experience,
-
-    // =================================================
-    // SKILLS
-    // =================================================
-
-    skills:
-      Array.isArray(data.skills)
-        ? data.skills
-        : [],
-
-    // =================================================
-    // PROJECTS
-    // =================================================
-
-    projects:
-      Array.isArray(data.projects)
-        ? data.projects.map(
-          (item) => ({
-            id:
-              item.id ||
-              createId(),
-
-            name:
-              item.name ||
-              "",
-
-            description:
-              item.description ||
-              "",
-
-            technologies:
-              item.technologies ||
-              "",
-
-            link:
-              item.link ||
-              "",
-
-            // Preserve these if older/newer
-            // project data already contains them.
-            liveUrl:
-              item.liveUrl ||
-              "",
-
-            githubUrl:
-              item.githubUrl ||
-              "",
-          })
-        )
-        : defaults.projects,
-
-    // =================================================
-    // CERTIFICATIONS
-    // =================================================
+    projects: Array.isArray(data.projects)
+      ? data.projects.map((item) => ({
+        id: item.id || createId(),
+        name: item.name || "",
+        description: item.description || "",
+        technologies: item.technologies || "",
+        link: item.link || "",
+        liveUrl: item.liveUrl || "",
+        githubUrl: item.githubUrl || "",
+      }))
+      : defaults.projects,
 
     certifications: {
       enabled:
         data.certifications?.enabled === true,
 
-      items:
-        Array.isArray(
-          data.certifications?.items
+      items: Array.isArray(
+        data.certifications?.items
+      )
+        ? data.certifications.items.map(
+          (item) => ({
+            id: item.id || createId(),
+            name: item.name || "",
+            organization:
+              item.organization || "",
+            date: item.date || "",
+            link: item.link || "",
+          })
         )
-          ? data.certifications.items.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
-
-              name:
-                item.name ||
-                "",
-
-              organization:
-                item.organization ||
-                "",
-
-              date:
-                item.date ||
-                "",
-
-              link:
-                item.link ||
-                "",
-            })
-          )
-          : [],
+        : [],
     },
-
-    // =================================================
-    // LANGUAGES
-    // =================================================
 
     languages: {
       enabled:
         data.languages?.enabled === true,
 
-      items:
-        Array.isArray(
-          data.languages?.items
+      items: Array.isArray(
+        data.languages?.items
+      )
+        ? data.languages.items.map(
+          (item) => ({
+            id: item.id || createId(),
+            language: item.language || "",
+            level: item.level || "",
+          })
         )
-          ? data.languages.items.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
-
-              language:
-                item.language ||
-                "",
-
-              level:
-                item.level ||
-                "",
-            })
-          )
-          : [],
+        : [],
     },
-
-    // =================================================
-    // ACHIEVEMENTS
-    // =================================================
 
     achievements: {
       enabled:
         data.achievements?.enabled === true,
 
-      items:
-        Array.isArray(
-          data.achievements?.items
+      items: Array.isArray(
+        data.achievements?.items
+      )
+        ? data.achievements.items.map(
+          (item) => ({
+            id: item.id || createId(),
+            title: item.title || "",
+            description:
+              item.description || "",
+            date: item.date || "",
+          })
         )
-          ? data.achievements.items.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
-
-              title:
-                item.title ||
-                "",
-
-              description:
-                item.description ||
-                "",
-
-              date:
-                item.date ||
-                "",
-            })
-          )
-          : [],
+        : [],
     },
-
-    // =================================================
-    // INTERESTS
-    // =================================================
 
     interests: {
       enabled:
         data.interests?.enabled === true,
 
       value:
-        data.interests?.value ||
-        "",
+        data.interests?.value || "",
     },
-
-    // =================================================
-    // REFERENCES
-    // =================================================
 
     references: {
       enabled:
         data.references?.enabled === true,
 
-      items:
-        Array.isArray(
-          data.references?.items
+      items: Array.isArray(
+        data.references?.items
+      )
+        ? data.references.items.map(
+          (item) => ({
+            id: item.id || createId(),
+            name: item.name || "",
+            position: item.position || "",
+            company: item.company || "",
+            email: item.email || "",
+            phone: item.phone || "",
+          })
         )
-          ? data.references.items.map(
-            (item) => ({
-              id:
-                item.id ||
-                createId(),
-
-              name:
-                item.name ||
-                "",
-
-              position:
-                item.position ||
-                "",
-
-              company:
-                item.company ||
-                "",
-
-              email:
-                item.email ||
-                "",
-
-              phone:
-                item.phone ||
-                "",
-            })
-          )
-          : [],
+        : [],
     },
   }
 }
@@ -493,9 +316,7 @@ function normalizeFormData(data) {
 function loadFormData() {
   try {
     const savedData =
-      localStorage.getItem(
-        STORAGE_KEY
-      )
+      localStorage.getItem(STORAGE_KEY)
 
     if (!savedData) {
       return createDefaultFormData()
@@ -544,11 +365,8 @@ function getTemplateId(value) {
 // =====================================================
 
 function Builder() {
-  const location =
-    useLocation()
-
-  const navigate =
-    useNavigate()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   // ===================================================
   // FORM STATE
@@ -556,6 +374,11 @@ function Builder() {
 
   const [formData, setFormData] =
     useState(loadFormData)
+
+  const [
+    isPreviewExpanded,
+    setIsPreviewExpanded,
+  ] = useState(false)
 
   // ===================================================
   // ACTIVE STEP
@@ -571,47 +394,30 @@ function Builder() {
   // SELECTED TEMPLATE
   // ===================================================
 
-  /*
-    IMPORTANT:
+  const selectedTemplate = useMemo(() => {
+    const stateTemplate =
+      location.state?.selectedTemplate
 
-    Priority:
+    let savedTemplate = null
 
-    1. Template selected from Templates.jsx
-       through React Router state
-
-    2. Template saved in localStorage
-
-    3. Modern as fallback
-  */
-
-  const selectedTemplate =
-    useMemo(() => {
-      const stateTemplate =
-        location.state
-          ?.selectedTemplate
-
-      let savedTemplate = null
-
-      try {
-        savedTemplate =
-          localStorage.getItem(
-            TEMPLATE_STORAGE_KEY
-          )
-      } catch (error) {
-        console.error(
-          "Failed to read selected template:",
-          error
+    try {
+      savedTemplate =
+        localStorage.getItem(
+          TEMPLATE_STORAGE_KEY
         )
-      }
-
-      return getTemplateId(
-        stateTemplate ||
-        savedTemplate ||
-        "modern"
+    } catch (error) {
+      console.error(
+        "Failed to read selected template:",
+        error
       )
-    }, [
-      location.state,
-    ])
+    }
+
+    return getTemplateId(
+      stateTemplate ||
+      savedTemplate ||
+      "modern"
+    )
+  }, [location.state])
 
   // ===================================================
   // SAVE SELECTED TEMPLATE
@@ -624,14 +430,6 @@ function Builder() {
         selectedTemplate
       )
 
-      /*
-        Keep the old BuildCV template key
-        synchronized as well.
-
-        This makes the selected template
-        available to older parts of the app.
-      */
-
       localStorage.setItem(
         "buildcv-template",
         selectedTemplate
@@ -642,9 +440,7 @@ function Builder() {
         error
       )
     }
-  }, [
-    selectedTemplate,
-  ])
+  }, [selectedTemplate])
 
   // ===================================================
   // SAVE FORM DATA
@@ -665,16 +461,40 @@ function Builder() {
   }, [formData])
 
   // ===================================================
-  // REQUIRED STEP INFORMATION
-  //
-  // IMPORTANT:
-  // Optional sections are NOT included here.
+  // ESCAPE PREVIEW
+  // ===================================================
+
+  useEffect(() => {
+    if (!isPreviewExpanded) {
+      return undefined
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsPreviewExpanded(false)
+      }
+    }
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    )
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      )
+    }
+  }, [isPreviewExpanded])
+
+  // ===================================================
+  // STEP INFORMATION
   // ===================================================
 
   const requiredStepIndex =
     BUILDER_STEPS.findIndex(
-      (step) =>
-        step.id === activeStep
+      (step) => step.id === activeStep
     )
 
   const isOptionalSection =
@@ -682,11 +502,6 @@ function Builder() {
       (section) =>
         section.id === activeStep
     )
-
-  /*
-    If an optional section is active,
-    keep the required-step progress at 100%.
-  */
 
   const currentStepIndex =
     requiredStepIndex >= 0
@@ -709,8 +524,7 @@ function Builder() {
       : BUILDER_STEPS.length > 1
         ? Math.round(
           (currentStepIndex /
-            (BUILDER_STEPS.length -
-              1)) *
+            (BUILDER_STEPS.length - 1)) *
           100
         )
         : 0
@@ -720,11 +534,6 @@ function Builder() {
   // ===================================================
 
   const goNext = () => {
-    /*
-      Optional sections are separate
-      from the required step navigation.
-    */
-
     if (isOptionalSection) {
       return
     }
@@ -744,19 +553,12 @@ function Builder() {
   }
 
   const goPrevious = () => {
-    /*
-      When viewing an optional section,
-      Back returns to Projects.
-    */
-
     if (isOptionalSection) {
       setActiveStep("projects")
       return
     }
 
-    if (
-      currentStepIndex <= 0
-    ) {
+    if (currentStepIndex <= 0) {
       return
     }
 
@@ -785,14 +587,11 @@ function Builder() {
     setFormData((current) => {
       const updatedPersonal =
         typeof update === "function"
-          ? update(
-            current.personal
-          )
+          ? update(current.personal)
           : update
 
       return {
         ...current,
-
         personal: {
           ...current.personal,
           ...updatedPersonal,
@@ -807,151 +606,85 @@ function Builder() {
 
   const renderStepContent = () => {
     switch (activeStep) {
-
-      // ===============================================
-      // PERSONAL
-      // ===============================================
-
       case "personal":
         return (
           <PersonalInfo
-            formData={
-              formData.personal
-            }
+            formData={formData.personal}
             setFormData={
               updatePersonalInfo
             }
           />
         )
 
-      // ===============================================
-      // EDUCATION
-      // ===============================================
-
       case "education":
         return (
           <Education
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // EXPERIENCE
-      // ===============================================
 
       case "experience":
         return (
           <Experience
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // SKILLS
-      // ===============================================
 
       case "skills":
         return (
           <Skills
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // PROJECTS
-      // ===============================================
 
       case "projects":
         return (
           <Projects
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // OPTIONAL:
-      // CERTIFICATIONS
-      // ===============================================
 
       case "certifications":
         return (
           <Certifications
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // OPTIONAL:
-      // LANGUAGES
-      // ===============================================
 
       case "languages":
         return (
           <Languages
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // OPTIONAL:
-      // ACHIEVEMENTS
-      // ===============================================
 
       case "achievements":
         return (
           <Achievements
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // OPTIONAL:
-      // INTERESTS
-      // ===============================================
 
       case "interests":
         return (
           <Interests
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
-
-      // ===============================================
-      // OPTIONAL:
-      // REFERENCES
-      // ===============================================
 
       case "references":
         return (
           <References
             formData={formData}
-            setFormData={
-              setFormData
-            }
+            setFormData={setFormData}
           />
         )
 
@@ -965,54 +698,92 @@ function Builder() {
   // ===================================================
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-[#111827] pt-20">
+    <main className="min-h-screen bg-[#F8FAFC] pt-20 text-[#111827]">
 
       {/* =================================================
-          HEADER
+          TOP HEADER
       ================================================= */}
 
-      <header className="border-b border-[#E2E8F0] bg-white">
+      <header className="sticky top-20 z-30 border-b border-[#E2E8F0] bg-white/95 backdrop-blur">
 
-        <div className="mx-auto max-w-[1900px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[2000px] px-4 sm:px-6 lg:px-8">
 
-          <div className="flex min-h-[76px] items-center justify-between gap-6">
+          {/* MAIN HEADER */}
+
+          <div className="flex min-h-[82px] items-center justify-between gap-6">
 
             <div className="min-w-0">
 
-              <h1 className="text-xl font-bold tracking-tight text-[#111827] sm:text-2xl">
-                Build Your Resume
-              </h1>
+              <div className="flex items-center gap-3">
 
-              <p className="mt-1 text-sm text-[#718096]">
-                Complete each section to create your professional CV.
-              </p>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#6366F1]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      d="M6 3.75h9.5L19 7.25v13H6a1.5 1.5 0 0 1-1.5-1.5v-13A2.5 2.5 0 0 1 7 3.75h-.5Z"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinejoin="round"
+                    />
+
+                    <path
+                      d="M15 3.75v4h4"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinejoin="round"
+                    />
+
+                    <path
+                      d="M8 12h8M8 15.5h5"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+
+                <div className="min-w-0">
+                  <h1 className="truncate text-xl font-bold tracking-tight text-[#111827] sm:text-2xl">
+                    Build Your Resume
+                  </h1>
+
+                  <p className="mt-0.5 hidden text-sm text-[#718096] sm:block">
+                    Complete each section to create your professional CV.
+                  </p>
+                </div>
+
+              </div>
 
             </div>
 
             <div className="flex shrink-0 items-center gap-3">
 
-              <div className="hidden text-right sm:block">
-
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#718096]">
+              <div className="hidden rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2.5 lg:block">
+                <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#718096]">
                   Current template
                 </p>
 
-                <p className="mt-1 text-sm font-semibold capitalize text-[#111827]">
-                  {selectedTemplate}
-                </p>
+                <div className="mt-0.5 flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
 
+                  <p className="text-sm font-semibold capitalize text-[#111827]">
+                    {selectedTemplate}
+                  </p>
+                </div>
               </div>
 
               <button
                 type="button"
-                onClick={
-                  changeTemplate
-                }
+                onClick={changeTemplate}
                 className="
+                  group
                   inline-flex
                   items-center
                   gap-2
-                  rounded-lg
+                  rounded-xl
                   border
                   border-[#E2E8F0]
                   bg-white
@@ -1021,6 +792,7 @@ function Builder() {
                   text-sm
                   font-semibold
                   text-[#475569]
+                  shadow-sm
                   transition-all
                   duration-200
                   hover:border-[#6366F1]
@@ -1028,10 +800,34 @@ function Builder() {
                   hover:text-[#4F46E5]
                 "
               >
-                <span>↗</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-4 w-4"
+                >
+                  <path
+                    d="M7 7h10M17 7l-3-3M17 7l-3 3"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
 
-                <span>
+                  <path
+                    d="M17 17H7M7 17l3-3M7 17l3 3"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+
+                <span className="hidden sm:inline">
                   Change Template
+                </span>
+
+                <span className="sm:hidden">
+                  Template
                 </span>
               </button>
 
@@ -1041,26 +837,38 @@ function Builder() {
 
           {/* PROGRESS */}
 
-          <div className="border-t border-[#F1F5F9] py-4">
+          <div className="border-t border-[#E2E8F0] py-4">
 
-            <div className="mb-2.5 flex items-center justify-between">
+            <div className="mb-2.5 flex items-center justify-between gap-4">
 
-              <div className="flex items-center gap-2.5">
+              <div className="flex min-w-0 items-center gap-2.5">
 
-                <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#EEF2FF] text-[10px] font-bold text-[#6366F1]">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#EEF2FF] text-[10px] font-bold text-[#6366F1]">
                   {isOptionalSection
                     ? "✓"
                     : currentStepIndex + 1}
-                </span>
+                </div>
 
-                <p className="text-xs font-semibold text-[#475569]">
-                  {currentStep?.title ||
-                    "Resume Builder"}
-                </p>
+                <div className="min-w-0">
+
+                  <p className="truncate text-xs font-bold text-[#111827]">
+                    {currentStep?.title ||
+                      "Resume Builder"}
+                  </p>
+
+                  <p className="hidden text-[10px] text-[#718096] sm:block">
+                    {isOptionalSection
+                      ? "Optional section"
+                      : `Step ${currentStepIndex + 1
+                      } of ${BUILDER_STEPS.length
+                      }`}
+                  </p>
+
+                </div>
 
               </div>
 
-              <span className="text-xs font-bold text-[#6366F1]">
+              <span className="shrink-0 text-xs font-bold text-[#6366F1]">
                 {progressPercentage}%
               </span>
 
@@ -1074,7 +882,8 @@ function Builder() {
                   rounded-full
                   bg-[#6366F1]
                   transition-[width]
-                  duration-200
+                  duration-300
+                  ease-out
                 "
                 style={{
                   width: `${Math.max(
@@ -1094,11 +903,6 @@ function Builder() {
 
       {/* =================================================
           MOBILE STEPS
-          
-          IMPORTANT:
-          Only the five required steps appear here.
-          Optional sections stay in the desktop
-          BuilderSteps sidebar.
       ================================================= */}
 
       <div className="border-b border-[#E2E8F0] bg-white lg:hidden">
@@ -1111,48 +915,62 @@ function Builder() {
               (step, index) => {
 
                 const isActive =
-                  step.id ===
-                  activeStep
+                  step.id === activeStep
 
                 const isCompleted =
                   !isOptionalSection &&
-                  index <
-                  currentStepIndex
+                  index < currentStepIndex
 
                 return (
                   <button
                     key={step.id}
                     type="button"
                     onClick={() =>
-                      setActiveStep(
-                        step.id
-                      )
+                      setActiveStep(step.id)
                     }
                     className={`
                       flex
                       items-center
                       gap-2
-                      rounded-lg
+                      whitespace-nowrap
+                      rounded-xl
                       border
                       px-3.5
                       py-2.5
                       text-xs
                       font-semibold
-                      whitespace-nowrap
+                      transition-all
+                      duration-200
 
                       ${isActive
-                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5]"
-                        : "border-[#E2E8F0] bg-white text-[#718096]"
+                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5] shadow-sm"
+                        : "border-[#E2E8F0] bg-white text-[#718096] hover:border-[#6366F1] hover:bg-[#EEF2FF]"
                       }
                     `}
                   >
 
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F8FAFC] text-[10px]">
+                    <span
+                      className={`
+                        flex
+                        h-5
+                        w-5
+                        items-center
+                        justify-center
+                        rounded-full
+                        text-[10px]
+                        font-bold
 
+                        ${isActive
+                          ? "bg-[#6366F1] text-white"
+                          : isCompleted
+                            ? "bg-[#EEF2FF] text-[#6366F1]"
+                            : "bg-[#F8FAFC] text-[#718096]"
+                        }
+                      `}
+                    >
                       {isCompleted
                         ? "✓"
                         : index + 1}
-
                     </span>
 
                     {step.title}
@@ -1172,64 +990,127 @@ function Builder() {
           WORKSPACE
       ================================================= */}
 
-      <div className="mx-auto max-w-[2000px] px-4 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[2000px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+
 
         <div
           className="
-            grid
-            items-start
-            gap-6
-            lg:grid-cols-[260px_minmax(0,1fr)]
-            xl:grid-cols-[280px_minmax(0,1fr)_470px]
-            2xl:grid-cols-[300px_minmax(0,1fr)_500px]
-          "
+    grid
+    items-stretch
+    gap-6
+    lg:grid-cols-[250px_minmax(0,1fr)]
+    xl:grid-cols-[260px_minmax(0,1fr)_520px]
+    2xl:grid-cols-[280px_minmax(0,1fr)_560px]
+  "
         >
 
           {/* =================================================
-              LEFT SIDEBAR
+              LEFT — BUILDER STEPS
           ================================================= */}
 
-          <aside className="hidden lg:block">
+          <aside className="hidden min-w-0 lg:block">
 
-            <div className="sticky top-6 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
+            <div
+              className="
+                sticky
+                top-[190px]
+                overflow-hidden
+                rounded-2xl
+                border
+                border-[#E2E8F0]
+                bg-white
+                shadow-[0_4px_20px_rgba(15,23,42,0.04)]
+              "
+            >
 
+              <div className="border-b border-[#E2E8F0] px-5 py-4">
 
+                <div className="flex items-center justify-between">
 
+                  <div>
 
+                    <p className="text-sm font-bold text-[#111827]">
+                      Resume Sections
+                    </p>
+
+                    <p className="mt-1 text-[10px] text-[#718096]">
+                      Build your resume step by step
+                    </p>
+
+                  </div>
+
+                  <span className="rounded-full bg-[#EEF2FF] px-2 py-1 text-[9px] font-bold text-[#6366F1]">
+                    {BUILDER_STEPS.length}
+                  </span>
+
+                </div>
+
+              </div>
 
               <BuilderSteps
-                activeStep={
-                  activeStep
-                }
-                onStepChange={
-                  setActiveStep
-                }
-                steps={
-                  BUILDER_STEPS
-                }
+                activeStep={activeStep}
+                onStepChange={setActiveStep}
+                steps={BUILDER_STEPS}
                 optionalSections={
                   OPTIONAL_SECTIONS
                 }
               />
-
-
 
             </div>
 
           </aside>
 
           {/* =================================================
-              CENTER
+              CENTER — FORM BUILDER
           ================================================= */}
 
-          <section className="min-w-0">
+          <section className="min-w-0 h-full">
 
-            {/* FORM */}
+            <div
+              className="
+                flex
+                h-full
+                min-h-[850px]
+                flex-col
+                overflow-hidden
+                rounded-2xl
+                border
+                border-[#E2E8F0]
+                bg-white
+                shadow-[0_4px_24px_rgba(15,23,42,0.045)]
+              "
+            >
 
-            <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
+              {/* FORM TOP BAR */}
 
+              <div className="flex shrink-0 items-center justify-between border-b border-[#E2E8F0] bg-white px-5 py-5 sm:px-8">
 
-              <div className="min-w-0">
+                <div className="min-w-0">
+
+                  <p className="text-sm font-bold text-[#111827]">
+                    {currentStep?.title ||
+                      "Resume Builder"}
+                  </p>
+
+                  <p className="mt-1 truncate text-[11px] text-[#718096]">
+                    {currentStep?.description ||
+                      "Add your information below."}
+                  </p>
+
+                </div>
+
+                <div className="hidden shrink-0 rounded-lg bg-[#EEF2FF] px-2.5 py-1.5 text-[9px] font-bold text-[#6366F1] sm:block">
+                  {isOptionalSection
+                    ? "OPTIONAL"
+                    : `STEP ${currentStepIndex + 1
+                    }`}
+                </div>
+
+              </div>
+
+              {/* FORM CONTENT */}
+
+              <div className="min-w-0 min-h-[680px] flex-1">
 
                 {renderStepContent()}
 
@@ -1237,22 +1118,24 @@ function Builder() {
 
               {/* NAVIGATION */}
 
-              <div className="border-t border-[#E2E8F0] bg-[#F8FAFC] px-5 py-4 sm:px-8">
+              <div className="shrink-0 border-t border-[#E2E8F0] bg-[#F8FAFC] px-5 py-5 sm:px-8">
 
                 <div className="flex items-center justify-between gap-3">
 
+                  {/* BACK */}
+
                   <button
                     type="button"
-                    onClick={
-                      goPrevious
-                    }
+                    onClick={goPrevious}
                     disabled={
                       !isOptionalSection &&
-                      currentStepIndex ===
-                      0
+                      currentStepIndex === 0
                     }
                     className="
-                      rounded-lg
+                      inline-flex
+                      items-center
+                      gap-2
+                      rounded-xl
                       border
                       border-[#E2E8F0]
                       bg-white
@@ -1261,31 +1144,38 @@ function Builder() {
                       text-sm
                       font-semibold
                       text-[#475569]
+                      shadow-sm
+                      transition-all
+                      duration-200
+                      hover:border-[#6366F1]
+                      hover:bg-[#EEF2FF]
+                      hover:text-[#4F46E5]
+                      disabled:cursor-not-allowed
                       disabled:opacity-40
                     "
                   >
-                    ← Back
+                    <span>←</span>
+                    <span>Back</span>
                   </button>
 
-                  <div className="hidden gap-1.5 sm:flex">
+                  {/* STEP INDICATORS */}
+
+                  <div className="hidden items-center gap-1.5 sm:flex">
 
                     {BUILDER_STEPS.map(
-                      (
-                        step,
-                        index
-                      ) => (
+                      (step, index) => (
                         <span
-                          key={
-                            step.id
-                          }
+                          key={step.id}
                           className={`
                             h-1.5
                             rounded-full
+                            transition-all
+                            duration-300
 
                             ${!isOptionalSection &&
                               index ===
                               currentStepIndex
-                              ? "w-6 bg-[#6366F1]"
+                              ? "w-7 bg-[#6366F1]"
                               : index <
                                 currentStepIndex
                                 ? "w-3 bg-[#6366F1]"
@@ -1298,30 +1188,40 @@ function Builder() {
 
                   </div>
 
+                  {/* CONTINUE */}
+
                   <button
                     type="button"
-                    onClick={
-                      goNext
-                    }
+                    onClick={goNext}
                     disabled={
                       isOptionalSection ||
                       currentStepIndex ===
-                      BUILDER_STEPS.length -
-                      1
+                      BUILDER_STEPS.length - 1
                     }
                     className="
-                      rounded-lg
+                      inline-flex
+                      items-center
+                      gap-2
+                      rounded-xl
                       bg-[#6366F1]
                       px-5
                       py-2.5
                       text-sm
                       font-semibold
                       text-white
+                      shadow-sm
+                      shadow-[#6366F1]/20
+                      transition-all
+                      duration-200
                       hover:bg-[#4F46E5]
+                      hover:shadow-md
+                      disabled:cursor-not-allowed
                       disabled:opacity-40
+                      disabled:shadow-none
                     "
                   >
-                    Continue →
+                    <span>Continue</span>
+                    <span>→</span>
                   </button>
 
                 </div>
@@ -1334,44 +1234,75 @@ function Builder() {
                 MOBILE PREVIEW
             ================================================= */}
 
-            <div className="mt-5 xl:hidden">
+            <div className="mt-6 xl:hidden">
 
-              <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
+              <div
+                className="
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  border-[#E2E8F0]
+                  bg-white
+                  shadow-[0_4px_24px_rgba(15,23,42,0.04)]
+                "
+              >
 
-                <div className="border-b border-[#E2E8F0] px-5 py-4">
+                <div className="flex items-center justify-between border-b border-[#E2E8F0] px-5 py-4">
 
-                  <p className="text-sm font-bold text-[#111827]">
-                    Live Preview
-                  </p>
+                  <div>
 
-                  <p className="mt-1 text-[11px] capitalize text-[#718096]">
-                    {selectedTemplate} template
-                  </p>
+                    <p className="text-sm font-bold text-[#111827]">
+                      Live Preview
+                    </p>
+
+                    <p className="mt-1 text-[10px] capitalize text-[#718096]">
+                      {selectedTemplate} template
+                    </p>
+
+                  </div>
+
+                  <span className="flex items-center gap-1.5 rounded-full bg-[#EEF2FF] px-2.5 py-1 text-[9px] font-semibold text-[#6366F1]">
+
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
+
+                    Live
+
+                  </span>
 
                 </div>
 
-                <div className="overflow-auto bg-[#F8FAFC] p-4 sm:p-6">
+                <div className="bg-[#F8FAFC] p-4 sm:p-6">
 
-                  <div className="mx-auto w-full max-w-[794px] rounded-lg bg-white shadow-md">
+                  <div
+                    className="
+                      resume-preview-frame
+                      mx-auto
+                      w-full
+                      max-w-[794px]
+                      overflow-hidden
+                      rounded-xl
+                      border
+                      border-[#E2E8F0]
+                      bg-white
+                      shadow-[0_8px_30px_rgba(15,23,42,0.08)]
+                    "
+                  >
 
                     <ResumePreview
                       key={`mobile-${selectedTemplate}`}
                       previewId="resume-preview-mobile"
-                      formData={
-                        formData
-                      }
+                      formData={formData}
                       selectedTemplate={
                         selectedTemplate
                       }
+                      fitToContainer={true}
                     />
 
                   </div>
 
                 </div>
 
-                {/* DOWNLOAD */}
-
-                <div className="border-t border-[#E2E8F0] p-4">
+                <div className="border-t border-[#E2E8F0] bg-white p-4">
 
                   <DownloadButton
                     previewId="resume-preview-mobile"
@@ -1389,88 +1320,172 @@ function Builder() {
 
           </section>
 
-          
           {/* =================================================
-    DESKTOP PREVIEW
-================================================= */}
+              RIGHT — DESKTOP LIVE PREVIEW
+          ================================================= */}
 
           <aside className="hidden min-w-0 xl:block">
 
             <div
               className="
-      sticky
-      top-6
-      overflow-hidden
-      rounded-2xl
-      border
-      border-[#E2E8F0]
-      bg-white
-      shadow-sm
-    "
+                sticky
+                top-[190px]
+                overflow-hidden
+                rounded-2xl
+                border
+                border-[#E2E8F0]
+                bg-white
+                shadow-[0_4px_24px_rgba(15,23,42,0.045)]
+              "
             >
 
-              {/* =================================================
-        HEADER
-    ================================================= */}
+              {/* PREVIEW HEADER */}
 
-              <div
-                className="
-        flex
-        items-center
-        justify-between
-        border-b
-        border-[#E2E8F0]
-        px-4
-        py-2.5
-      "
-              >
-                <div>
-                  <p className="text-sm font-bold leading-tight text-[#111827]">
-                    Live Preview
-                  </p>
+              <div className="flex items-center justify-between border-b border-[#E2E8F0] px-4 py-3.5">
 
-                  <p className="mt-0.5 text-[10px] capitalize text-[#718096]">
-                    {selectedTemplate} template
-                  </p>
+                <div className="flex min-w-0 items-center gap-3">
+
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#EEF2FF] text-[#6366F1]">
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="h-4 w-4"
+                    >
+                      <rect
+                        x="4"
+                        y="3"
+                        width="16"
+                        height="18"
+                        rx="2"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                      />
+
+                      <path
+                        d="M8 8h8M8 12h8M8 16h5"
+                        stroke="currentColor"
+                        strokeWidth="1.7"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+
+                  </div>
+
+                  <div className="min-w-0">
+
+                    <p className="text-xs font-bold text-[#111827]">
+                      Live Preview
+                    </p>
+
+                    <p className="mt-0.5 truncate text-[9px] capitalize text-[#718096]">
+                      {selectedTemplate} template
+                    </p>
+
+                  </div>
+
                 </div>
 
-                {/* LIVE STATUS */}
-                <div className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
+                <div className="flex shrink-0 items-center gap-2">
 
-                  <span className="text-[10px] font-medium text-[#718096]">
-                    Live
-                  </span>
+                  <div className="hidden items-center gap-1.5 rounded-full bg-[#EEF2FF] px-2 py-1 sm:flex">
+
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
+
+                    <span className="text-[8px] font-bold text-[#6366F1]">
+                      LIVE
+                    </span>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setIsPreviewExpanded(true)
+                    }
+                    className="
+                      flex
+                      h-8
+                      items-center
+                      justify-center
+                      gap-1.5
+                      rounded-lg
+                      border
+                      border-[#E2E8F0]
+                      bg-white
+                      px-2.5
+                      text-[9px]
+                      font-semibold
+                      text-[#475569]
+                      transition-all
+                      duration-200
+                      hover:border-[#6366F1]
+                      hover:bg-[#EEF2FF]
+                      hover:text-[#4F46E5]
+                    "
+                    aria-label="Expand live preview"
+                    title="Expand live preview"
+                  >
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="h-3.5 w-3.5"
+                    >
+                      <path
+                        d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+
+                    <span>Expand</span>
+
+                  </button>
+
                 </div>
+
               </div>
 
-              {/* =================================================
-        COMPLETE RESUME PREVIEW
-    ================================================= */}
+              {/* PREVIEW AREA */}
 
-              <div className="bg-[#F8FAFC] p-3">
+              <div className="bg-[#F8FAFC] p-3 sm:p-4">
+
+                <div className="mb-3 flex items-center justify-between px-1">
+
+                  <p className="text-[9px] font-medium text-[#718096]">
+                    Resume preview
+                  </p>
+
+                  <p className="text-[9px] font-semibold text-[#475569]">
+                    A4
+                  </p>
+
+                </div>
 
                 <div
                   className="
-          flex
-          h-[min(680px,calc(100vh-280px))]
-          min-h-[420px]
-          w-full
-          items-start
-          justify-center
-          overflow-hidden
-          rounded-xl
-          border
-          border-[#E2E8F0]
-          bg-[#F8FAFC]
-        "
+                    resume-preview-frame
+                    mx-auto
+                    w-full
+                    overflow-hidden
+                    rounded-lg
+                    border
+                    border-[#E2E8F0]
+                    bg-white
+                    shadow-[0_8px_28px_rgba(15,23,42,0.08)]
+                  "
                 >
 
                   <ResumePreview
                     key={`desktop-${selectedTemplate}`}
                     previewId="resume-preview-desktop"
                     formData={formData}
-                    selectedTemplate={selectedTemplate}
+                    selectedTemplate={
+                      selectedTemplate
+                    }
                     fitToContainer={true}
                   />
 
@@ -1478,48 +1493,265 @@ function Builder() {
 
               </div>
 
-              {/* =================================================
-        DOWNLOAD
-    ================================================= */}
+              {/* DOWNLOAD */}
 
-              <div
-                className="
-        flex
-        items-center
-        gap-3
-        border-t
-        border-[#E2E8F0]
-        px-4
-        py-3
-      "
-              >
+              <div className="flex items-center justify-between gap-3 border-t border-[#E2E8F0] bg-white px-4 py-3.5">
 
-                <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-medium text-[#475569]">
-                    Ready to download?
+                <div className="min-w-0">
+
+                  <p className="text-[10px] font-semibold text-[#475569]">
+                    Ready to export?
                   </p>
 
-                  <p className="mt-0.5 truncate text-[9px] text-[#718096]">
-                    Export your resume as PDF
+                  <p className="mt-0.5 text-[9px] text-[#718096]">
+                    Download your finished CV
                   </p>
+
                 </div>
 
-                <DownloadButton
-                  previewId="resume-preview-desktop"
-                />
+                <div className="shrink-0">
+
+                  <DownloadButton
+                    previewId="resume-preview-desktop"
+                  />
+
+                </div>
 
               </div>
 
             </div>
 
           </aside>
-           
 
         </div>
 
-      </div >
+      </div>
 
-    </main >
+      {/* =================================================
+          EXPANDED PREVIEW MODAL
+      ================================================= */}
+
+      {isPreviewExpanded && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-50
+            flex
+            items-center
+            justify-center
+            bg-[#111827]/70
+            p-3
+            backdrop-blur-sm
+            sm:p-6
+            lg:p-8
+          "
+          onMouseDown={(event) => {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              setIsPreviewExpanded(false)
+            }
+          }}
+        >
+
+          <div
+            className="
+              flex
+              max-h-[95vh]
+              w-full
+              max-w-[1080px]
+              flex-col
+              overflow-hidden
+              rounded-2xl
+              border
+              border-[#E2E8F0]
+              bg-white
+              shadow-2xl
+            "
+          >
+
+            {/* MODAL HEADER */}
+
+            <div className="flex shrink-0 items-center justify-between border-b border-[#E2E8F0] bg-white px-5 py-4 sm:px-6">
+
+              <div className="flex items-center gap-3">
+
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EEF2FF] text-[#6366F1]">
+
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="h-4 w-4"
+                  >
+                    <rect
+                      x="4"
+                      y="3"
+                      width="16"
+                      height="18"
+                      rx="2"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                    />
+
+                    <path
+                      d="M8 8h8M8 12h8M8 16h5"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+
+                </div>
+
+                <div>
+
+                  <p className="text-sm font-bold text-[#111827]">
+                    Live Preview
+                  </p>
+
+                  <p className="mt-0.5 text-[10px] capitalize text-[#718096]">
+                    {selectedTemplate} template
+                  </p>
+
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setIsPreviewExpanded(false)
+                }
+                className="
+                  flex
+                  h-9
+                  w-9
+                  items-center
+                  justify-center
+                  rounded-lg
+                  border
+                  border-[#E2E8F0]
+                  bg-white
+                  text-lg
+                  font-medium
+                  text-[#475569]
+                  transition-all
+                  duration-200
+                  hover:border-[#6366F1]
+                  hover:bg-[#EEF2FF]
+                  hover:text-[#4F46E5]
+                "
+                aria-label="Close expanded preview"
+              >
+                ×
+              </button>
+
+            </div>
+
+            {/* MODAL PREVIEW */}
+
+            <div
+              className="
+                min-h-0
+                flex-1
+                overflow-auto
+                bg-[#F8FAFC]
+                p-4
+                sm:p-6
+                lg:p-8
+              "
+            >
+
+              <div className="mx-auto mb-4 flex max-w-[794px] items-center justify-between">
+
+                <p className="text-[10px] font-medium text-[#718096]">
+                  Full resume preview
+                </p>
+
+                <span className="rounded-full bg-[#EEF2FF] px-2.5 py-1 text-[9px] font-bold text-[#6366F1]">
+                  A4
+                </span>
+
+              </div>
+
+              <div
+                className="
+                  resume-preview-frame
+                  mx-auto
+                  max-w-[794px]
+                  overflow-hidden
+                  rounded-xl
+                  border
+                  border-[#E2E8F0]
+                  bg-white
+                  shadow-[0_12px_40px_rgba(15,23,42,0.10)]
+                "
+              >
+
+                <ResumePreview
+                  previewId="resume-preview-expanded"
+                  formData={formData}
+                  selectedTemplate={
+                    selectedTemplate
+                  }
+                  fitToContainer={true}
+                />
+
+              </div>
+
+            </div>
+
+            {/* MODAL FOOTER */}
+
+            <div className="flex shrink-0 items-center justify-between gap-3 border-t border-[#E2E8F0] bg-white px-5 py-3.5 sm:px-6">
+
+              <p className="hidden text-[10px] text-[#718096] sm:block">
+                Your resume updates automatically as you edit.
+              </p>
+
+              <div className="ml-auto flex items-center gap-2.5">
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsPreviewExpanded(false)
+                  }
+                  className="
+                    rounded-xl
+                    border
+                    border-[#E2E8F0]
+                    bg-white
+                    px-4
+                    py-2.5
+                    text-sm
+                    font-semibold
+                    text-[#475569]
+                    transition-all
+                    duration-200
+                    hover:border-[#6366F1]
+                    hover:bg-[#EEF2FF]
+                    hover:text-[#4F46E5]
+                  "
+                >
+                  Close
+                </button>
+
+                <DownloadButton
+                  previewId="resume-preview-expanded"
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+    </main>
   )
 }
 

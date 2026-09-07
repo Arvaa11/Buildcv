@@ -79,17 +79,17 @@ function Education({ formData, setFormData }) {
   }
 
   // =====================================================
-  // SHARED INPUT STYLE
+  // SHARED STYLES
   // =====================================================
 
   const inputClass = `
+    h-12
     w-full
-    rounded-lg
+    rounded-xl
     border
     border-[#E2E8F0]
-    bg-white
+    bg-[#F8FAFC]
     px-4
-    py-3
     text-sm
     font-medium
     text-[#111827]
@@ -98,9 +98,11 @@ function Education({ formData, setFormData }) {
     duration-200
     placeholder:text-[#718096]
     hover:border-[#CBD5E1]
+    hover:bg-white
     focus:border-[#6366F1]
+    focus:bg-white
     focus:ring-4
-    focus:ring-[#6366F1]/10
+    focus:ring-[#EEF2FF]
     disabled:cursor-not-allowed
     disabled:bg-[#F8FAFC]
     disabled:text-[#94A3B8]
@@ -109,29 +111,84 @@ function Education({ formData, setFormData }) {
   const labelClass = `
     mb-2
     block
-    text-sm
-    font-semibold
-    text-[#111827]
+    text-[12px]
+    font-bold
+    tracking-wide
+    text-[#334155]
   `
+
+  // =====================================================
+  // SECTION HEADER
+  // =====================================================
+
+  const SectionHeader = () => (
+    <div className="mb-6">
+      <div className="flex items-center gap-3">
+        <h3
+          className="
+            text-[15px]
+            font-black
+            tracking-tight
+            text-[#111827]
+          "
+        >
+          Academic background
+        </h3>
+
+        <div className="h-px flex-1 bg-[#E2E8F0]" />
+
+        <span
+          className="
+            shrink-0
+            rounded-full
+            border
+            border-[#E2E8F0]
+            bg-[#F8FAFC]
+            px-2.5
+            py-1
+            text-[9px]
+            font-bold
+            uppercase
+            tracking-wider
+            text-[#718096]
+          "
+        >
+          Education
+        </span>
+      </div>
+
+      <p
+        className="
+          mt-1
+          text-xs
+          leading-5
+          text-[#718096]
+        "
+      >
+        Add your degrees, institutions, dates, and relevant
+        academic achievements.
+      </p>
+    </div>
+  )
+
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
     <section
       className="
-        flex
-        h-[calc(100vh-190px)]
-        min-h-[740px]
-        flex-col
-        overflow-hidden
-        rounded-xl
-        border
-        border-[#E2E8F0]
-        bg-white
-        shadow-sm
-      "
+    flex
+    h-full
+    min-h-0
+    flex-col
+    overflow-hidden
+    bg-white
+  "
     >
       {/* =====================================================
           HEADER
-      ====================================================== */}
+      ===================================================== */}
 
       <div
         className="
@@ -139,10 +196,10 @@ function Education({ formData, setFormData }) {
           border-b
           border-[#E2E8F0]
           bg-white
-          px-5
-          py-5
-          sm:px-7
-          sm:py-6
+          px-6
+          py-6
+          sm:px-8
+          sm:py-7
         "
       >
         <div className="flex items-start gap-4">
@@ -157,7 +214,7 @@ function Education({ formData, setFormData }) {
               shrink-0
               items-center
               justify-center
-              rounded-lg
+              rounded-xl
               border
               border-[#E0E7FF]
               bg-[#EEF2FF]
@@ -196,28 +253,26 @@ function Education({ formData, setFormData }) {
           <div className="min-w-0">
 
             <div className="flex items-center gap-2">
-
               <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
 
               <span
                 className="
                   text-[10px]
-                  font-bold
+                  font-black
                   uppercase
-                  tracking-[0.16em]
+                  tracking-[0.18em]
                   text-[#6366F1]
                 "
               >
                 Step 02
               </span>
-
             </div>
 
             <h2
               className="
-                mt-1
+                mt-1.5
                 text-2xl
-                font-bold
+                font-black
                 tracking-tight
                 text-[#111827]
                 sm:text-3xl
@@ -228,8 +283,8 @@ function Education({ formData, setFormData }) {
 
             <p
               className="
-                mt-2
-                max-w-xl
+                mt-1.5
+                max-w-2xl
                 text-sm
                 leading-6
                 text-[#718096]
@@ -245,494 +300,648 @@ function Education({ formData, setFormData }) {
 
       {/* =====================================================
           SCROLLABLE CONTENT
-      ====================================================== */}
+      ===================================================== */}
 
       <div
         className="
           min-h-0
           flex-1
           overflow-y-auto
+          bg-[#F8FAFC]
           px-5
-          py-5
-          sm:px-7
-          sm:py-6
+          py-7
+          sm:px-8
+          sm:py-8
         "
       >
+        <div className="mx-auto w-full max-w-[960px]">
 
-        {/* =====================================================
-            EDUCATION ENTRIES
-        ====================================================== */}
+          {/* =====================================================
+              SECTION HEADER
+          ===================================================== */}
 
-        <div className="space-y-5">
+          <SectionHeader />
 
-          {education.map((item, index) => (
+          {/* =====================================================
+              EDUCATION ENTRIES
+          ===================================================== */}
 
-            <article
-              key={item.id}
-              className="
-                rounded-xl
-                border
-                border-[#E2E8F0]
-                bg-[#F8FAFC]
-                p-5
-                transition-all
-                duration-200
-                hover:border-[#CBD5E1]
-                hover:bg-white
-                sm:p-6
-              "
-            >
+          <div className="space-y-6">
 
-              {/* ENTRY HEADER */}
+            {education.map((item, index) => (
 
-              <div
+              <article
+                key={item.id}
                 className="
-                  mb-6
-                  flex
-                  items-start
-                  justify-between
-                  gap-4
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  border-[#E2E8F0]
+                  bg-white
+                  shadow-[0_4px_18px_rgba(15,23,42,0.035)]
+                  transition-all
+                  duration-200
+                  hover:border-[#CBD5E1]
+                  hover:shadow-[0_6px_22px_rgba(15,23,42,0.05)]
                 "
               >
 
-                <div className="min-w-0">
+                {/* =================================================
+                    ENTRY HEADER
+                ================================================= */}
 
-                  <div className="flex items-center gap-2">
+                <div
+                  className="
+                    flex
+                    items-center
+                    justify-between
+                    gap-4
+                    border-b
+                    border-[#E2E8F0]
+                    bg-white
+                    px-5
+                    py-4
+                    sm:px-6
+                  "
+                >
+
+                  <div className="flex min-w-0 items-center gap-3">
 
                     <span
                       className="
                         flex
-                        h-7
-                        w-7
+                        h-9
+                        w-9
                         shrink-0
                         items-center
                         justify-center
-                        rounded-lg
+                        rounded-xl
                         bg-[#EEF2FF]
                         text-xs
-                        font-bold
+                        font-black
                         text-[#6366F1]
                       "
                     >
                       {index + 1}
                     </span>
 
-                    <span
-                      className="
-                        text-[10px]
-                        font-bold
-                        uppercase
-                        tracking-[0.14em]
-                        text-[#6366F1]
-                      "
-                    >
-                      Education
-                    </span>
+                    <div className="min-w-0">
 
+                      <p
+                        className="
+                          text-[9px]
+                          font-black
+                          uppercase
+                          tracking-[0.16em]
+                          text-[#6366F1]
+                        "
+                      >
+                        Education
+                      </p>
+
+                      <h3
+                        className="
+                          mt-0.5
+                          truncate
+                          text-base
+                          font-black
+                          text-[#111827]
+                          sm:text-lg
+                        "
+                      >
+                        {item.degree || "New education"}
+                      </h3>
+
+                    </div>
                   </div>
 
-                  <h3
+                  <button
+                    type="button"
+                    onClick={() =>
+                      removeEducation(item.id)
+                    }
                     className="
-                      mt-2
-                      truncate
-                      text-lg
-                      font-bold
-                      text-[#111827]
-                    "
-                  >
-                    {item.degree || "New Education"}
-                  </h3>
-
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    removeEducation(item.id)
-                  }
-                  className="
-                    shrink-0
-                    rounded-lg
-                    border
-                    border-[#E2E8F0]
-                    bg-white
-                    px-3
-                    py-2
-                    text-xs
-                    font-semibold
-                    text-[#718096]
-                    transition-all
-                    duration-200
-                    hover:border-red-200
-                    hover:bg-red-50
-                    hover:text-red-500
-                  "
-                >
-                  Remove
-                </button>
-
-              </div>
-
-              {/* =================================================
-                  FIELDS
-              ================================================== */}
-
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-
-                {/* DEGREE */}
-
-                <div className="sm:col-span-2">
-
-                  <label
-                    htmlFor={`degree-${item.id}`}
-                    className={labelClass}
-                  >
-                    Degree / Qualification
-                  </label>
-
-                  <input
-                    id={`degree-${item.id}`}
-                    type="text"
-                    value={item.degree}
-                    onChange={(event) =>
-                      updateEducation(
-                        item.id,
-                        "degree",
-                        event.target.value
-                      )
-                    }
-                    placeholder="e.g. Bachelor of Computer Science"
-                    className={inputClass}
-                  />
-
-                </div>
-
-                {/* INSTITUTION */}
-
-                <div>
-
-                  <label
-                    htmlFor={`institution-${item.id}`}
-                    className={labelClass}
-                  >
-                    Institution
-                  </label>
-
-                  <input
-                    id={`institution-${item.id}`}
-                    type="text"
-                    value={item.institution}
-                    onChange={(event) =>
-                      updateEducation(
-                        item.id,
-                        "institution",
-                        event.target.value
-                      )
-                    }
-                    placeholder="e.g. University of Islamabad"
-                    className={inputClass}
-                  />
-
-                </div>
-
-                {/* LOCATION */}
-
-                <div>
-
-                  <label
-                    htmlFor={`education-location-${item.id}`}
-                    className={labelClass}
-                  >
-                    Location
-                  </label>
-
-                  <input
-                    id={`education-location-${item.id}`}
-                    type="text"
-                    value={item.location}
-                    onChange={(event) =>
-                      updateEducation(
-                        item.id,
-                        "location",
-                        event.target.value
-                      )
-                    }
-                    placeholder="e.g. Islamabad, Pakistan"
-                    className={inputClass}
-                  />
-
-                </div>
-
-                {/* START DATE */}
-
-                <div>
-
-                  <label
-                    htmlFor={`education-start-${item.id}`}
-                    className={labelClass}
-                  >
-                    Start Date
-                  </label>
-
-                  <input
-                    id={`education-start-${item.id}`}
-                    type="month"
-                    value={item.startDate}
-                    onChange={(event) =>
-                      updateEducation(
-                        item.id,
-                        "startDate",
-                        event.target.value
-                      )
-                    }
-                    className={inputClass}
-                  />
-
-                </div>
-
-                {/* END DATE */}
-
-                <div>
-
-                  <label
-                    htmlFor={`education-end-${item.id}`}
-                    className={labelClass}
-                  >
-                    End Date
-                  </label>
-
-                  <input
-                    id={`education-end-${item.id}`}
-                    type="month"
-                    value={item.endDate}
-                    disabled={item.current}
-                    onChange={(event) =>
-                      updateEducation(
-                        item.id,
-                        "endDate",
-                        event.target.value
-                      )
-                    }
-                    className={inputClass}
-                  />
-
-                </div>
-
-                {/* CURRENTLY STUDYING */}
-
-                <div className="sm:col-span-2">
-
-                  <label
-                    className="
-                      flex
-                      cursor-pointer
-                      items-center
-                      gap-3
-                      rounded-lg
+                      shrink-0
+                      rounded-xl
                       border
                       border-[#E2E8F0]
                       bg-white
-                      px-4
-                      py-3
-                      transition-colors
+                      px-3
+                      py-2
+                      text-[11px]
+                      font-bold
+                      text-[#718096]
+                      transition-all
                       duration-200
-                      hover:border-[#E0E7FF]
-                      hover:bg-[#EEF2FF]/40
+                      hover:border-[#FECACA]
+                      hover:bg-[#FEF2F2]
+                      hover:text-[#DC2626]
                     "
                   >
-
-                    <input
-                      type="checkbox"
-                      checked={Boolean(item.current)}
-                      onChange={(event) =>
-                        updateEducation(
-                          item.id,
-                          "current",
-                          event.target.checked
-                        )
-                      }
-                      className="
-                        h-4
-                        w-4
-                        cursor-pointer
-                        rounded
-                        border-[#CBD5E1]
-                        accent-[#6366F1]
-                      "
-                    />
-
-                    <span className="text-sm font-medium text-[#475569]">
-                      I am currently studying here
-                    </span>
-
-                  </label>
+                    Remove
+                  </button>
 
                 </div>
 
-                {/* DESCRIPTION */}
+                {/* =================================================
+                    ENTRY CONTENT
+                ================================================= */}
 
-                <div className="sm:col-span-2">
+                <div
+                  className="
+                    bg-[#F8FAFC]
+                    p-5
+                    sm:p-6
+                  "
+                >
 
-                  <label
-                    htmlFor={`education-description-${item.id}`}
-                    className={labelClass}
-                  >
-                    Description
-                  </label>
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
-                  <textarea
-                    id={`education-description-${item.id}`}
-                    rows={4}
-                    value={item.description}
-                    onChange={(event) =>
-                      updateEducation(
-                        item.id,
-                        "description",
-                        event.target.value
-                      )
-                    }
-                    placeholder="Add achievements, relevant coursework, activities, GPA, or other details..."
-                    className={`
-                      ${inputClass}
-                      resize-none
-                      leading-6
-                    `}
-                  />
+                    {/* =================================================
+                        DEGREE
+                    ================================================= */}
 
-                  <p className="mt-1.5 text-xs text-[#718096]">
-                    Keep this concise and focus on relevant achievements.
-                  </p>
+                    <div className="md:col-span-2">
 
+                      <label
+                        htmlFor={`degree-${item.id}`}
+                        className={labelClass}
+                      >
+                        Degree / Qualification
+                      </label>
+
+                      <input
+                        id={`degree-${item.id}`}
+                        type="text"
+                        value={item.degree}
+                        onChange={(event) =>
+                          updateEducation(
+                            item.id,
+                            "degree",
+                            event.target.value
+                          )
+                        }
+                        placeholder="e.g. Bachelor of Computer Science"
+                        className={inputClass}
+                      />
+
+                      <p
+                        className="
+                          mt-2
+                          text-[11px]
+                          text-[#718096]
+                        "
+                      >
+                        Enter your degree, diploma, certification,
+                        or qualification.
+                      </p>
+
+                    </div>
+
+                    {/* =================================================
+                        INSTITUTION
+                    ================================================= */}
+
+                    <div>
+
+                      <label
+                        htmlFor={`institution-${item.id}`}
+                        className={labelClass}
+                      >
+                        Institution
+                      </label>
+
+                      <input
+                        id={`institution-${item.id}`}
+                        type="text"
+                        value={item.institution}
+                        onChange={(event) =>
+                          updateEducation(
+                            item.id,
+                            "institution",
+                            event.target.value
+                          )
+                        }
+                        placeholder="e.g. University of Islamabad"
+                        className={inputClass}
+                      />
+
+                    </div>
+
+                    {/* =================================================
+                        LOCATION
+                    ================================================= */}
+
+                    <div>
+
+                      <label
+                        htmlFor={`education-location-${item.id}`}
+                        className={labelClass}
+                      >
+                        Location
+                      </label>
+
+                      <input
+                        id={`education-location-${item.id}`}
+                        type="text"
+                        value={item.location}
+                        onChange={(event) =>
+                          updateEducation(
+                            item.id,
+                            "location",
+                            event.target.value
+                          )
+                        }
+                        placeholder="e.g. Islamabad, Pakistan"
+                        className={inputClass}
+                      />
+
+                    </div>
+
+                    {/* =================================================
+                        START DATE
+                    ================================================= */}
+
+                    <div>
+
+                      <label
+                        htmlFor={`education-start-${item.id}`}
+                        className={labelClass}
+                      >
+                        Start date
+                      </label>
+
+                      <input
+                        id={`education-start-${item.id}`}
+                        type="month"
+                        value={item.startDate}
+                        onChange={(event) =>
+                          updateEducation(
+                            item.id,
+                            "startDate",
+                            event.target.value
+                          )
+                        }
+                        className={inputClass}
+                      />
+
+                    </div>
+
+                    {/* =================================================
+                        END DATE
+                    ================================================= */}
+
+                    <div>
+
+                      <label
+                        htmlFor={`education-end-${item.id}`}
+                        className={labelClass}
+                      >
+                        End date
+                      </label>
+
+                      <input
+                        id={`education-end-${item.id}`}
+                        type="month"
+                        value={item.endDate}
+                        disabled={item.current}
+                        onChange={(event) =>
+                          updateEducation(
+                            item.id,
+                            "endDate",
+                            event.target.value
+                          )
+                        }
+                        className={inputClass}
+                      />
+
+                    </div>
+
+                    {/* =================================================
+                        CURRENTLY STUDYING
+                    ================================================= */}
+
+                    <div className="md:col-span-2">
+
+                      <label
+                        className="
+                          flex
+                          cursor-pointer
+                          items-center
+                          gap-3
+                          rounded-xl
+                          border
+                          border-[#E2E8F0]
+                          bg-white
+                          px-4
+                          py-3.5
+                          transition-all
+                          duration-200
+                          hover:border-[#C7D2FE]
+                          hover:bg-[#EEF2FF]
+                        "
+                      >
+
+                        <input
+                          type="checkbox"
+                          checked={Boolean(item.current)}
+                          onChange={(event) =>
+                            updateEducation(
+                              item.id,
+                              "current",
+                              event.target.checked
+                            )
+                          }
+                          className="
+                            h-4
+                            w-4
+                            cursor-pointer
+                            rounded
+                            border-[#CBD5E1]
+                            accent-[#6366F1]
+                          "
+                        />
+
+                        <div className="min-w-0">
+
+                          <span
+                            className="
+                              block
+                              text-xs
+                              font-bold
+                              text-[#111827]
+                            "
+                          >
+                            I am currently studying here
+                          </span>
+
+                          <span
+                            className="
+                              mt-0.5
+                              block
+                              text-[10px]
+                              text-[#718096]
+                            "
+                          >
+                            Your end date will be left blank.
+                          </span>
+
+                        </div>
+
+                      </label>
+
+                    </div>
+
+                    {/* =================================================
+                        DESCRIPTION
+                    ================================================= */}
+
+                    <div className="md:col-span-2">
+
+                      <label
+                        htmlFor={`education-description-${item.id}`}
+                        className={labelClass}
+                      >
+                        Description
+                      </label>
+
+                      <textarea
+                        id={`education-description-${item.id}`}
+                        rows={5}
+                        value={item.description}
+                        onChange={(event) =>
+                          updateEducation(
+                            item.id,
+                            "description",
+                            event.target.value
+                          )
+                        }
+                        placeholder="Add achievements, relevant coursework, activities, GPA, awards, or other details..."
+                        className="
+                          min-h-[150px]
+                          w-full
+                          resize-y
+                          rounded-xl
+                          border
+                          border-[#E2E8F0]
+                          bg-[#F8FAFC]
+                          px-4
+                          py-3.5
+                          text-sm
+                          leading-6
+                          text-[#111827]
+                          outline-none
+                          transition-all
+                          duration-200
+                          placeholder:text-[#718096]
+                          hover:border-[#CBD5E1]
+                          hover:bg-white
+                          focus:border-[#6366F1]
+                          focus:bg-white
+                          focus:ring-4
+                          focus:ring-[#EEF2FF]
+                        "
+                      />
+
+                      <div className="mt-2 flex items-center justify-between">
+
+                        <p className="text-[11px] text-[#718096]">
+                          Keep this concise and focus on relevant achievements.
+                        </p>
+
+                        <span className="text-[10px] font-semibold text-[#718096]">
+                          {item.description?.length || 0} characters
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </div>
                 </div>
 
-              </div>
+              </article>
 
-            </article>
-
-          ))}
-
-        </div>
-
-        {/* =====================================================
-            EMPTY STATE
-        ====================================================== */}
-
-        {education.length === 0 && (
-
-          <div
-            className="
-              rounded-xl
-              border
-              border-dashed
-              border-[#E2E8F0]
-              bg-[#F8FAFC]
-              px-6
-              py-12
-              text-center
-            "
-          >
-
-            <div
-              className="
-                mx-auto
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-xl
-                bg-[#EEF2FF]
-                text-xl
-                font-bold
-                text-[#6366F1]
-              "
-            >
-              +
-            </div>
-
-            <h3
-              className="
-                mt-4
-                text-lg
-                font-bold
-                text-[#111827]
-              "
-            >
-              Add your education
-            </h3>
-
-            <p
-              className="
-                mx-auto
-                mt-2
-                max-w-md
-                text-sm
-                leading-6
-                text-[#718096]
-              "
-            >
-              Add your degree, university, college,
-              certification, or other educational
-              qualifications.
-            </p>
+            ))}
 
           </div>
 
-        )}
+          {/* =====================================================
+              EMPTY STATE
+          ===================================================== */}
 
-        {/* =====================================================
-            ADD EDUCATION
-        ====================================================== */}
+          {education.length === 0 && (
 
-        <button
-          type="button"
-          onClick={addEducation}
-          className="
-            mt-5
-            flex
-            w-full
-            items-center
-            justify-center
-            gap-2
-            rounded-lg
-            border
-            border-dashed
-            border-[#C7D2FE]
-            bg-[#EEF2FF]
-            px-5
-            py-3.5
-            text-sm
-            font-semibold
-            text-[#4F46E5]
-            transition-all
-            duration-200
-            hover:border-[#6366F1]
-            hover:bg-[#E0E7FF]
-          "
-        >
+            <div
+              className="
+                rounded-2xl
+                border
+                border-dashed
+                border-[#CBD5E1]
+                bg-white
+                px-6
+                py-14
+                text-center
+              "
+            >
 
-          <span
+              <div
+                className="
+                  mx-auto
+                  flex
+                  h-16
+                  w-16
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-[#EEF2FF]
+                  text-2xl
+                  font-black
+                  text-[#6366F1]
+                "
+              >
+                +
+              </div>
+
+              <h3
+                className="
+                  mt-5
+                  text-lg
+                  font-black
+                  text-[#111827]
+                "
+              >
+                Add your education
+              </h3>
+
+              <p
+                className="
+                  mx-auto
+                  mt-2
+                  max-w-md
+                  text-sm
+                  leading-6
+                  text-[#718096]
+                "
+              >
+                Add your degree, university, college,
+                certification, or other educational
+                qualifications.
+              </p>
+
+            </div>
+
+          )}
+
+          {/* =====================================================
+              ADD EDUCATION
+          ===================================================== */}
+
+          <button
+            type="button"
+            onClick={addEducation}
             className="
+              mt-6
               flex
-              h-5
-              w-5
+              w-full
               items-center
               justify-center
-              rounded-full
-              bg-[#6366F1]
+              gap-2.5
+              rounded-xl
+              border
+              border-dashed
+              border-[#C7D2FE]
+              bg-[#EEF2FF]
+              px-5
+              py-4
               text-sm
               font-bold
-              leading-none
-              text-white
+              text-[#4F46E5]
+              transition-all
+              duration-200
+              hover:border-[#6366F1]
+              hover:bg-[#E0E7FF]
             "
           >
-            +
-          </span>
 
-          Add Another Education
+            <span
+              className="
+                flex
+                h-6
+                w-6
+                items-center
+                justify-center
+                rounded-full
+                bg-[#6366F1]
+                text-base
+                font-bold
+                leading-none
+                text-white
+              "
+            >
+              +
+            </span>
 
-        </button>
+            Add Another Education
 
+          </button>
+
+          {/* =====================================================
+              HELPER TIP
+          ===================================================== */}
+
+          <div
+            className="
+              mt-6
+              flex
+              items-start
+              gap-3
+              rounded-2xl
+              border
+              border-[#E0E7FF]
+              bg-[#EEF2FF]
+              px-5
+              py-4
+            "
+          >
+
+            <span
+              className="
+                flex
+                h-7
+                w-7
+                shrink-0
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-[#C7D2FE]
+                bg-white
+                text-[11px]
+                font-black
+                text-[#6366F1]
+              "
+            >
+              i
+            </span>
+
+            <div>
+              <p className="text-xs font-bold text-[#111827]">
+                Education tip
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-[#475569]">
+                Put your most recent or most relevant education
+                first. Focus your description on achievements,
+                coursework, or activities that support your career.
+              </p>
+            </div>
+
+          </div>
+
+          <div className="h-4" />
+
+        </div>
       </div>
     </section>
   )
