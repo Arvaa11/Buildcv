@@ -4,59 +4,62 @@ import { jsPDF } from "jspdf"
 
 /* =========================================================
    BUILDCV — COLOR HELPERS
+   Convert OKLCH / OKLAB → RGB
 ========================================================= */
 
 function clamp(value, min = 0, max = 1) {
-  return Math.min(Math.max(value, min), max)
+  return Math.min(max, Math.max(min, value))
 }
 
-function oklabToRgb(L, a, b) {
-  const l_ = L + 0.3963377774 * a + 0.2158037573 * b
-  const m_ = L - 0.1055613458 * a - 0.0638541728 * b
-  const s_ = L - 0.0894841775 * a - 1.291485548 * b
+function parseLightness(value) {
+  const trimmed = String(value).trim()
 
-  const l = l_ * l_ * l_
-  const m = m_ * m_ * m_
-  const s = s_ * s_ * s_
-
-  const r =
-    4.0767416621 * l -
-    3.3077115913 * m +
-    0.2309699292 * s
-
-  const g =
-    -1.2684380046 * l +
-    2.6097574011 * m -
-    0.3413193965 * s
-
-  const blue =
-    -0.0041960863 * l -
-    0.7034186147 * m +
-    1.707614701 * s
-
-  return {
-    r: Math.round(clamp(r) * 255),
-    g: Math.round(clamp(g) * 255),
-    b: Math.round(clamp(blue) * 255),
+  if (trimmed.endsWith("%")) {
+    return parseFloat(trimmed) / 100
   }
+
+  return parseFloat(trimmed)
 }
 
-function oklchToRgb(L, C, h) {
-  const angle = (h * Math.PI) / 180
+function parseChroma(value) {
+  const trimmed = String(value).trim()
 
-  const a = C * Math.cos(angle)
-  const b = C * Math.sin(angle)
+  if (trimmed.endsWith("%")) {
+    return parseFloat(trimmed) / 100
+  }
 
-  return oklabToRgb(L, a, b)
+  return parseFloat(trimmed)
 }
 
-function parseNumber(value) {
-  const number = Number.parseFloat(value)
-  return Number.isFinite(number) ? number : 0
+function parseHue(value) {
+  const trimmed = String(value)
+    .trim()
+    .toLowerCase()
+
+  if (trimmed.endsWith("deg")) {
+    return parseFloat(trimmed)
+  }
+
+  if (trimmed.endsWith("grad")) {
+    return parseFloat(trimmed) * 0.9
+  }
+
+  if (trimmed.endsWith("rad")) {
+    return (
+      (parseFloat(trimmed) * 180) /
+      Math.PI
+    )
+  }
+
+  if (trimmed.endsWith("turn")) {
+    return parseFloat(trimmed) * 360
+  }
+
+  return parseFloat(trimmed)
 }
 
 function parseAlpha(value) {
-  if (value == null || value === "") {
+  if (!value || value === "none") {
     return 1
   }
 
@@ -69,265 +72,386 @@ function parseAlpha(value) {
   return clamp(parseFloat(trimmed))
 }
 
-function convertModernColor(value) {
-  if (!value) return value
-
-  const original = String(value).trim()
-
-  if (
-    !original ||
-    original === "transparent" ||
-    /^rgba?\(/i.test(original) ||
-    /^hsla?\(/i.test(original)
-  ) {
-    return original
+function linearToSrgb(value) {
+  if (value <= 0.0031308) {
+    return 12.92 * value
   }
 
-  /* -------------------------------------------------------
-     OKLAB
-  ------------------------------------------------------- */
-
-  const oklabMatch = original.match(
-    /^oklab\(\s*([+-]?(?:\d*\.?\d+)(?:%|))\s+([+-]?(?:\d*\.?\d+)(?:%|))\s+([+-]?(?:\d*\.?\d+)(?:%|))(?:\s*\/\s*([+-]?(?:\d*\.?\d+)(?:%|)))?\s*\)$/i
+  return (
+    1.055 *
+      Math.pow(
+        Math.max(value, 0),
+        1 / 2.4
+      ) -
+    0.055
   )
+}
 
-  if (oklabMatch) {
-    let L = parseNumber(oklabMatch[1])
-    let a = parseNumber(oklabMatch[2])
-    let b = parseNumber(oklabMatch[3])
+/* =========================================================
+   OKLAB → RGB
+========================================================= */
 
-    if (oklabMatch[1].includes("%")) {
-      L /= 100
-    }
+function oklabToRgb(L, a, b) {
+  const l =
+    L +
+    0.3963377774 * a +
+    0.2158037573 * b
 
-    if (oklabMatch[2].includes("%")) {
-      a = (a / 100) * 0.4
-    }
+  const m =
+    L -
+    0.1055613458 * a -
+    0.0638541728 * b
 
-    if (oklabMatch[3].includes("%")) {
-      b = (b / 100) * 0.4
+  const s =
+    L -
+    0.0894841775 * a -
+    1.291485548 * b
+
+  const l3 = l * l * l
+  const m3 = m * m * m
+  const s3 = s * s * s
+
+  const red =
+    4.0767416621 * l3 -
+    3.3077115913 * m3 +
+    0.2309699292 * s3
+
+  const green =
+    -1.2684380046 * l3 +
+    2.6097574011 * m3 -
+    0.3413193965 * s3
+
+  const blue =
+    -0.0041960863 * l3 -
+    0.7034186147 * m3 +
+    1.707614701 * s3
+
+  return {
+    r: Math.round(
+      clamp(linearToSrgb(red)) * 255
+    ),
+    g: Math.round(
+      clamp(linearToSrgb(green)) * 255
+    ),
+    b: Math.round(
+      clamp(linearToSrgb(blue)) * 255
+    ),
+  }
+}
+
+/* =========================================================
+   CONVERT OKLAB
+========================================================= */
+
+function convertOklabColor(
+  match,
+  LValue,
+  aValue,
+  bValue,
+  alphaValue
+) {
+  try {
+    const L = parseLightness(LValue)
+
+    const a =
+      String(aValue)
+        .trim()
+        .endsWith("%")
+        ? (parseFloat(aValue) / 100) *
+          0.4
+        : parseFloat(aValue)
+
+    const b =
+      String(bValue)
+        .trim()
+        .endsWith("%")
+        ? (parseFloat(bValue) / 100) *
+          0.4
+        : parseFloat(bValue)
+
+    if (
+      !Number.isFinite(L) ||
+      !Number.isFinite(a) ||
+      !Number.isFinite(b)
+    ) {
+      return match
     }
 
     const rgb = oklabToRgb(L, a, b)
 
-    if (oklabMatch[4] !== undefined) {
-      const alpha = parseAlpha(oklabMatch[4])
+    const alpha = parseAlpha(alphaValue)
 
+    if (alpha < 1) {
       return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`
     }
 
     return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`
+  } catch {
+    return match
   }
+}
 
-  /* -------------------------------------------------------
-     OKLCH
-  ------------------------------------------------------- */
+/* =========================================================
+   CONVERT OKLCH
+========================================================= */
 
-  const oklchMatch = original.match(
-    /^oklch\(\s*([+-]?(?:\d*\.?\d+)(?:%|))\s+([+-]?(?:\d*\.?\d+)(?:%|))\s+([+-]?(?:\d*\.?\d+)(?:deg|grad|rad|turn|))?(?:\s*\/\s*([+-]?(?:\d*\.?\d+)(?:%|)))?\s*\)$/i
-  )
+function convertOklchColor(
+  match,
+  LValue,
+  CValue,
+  HValue,
+  alphaValue
+) {
+  try {
+    const L = parseLightness(LValue)
+    const C = parseChroma(CValue)
+    const H = parseHue(HValue)
 
-  if (oklchMatch) {
-    let L = parseNumber(oklchMatch[1])
-    let C = parseNumber(oklchMatch[2])
-    let h = parseNumber(oklchMatch[3])
-
-    if (oklchMatch[1].includes("%")) {
-      L /= 100
+    if (
+      !Number.isFinite(L) ||
+      !Number.isFinite(C) ||
+      !Number.isFinite(H)
+    ) {
+      return match
     }
 
-    if (oklchMatch[2].includes("%")) {
-      C /= 100
-    }
+    const radians =
+      (H * Math.PI) / 180
 
-    const hue = oklchMatch[3] || "0"
+    const a =
+      C * Math.cos(radians)
 
-    if (hue.includes("rad")) {
-      h = (h * 180) / Math.PI
-    } else if (hue.includes("turn")) {
-      h *= 360
-    } else if (hue.includes("grad")) {
-      h *= 0.9
-    }
+    const b =
+      C * Math.sin(radians)
 
-    const rgb = oklchToRgb(L, C, h)
+    const rgb = oklabToRgb(L, a, b)
 
-    if (oklchMatch[4] !== undefined) {
-      const alpha = parseAlpha(oklchMatch[4])
+    const alpha = parseAlpha(alphaValue)
 
+    if (alpha < 1) {
       return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`
     }
 
     return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`
+  } catch {
+    return match
+  }
+}
+
+/* =========================================================
+   SANITIZE CSS VALUE
+========================================================= */
+
+function sanitizeCssValue(value) {
+  if (!value) {
+    return value
   }
 
-  return original
-}
-
-/* =========================================================
-   SAFE CSS SANITIZER
-========================================================= */
-
-function sanitizeCss(value) {
-  if (!value) return value
-
-  return String(value).replace(
-    /oklab\([^)]*\)|oklch\([^)]*\)/gi,
-    (match) => convertModernColor(match)
-  )
-}
-
-/* =========================================================
-   SANITIZE CLONED DOCUMENT
-========================================================= */
-
-function sanitizeClone(clonedDocument) {
-  if (!clonedDocument) return
+  let result = String(value)
 
   /*
-    IMPORTANT:
-    Only color values are changed.
-    Layout, fonts, spacing, sizes, grid and flex are untouched.
-  */
+   * Convert OKLCH colors.
+   */
+  result = result.replace(
+    /oklch\(\s*([^\s/]+)\s+([^\s/]+)\s+([^\s/]+)(?:\s*\/\s*([^)]+))?\s*\)/gi,
+    convertOklchColor
+  )
 
-  /* -------------------------------------------------------
-     1. SANITIZE ALL STYLE TAGS
-  ------------------------------------------------------- */
+  /*
+   * Convert OKLAB colors.
+   */
+  result = result.replace(
+    /oklab\(\s*([^\s/]+)\s+([^\s/]+)\s+([^\s/]+)(?:\s*\/\s*([^)]+))?\s*\)/gi,
+    convertOklabColor
+  )
 
-  const styleTags = clonedDocument.querySelectorAll("style")
+  return result
+}
 
-  styleTags.forEach((styleTag) => {
-    if (styleTag.textContent) {
-      styleTag.textContent = sanitizeCss(
-        styleTag.textContent
+/* =========================================================
+   COPY COMPUTED STYLES
+========================================================= */
+
+function copyComputedStyles(
+  source,
+  target
+) {
+  if (!source || !target) {
+    return
+  }
+
+  const computed =
+    window.getComputedStyle(source)
+
+  /*
+   * Copy the browser's FINAL computed styles.
+   *
+   * This preserves the appearance without
+   * depending on Tailwind classes in the clone.
+   */
+  for (
+    let i = 0;
+    i < computed.length;
+    i += 1
+  ) {
+    const property = computed[i]
+
+    let value =
+      computed.getPropertyValue(
+        property
       )
-    }
-  })
 
-  /* -------------------------------------------------------
-     2. SANITIZE LINKED CSS THAT HAS BEEN COPIED INTO
-        THE CLONED DOCUMENT
-
-     We cannot modify external CSS files directly here,
-     but inline style attributes can still contain colors.
-  ------------------------------------------------------- */
-
-  const elements = clonedDocument.querySelectorAll("*")
-
-  elements.forEach((element) => {
-    if (!(element instanceof HTMLElement)) {
-      return
+    if (!value) {
+      continue
     }
 
-    /* -----------------------------------------------------
-       INLINE STYLE
-    ----------------------------------------------------- */
+    value =
+      sanitizeCssValue(value)
 
-    const inlineStyle = element.getAttribute("style")
-
-    if (inlineStyle) {
-      element.setAttribute(
-        "style",
-        sanitizeCss(inlineStyle)
+    try {
+      target.style.setProperty(
+        property,
+        value
       )
+    } catch {
+      /*
+       * Ignore unsupported CSS
+       * properties.
+       */
     }
-  })
+  }
 
-  /* -------------------------------------------------------
-     3. IMPORTANT FALLBACK
+  /*
+   * Remove classes ONLY from the clone.
+   *
+   * The original resume remains untouched.
+   */
+  target.removeAttribute("class")
+}
 
-     html2canvas reads computed styles.
+/* =========================================================
+   COPY RENDERED DOM TREE
+========================================================= */
 
-     Force unsupported computed colors into ordinary RGB
-     values only when the browser actually reports oklab/
-     oklch.
+function copyRenderedTree(
+  source,
+  target
+) {
+  /*
+   * Copy this element's computed appearance.
+   */
+  copyComputedStyles(
+    source,
+    target
+  )
 
-     We DO NOT copy the complete computed style.
-  ------------------------------------------------------- */
+  /*
+   * IMPORTANT:
+   *
+   * Do NOT add pseudo-elements here.
+   *
+   * Adding ::before / ::after as real
+   * children changes child indexes and
+   * causes resume information to be copied
+   * into the wrong elements.
+   */
 
-  const colorProperties = [
-    "color",
-    "backgroundColor",
-    "borderTopColor",
-    "borderRightColor",
-    "borderBottomColor",
-    "borderLeftColor",
-    "outlineColor",
-    "textDecorationColor",
-    "columnRuleColor",
-    "caretColor",
-    "fill",
-    "stroke",
-  ]
+  const sourceChildren =
+    Array.from(
+      source.children
+    )
 
-  elements.forEach((element) => {
-    if (!(element instanceof HTMLElement)) {
-      return
-    }
+  const targetChildren =
+    Array.from(
+      target.children
+    )
 
-    const computed =
-      clonedDocument.defaultView?.getComputedStyle(element)
+  /*
+   * Source and target now have exactly
+   * the same DOM structure.
+   */
+  sourceChildren.forEach(
+    (sourceChild, index) => {
+      const targetChild =
+        targetChildren[index]
 
-    if (!computed) {
-      return
-    }
-
-    colorProperties.forEach((property) => {
-      const value = computed[property]
-
-      if (!value) {
+      if (!targetChild) {
         return
       }
 
-      if (
-        value.includes("oklab(") ||
-        value.includes("oklch(")
-      ) {
-        const converted = sanitizeCss(value)
-
-        /*
-          Only set the individual color property.
-          Nothing else in the layout is touched.
-        */
-
-        if (converted) {
-          element.style[property] = converted
-        }
-      }
-    })
-  })
+      copyRenderedTree(
+        sourceChild,
+        targetChild
+      )
+    }
+  )
 }
 
 /* =========================================================
    WAIT FOR IMAGES
 ========================================================= */
 
-async function waitForImages(document) {
-  if (!document) return
-
-  const images = Array.from(document.images || [])
+async function waitForImages(
+  container
+) {
+  const images = Array.from(
+    container.querySelectorAll(
+      "img"
+    )
+  )
 
   await Promise.all(
     images.map(
       (image) =>
-        new Promise((resolve) => {
-          if (image.complete) {
-            resolve()
-            return
+        new Promise(
+          (resolve) => {
+            if (image.complete) {
+              resolve()
+              return
+            }
+
+            let finished = false
+
+            const finish = () => {
+              if (finished) {
+                return
+              }
+
+              finished = true
+
+              image.removeEventListener(
+                "load",
+                finish
+              )
+
+              image.removeEventListener(
+                "error",
+                finish
+              )
+
+              resolve()
+            }
+
+            image.addEventListener(
+              "load",
+              finish
+            )
+
+            image.addEventListener(
+              "error",
+              finish
+            )
+
+            /*
+             * Prevent one broken image
+             * from blocking PDF generation.
+             */
+            setTimeout(
+              finish,
+              10000
+            )
           }
-
-          const finish = () => resolve()
-
-          image.addEventListener("load", finish, {
-            once: true,
-          })
-
-          image.addEventListener("error", finish, {
-            once: true,
-          })
-
-          setTimeout(resolve, 15000)
-        })
+        )
     )
   )
 }
@@ -336,26 +460,20 @@ async function waitForImages(document) {
    WAIT FOR FONTS
 ========================================================= */
 
-async function waitForFonts(document) {
+async function waitForFonts() {
   try {
-    if (document?.fonts?.ready) {
+    if (
+      document.fonts &&
+      document.fonts.ready
+    ) {
       await document.fonts.ready
     }
   } catch {
-    // Font loading should not stop PDF generation.
+    /*
+     * Continue even if font
+     * detection fails.
+     */
   }
-}
-
-/* =========================================================
-   WAIT FOR BROWSER PAINT
-========================================================= */
-
-function waitForPaint() {
-  return new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(resolve)
-    })
-  })
 }
 
 /* =========================================================
@@ -365,262 +483,335 @@ function waitForPaint() {
 function DownloadPDF({
   previewId = "resume-preview-desktop",
 }) {
-  const [isDownloading, setIsDownloading] = useState(false)
+  const [
+    isDownloading,
+    setIsDownloading,
+  ] = useState(false)
 
-  const handleDownload = async () => {
-    if (isDownloading) return
-
-    setIsDownloading(true)
-
-    try {
-      /* =====================================================
-         1. FIND RESUME
-      ===================================================== */
-
-      const original = document.getElementById(previewId)
-
-      if (!original) {
-        throw new Error(
-          `Resume preview element "${previewId}" was not found.`
-        )
+  const handleDownload =
+    async () => {
+      if (isDownloading) {
+        return
       }
 
-      /* =====================================================
-         2. WAIT FOR ORIGINAL DOCUMENT
-      ===================================================== */
+      setIsDownloading(true)
 
-      await waitForFonts(document)
-      await waitForImages(document)
-      await waitForPaint()
+      let captureWrapper = null
 
-      /* =====================================================
-         3. READ ACTUAL RESUME DIMENSIONS
+      try {
+        /* =================================================
+           FIND ORIGINAL RESUME
+        ================================================= */
 
-         ClassicPreview uses:
+        const original =
+          document.getElementById(
+            previewId
+          )
 
-           width: 794px
-           height: 1123px
-
-         We read the actual rendered size instead of
-         changing the resume's layout.
-      ===================================================== */
-
-      const rect = original.getBoundingClientRect()
-
-      const resumeWidth = Math.round(rect.width)
-      const resumeHeight = Math.round(rect.height)
-
-      if (resumeWidth <= 0 || resumeHeight <= 0) {
-        throw new Error(
-          "The resume preview has an invalid size."
-        )
-      }
-
-      /* =====================================================
-         4. CREATE CANVAS
-
-         IMPORTANT:
-         foreignObjectRendering is intentionally NOT used.
-
-         The normal html2canvas renderer is used because
-         foreignObjectRendering was producing a blank PDF
-         in this project.
-      ===================================================== */
-
-     const canvas = await html2canvas(original, {
-  scale: 2,
-
-  useCORS: true,
-
-  allowTaint: false,
-
-  backgroundColor: "#FFFFFF",
-
-  imageTimeout: 15000,
-
-  logging: false,
-
-  onclone: async (clonedDocument) => {
-    const clonedResume =
-      clonedDocument.getElementById(previewId)
-
-    if (!clonedResume) {
-      return
-    }
-
-    /*
-      Preserve the existing template dimensions.
-      Do not change the internal layout.
-    */
-
-    clonedResume.style.width = "794px"
-    clonedResume.style.height = "1123px"
-
-    /*
-      Remove unsupported modern CSS colors.
-    */
-
-    sanitizeClone(clonedDocument)
-
-    /*
-      Wait until fonts/images are ready.
-    */
-
-    await waitForFonts(clonedDocument)
-    await waitForImages(clonedDocument)
-  },
-})
-      /* =====================================================
-         5. VALIDATE CANVAS
-      ===================================================== */
-
-      if (
-        !canvas ||
-        canvas.width <= 0 ||
-        canvas.height <= 0
-      ) {
-        throw new Error(
-          "html2canvas returned an empty canvas."
-        )
-      }
-
-      /* =====================================================
-         6. CREATE A4 PDF
-      ===================================================== */
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-        compress: true,
-      })
-
-      const pageWidth = 210
-      const pageHeight = 297
-
-      /*
-        Because the resume itself is an A4-sized layout,
-        calculate exactly how much of the canvas corresponds
-        to one A4 page.
-      */
-
-      const pageCanvasHeight = Math.floor(
-        (canvas.width * pageHeight) / pageWidth
-      )
-
-      /* =====================================================
-         7. SPLIT CANVAS INTO PDF PAGES
-      ===================================================== */
-
-      let offsetY = 0
-      let pageNumber = 0
-
-      while (offsetY < canvas.height) {
-        const remainingHeight =
-          canvas.height - offsetY
-
-        const currentHeight = Math.min(
-          pageCanvasHeight,
-          remainingHeight
-        )
-
-        const pageCanvas =
-          document.createElement("canvas")
-
-        pageCanvas.width = canvas.width
-        pageCanvas.height = currentHeight
-
-        const context = pageCanvas.getContext("2d")
-
-        if (!context) {
+        if (!original) {
           throw new Error(
-            "Could not create PDF canvas context."
+            `Resume preview "${previewId}" was not found.`
           )
         }
 
-        /*
-          White page background.
-        */
+        /* =================================================
+           WAIT FOR ASSETS
+        ================================================= */
 
-        context.fillStyle = "#FFFFFF"
+        await waitForFonts()
 
-        context.fillRect(
-          0,
-          0,
-          pageCanvas.width,
-          pageCanvas.height
+        await waitForImages(
+          original
+        )
+
+        /* =================================================
+           CREATE TEMPORARY CAPTURE AREA
+        ================================================= */
+
+        captureWrapper =
+          document.createElement(
+            "div"
+          )
+
+        captureWrapper.setAttribute(
+          "data-buildcv-pdf-capture",
+          "true"
         )
 
         /*
-          Copy the exact rendered resume pixels.
+         * Keep it rendered but place it
+         * far outside the visible viewport.
+         */
+        captureWrapper.style.position =
+          "absolute"
 
-          No text is rendered again here.
-          This is only an image crop.
-        */
+        captureWrapper.style.left =
+          "-100000px"
 
-        context.drawImage(
-          canvas,
-          0,
-          offsetY,
-          canvas.width,
-          currentHeight,
-          0,
-          0,
-          canvas.width,
-          currentHeight
+        captureWrapper.style.top =
+          "0"
+
+        captureWrapper.style.width =
+          "794px"
+
+        captureWrapper.style.height =
+          "1123px"
+
+        captureWrapper.style.minWidth =
+          "794px"
+
+        captureWrapper.style.minHeight =
+          "1123px"
+
+        captureWrapper.style.maxWidth =
+          "794px"
+
+        captureWrapper.style.maxHeight =
+          "1123px"
+
+        captureWrapper.style.overflow =
+          "hidden"
+
+        captureWrapper.style.margin =
+          "0"
+
+        captureWrapper.style.padding =
+          "0"
+
+        captureWrapper.style.transform =
+          "none"
+
+        captureWrapper.style.background =
+          "#FFFFFF"
+
+        captureWrapper.style.zIndex =
+          "999999"
+
+        /* =================================================
+           CLONE ORIGINAL RESUME
+        ================================================= */
+
+        const clone =
+          original.cloneNode(true)
+
+        captureWrapper.appendChild(
+          clone
         )
 
+        document.body.appendChild(
+          captureWrapper
+        )
+
+        /* =================================================
+           COPY EXACT RENDERED STYLES
+        ================================================= */
+
+        copyRenderedTree(
+          original,
+          clone
+        )
+
+        /* =================================================
+           FORCE RESUME SIZE
+        ================================================= */
+
+        clone.style.width =
+          "794px"
+
+        clone.style.height =
+          "1123px"
+
+        clone.style.minWidth =
+          "794px"
+
+        clone.style.minHeight =
+          "1123px"
+
+        clone.style.maxWidth =
+          "794px"
+
+        clone.style.maxHeight =
+          "1123px"
+
+        clone.style.overflow =
+          "hidden"
+
+        clone.style.transform =
+          "none"
+
+        clone.style.transformOrigin =
+          "top left"
+
+        clone.style.margin =
+          "0"
+
+        /*
+         * Make sure the wrapper itself
+         * doesn't affect the dimensions.
+         */
+        captureWrapper.style.transform =
+          "none"
+
+        /* =================================================
+           WAIT FOR CLONE IMAGES
+        ================================================= */
+
+        await waitForImages(
+          clone
+        )
+
+        await waitForFonts()
+
+        /*
+         * Give browser time to finish
+         * layout and painting.
+         */
+        await new Promise(
+          (resolve) => {
+            requestAnimationFrame(
+              () => {
+                requestAnimationFrame(
+                  resolve
+                )
+              }
+            )
+          }
+        )
+
+        /* =================================================
+           CAPTURE RESUME
+        ================================================= */
+
+        const canvas =
+          await html2canvas(
+            clone,
+            {
+              /*
+               * 2x resolution keeps text
+               * sharp in the PDF.
+               */
+              scale: 2,
+
+              useCORS: true,
+
+              allowTaint: false,
+
+              backgroundColor:
+                "#FFFFFF",
+
+              /*
+               * Exact BuildCV resume
+               * dimensions.
+               */
+              width: 794,
+
+              height: 1123,
+
+              windowWidth: 794,
+
+              windowHeight: 1123,
+
+              imageTimeout: 15000,
+
+              logging: false,
+
+              /*
+               * We don't use foreignObjectRendering.
+               */
+              foreignObjectRendering:
+                false,
+
+              removeContainer: true,
+            }
+          )
+
+        /* =================================================
+           CREATE ONE-PAGE A4 PDF
+        ================================================= */
+
+        const pdf =
+          new jsPDF({
+            orientation:
+              "portrait",
+
+            unit: "mm",
+
+            format: "a4",
+
+            compress: true,
+          })
+
+        /*
+         * PNG is used here instead of JPEG.
+         *
+         * This keeps:
+         * - text
+         * - thin borders
+         * - small icons
+         * - profile image
+         * - fine details
+         *
+         * much cleaner.
+         */
         const imageData =
-          pageCanvas.toDataURL(
-            "image/jpeg",
-            0.98
+          canvas.toDataURL(
+            "image/png"
           )
 
-        const pdfPageHeight =
-          (currentHeight * pageWidth) /
-          canvas.width
-
-        if (pageNumber > 0) {
-          pdf.addPage()
-        }
-
+        /*
+         * A4:
+         *
+         * 210mm × 297mm
+         *
+         * One image = one page.
+         */
         pdf.addImage(
           imageData,
-          "JPEG",
+          "PNG",
           0,
           0,
-          pageWidth,
-          pdfPageHeight,
+          210,
+          297,
           undefined,
           "FAST"
         )
 
-        offsetY += currentHeight
-        pageNumber += 1
+        /* =================================================
+           SAVE
+        ================================================= */
+
+        pdf.save(
+          "BuildCV-Resume.pdf"
+        )
+      } catch (error) {
+        console.error(
+          "BuildCV PDF generation failed:",
+          error
+        )
+
+        alert(
+          `Unable to generate PDF.\n\n${
+            error?.message ||
+            "Unknown error"
+          }`
+        )
+      } finally {
+        /* =================================================
+           CLEAN TEMPORARY CLONE
+        ================================================= */
+
+        if (
+          captureWrapper &&
+          captureWrapper.parentNode
+        ) {
+          captureWrapper.parentNode.removeChild(
+            captureWrapper
+          )
+        }
+
+        setIsDownloading(false)
       }
-
-      /* =====================================================
-         8. SAVE
-      ===================================================== */
-
-      pdf.save("BuildCV-Resume.pdf")
-    } catch (error) {
-      console.error(
-        "BuildCV PDF ERROR:",
-        error
-      )
-
-      window.alert(
-        "Unable to generate the PDF. Please try again."
-      )
-    } finally {
-      setIsDownloading(false)
     }
-  }
-
-  /* =======================================================
-     BUTTON
-  ======================================================= */
 
   return (
     <button
@@ -633,7 +824,7 @@ function DownloadPDF({
         justify-center
         gap-2
         rounded-xl
-        bg-[#6366F1]
+        bg-buildcv-indigo
         px-5
         py-3
         text-sm
@@ -641,7 +832,7 @@ function DownloadPDF({
         text-white
         shadow-sm
         transition
-        hover:bg-[#4F46E5]
+        hover:bg-buildcv-indigo-600
         disabled:cursor-not-allowed
         disabled:opacity-60
       "
@@ -666,23 +857,25 @@ function DownloadPDF({
         <>
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            className="h-4 w-4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             aria-hidden="true"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3v12m0 0 4-4m-4 4-4-4"
-            />
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
 
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 21h14"
+            <polyline points="7 10 12 15 17 10" />
+
+            <line
+              x1="12"
+              y1="15"
+              x2="12"
+              y2="3"
             />
           </svg>
 

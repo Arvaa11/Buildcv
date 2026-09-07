@@ -56,7 +56,6 @@ const templateComponents = {
   atelier: AtelierPreview,
 };
 
-
 // =====================================================
 // BUILDCV — RESUME PREVIEW
 // =====================================================
@@ -67,7 +66,6 @@ function ResumePreview({
   previewId = "resume-preview",
   fitToContainer = false,
 }) {
-
   // ===================================================
   // GET TEMPLATE ID
   // ===================================================
@@ -79,7 +77,6 @@ function ResumePreview({
         selectedTemplate?.slug ||
         selectedTemplate?.preview ||
         "modern";
-
 
   // ===================================================
   // PERSONAL INFORMATION
@@ -98,12 +95,15 @@ function ResumePreview({
     ...(formData.personal || {}),
   };
 
-
   // ===================================================
   // NORMALIZED RESUME DATA
   // ===================================================
 
   const normalizedData = {
+    // -----------------------------------------------
+    // REQUIRED SECTIONS
+    // -----------------------------------------------
+
     personal,
 
     education: Array.isArray(formData.education)
@@ -123,6 +123,84 @@ function ResumePreview({
       : [],
 
     // -----------------------------------------------
+    // OPTIONAL SECTIONS
+    //
+    // IMPORTANT:
+    // Preserve the complete section object,
+    // including `enabled` and `items` / `value`.
+    // -----------------------------------------------
+
+    certifications: formData.certifications
+      ? {
+          ...formData.certifications,
+          items: Array.isArray(
+            formData.certifications.items
+          )
+            ? formData.certifications.items
+            : [],
+        }
+      : {
+          enabled: false,
+          items: [],
+        },
+
+    languages: formData.languages
+      ? {
+          ...formData.languages,
+          items: Array.isArray(
+            formData.languages.items
+          )
+            ? formData.languages.items
+            : [],
+        }
+      : {
+          enabled: false,
+          items: [],
+        },
+
+    achievements: formData.achievements
+      ? {
+          ...formData.achievements,
+          items: Array.isArray(
+            formData.achievements.items
+          )
+            ? formData.achievements.items
+            : [],
+        }
+      : {
+          enabled: false,
+          items: [],
+        },
+
+    interests: formData.interests
+      ? {
+          ...formData.interests,
+          value:
+            typeof formData.interests.value ===
+            "string"
+              ? formData.interests.value
+              : "",
+        }
+      : {
+          enabled: false,
+          value: "",
+        },
+
+    references: formData.references
+      ? {
+          ...formData.references,
+          items: Array.isArray(
+            formData.references.items
+          )
+            ? formData.references.items
+            : [],
+        }
+      : {
+          enabled: false,
+          items: [],
+        },
+
+    // -----------------------------------------------
     // Flat values for templates that use them
     // -----------------------------------------------
 
@@ -137,7 +215,6 @@ function ResumePreview({
     profileImage: personal.profileImage,
   };
 
-
   // ===================================================
   // TEMPLATE PROPS
   // ===================================================
@@ -147,14 +224,12 @@ function ResumePreview({
     data: normalizedData,
   };
 
-
   // ===================================================
   // SELECT TEMPLATE COMPONENT
   // ===================================================
 
   const TemplateComponent =
     templateComponents[templateId] || ModernPreview;
-
 
   // ===================================================
   // RENDER
@@ -163,7 +238,11 @@ function ResumePreview({
   return (
     <div
       id={previewId}
-      className={`resume-preview${fitToContainer ? " resume-preview--fit" : ""}`}
+      className={`resume-preview${
+        fitToContainer
+          ? " resume-preview--fit"
+          : ""
+      }`}
       data-template={templateId}
       style={{
         width: "210mm",
@@ -185,9 +264,11 @@ function ResumePreview({
         position: "relative",
       }}
     >
-      <TemplateComponent {...templateProps} />
+      <TemplateComponent
+        {...templateProps}
+      />
     </div>
   );
 }
 
-export default ResumePreview
+export default ResumePreview;
