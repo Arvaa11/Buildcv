@@ -261,36 +261,165 @@ function TechPreview({
     sampleEducation
   );
 
-  const certifications = getArrayData(
-    formData.certifications,
-    data.certifications,
-    sampleCertifications
-  );
+// =========================================================
+// OPTIONAL SECTION DATA
+// =========================================================
 
-  const languages = getArrayData(
-    formData.languages,
-    data.languages,
-    sampleLanguages
-  );
+const getOptionalSection = (
+  formSection,
+  dataSection,
+  sampleItems
+) => {
+  // =====================================================
+  // LIVE BUILDER
+  // =====================================================
 
-  const achievements = getArrayData(
-    formData.achievements,
-    data.achievements,
-    sampleAchievements
-  );
+  if (!useSampleData) {
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items)
+    ) {
+      return formSection.items;
+    }
 
-  const interests = getArrayData(
-    formData.interests,
-    data.interests,
-    sampleInterests
-  );
+    return [];
+  }
 
-  const references = getArrayData(
-    formData.references,
-    data.references,
-    sampleReferences
-  );
+  // =====================================================
+  // SAMPLE / TEMPLATE PREVIEW
+  // =====================================================
 
+  // Use user's entered data first
+  if (
+    formSection?.enabled &&
+    Array.isArray(formSection.items) &&
+    formSection.items.length > 0
+  ) {
+    return formSection.items;
+  }
+
+  // Otherwise use template data
+  if (
+    dataSection?.enabled &&
+    Array.isArray(dataSection.items) &&
+    dataSection.items.length > 0
+  ) {
+    return dataSection.items;
+  }
+
+  // Otherwise use sample data
+  return sampleItems;
+};
+
+
+// =========================================================
+// CERTIFICATIONS
+// =========================================================
+
+const certifications = getOptionalSection(
+  formData.certifications,
+  data.certifications,
+  sampleCertifications
+);
+
+
+// =========================================================
+// LANGUAGES
+// =========================================================
+
+const languages = getOptionalSection(
+  formData.languages,
+  data.languages,
+  sampleLanguages
+);
+
+
+// =========================================================
+// ACHIEVEMENTS
+// =========================================================
+
+const achievements = getOptionalSection(
+  formData.achievements,
+  data.achievements,
+  sampleAchievements
+);
+
+
+// =========================================================
+// REFERENCES
+// =========================================================
+
+const references = getOptionalSection(
+  formData.references,
+  data.references,
+  sampleReferences
+);
+
+
+// =========================================================
+// INTERESTS
+// =========================================================
+
+let interests = [];
+
+if (!useSampleData) {
+  // -----------------------------------------------------
+  // LIVE BUILDER
+  // -----------------------------------------------------
+
+  if (formData.interests?.enabled) {
+    const value = String(
+      formData.interests.value || ""
+    ).trim();
+
+    if (value) {
+      interests = value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+  }
+} else {
+  // -----------------------------------------------------
+  // SAMPLE / TEMPLATE PREVIEW
+  // -----------------------------------------------------
+
+  // Use user's interests first
+  if (
+    formData.interests?.enabled &&
+    String(formData.interests.value || "").trim()
+  ) {
+    interests = String(
+      formData.interests.value
+    )
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  // Otherwise use template interests
+  else if (
+    data.interests?.enabled &&
+    String(data.interests.value || "").trim()
+  ) {
+    interests = String(
+      data.interests.value
+    )
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  // Otherwise use sample interests
+  else {
+    interests = Array.isArray(sampleInterests)
+      ? sampleInterests
+      : String(sampleInterests || "")
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+  }
+}
   // =========================================================
   // HELPERS
   // =========================================================
@@ -435,7 +564,7 @@ function TechPreview({
   // =========================================================
 
   return (
-    <div className="h-[1123px] w-[794px] overflow-hidden bg-[#f8fafc] font-sans">
+    <div className="min-h-[1123px] w-[794px] overflow-hidden bg-[#f8fafc] font-sans">
       {/* =====================================================
           HEADER
       ===================================================== */}

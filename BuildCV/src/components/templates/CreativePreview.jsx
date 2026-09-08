@@ -271,60 +271,165 @@ function CreativePreview({
     ? formData.education
     : [];
 
-  const certifications = useSampleData
-    ? Array.isArray(formData.certifications) &&
-      formData.certifications.length > 0
-      ? formData.certifications
-      : Array.isArray(data.certifications) &&
-        data.certifications.length > 0
-      ? data.certifications
-      : sampleCertifications
-    : Array.isArray(formData.certifications)
-    ? formData.certifications
-    : [];
+// =========================================================
+// OPTIONAL SECTION DATA
+// =========================================================
 
-  const languages = useSampleData
-    ? Array.isArray(formData.languages) && formData.languages.length > 0
-      ? formData.languages
-      : Array.isArray(data.languages) && data.languages.length > 0
-      ? data.languages
-      : sampleLanguages
-    : Array.isArray(formData.languages)
-    ? formData.languages
-    : [];
+const getOptionalSection = (
+  formSection,
+  dataSection,
+  sampleItems
+) => {
+  // =====================================================
+  // LIVE BUILDER
+  // =====================================================
 
-  const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
-      ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
-      ? data.achievements
-      : sampleAchievements
-    : Array.isArray(formData.achievements)
-    ? formData.achievements
-    : [];
+  if (!useSampleData) {
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items)
+    ) {
+      return formSection.items;
+    }
 
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) && formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) && data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : [];
+    return [];
+  }
 
-  const references = useSampleData
-    ? Array.isArray(formData.references) && formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) && data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : [];
+  // =====================================================
+  // SAMPLE / TEMPLATE PREVIEW
+  // =====================================================
 
+  // Use user's entered data first
+  if (
+    formSection?.enabled &&
+    Array.isArray(formSection.items) &&
+    formSection.items.length > 0
+  ) {
+    return formSection.items;
+  }
+
+  // Otherwise use template data
+  if (
+    dataSection?.enabled &&
+    Array.isArray(dataSection.items) &&
+    dataSection.items.length > 0
+  ) {
+    return dataSection.items;
+  }
+
+  // Otherwise use sample data
+  return sampleItems;
+};
+
+
+// =========================================================
+// CERTIFICATIONS
+// =========================================================
+
+const certifications = getOptionalSection(
+  formData.certifications,
+  data.certifications,
+  sampleCertifications
+);
+
+
+// =========================================================
+// LANGUAGES
+// =========================================================
+
+const languages = getOptionalSection(
+  formData.languages,
+  data.languages,
+  sampleLanguages
+);
+
+
+// =========================================================
+// ACHIEVEMENTS
+// =========================================================
+
+const achievements = getOptionalSection(
+  formData.achievements,
+  data.achievements,
+  sampleAchievements
+);
+
+
+// =========================================================
+// REFERENCES
+// =========================================================
+
+const references = getOptionalSection(
+  formData.references,
+  data.references,
+  sampleReferences
+);
+
+
+// =========================================================
+// INTERESTS
+// =========================================================
+
+let interests = [];
+
+if (!useSampleData) {
+  // -----------------------------------------------------
+  // LIVE BUILDER
+  // -----------------------------------------------------
+
+  if (formData.interests?.enabled) {
+    const value = String(
+      formData.interests.value || ""
+    ).trim();
+
+    if (value) {
+      interests = value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+  }
+} else {
+  // -----------------------------------------------------
+  // SAMPLE / TEMPLATE PREVIEW
+  // -----------------------------------------------------
+
+  // Use user's interests first
+  if (
+    formData.interests?.enabled &&
+    String(formData.interests.value || "").trim()
+  ) {
+    interests = String(
+      formData.interests.value
+    )
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  // Otherwise use template interests
+  else if (
+    data.interests?.enabled &&
+    String(data.interests.value || "").trim()
+  ) {
+    interests = String(
+      data.interests.value
+    )
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  // Otherwise use sample interests
+  else {
+    interests = Array.isArray(sampleInterests)
+      ? sampleInterests
+      : String(sampleInterests || "")
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+  }
+}
   // =========================================================
   // HELPERS
   // =========================================================
@@ -739,7 +844,7 @@ function CreativePreview({
     <div
       className="
         flex
-        h-[1123px]
+        min-h-[1123px]
         w-[794px]
         overflow-hidden
         bg-white

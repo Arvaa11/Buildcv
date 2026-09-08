@@ -127,9 +127,18 @@ function MusePreview({
   ];
 
   const sampleLanguages = [
-    { name: "English", level: "Native" },
-    { name: "Spanish", level: "Professional" },
-    { name: "French", level: "Conversational" },
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Spanish",
+      level: "Professional",
+    },
+    {
+      name: "French",
+      level: "Conversational",
+    },
   ];
 
   const sampleAchievements = [
@@ -251,66 +260,6 @@ function MusePreview({
     ? formData.education
     : [];
 
-  const certifications = useSampleData
-    ? Array.isArray(formData.certifications) &&
-      formData.certifications.length > 0
-      ? formData.certifications
-      : Array.isArray(data.certifications) &&
-        data.certifications.length > 0
-      ? data.certifications
-      : sampleCertifications
-    : Array.isArray(formData.certifications)
-    ? formData.certifications
-    : [];
-
-  const languages = useSampleData
-    ? Array.isArray(formData.languages) &&
-      formData.languages.length > 0
-      ? formData.languages
-      : Array.isArray(data.languages) &&
-        data.languages.length > 0
-      ? data.languages
-      : sampleLanguages
-    : Array.isArray(formData.languages)
-    ? formData.languages
-    : [];
-
-  const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
-      ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
-      ? data.achievements
-      : sampleAchievements
-    : Array.isArray(formData.achievements)
-    ? formData.achievements
-    : [];
-
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) &&
-      formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) &&
-        data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : [];
-
-  const references = useSampleData
-    ? Array.isArray(formData.references) &&
-      formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) &&
-        data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : [];
-
   // =========================================================
   // HELPERS
   // =========================================================
@@ -384,6 +333,171 @@ function MusePreview({
   };
 
   // =========================================================
+  // OPTIONAL SECTION DATA
+  // =========================================================
+
+  const getOptionalSection = (
+    formSection,
+    dataSection,
+    sampleItems
+  ) => {
+    // =====================================================
+    // LIVE BUILDER
+    // =====================================================
+
+    if (!useSampleData) {
+      if (
+        formSection?.enabled &&
+        Array.isArray(formSection.items)
+      ) {
+        return formSection.items;
+      }
+
+      return [];
+    }
+
+    // =====================================================
+    // SAMPLE / TEMPLATE PREVIEW
+    // =====================================================
+
+    // User entered optional data
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items) &&
+      formSection.items.length > 0
+    ) {
+      return formSection.items;
+    }
+
+    // Template optional data
+    if (
+      dataSection?.enabled &&
+      Array.isArray(dataSection.items) &&
+      dataSection.items.length > 0
+    ) {
+      return dataSection.items;
+    }
+
+    // Sample optional data
+    return Array.isArray(sampleItems)
+      ? sampleItems
+      : [];
+  };
+
+  // =========================================================
+  // CERTIFICATIONS
+  // =========================================================
+
+  const certifications = getOptionalSection(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  // =========================================================
+  // LANGUAGES
+  // =========================================================
+
+  const languages = getOptionalSection(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  // =========================================================
+  // ACHIEVEMENTS
+  // =========================================================
+
+  const achievements = getOptionalSection(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  // =========================================================
+  // REFERENCES
+  // =========================================================
+
+  const references = getOptionalSection(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // =========================================================
+
+  let interests = [];
+
+  if (!useSampleData) {
+    // =====================================================
+    // LIVE BUILDER
+    // =====================================================
+
+    if (formData.interests?.enabled) {
+      const value = String(
+        formData.interests.value || ""
+      ).trim();
+
+      if (value) {
+        interests = value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+    }
+  } else {
+    // =====================================================
+    // SAMPLE / TEMPLATE PREVIEW
+    // =====================================================
+
+    // User entered interests
+    if (
+      formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+    ) {
+      interests = String(
+        formData.interests.value
+      )
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    // Template interests
+    else if (
+      data.interests?.enabled &&
+      String(data.interests.value || "").trim()
+    ) {
+      interests = String(
+        data.interests.value
+      )
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    // Sample interests
+    else if (Array.isArray(sampleInterests)) {
+      interests = sampleInterests;
+    } else if (sampleInterests) {
+      interests = String(sampleInterests)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+  }
+
+  // =========================================================
+  // ALWAYS GUARANTEE INTERESTS IS AN ARRAY
+  // =========================================================
+
+  if (!Array.isArray(interests)) {
+    interests = [];
+  }
+
+  // =========================================================
   // VALID DATA
   // =========================================================
 
@@ -454,6 +568,7 @@ function MusePreview({
           "name",
           "title",
           "certificate",
+          "certification",
         ]) ||
         getValue(item, [
           "issuer",
@@ -504,6 +619,7 @@ function MusePreview({
             "name",
             "title",
             "interest",
+            "label",
           ])
     )
     .filter(
@@ -680,6 +796,7 @@ function MusePreview({
     : [];
 
   const firstName = nameParts[0] || "";
+
   const lastName =
     nameParts.slice(1).join(" ");
 
@@ -691,7 +808,7 @@ function MusePreview({
   // =========================================================
 
   return (
-    <div className="h-[1123px] w-[794px] overflow-hidden bg-[#fffaf8] font-sans">
+    <div className="min-h-[1123px] w-[794px] bg-[#fffaf8] font-sans">
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -779,14 +896,16 @@ function MusePreview({
               <div className="mt-4 flex flex-wrap gap-2">
                 {validSkills
                   .slice(0, 10)
-                  .map((skillName, index) => (
-                    <SkillPill
-                      key={`${skillName}-${index}`}
-                      dark
-                    >
-                      {skillName}
-                    </SkillPill>
-                  ))}
+                  .map(
+                    (skillName, index) => (
+                      <SkillPill
+                        key={`${skillName}-${index}`}
+                        dark
+                      >
+                        {skillName}
+                      </SkillPill>
+                    )
+                  )}
               </div>
             </div>
           )}
@@ -852,46 +971,35 @@ function MusePreview({
                 {validEducation
                   .slice(0, 2)
                   .map((item, index) => {
-                    const degree = getValue(
-                      item,
-                      [
+                    const degree =
+                      getValue(item, [
                         "degree",
                         "program",
                         "qualification",
                         "title",
-                      ]
-                    );
+                      ]);
 
                     const institution =
-                      getValue(
-                        item,
-                        [
-                          "institution",
-                          "university",
-                          "school",
-                          "college",
-                        ]
-                      );
+                      getValue(item, [
+                        "institution",
+                        "university",
+                        "school",
+                        "college",
+                      ]);
 
                     const startDate =
-                      getValue(
-                        item,
-                        [
-                          "startDate",
-                          "start",
-                          "from",
-                        ]
-                      );
+                      getValue(item, [
+                        "startDate",
+                        "start",
+                        "from",
+                      ]);
 
                     const endDate =
-                      getValue(
-                        item,
-                        [
-                          "endDate",
-                          "end",
-                          "to",
-                        ]
-                      );
+                      getValue(item, [
+                        "endDate",
+                        "end",
+                        "to",
+                      ]);
 
                     return (
                       <div key={index}>
@@ -992,14 +1100,16 @@ function MusePreview({
               <div className="mt-4 flex flex-wrap gap-x-3 gap-y-2">
                 {validInterests
                   .slice(0, 8)
-                  .map((interest, index) => (
-                    <span
-                      key={`${interest}-${index}`}
-                      className="text-[9px] text-white/55"
-                    >
-                      {interest}
-                    </span>
-                  ))}
+                  .map(
+                    (interest, index) => (
+                      <span
+                        key={`${interest}-${index}`}
+                        className="text-[9px] text-white/55"
+                      >
+                        {interest}
+                      </span>
+                    )
+                  )}
               </div>
             </div>
           )}
@@ -1129,14 +1239,11 @@ function MusePreview({
                       ]);
 
                     const projectDescription =
-                      getValue(
-                        project,
-                        [
-                          "description",
-                          "details",
-                          "summary",
-                        ]
-                      );
+                      getValue(project, [
+                        "description",
+                        "details",
+                        "summary",
+                      ]);
 
                     const technologies =
                       getTechnologies(
@@ -1160,7 +1267,9 @@ function MusePreview({
 
                         {projectDescription && (
                           <TinyText className="mt-1.5">
-                            {projectDescription}
+                            {
+                              projectDescription
+                            }
                           </TinyText>
                         )}
 
@@ -1308,6 +1417,18 @@ function MusePreview({
                         "organization",
                       ]);
 
+                    const email =
+                      getValue(item, [
+                        "email",
+                      ]);
+
+                    const phone =
+                      getValue(item, [
+                        "phone",
+                        "telephone",
+                        "mobile",
+                      ]);
+
                     return (
                       <div key={index}>
                         {name && (
@@ -1321,6 +1442,18 @@ function MusePreview({
                             {[role, company]
                               .filter(Boolean)
                               .join(" • ")}
+                          </TinyText>
+                        )}
+
+                        {email && (
+                          <TinyText className="mt-0.5">
+                            {email}
+                          </TinyText>
+                        )}
+
+                        {phone && (
+                          <TinyText className="mt-0.5">
+                            {phone}
                           </TinyText>
                         )}
                       </div>

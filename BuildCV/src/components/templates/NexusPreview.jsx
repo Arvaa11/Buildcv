@@ -122,9 +122,18 @@ function NexusPreview({
   ];
 
   const sampleLanguages = [
-    { name: "English", level: "Native" },
-    { name: "Spanish", level: "Professional" },
-    { name: "French", level: "Conversational" },
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Spanish",
+      level: "Professional",
+    },
+    {
+      name: "French",
+      level: "Conversational",
+    },
   ];
 
   const sampleAchievements = [
@@ -132,16 +141,19 @@ function NexusPreview({
       title: "Design System Initiative",
       description:
         "Established reusable interface patterns that improved consistency across product experiences.",
+      date: "2025",
     },
     {
       title: "Frontend Mentorship",
       description:
         "Supported junior developers through code reviews, technical guidance, and collaborative learning.",
+      date: "2024",
     },
     {
       title: "Product Experience Improvement",
       description:
         "Partnered with product teams to simplify workflows and create more intuitive user experiences.",
+      date: "2023",
     },
   ];
 
@@ -196,13 +208,15 @@ function NexusPreview({
       };
 
   // =========================================================
-  // NORMALIZE ARRAYS
+  // NORMALIZE MAIN ARRAYS
   // =========================================================
 
   const experience = useSampleData
-    ? Array.isArray(formData.experience) && formData.experience.length > 0
+    ? Array.isArray(formData.experience) &&
+      formData.experience.length > 0
       ? formData.experience
-      : Array.isArray(data.experience) && data.experience.length > 0
+      : Array.isArray(data.experience) &&
+        data.experience.length > 0
       ? data.experience
       : sampleExperience
     : Array.isArray(formData.experience)
@@ -212,9 +226,11 @@ function NexusPreview({
     : [];
 
   const skills = useSampleData
-    ? Array.isArray(formData.skills) && formData.skills.length > 0
+    ? Array.isArray(formData.skills) &&
+      formData.skills.length > 0
       ? formData.skills
-      : Array.isArray(data.skills) && data.skills.length > 0
+      : Array.isArray(data.skills) &&
+        data.skills.length > 0
       ? data.skills
       : sampleSkills
     : Array.isArray(formData.skills)
@@ -224,9 +240,11 @@ function NexusPreview({
     : [];
 
   const projects = useSampleData
-    ? Array.isArray(formData.projects) && formData.projects.length > 0
+    ? Array.isArray(formData.projects) &&
+      formData.projects.length > 0
       ? formData.projects
-      : Array.isArray(data.projects) && data.projects.length > 0
+      : Array.isArray(data.projects) &&
+        data.projects.length > 0
       ? data.projects
       : sampleProjects
     : Array.isArray(formData.projects)
@@ -236,9 +254,11 @@ function NexusPreview({
     : [];
 
   const education = useSampleData
-    ? Array.isArray(formData.education) && formData.education.length > 0
+    ? Array.isArray(formData.education) &&
+      formData.education.length > 0
       ? formData.education
-      : Array.isArray(data.education) && data.education.length > 0
+      : Array.isArray(data.education) &&
+        data.education.length > 0
       ? data.education
       : sampleEducation
     : Array.isArray(formData.education)
@@ -247,78 +267,183 @@ function NexusPreview({
     ? data.education
     : [];
 
-  const certifications = useSampleData
-    ? Array.isArray(formData.certifications) &&
-      formData.certifications.length > 0
-      ? formData.certifications
-      : Array.isArray(data.certifications) &&
-        data.certifications.length > 0
-      ? data.certifications
-      : sampleCertifications
-    : Array.isArray(formData.certifications)
-    ? formData.certifications
-    : Array.isArray(data.certifications)
-    ? data.certifications
-    : [];
+  // =========================================================
+  // OPTIONAL SECTIONS
+  // =========================================================
 
-  const languages = useSampleData
-    ? Array.isArray(formData.languages) && formData.languages.length > 0
-      ? formData.languages
-      : Array.isArray(data.languages) && data.languages.length > 0
-      ? data.languages
-      : sampleLanguages
-    : Array.isArray(formData.languages)
-    ? formData.languages
-    : Array.isArray(data.languages)
-    ? data.languages
-    : [];
+  const getSectionItems = (
+    formSection,
+    dataSection,
+    sampleItems = []
+  ) => {
+    if (useSampleData) {
+      if (
+        formSection?.enabled &&
+        Array.isArray(formSection.items) &&
+        formSection.items.length > 0
+      ) {
+        return formSection.items;
+      }
 
-  const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
-      ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
-      ? data.achievements
-      : sampleAchievements
-    : Array.isArray(formData.achievements)
-    ? formData.achievements
-    : Array.isArray(data.achievements)
-    ? data.achievements
-    : [];
+      if (
+        dataSection?.enabled &&
+        Array.isArray(dataSection.items) &&
+        dataSection.items.length > 0
+      ) {
+        return dataSection.items;
+      }
 
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) && formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) && data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : Array.isArray(data.interests)
-    ? data.interests
-    : [];
+      if (Array.isArray(formSection) && formSection.length > 0) {
+        return formSection;
+      }
 
-  const references = useSampleData
-    ? Array.isArray(formData.references) && formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) && data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : Array.isArray(data.references)
-    ? data.references
-    : [];
+      if (Array.isArray(dataSection) && dataSection.length > 0) {
+        return dataSection;
+      }
+
+      return sampleItems;
+    }
+
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items)
+    ) {
+      return formSection.items;
+    }
+
+    if (Array.isArray(formSection)) {
+      return formSection;
+    }
+
+    if (
+      dataSection?.enabled &&
+      Array.isArray(dataSection.items)
+    ) {
+      return dataSection.items;
+    }
+
+    if (Array.isArray(dataSection)) {
+      return dataSection;
+    }
+
+    return [];
+  };
+
+  const certifications = getSectionItems(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getSectionItems(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getSectionItems(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const references = getSectionItems(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // =========================================================
+
+  const parseInterests = (
+    formSection,
+    dataSection,
+    sampleItems = []
+  ) => {
+    if (useSampleData) {
+      if (
+        formSection?.enabled &&
+        typeof formSection.value === "string" &&
+        formSection.value.trim()
+      ) {
+        return formSection.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      if (
+        dataSection?.enabled &&
+        typeof dataSection.value === "string" &&
+        dataSection.value.trim()
+      ) {
+        return dataSection.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      if (Array.isArray(formSection) && formSection.length > 0) {
+        return formSection;
+      }
+
+      if (Array.isArray(dataSection) && dataSection.length > 0) {
+        return dataSection;
+      }
+
+      return sampleItems;
+    }
+
+    if (
+      formSection?.enabled &&
+      typeof formSection.value === "string"
+    ) {
+      return formSection.value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    if (Array.isArray(formSection)) {
+      return formSection;
+    }
+
+    if (
+      dataSection?.enabled &&
+      typeof dataSection.value === "string"
+    ) {
+      return dataSection.value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    if (Array.isArray(dataSection)) {
+      return dataSection;
+    }
+
+    return [];
+  };
+
+  const interests = parseInterests(
+    formData.interests,
+    data.interests,
+    sampleInterests
+  );
 
   // =========================================================
   // HELPERS
   // =========================================================
 
   const getValue = (item, keys) => {
+    if (!item) {
+      return "";
+    }
+
     for (const key of keys) {
       if (
-        item &&
         item[key] !== undefined &&
         item[key] !== null &&
         String(item[key]).trim() !== ""
@@ -384,69 +509,106 @@ function NexusPreview({
   // VALID DATA
   // =========================================================
 
-  const validExperience = experience.filter(
-    (item) =>
-      getValue(item, [
-        "jobTitle",
-        "title",
-        "position",
-        "role",
-        "company",
-        "companyName",
-        "organization",
-      ])
-  );
+  const validExperience = Array.isArray(experience)
+    ? experience.filter((item) =>
+        getValue(item, [
+          "jobTitle",
+          "title",
+          "position",
+          "role",
+          "company",
+          "companyName",
+          "organization",
+        ])
+      )
+    : [];
 
-  const validSkills = skills.filter((skill) =>
-    String(getSkillName(skill) || "").trim()
-  );
+  const validSkills = Array.isArray(skills)
+    ? skills.filter((skill) =>
+        String(getSkillName(skill) || "").trim()
+      )
+    : [];
 
-  const validProjects = projects.filter((project) =>
-    getValue(project, [
-      "name",
-      "title",
-      "projectName",
-      "description",
-      "details",
-      "summary",
-    ])
-  );
+  const validProjects = Array.isArray(projects)
+    ? projects.filter((project) =>
+        getValue(project, [
+          "name",
+          "title",
+          "projectName",
+          "description",
+          "details",
+          "summary",
+        ])
+      )
+    : [];
 
-  const validEducation = education.filter((item) =>
-    getValue(item, [
-      "degree",
-      "qualification",
-      "program",
-      "institution",
-      "school",
-      "university",
-    ])
-  );
+  const validEducation = Array.isArray(education)
+    ? education.filter((item) =>
+        getValue(item, [
+          "degree",
+          "qualification",
+          "program",
+          "institution",
+          "school",
+          "university",
+        ])
+      )
+    : [];
 
-  const validCertifications = certifications.filter((item) =>
-    getValue(item, ["name", "title", "certificate"])
-  );
+  const validCertifications = Array.isArray(certifications)
+    ? certifications.filter((item) =>
+        getValue(item, [
+          "name",
+          "title",
+          "certificate",
+        ])
+      )
+    : [];
 
-  const validLanguages = languages.filter((item) =>
-    getValue(item, ["name", "language"])
-  );
+  const validLanguages = Array.isArray(languages)
+    ? languages.filter((item) =>
+        getValue(item, [
+          "name",
+          "language",
+        ])
+      )
+    : [];
 
-  const validAchievements = achievements.filter((item) =>
-    getValue(item, ["title", "name", "description"])
-  );
+  const validAchievements = Array.isArray(achievements)
+    ? achievements.filter((item) =>
+        getValue(item, [
+          "title",
+          "name",
+          "achievement",
+          "description",
+          "details",
+        ])
+      )
+    : [];
 
-  const validInterests = interests.filter((item) => {
-    const value =
-      typeof item === "string"
-        ? item
-        : getValue(item, ["name", "title", "interest"]);
+  const validInterests = Array.isArray(interests)
+    ? interests.filter((item) => {
+        const value =
+          typeof item === "string"
+            ? item
+            : getValue(item, [
+                "name",
+                "title",
+                "interest",
+              ]);
 
-    return String(value || "").trim();
-  });
+        return String(value || "").trim();
+      })
+    : [];
 
-  const validReferences = references.filter((item) =>
-    getValue(item, ["name", "fullName"])
-  );
+  const validReferences = Array.isArray(references)
+    ? references.filter((item) =>
+        getValue(item, [
+          "name",
+          "fullName",
+        ])
+      )
+    : [];
 
   // =========================================================
   // SMALL COMPONENTS
@@ -508,7 +670,7 @@ function NexusPreview({
   // =========================================================
 
   return (
-    <div className="h-[1123px] w-[794px] overflow-hidden bg-white font-sans">
+    <div className="min-h-[1123px] w-[794px] bg-white font-sans">
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -562,7 +724,7 @@ function NexusPreview({
           CONTENT
       ===================================================== */}
 
-      <div className="mt-8 grid grid-cols-[0.72fr_1.5fr]">
+      <div className="mt-8 grid grid-cols-[0.72fr_1.5fr] items-start">
         {/* =================================================
             SIDEBAR
         ================================================= */}
@@ -908,16 +1070,21 @@ function NexusPreview({
 
                       {technologies.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1.5">
-                          {technologies.slice(0, 4).map(
-                            (technology, techIndex) => (
-                              <span
-                                key={`${technology}-${techIndex}`}
-                                className="rounded-md bg-blue-50 px-1.5 py-0.5 text-[7.5px] font-medium text-blue-700"
-                              >
-                                {technology}
-                              </span>
-                            )
-                          )}
+                          {technologies
+                            .slice(0, 4)
+                            .map(
+                              (
+                                technology,
+                                techIndex
+                              ) => (
+                                <span
+                                  key={`${technology}-${techIndex}`}
+                                  className="rounded-md bg-blue-50 px-1.5 py-0.5 text-[7.5px] font-medium text-blue-700"
+                                >
+                                  {technology}
+                                </span>
+                              )
+                            )}
                         </div>
                       )}
                     </div>
@@ -936,11 +1103,13 @@ function NexusPreview({
               </div>
 
               <div className="mt-4 space-y-4">
-                {validAchievements.slice(0, 3).map(
-                  (item, index) => {
+                {validAchievements
+                  .slice(0, 3)
+                  .map((item, index) => {
                     const title = getValue(item, [
                       "title",
                       "name",
+                      "achievement",
                     ]);
 
                     const description = getValue(item, [
@@ -949,13 +1118,26 @@ function NexusPreview({
                       "summary",
                     ]);
 
+                    const date = getValue(item, [
+                      "date",
+                      "year",
+                    ]);
+
                     return (
                       <div key={index}>
-                        {title && (
-                          <div className="text-[10px] font-bold text-slate-900">
-                            {title}
-                          </div>
-                        )}
+                        <div className="flex items-start justify-between gap-3">
+                          {title && (
+                            <div className="text-[10px] font-bold text-slate-900">
+                              {title}
+                            </div>
+                          )}
+
+                          {date && (
+                            <div className="shrink-0 text-[8px] text-slate-500">
+                              {date}
+                            </div>
+                          )}
+                        </div>
 
                         {description && (
                           <TinyText className="mt-1">
@@ -964,8 +1146,7 @@ function NexusPreview({
                         )}
                       </div>
                     );
-                  }
-                )}
+                  })}
               </div>
             </section>
           )}

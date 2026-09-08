@@ -283,18 +283,26 @@ function CoralPreview({
   // OPTIONAL DATA
   // =========================================================
 
-  const certifications = useSampleData
-    ? Array.isArray(formData.certifications) &&
-      formData.certifications.length > 0
-      ? formData.certifications
-      : Array.isArray(data.certifications) &&
-        data.certifications.length > 0
-      ? data.certifications
-      : sampleCertifications
+const certifications = useSampleData
+  ? formData.certifications?.enabled &&
+    Array.isArray(formData.certifications.items) &&
+    formData.certifications.items.length > 0
+    ? formData.certifications.items
+    : data.certifications?.enabled &&
+      Array.isArray(data.certifications.items) &&
+      data.certifications.items.length > 0
+    ? data.certifications.items
     : Array.isArray(formData.certifications)
     ? formData.certifications
-    : [];
-
+    : Array.isArray(data.certifications)
+    ? data.certifications
+    : sampleCertifications
+  : formData.certifications?.enabled &&
+    Array.isArray(formData.certifications.items)
+  ? formData.certifications.items
+  : Array.isArray(formData.certifications)
+  ? formData.certifications
+  : [];
   const languages = useSampleData
     ? Array.isArray(formData.languages) &&
       formData.languages.length > 0
@@ -597,9 +605,8 @@ function CoralPreview({
   return (
     <div
       className="
-        h-[1123px]
+        min-h-[1123px]
         w-[794px]
-        overflow-hidden
         bg-[#fff9f7]
         font-sans
       "

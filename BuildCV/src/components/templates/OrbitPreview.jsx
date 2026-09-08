@@ -7,7 +7,6 @@ function OrbitPreview({
 }) {
   // =========================================================
   // SAMPLE DATA
-  // Same sample data used across all BuildCV templates
   // =========================================================
 
   const samplePersonal = {
@@ -123,9 +122,18 @@ function OrbitPreview({
   ];
 
   const sampleLanguages = [
-    { name: "English", level: "Native" },
-    { name: "Spanish", level: "Professional" },
-    { name: "French", level: "Conversational" },
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Spanish",
+      level: "Professional",
+    },
+    {
+      name: "French",
+      level: "Conversational",
+    },
   ];
 
   const sampleAchievements = [
@@ -133,16 +141,19 @@ function OrbitPreview({
       title: "Design System Initiative",
       description:
         "Established reusable interface patterns that improved consistency across product experiences.",
+      date: "2025",
     },
     {
       title: "Frontend Mentorship",
       description:
         "Supported junior developers through code reviews, technical guidance, and collaborative learning.",
+      date: "2024",
     },
     {
       title: "Product Experience Improvement",
       description:
         "Partnered with product teams to simplify workflows and create more intuitive user experiences.",
+      date: "2023",
     },
   ];
 
@@ -173,6 +184,78 @@ function OrbitPreview({
   ];
 
   // =========================================================
+  // HELPERS
+  // =========================================================
+
+  const getValue = (item, keys) => {
+    for (const key of keys) {
+      if (
+        item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        String(item[key]).trim() !== ""
+      ) {
+        return item[key];
+      }
+    }
+
+    return "";
+  };
+
+  const getSkillName = (skill) => {
+    if (typeof skill === "string") {
+      return skill;
+    }
+
+    return getValue(skill, [
+      "name",
+      "skill",
+      "title",
+      "label",
+    ]);
+  };
+
+  const getDescriptionLines = (description) => {
+    if (!description) {
+      return [];
+    }
+
+    if (Array.isArray(description)) {
+      return description
+        .filter(Boolean)
+        .map((line) => String(line).trim())
+        .filter(Boolean);
+    }
+
+    return String(description)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+  };
+
+  const getTechnologies = (project) => {
+    const technologies = getValue(project, [
+      "technologies",
+      "tech",
+      "stack",
+      "tools",
+    ]);
+
+    if (Array.isArray(technologies)) {
+      return technologies.filter(Boolean);
+    }
+
+    if (typeof technologies === "string") {
+      return technologies
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
+  // =========================================================
   // PERSONAL DATA
   // =========================================================
 
@@ -197,7 +280,7 @@ function OrbitPreview({
       };
 
   // =========================================================
-  // RESUME SECTIONS
+  // NORMALIZE STANDARD SECTIONS
   // =========================================================
 
   const education = useSampleData
@@ -256,144 +339,307 @@ function OrbitPreview({
     ? data.projects
     : [];
 
+  // =========================================================
+  // OPTIONAL SECTIONS
+  // SUPPORT CURRENT BuildCV { enabled, items } STRUCTURE
+  // =========================================================
+
   const certifications = useSampleData
-    ? Array.isArray(formData.certifications) &&
-      formData.certifications.length > 0
+    ? formData.certifications?.enabled &&
+      Array.isArray(formData.certifications.items) &&
+      formData.certifications.items.length > 0
+      ? formData.certifications.items
+      : data.certifications?.enabled &&
+        Array.isArray(data.certifications.items) &&
+        data.certifications.items.length > 0
+      ? data.certifications.items
+      : Array.isArray(formData.certifications)
       ? formData.certifications
-      : Array.isArray(data.certifications) &&
-        data.certifications.length > 0
+      : Array.isArray(data.certifications)
       ? data.certifications
       : sampleCertifications
+    : formData.certifications?.enabled &&
+      Array.isArray(formData.certifications.items)
+    ? formData.certifications.items
     : Array.isArray(formData.certifications)
     ? formData.certifications
+    : data.certifications?.enabled &&
+      Array.isArray(data.certifications.items)
+    ? data.certifications.items
     : Array.isArray(data.certifications)
     ? data.certifications
     : [];
 
   const languages = useSampleData
-    ? Array.isArray(formData.languages) &&
-      formData.languages.length > 0
+    ? formData.languages?.enabled &&
+      Array.isArray(formData.languages.items) &&
+      formData.languages.items.length > 0
+      ? formData.languages.items
+      : data.languages?.enabled &&
+        Array.isArray(data.languages.items) &&
+        data.languages.items.length > 0
+      ? data.languages.items
+      : Array.isArray(formData.languages)
       ? formData.languages
-      : Array.isArray(data.languages) &&
-        data.languages.length > 0
+      : Array.isArray(data.languages)
       ? data.languages
       : sampleLanguages
+    : formData.languages?.enabled &&
+      Array.isArray(formData.languages.items)
+    ? formData.languages.items
     : Array.isArray(formData.languages)
     ? formData.languages
+    : data.languages?.enabled &&
+      Array.isArray(data.languages.items)
+    ? data.languages.items
     : Array.isArray(data.languages)
     ? data.languages
     : [];
 
   const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
+    ? formData.achievements?.enabled &&
+      Array.isArray(formData.achievements.items) &&
+      formData.achievements.items.length > 0
+      ? formData.achievements.items
+      : data.achievements?.enabled &&
+        Array.isArray(data.achievements.items) &&
+        data.achievements.items.length > 0
+      ? data.achievements.items
+      : Array.isArray(formData.achievements)
       ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
+      : Array.isArray(data.achievements)
       ? data.achievements
       : sampleAchievements
+    : formData.achievements?.enabled &&
+      Array.isArray(formData.achievements.items)
+    ? formData.achievements.items
     : Array.isArray(formData.achievements)
     ? formData.achievements
+    : data.achievements?.enabled &&
+      Array.isArray(data.achievements.items)
+    ? data.achievements.items
     : Array.isArray(data.achievements)
     ? data.achievements
     : [];
 
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) &&
-      formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) &&
-        data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : Array.isArray(data.interests)
-    ? data.interests
-    : [];
-
-  const references = useSampleData
-    ? Array.isArray(formData.references) &&
-      formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) &&
-        data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : Array.isArray(data.references)
-    ? data.references
-    : [];
-
   // =========================================================
-  // HELPERS
+  // INTERESTS
+  // SUPPORT:
+  // { enabled: true, value: "Web Design, Reading" }
   // =========================================================
 
-  const getValue = (item, keys) => {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key];
+  const normalizeInterests = (source, fallback = []) => {
+    if (!source) {
+      return fallback;
+    }
+
+    if (
+      typeof source === "object" &&
+      !Array.isArray(source)
+    ) {
+      if (source.enabled === false) {
+        return [];
+      }
+
+      if (typeof source.value === "string") {
+        return source.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      if (Array.isArray(source.items)) {
+        return source.items;
       }
     }
 
-    return "";
-  };
-
-  const getSkillName = (skill) => {
-    if (typeof skill === "string") {
-      return skill;
+    if (Array.isArray(source)) {
+      return source;
     }
 
-    return getValue(skill, [
-      "name",
-      "skill",
-      "title",
-      "label",
-    ]);
-  };
-
-  const getDescriptionLines = (description) => {
-    if (!description) {
-      return [];
-    }
-
-    if (Array.isArray(description)) {
-      return description.filter(Boolean);
-    }
-
-    return String(description)
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-  };
-
-  const getTechnologies = (project) => {
-    const technologies = getValue(project, [
-      "technologies",
-      "tech",
-      "stack",
-      "tools",
-    ]);
-
-    if (Array.isArray(technologies)) {
-      return technologies.filter(Boolean);
-    }
-
-    if (typeof technologies === "string") {
-      return technologies
+    if (typeof source === "string") {
+      return source
         .split(",")
         .map((item) => item.trim())
         .filter(Boolean);
     }
 
-    return [];
+    return fallback;
   };
+
+  const formInterests = formData.interests;
+  const dataInterests = data.interests;
+
+  let interests = [];
+
+  if (useSampleData) {
+    const normalizedFormInterests = normalizeInterests(
+      formInterests
+    );
+
+    const normalizedDataInterests = normalizeInterests(
+      dataInterests
+    );
+
+    interests =
+      normalizedFormInterests.length > 0
+        ? normalizedFormInterests
+        : normalizedDataInterests.length > 0
+        ? normalizedDataInterests
+        : sampleInterests;
+  } else {
+    const normalizedFormInterests = normalizeInterests(
+      formInterests
+    );
+
+    const normalizedDataInterests = normalizeInterests(
+      dataInterests
+    );
+
+    interests =
+      normalizedFormInterests.length > 0
+        ? normalizedFormInterests
+        : normalizedDataInterests;
+  }
+
+  // =========================================================
+  // REFERENCES
+  // =========================================================
+
+  const references = useSampleData
+    ? formData.references?.enabled &&
+      Array.isArray(formData.references.items) &&
+      formData.references.items.length > 0
+      ? formData.references.items
+      : data.references?.enabled &&
+        Array.isArray(data.references.items) &&
+        data.references.items.length > 0
+      ? data.references.items
+      : Array.isArray(formData.references)
+      ? formData.references
+      : Array.isArray(data.references)
+      ? data.references
+      : sampleReferences
+    : formData.references?.enabled &&
+      Array.isArray(formData.references.items)
+    ? formData.references.items
+    : Array.isArray(formData.references)
+    ? formData.references
+    : data.references?.enabled &&
+      Array.isArray(data.references.items)
+    ? data.references.items
+    : Array.isArray(data.references)
+    ? data.references
+    : [];
+
+  // =========================================================
+  // VALID DATA
+  // =========================================================
+
+  const validExperience = Array.isArray(experience)
+    ? experience.filter((item) =>
+        getValue(item, [
+          "jobTitle",
+          "title",
+          "position",
+          "role",
+          "company",
+          "companyName",
+          "organization",
+          "description",
+          "details",
+        ])
+      )
+    : [];
+
+  const validSkills = Array.isArray(skills)
+    ? skills.filter((skill) =>
+        String(getSkillName(skill) || "").trim()
+      )
+    : [];
+
+  const validProjects = Array.isArray(projects)
+    ? projects.filter((project) =>
+        getValue(project, [
+          "name",
+          "title",
+          "projectName",
+          "description",
+          "details",
+          "summary",
+        ])
+      )
+    : [];
+
+  const validEducation = Array.isArray(education)
+    ? education.filter((item) =>
+        getValue(item, [
+          "degree",
+          "qualification",
+          "program",
+          "title",
+          "institution",
+          "school",
+          "university",
+        ])
+      )
+    : [];
+
+  const validCertifications = Array.isArray(certifications)
+    ? certifications.filter((item) =>
+        getValue(item, [
+          "name",
+          "title",
+          "certificate",
+        ])
+      )
+    : [];
+
+  const validLanguages = Array.isArray(languages)
+    ? languages.filter((item) =>
+        getValue(item, [
+          "name",
+          "language",
+          "title",
+        ])
+      )
+    : [];
+
+  const validAchievements = Array.isArray(achievements)
+    ? achievements.filter((item) =>
+        getValue(item, [
+          "title",
+          "name",
+          "achievement",
+          "description",
+          "details",
+        ])
+      )
+    : [];
+
+  const validInterests = Array.isArray(interests)
+    ? interests.filter((item) => {
+        const value =
+          typeof item === "string"
+            ? item
+            : getValue(item, [
+                "name",
+                "title",
+                "interest",
+              ]);
+
+        return String(value || "").trim();
+      })
+    : [];
+
+  const validReferences = Array.isArray(references)
+    ? references.filter((item) =>
+        getValue(item, [
+          "name",
+          "fullName",
+        ])
+      )
+    : [];
 
   // =========================================================
   // SMALL TEXT
@@ -498,7 +744,7 @@ function OrbitPreview({
   };
 
   // =========================================================
-  // OPTIONAL SECTION HELPERS
+  // CONTACT
   // =========================================================
 
   const hasContact =
@@ -511,8 +757,14 @@ function OrbitPreview({
   const displayName = personal.fullName;
   const displayJobTitle = personal.jobTitle;
 
+  // =========================================================
+  // RENDER
+  // IMPORTANT:
+  // DO NOT USE FIXED HEIGHT OR overflow-hidden ON ROOT
+  // =========================================================
+
   return (
-    <div className="h-[1123px] w-[794px] overflow-hidden bg-slate-950 font-sans text-white">
+    <div className="min-h-[1123px] w-[794px] bg-slate-950 font-sans text-white">
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -578,276 +830,258 @@ function OrbitPreview({
 
             {/* EXPERIENCE */}
 
-            {experience.length > 0 && (
+            {validExperience.length > 0 && (
               <>
                 <div className="font-mono text-[11px] font-bold tracking-[0.18em] text-cyan-300">
                   CAREER ORBIT
                 </div>
 
                 <div className="relative mt-6 border-l border-cyan-400/30 pl-7">
-                  {experience
-                    .slice(0, 4)
-                    .map((item, index) => {
-                      const jobTitle = getValue(item, [
-                        "jobTitle",
-                        "title",
-                        "position",
-                        "role",
-                      ]);
+                  {validExperience.map((item, index) => {
+                    const jobTitle = getValue(item, [
+                      "jobTitle",
+                      "title",
+                      "position",
+                      "role",
+                    ]);
 
-                      const company = getValue(item, [
-                        "company",
-                        "companyName",
-                        "organization",
-                      ]);
+                    const company = getValue(item, [
+                      "company",
+                      "companyName",
+                      "organization",
+                    ]);
 
-                      const startDate = getValue(item, [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]);
+                    const startDate = getValue(item, [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]);
 
-                      const endDate = getValue(item, [
-                        "endDate",
-                        "end",
-                        "to",
-                      ]);
+                    const endDate = getValue(item, [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]);
 
-                      const description = getValue(item, [
-                        "description",
-                        "details",
-                        "responsibilities",
-                        "summary",
-                      ]);
+                    const description = getValue(item, [
+                      "description",
+                      "details",
+                      "responsibilities",
+                      "summary",
+                    ]);
 
-                      if (
-                        !jobTitle &&
-                        !company &&
-                        !description
-                      ) {
-                        return null;
-                      }
+                    if (
+                      !jobTitle &&
+                      !company &&
+                      !description
+                    ) {
+                      return null;
+                    }
 
-                      const year =
-                        startDate || endDate || "";
+                    const year =
+                      startDate || endDate || "";
 
-                      return (
-                        <div
-                          key={index}
-                          className="relative mb-8"
-                        >
-                          {/* Orbit point */}
+                    return (
+                      <div
+                        key={item.id || index}
+                        className="relative mb-8"
+                      >
+                        <div className="absolute -left-[35px] top-0 h-4 w-4 rounded-full border border-cyan-300 bg-slate-950" />
 
-                          <div className="absolute -left-[35px] top-0 h-4 w-4 rounded-full border border-cyan-300 bg-slate-950" />
+                        {year && (
+                          <div className="font-mono text-[9.5px] text-cyan-300">
+                            {startDate && endDate
+                              ? `${startDate} — ${endDate}`
+                              : year}
+                          </div>
+                        )}
 
-                          {/* Year */}
+                        {jobTitle && (
+                          <div className="mt-2 text-[12px] font-bold">
+                            {jobTitle}
+                          </div>
+                        )}
 
-                          {year && (
-                            <div className="font-mono text-[9.5px] text-cyan-300">
-                              {year}
-                            </div>
-                          )}
+                        {company && (
+                          <div className="mt-1.5 text-[9.5px] text-white/40">
+                            {company}
+                          </div>
+                        )}
 
-                          {/* Job */}
-
-                          {jobTitle && (
-                            <div className="mt-2 text-[12px] font-bold">
-                              {jobTitle}
-                            </div>
-                          )}
-
-                          {/* Company */}
-
-                          {company && (
-                            <div className="mt-1.5 text-[9.5px] text-white/40">
-                              {company}
-
-                              {endDate && (
-                                <>
-                                  {" "}
-                                  • {endDate}
-                                </>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Description */}
-
-                          {description && (
-                            <div className="mt-3">
-                              <ResumeLines
-                                description={description}
-                                color="bg-white/10"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                        {description && (
+                          <div className="mt-3">
+                            <ResumeLines
+                              description={description}
+                              color="bg-white/10"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}
 
-            {/* =================================================
-                EDUCATION
-            ================================================= */}
+            {/* EDUCATION */}
 
-            {education.length > 0 && (
+            {validEducation.length > 0 && (
               <>
                 <div className="mt-2 font-mono text-[11px] font-bold tracking-[0.18em] text-cyan-300">
                   EDUCATION ORBIT
                 </div>
 
                 <div className="relative mt-6 border-l border-cyan-400/30 pl-7">
-                  {education
-                    .slice(0, 2)
-                    .map((item, index) => {
-                      const degree = getValue(item, [
-                        "degree",
-                        "program",
-                        "qualification",
-                        "title",
-                      ]);
+                  {validEducation.map((item, index) => {
+                    const degree = getValue(item, [
+                      "degree",
+                      "program",
+                      "qualification",
+                      "title",
+                    ]);
 
-                      const institution = getValue(
-                        item,
-                        [
-                          "institution",
-                          "university",
-                          "school",
-                          "college",
-                        ]
-                      );
+                    const institution = getValue(
+                      item,
+                      [
+                        "institution",
+                        "university",
+                        "school",
+                        "college",
+                      ]
+                    );
 
-                      const startDate = getValue(item, [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]);
+                    const startDate = getValue(item, [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]);
 
-                      const endDate = getValue(item, [
-                        "endDate",
-                        "end",
-                        "to",
-                      ]);
+                    const endDate = getValue(item, [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]);
 
-                      if (
-                        !degree &&
-                        !institution &&
-                        !startDate &&
-                        !endDate
-                      ) {
-                        return null;
-                      }
+                    if (
+                      !degree &&
+                      !institution &&
+                      !startDate &&
+                      !endDate
+                    ) {
+                      return null;
+                    }
 
-                      return (
-                        <div
-                          key={`education-${index}`}
-                          className="relative mb-8"
-                        >
-                          <div className="absolute -left-[35px] top-0 h-4 w-4 rounded-full border border-cyan-300 bg-slate-950" />
+                    return (
+                      <div
+                        key={
+                          item.id ||
+                          `education-${index}`
+                        }
+                        className="relative mb-8"
+                      >
+                        <div className="absolute -left-[35px] top-0 h-4 w-4 rounded-full border border-cyan-300 bg-slate-950" />
 
-                          {(startDate || endDate) && (
-                            <div className="font-mono text-[9.5px] text-cyan-300">
-                              {startDate || ""}{" "}
-                              {startDate && endDate
-                                ? "—"
-                                : ""}
-                              {endDate || ""}
-                            </div>
-                          )}
+                        {(startDate || endDate) && (
+                          <div className="font-mono text-[9.5px] text-cyan-300">
+                            {startDate || ""}{" "}
+                            {startDate && endDate
+                              ? "—"
+                              : ""}
+                            {endDate || ""}
+                          </div>
+                        )}
 
-                          {degree && (
-                            <div className="mt-2 text-[12px] font-bold">
-                              {degree}
-                            </div>
-                          )}
+                        {degree && (
+                          <div className="mt-2 text-[12px] font-bold">
+                            {degree}
+                          </div>
+                        )}
 
-                          {institution && (
-                            <div className="mt-1.5 text-[9.5px] text-white/40">
-                              {institution}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                        {institution && (
+                          <div className="mt-1.5 text-[9.5px] text-white/40">
+                            {institution}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}
 
-            {/* =================================================
-                PROJECTS
-            ================================================= */}
+            {/* PROJECTS */}
 
-            {projects.length > 0 && (
+            {validProjects.length > 0 && (
               <div className="mt-2">
                 <div className="font-mono text-[11px] font-bold tracking-[0.18em] text-cyan-300">
                   PROJECT ORBIT
                 </div>
 
                 <div className="mt-5 space-y-5">
-                  {projects
-                    .slice(0, 3)
-                    .map((project, index) => {
-                      const title = getValue(project, [
-                        "title",
-                        "name",
-                      ]);
+                  {validProjects.map((project, index) => {
+                    const title = getValue(project, [
+                      "title",
+                      "name",
+                      "projectName",
+                    ]);
 
-                      const description = getValue(
-                        project,
-                        [
-                          "description",
-                          "details",
-                          "summary",
-                        ]
-                      );
+                    const description = getValue(
+                      project,
+                      [
+                        "description",
+                        "details",
+                        "summary",
+                      ]
+                    );
 
-                      const technologies =
-                        getTechnologies(project);
+                    const technologies =
+                      getTechnologies(project);
 
-                      if (
-                        !title &&
-                        !description &&
-                        technologies.length === 0
-                      ) {
-                        return null;
-                      }
+                    if (
+                      !title &&
+                      !description &&
+                      technologies.length === 0
+                    ) {
+                      return null;
+                    }
 
-                      return (
-                        <div
-                          key={`project-${index}`}
-                          className="border-l border-cyan-400/30 pl-4"
-                        >
-                          {title && (
-                            <div className="text-[11px] font-bold">
-                              {title}
-                            </div>
-                          )}
+                    return (
+                      <div
+                        key={
+                          project.id ||
+                          `project-${index}`
+                        }
+                        className="border-l border-cyan-400/30 pl-4"
+                      >
+                        {title && (
+                          <div className="text-[11px] font-bold">
+                            {title}
+                          </div>
+                        )}
 
-                          {description && (
-                            <p className="mt-2 text-[9.5px] leading-[1.55] text-white/50">
-                              {description}
-                            </p>
-                          )}
+                        {description && (
+                          <p className="mt-2 text-[9.5px] leading-[1.55] text-white/50">
+                            {description}
+                          </p>
+                        )}
 
-                          {technologies.length > 0 && (
-                            <div className="mt-2 flex flex-wrap gap-1.5">
-                              {technologies
-                                .slice(0, 4)
-                                .map((tech, techIndex) => (
-                                  <span
-                                    key={`${tech}-${techIndex}`}
-                                    className="rounded-full border border-cyan-400/20 px-2 py-1 text-[8px] text-cyan-300"
-                                  >
-                                    {tech}
-                                  </span>
-                                ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                        {technologies.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {technologies.map(
+                              (tech, techIndex) => (
+                                <span
+                                  key={`${tech}-${techIndex}`}
+                                  className="rounded-full border border-cyan-400/20 px-2 py-1 text-[8px] text-cyan-300"
+                                >
+                                  {tech}
+                                </span>
+                              )
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -860,32 +1094,30 @@ function OrbitPreview({
           <aside>
             {/* SKILLS */}
 
-            {skills.length > 0 && (
+            {validSkills.length > 0 && (
               <>
                 <div className="font-mono text-[11px] font-bold tracking-[0.18em] text-cyan-300">
                   SKILLS
                 </div>
 
                 <div className="mt-5 space-y-3">
-                  {skills
-                    .slice(0, 10)
-                    .map((skill, index) => {
-                      const skillName =
-                        getSkillName(skill);
+                  {validSkills.map((skill, index) => {
+                    const skillName =
+                      getSkillName(skill);
 
-                      if (!skillName) {
-                        return null;
-                      }
+                    if (!skillName) {
+                      return null;
+                    }
 
-                      return (
-                        <div
-                          key={`${skillName}-${index}`}
-                          className="rounded-lg border border-white/10 px-3 py-2.5 text-[9.5px] text-white/80"
-                        >
-                          {skillName}
-                        </div>
-                      );
-                    })}
+                    return (
+                      <div
+                        key={`${skillName}-${index}`}
+                        className="rounded-lg border border-white/10 px-3 py-2.5 text-[9.5px] text-white/80"
+                      >
+                        {skillName}
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}
@@ -931,7 +1163,9 @@ function OrbitPreview({
                   )}
 
                   {personal.github && (
-                    <>{personal.github}</>
+                    <>
+                      {personal.github}
+                    </>
                   )}
                 </TinyText>
               </div>
@@ -939,16 +1173,15 @@ function OrbitPreview({
 
             {/* LANGUAGES */}
 
-            {languages.length > 0 && (
+            {validLanguages.length > 0 && (
               <div className="mt-10">
                 <div className="font-mono text-[11px] tracking-[0.18em] text-cyan-300">
                   LANGUAGES
                 </div>
 
                 <div className="mt-4 space-y-3">
-                  {languages
-                    .slice(0, 4)
-                    .map((language, index) => {
+                  {validLanguages.map(
+                    (language, index) => {
                       const name = getValue(language, [
                         "name",
                         "language",
@@ -967,7 +1200,10 @@ function OrbitPreview({
 
                       return (
                         <div
-                          key={`language-${index}`}
+                          key={
+                            language.id ||
+                            `language-${index}`
+                          }
                         >
                           <div className="text-[9.5px] text-white/80">
                             {name}
@@ -980,23 +1216,23 @@ function OrbitPreview({
                           )}
                         </div>
                       );
-                    })}
+                    }
+                  )}
                 </div>
               </div>
             )}
 
             {/* INTERESTS */}
 
-            {interests.length > 0 && (
+            {validInterests.length > 0 && (
               <div className="mt-10">
                 <div className="font-mono text-[11px] tracking-[0.18em] text-cyan-300">
                   INTERESTS
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {interests
-                    .slice(0, 8)
-                    .map((interest, index) => {
+                  {validInterests.map(
+                    (interest, index) => {
                       const name =
                         typeof interest === "string"
                           ? interest
@@ -1012,29 +1248,29 @@ function OrbitPreview({
 
                       return (
                         <span
-                          key={`interest-${index}`}
+                          key={`${name}-${index}`}
                           className="rounded-full border border-white/10 px-2.5 py-1 text-[8px] text-white/55"
                         >
                           {name}
                         </span>
                       );
-                    })}
+                    }
+                  )}
                 </div>
               </div>
             )}
 
             {/* CERTIFICATIONS */}
 
-            {certifications.length > 0 && (
+            {validCertifications.length > 0 && (
               <div className="mt-10">
                 <div className="font-mono text-[11px] tracking-[0.18em] text-cyan-300">
                   CERTIFICATIONS
                 </div>
 
                 <div className="mt-4 space-y-4">
-                  {certifications
-                    .slice(0, 3)
-                    .map((item, index) => {
+                  {validCertifications.map(
+                    (item, index) => {
                       const name = getValue(item, [
                         "name",
                         "title",
@@ -1045,6 +1281,7 @@ function OrbitPreview({
                         "issuer",
                         "organization",
                         "company",
+                        "provider",
                       ]);
 
                       const date = getValue(item, [
@@ -1059,7 +1296,10 @@ function OrbitPreview({
 
                       return (
                         <div
-                          key={`certification-${index}`}
+                          key={
+                            item.id ||
+                            `certification-${index}`
+                          }
                         >
                           <div className="text-[9.5px] font-semibold text-white/80">
                             {name}
@@ -1078,7 +1318,8 @@ function OrbitPreview({
                           )}
                         </div>
                       );
-                    })}
+                    }
+                  )}
                 </div>
               </div>
             )}
@@ -1089,34 +1330,37 @@ function OrbitPreview({
             ACHIEVEMENTS / REFERENCES
         ===================================================== */}
 
-        {(achievements.length > 0 ||
-          references.length > 0) && (
+        {(validAchievements.length > 0 ||
+          validReferences.length > 0) && (
           <div className="mt-8 grid grid-cols-2 gap-8">
             {/* ACHIEVEMENTS */}
 
-            {achievements.length > 0 && (
+            {validAchievements.length > 0 && (
               <section>
                 <div className="font-mono text-[11px] font-bold tracking-[0.18em] text-cyan-300">
                   ACHIEVEMENTS
                 </div>
 
                 <div className="mt-4 space-y-4">
-                  {achievements
-                    .slice(0, 2)
-                    .map((item, index) => {
+                  {validAchievements.map(
+                    (item, index) => {
                       const title = getValue(item, [
                         "title",
                         "name",
+                        "achievement",
                       ]);
 
-                      const description = getValue(
-                        item,
-                        [
+                      const description =
+                        getValue(item, [
                           "description",
                           "details",
                           "summary",
-                        ]
-                      );
+                        ]);
+
+                      const date = getValue(item, [
+                        "date",
+                        "year",
+                      ]);
 
                       if (!title && !description) {
                         return null;
@@ -1124,13 +1368,24 @@ function OrbitPreview({
 
                       return (
                         <div
-                          key={`achievement-${index}`}
+                          key={
+                            item.id ||
+                            `achievement-${index}`
+                          }
                         >
-                          {title && (
-                            <div className="text-[10px] font-bold">
-                              {title}
-                            </div>
-                          )}
+                          <div className="flex items-start justify-between gap-3">
+                            {title && (
+                              <div className="text-[10px] font-bold">
+                                {title}
+                              </div>
+                            )}
+
+                            {date && (
+                              <div className="shrink-0 font-mono text-[8px] text-cyan-300/70">
+                                {date}
+                              </div>
+                            )}
+                          </div>
 
                           {description && (
                             <p className="mt-1.5 text-[8.5px] leading-[1.5] text-white/45">
@@ -1139,23 +1394,23 @@ function OrbitPreview({
                           )}
                         </div>
                       );
-                    })}
+                    }
+                  )}
                 </div>
               </section>
             )}
 
             {/* REFERENCES */}
 
-            {references.length > 0 && (
+            {validReferences.length > 0 && (
               <section>
                 <div className="font-mono text-[11px] font-bold tracking-[0.18em] text-cyan-300">
                   REFERENCES
                 </div>
 
                 <div className="mt-4 space-y-4">
-                  {references
-                    .slice(0, 2)
-                    .map((item, index) => {
+                  {validReferences.map(
+                    (item, index) => {
                       const name = getValue(item, [
                         "name",
                         "fullName",
@@ -1165,6 +1420,7 @@ function OrbitPreview({
                         "role",
                         "position",
                         "jobTitle",
+                        "title",
                       ]);
 
                       const company = getValue(item, [
@@ -1176,18 +1432,27 @@ function OrbitPreview({
                         "email",
                       ]);
 
+                      const phone = getValue(item, [
+                        "phone",
+                        "mobile",
+                      ]);
+
                       if (
                         !name &&
                         !role &&
                         !company &&
-                        !email
+                        !email &&
+                        !phone
                       ) {
                         return null;
                       }
 
                       return (
                         <div
-                          key={`reference-${index}`}
+                          key={
+                            item.id ||
+                            `reference-${index}`
+                          }
                         >
                           {name && (
                             <div className="text-[10px] font-bold">
@@ -1210,9 +1475,16 @@ function OrbitPreview({
                               {email}
                             </div>
                           )}
+
+                          {phone && (
+                            <div className="mt-0.5 text-[8px] text-white/35">
+                              {phone}
+                            </div>
+                          )}
                         </div>
                       );
-                    })}
+                    }
+                  )}
                 </div>
               </section>
             )}

@@ -114,27 +114,106 @@ function AcademicPreview({
   ];
 
   // =========================================================
+  // SAMPLE OPTIONAL DATA
+  // =========================================================
+
+  const sampleCertifications = [
+    {
+      name: "Meta Front-End Developer",
+      issuer: "Meta",
+      year: "2023",
+    },
+    {
+      name: "Responsive Web Design",
+      issuer: "freeCodeCamp",
+      year: "2022",
+    },
+    {
+      name: "JavaScript Algorithms",
+      issuer: "freeCodeCamp",
+      year: "2022",
+    },
+  ];
+
+  const sampleLanguages = [
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Spanish",
+      level: "Professional",
+    },
+    {
+      name: "French",
+      level: "Conversational",
+    },
+  ];
+
+  const sampleAchievements = [
+    {
+      title: "Research Excellence",
+      description:
+        "Contributed to research projects involving intelligent systems and data-driven solutions.",
+    },
+    {
+      title: "Academic Publication",
+      description:
+        "Published technical research focused on modern computing and artificial intelligence.",
+    },
+    {
+      title: "Developer Mentoring",
+      description:
+        "Supported junior developers through technical guidance and collaborative research.",
+    },
+  ];
+
+  const sampleInterests = [
+    "Artificial Intelligence",
+    "Open Source",
+    "Reading",
+    "Research",
+    "Technology",
+    "Photography",
+  ];
+
+  const sampleReferences = [
+    {
+      name: "James Wilson",
+      position: "Research Director",
+      company: "Stanford AI Research Lab",
+      email: "james.wilson@example.com",
+    },
+    {
+      name: "Sophia Bennett",
+      position: "Engineering Manager",
+      company: "Technology Research Center",
+      email: "sophia.bennett@example.com",
+    },
+  ];
+
+  // =========================================================
   // PERSONAL DATA
   // =========================================================
 
   const personal = useSampleData
     ? {
-      ...samplePersonal,
-      ...(data.personal || {}),
-      ...(formData.personal || {}),
-    }
+        ...samplePersonal,
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      }
     : {
-      fullName: "",
-      jobTitle: "",
-      email: "",
-      phone: "",
-      location: "",
-      linkedin: "",
-      github: "",
-      summary: "",
-      profileImage: "",
-      ...(formData.personal || {}),
-    };
+        fullName: "",
+        jobTitle: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        summary: "",
+        profileImage: "",
+        ...(formData.personal || {}),
+      };
 
   // =========================================================
   // REQUIRED SECTIONS
@@ -146,11 +225,11 @@ function AcademicPreview({
       ? formData.education
       : Array.isArray(data.education) &&
         data.education.length > 0
-        ? data.education
-        : sampleEducation
+      ? data.education
+      : sampleEducation
     : Array.isArray(formData.education)
-      ? formData.education
-      : [];
+    ? formData.education
+    : [];
 
   const experience = useSampleData
     ? Array.isArray(formData.experience) &&
@@ -158,11 +237,11 @@ function AcademicPreview({
       ? formData.experience
       : Array.isArray(data.experience) &&
         data.experience.length > 0
-        ? data.experience
-        : sampleExperience
+      ? data.experience
+      : sampleExperience
     : Array.isArray(formData.experience)
-      ? formData.experience
-      : [];
+    ? formData.experience
+    : [];
 
   const skills = useSampleData
     ? Array.isArray(formData.skills) &&
@@ -170,11 +249,11 @@ function AcademicPreview({
       ? formData.skills
       : Array.isArray(data.skills) &&
         data.skills.length > 0
-        ? data.skills
-        : sampleSkills
+      ? data.skills
+      : sampleSkills
     : Array.isArray(formData.skills)
-      ? formData.skills
-      : [];
+    ? formData.skills
+    : [];
 
   const projects = useSampleData
     ? Array.isArray(formData.projects) &&
@@ -182,11 +261,11 @@ function AcademicPreview({
       ? formData.projects
       : Array.isArray(data.projects) &&
         data.projects.length > 0
-        ? data.projects
-        : sampleProjects
+      ? data.projects
+      : sampleProjects
     : Array.isArray(formData.projects)
-      ? formData.projects
-      : [];
+    ? formData.projects
+    : [];
 
   const publications = useSampleData
     ? Array.isArray(formData.publications) &&
@@ -194,11 +273,111 @@ function AcademicPreview({
       ? formData.publications
       : Array.isArray(data.publications) &&
         data.publications.length > 0
-        ? data.publications
-        : samplePublications
+      ? data.publications
+      : samplePublications
     : Array.isArray(formData.publications)
-      ? formData.publications
-      : [];
+    ? formData.publications
+    : [];
+
+  // =========================================================
+  // OPTIONAL SECTIONS
+  // =========================================================
+
+  const getOptionalItems = (
+    formSection,
+    dataSection,
+    sampleItems
+  ) => {
+    if (!useSampleData) {
+      if (
+        formSection?.enabled &&
+        Array.isArray(formSection.items)
+      ) {
+        return formSection.items;
+      }
+
+      return [];
+    }
+
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items) &&
+      formSection.items.length > 0
+    ) {
+      return formSection.items;
+    }
+
+    if (
+      dataSection?.enabled &&
+      Array.isArray(dataSection.items) &&
+      dataSection.items.length > 0
+    ) {
+      return dataSection.items;
+    }
+
+    return sampleItems;
+  };
+
+  const certifications = getOptionalItems(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getOptionalItems(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getOptionalItems(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const references = getOptionalItems(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  let interests = [];
+
+  if (!useSampleData) {
+    if (formData.interests?.enabled) {
+      const value = String(
+        formData.interests.value || ""
+      ).trim();
+
+      if (value) {
+        interests = value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+    }
+  } else {
+    if (
+      formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+    ) {
+      interests = String(formData.interests.value)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    } else if (
+      data.interests?.enabled &&
+      String(data.interests.value || "").trim()
+    ) {
+      interests = String(data.interests.value)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    } else {
+      interests = sampleInterests;
+    }
+  }
 
   // =========================================================
   // DISPLAY SKILLS
@@ -243,8 +422,8 @@ function AcademicPreview({
   const researchInterests = useSampleData
     ? sampleResearchInterests
     : Array.isArray(formData.researchInterests)
-      ? formData.researchInterests
-      : [];
+    ? formData.researchInterests
+    : [];
 
   // =========================================================
   // ACADEMIC FOCUS
@@ -253,8 +432,8 @@ function AcademicPreview({
   const academicFocus = useSampleData
     ? sampleAcademicFocus
     : Array.isArray(formData.academicFocus)
-      ? formData.academicFocus
-      : [];
+    ? formData.academicFocus
+    : [];
 
   // =========================================================
   // HELPERS
@@ -474,6 +653,74 @@ function AcademicPreview({
   ].filter(Boolean);
 
   // =========================================================
+  // VALID OPTIONAL DATA
+  // =========================================================
+
+  const validCertifications =
+    certifications.filter((item) =>
+      getValue(item, [
+        "name",
+        "title",
+        "certificate",
+        "certification",
+        "issuer",
+      ])
+    );
+
+  const validLanguages =
+    languages.filter((item) => {
+      if (typeof item === "string") {
+        return item.trim() !== "";
+      }
+
+      return Boolean(
+        getValue(item, [
+          "name",
+          "language",
+          "title",
+        ])
+      );
+    });
+
+  const validAchievements =
+    achievements.filter((item) =>
+      getValue(item, [
+        "title",
+        "name",
+        "achievement",
+        "description",
+      ])
+    );
+
+  const validReferences =
+    references.filter((item) =>
+      getValue(item, [
+        "name",
+        "fullName",
+        "person",
+        "position",
+        "company",
+        "email",
+      ])
+    );
+
+  const validInterests =
+    interests.filter((item) => {
+      if (typeof item === "string") {
+        return item.trim() !== "";
+      }
+
+      return Boolean(
+        getValue(item, [
+          "name",
+          "interest",
+          "title",
+          "label",
+        ])
+      );
+    });
+
+  // =========================================================
   // RENDER
   // =========================================================
 
@@ -481,18 +728,17 @@ function AcademicPreview({
     <div
       id="resume-preview"
       className="
-    box-border
-    min-h-[1123px]
-h-auto
-overflow-visible
-    w-[794px]
-    overflow-hidden
-    bg-white
-    px-[52px]
-    py-[48px]
-    font-sans
-    text-slate-900
-  "
+        box-border
+        min-h-[1123px]
+        h-auto
+        overflow-visible
+        w-[794px]
+        bg-white
+        px-[52px]
+        py-[48px]
+        font-sans
+        text-slate-900
+      "
     >
       {/* =====================================================
           HEADER
@@ -753,22 +999,22 @@ overflow-visible
 
                         {(startDate ||
                           endDate) && (
-                            <div
-                              className="
+                          <div
+                            className="
                               mt-1
                               text-[9.5px]
                               font-semibold
                               text-indigo-600
                             "
-                            >
-                              {startDate || ""}
-                              {startDate &&
-                                endDate
-                                ? " — "
-                                : ""}
-                              {endDate || ""}
-                            </div>
-                          )}
+                          >
+                            {startDate || ""}
+                            {startDate &&
+                            endDate
+                              ? " — "
+                              : ""}
+                            {endDate || ""}
+                          </div>
+                        )}
                       </article>
                     );
                   })}
@@ -856,9 +1102,9 @@ overflow-visible
                           experience
                             .slice(0, 3)
                             .length -
-                          1 && (
-                            <span
-                              className="
+                            1 && (
+                          <span
+                            className="
                               absolute
                               left-[3px]
                               top-4
@@ -866,8 +1112,8 @@ overflow-visible
                               w-px
                               bg-slate-200
                             "
-                            />
-                          )}
+                          />
+                        )}
 
                         {/* ROLE */}
 
@@ -889,8 +1135,8 @@ overflow-visible
                         {(company ||
                           startDate ||
                           endDate) && (
-                            <div
-                              className="
+                          <div
+                            className="
                               mt-1
                               flex
                               flex-wrap
@@ -899,36 +1145,36 @@ overflow-visible
                               text-[9.5px]
                               font-semibold
                             "
-                            >
-                              {company && (
-                                <span className="text-indigo-600">
-                                  {company}
-                                </span>
-                              )}
+                          >
+                            {company && (
+                              <span className="text-indigo-600">
+                                {company}
+                              </span>
+                            )}
 
-                              {(startDate ||
-                                endDate) && (
-                                  <>
-                                    {company && (
-                                      <span className="text-slate-300">
-                                        •
-                                      </span>
-                                    )}
-
-                                    <span className="text-slate-400">
-                                      {startDate ||
-                                        ""}
-                                      {startDate &&
-                                        endDate
-                                        ? " — "
-                                        : ""}
-                                      {endDate ||
-                                        ""}
-                                    </span>
-                                  </>
+                            {(startDate ||
+                              endDate) && (
+                              <>
+                                {company && (
+                                  <span className="text-slate-300">
+                                    •
+                                  </span>
                                 )}
-                            </div>
-                          )}
+
+                                <span className="text-slate-400">
+                                  {startDate ||
+                                    ""}
+                                  {startDate &&
+                                  endDate
+                                    ? " — "
+                                    : ""}
+                                  {endDate ||
+                                    ""}
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        )}
 
                         {/* DESCRIPTION */}
 
@@ -969,15 +1215,15 @@ overflow-visible
                     ) => {
                       const title =
                         typeof publication ===
-                          "string"
+                        "string"
                           ? publication
                           : getValue(
-                            publication,
-                            [
-                              "title",
-                              "name",
-                            ]
-                          );
+                              publication,
+                              [
+                                "title",
+                                "name",
+                              ]
+                            );
 
                       const publisher =
                         getValue(
@@ -1019,28 +1265,197 @@ overflow-visible
 
                           {(publisher ||
                             year) && (
-                              <p
-                                className="
+                            <p
+                              className="
                                 mt-1
                                 text-[9.5px]
                                 leading-[1.4]
                                 text-slate-500
                               "
-                              >
-                                {publisher}
+                            >
+                              {publisher}
 
-                                {publisher &&
-                                  year
-                                  ? " • "
-                                  : ""}
+                              {publisher &&
+                              year
+                                ? " • "
+                                : ""}
 
-                                {year}
-                              </p>
-                            )}
+                              {year}
+                            </p>
+                          )}
                         </article>
                       );
                     }
                   )}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              CERTIFICATIONS
+          ================================================= */}
+
+          {validCertifications.length > 0 && (
+            <section className="mt-7">
+              <SectionTitle>
+                Certifications
+              </SectionTitle>
+
+              <div className="space-y-4">
+                {validCertifications
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const name =
+                      getValue(item, [
+                        "name",
+                        "title",
+                        "certificate",
+                        "certification",
+                      ]);
+
+                    const issuer =
+                      getValue(item, [
+                        "issuer",
+                        "organization",
+                        "company",
+                      ]);
+
+                    const year =
+                      getValue(item, [
+                        "year",
+                        "date",
+                        "issued",
+                      ]);
+
+                    return (
+                      <article
+                        key={index}
+                        className="break-inside-avoid"
+                      >
+                        {name && (
+                          <h3
+                            className="
+                              text-[10.5px]
+                              font-bold
+                              leading-[1.4]
+                              text-slate-900
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
+
+                        {(issuer || year) && (
+                          <TinyText className="mt-1">
+                            {issuer}
+                            {issuer && year
+                              ? " • "
+                              : ""}
+                            {year}
+                          </TinyText>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              ACHIEVEMENTS
+          ================================================= */}
+
+          {validAchievements.length > 0 && (
+            <section className="mt-7">
+              <SectionTitle>
+                Achievements
+              </SectionTitle>
+
+              <div className="space-y-4">
+                {validAchievements
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const title =
+                      getValue(item, [
+                        "title",
+                        "name",
+                        "achievement",
+                      ]);
+
+                    const description =
+                      getValue(item, [
+                        "description",
+                        "details",
+                      ]);
+
+                    return (
+                      <article
+                        key={index}
+                        className="break-inside-avoid"
+                      >
+                        {title && (
+                          <h3
+                            className="
+                              text-[10.5px]
+                              font-bold
+                              leading-[1.4]
+                              text-slate-900
+                            "
+                          >
+                            {title}
+                          </h3>
+                        )}
+
+                        {description && (
+                          <TinyText className="mt-1">
+                            {description}
+                          </TinyText>
+                        )}
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              INTERESTS
+          ================================================= */}
+
+          {validInterests.length > 0 && (
+            <section className="mt-7">
+              <SectionTitle>
+                Interests
+              </SectionTitle>
+
+              <div className="flex flex-wrap gap-x-5 gap-y-2">
+                {validInterests
+                  .slice(0, 8)
+                  .map((item, index) => {
+                    const name =
+                      typeof item ===
+                      "string"
+                        ? item
+                        : getValue(item, [
+                            "name",
+                            "interest",
+                            "title",
+                            "label",
+                          ]);
+
+                    return (
+                      <span
+                        key={index}
+                        className="
+                          text-[9.5px]
+                          font-medium
+                          text-slate-600
+                        "
+                      >
+                        {name}
+                      </span>
+                    );
+                  })}
               </div>
             </section>
           )}
@@ -1142,27 +1557,27 @@ overflow-visible
                   .map((project, index) => {
                     const title =
                       typeof project ===
-                        "string"
+                      "string"
                         ? project
                         : getValue(
-                          project,
-                          [
-                            "title",
-                            "name",
-                          ]
-                        );
+                            project,
+                            [
+                              "title",
+                              "name",
+                            ]
+                          );
 
                     const description =
                       typeof project ===
-                        "string"
+                      "string"
                         ? ""
                         : getValue(
-                          project,
-                          [
-                            "description",
-                            "details",
-                          ]
-                        );
+                            project,
+                            [
+                              "description",
+                              "details",
+                            ]
+                          );
 
                     return (
                       <article
@@ -1232,6 +1647,148 @@ overflow-visible
                     </div>
                   )
                 )}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              LANGUAGES
+          ================================================= */}
+
+          {validLanguages.length > 0 && (
+            <section className="mt-8">
+              <SectionTitle>
+                Languages
+              </SectionTitle>
+
+              <div className="space-y-2.5">
+                {validLanguages
+                  .slice(0, 5)
+                  .map((item, index) => {
+                    const name =
+                      typeof item ===
+                      "string"
+                        ? item
+                        : getValue(item, [
+                            "name",
+                            "language",
+                            "title",
+                          ]);
+
+                    const level =
+                      typeof item ===
+                      "string"
+                        ? ""
+                        : getValue(item, [
+                            "level",
+                            "proficiency",
+                            "fluency",
+                          ]);
+
+                    return (
+                      <div
+                        key={index}
+                        className="
+                          text-[9.5px]
+                          font-medium
+                          text-slate-600
+                        "
+                      >
+                        <span className="font-semibold text-slate-900">
+                          {name}
+                        </span>
+
+                        {level && (
+                          <span className="text-slate-400">
+                            {" "}
+                            • {level}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              REFERENCES
+          ================================================= */}
+
+          {validReferences.length > 0 && (
+            <section className="mt-8">
+              <SectionTitle>
+                References
+              </SectionTitle>
+
+              <div className="space-y-4">
+                {validReferences
+                  .slice(0, 3)
+                  .map((item, index) => {
+                    const name =
+                      getValue(item, [
+                        "name",
+                        "fullName",
+                        "person",
+                      ]);
+
+                    const position =
+                      getValue(item, [
+                        "position",
+                        "jobTitle",
+                        "role",
+                      ]);
+
+                    const company =
+                      getValue(item, [
+                        "company",
+                        "organization",
+                      ]);
+
+                    const email =
+                      getValue(item, [
+                        "email",
+                        "contact",
+                      ]);
+
+                    return (
+                      <article
+                        key={index}
+                        className="break-inside-avoid"
+                      >
+                        {name && (
+                          <h3
+                            className="
+                              text-[10px]
+                              font-bold
+                              leading-[1.4]
+                              text-slate-900
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
+
+                        {position && (
+                          <TinyText className="mt-1">
+                            {position}
+                          </TinyText>
+                        )}
+
+                        {company && (
+                          <TinyText>
+                            {company}
+                          </TinyText>
+                        )}
+
+                        {email && (
+                          <TinyText>
+                            {email}
+                          </TinyText>
+                        )}
+                      </article>
+                    );
+                  })}
               </div>
             </section>
           )}

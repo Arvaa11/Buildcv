@@ -251,65 +251,150 @@ function ModernPreview({
     ? formData.projects
     : [];
 
-  const certifications = useSampleData
-    ? Array.isArray(formData.certifications) &&
-      formData.certifications.length > 0
-      ? formData.certifications
-      : Array.isArray(data.certifications) &&
-        data.certifications.length > 0
-      ? data.certifications
-      : sampleCertifications
-    : Array.isArray(formData.certifications)
-    ? formData.certifications
-    : [];
+  // =========================================================
+  // OPTIONAL SECTION DATA
+  // =========================================================
 
-  const languages = useSampleData
-    ? Array.isArray(formData.languages) &&
-      formData.languages.length > 0
-      ? formData.languages
-      : Array.isArray(data.languages) &&
-        data.languages.length > 0
-      ? data.languages
-      : sampleLanguages
-    : Array.isArray(formData.languages)
-    ? formData.languages
-    : [];
+  const getOptionalSection = (
+    formSection,
+    dataSection,
+    sampleItems
+  ) => {
+    // =====================================================
+    // LIVE BUILDER
+    // =====================================================
 
-  const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
-      ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
-      ? data.achievements
-      : sampleAchievements
-    : Array.isArray(formData.achievements)
-    ? formData.achievements
-    : [];
+    if (!useSampleData) {
+      if (
+        formSection?.enabled &&
+        Array.isArray(formSection.items)
+      ) {
+        return formSection.items;
+      }
 
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) &&
-      formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) &&
-        data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : [];
+      return [];
+    }
 
-  const references = useSampleData
-    ? Array.isArray(formData.references) &&
-      formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) &&
-        data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : [];
+    // =====================================================
+    // SAMPLE / TEMPLATE PREVIEW
+    // =====================================================
+
+    if (
+      formSection?.enabled &&
+      Array.isArray(formSection.items) &&
+      formSection.items.length > 0
+    ) {
+      return formSection.items;
+    }
+
+    if (
+      dataSection?.enabled &&
+      Array.isArray(dataSection.items) &&
+      dataSection.items.length > 0
+    ) {
+      return dataSection.items;
+    }
+
+    return sampleItems;
+  };
+
+  // =========================================================
+  // CERTIFICATIONS
+  // =========================================================
+
+  const certifications = getOptionalSection(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  // =========================================================
+  // LANGUAGES
+  // =========================================================
+
+  const languages = getOptionalSection(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  // =========================================================
+  // ACHIEVEMENTS
+  // =========================================================
+
+  const achievements = getOptionalSection(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  // =========================================================
+  // REFERENCES
+  // =========================================================
+
+  const references = getOptionalSection(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // =========================================================
+
+  let interests = [];
+
+  if (!useSampleData) {
+    // -----------------------------------------------------
+    // LIVE BUILDER
+    // -----------------------------------------------------
+
+    if (formData.interests?.enabled) {
+      const value = String(
+        formData.interests.value || ""
+      ).trim();
+
+      if (value) {
+        interests = value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+    }
+  } else {
+    // -----------------------------------------------------
+    // SAMPLE / TEMPLATE PREVIEW
+    // -----------------------------------------------------
+
+    if (
+      formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+    ) {
+      interests = String(
+        formData.interests.value
+      )
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    } else if (
+      data.interests?.enabled &&
+      String(data.interests.value || "").trim()
+    ) {
+      interests = String(
+        data.interests.value
+      )
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    } else {
+      interests = Array.isArray(sampleInterests)
+        ? sampleInterests
+        : String(sampleInterests || "")
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+    }
+  }
 
   // =========================================================
   // HELPERS
@@ -364,95 +449,118 @@ function ModernPreview({
   // VALID DATA
   // =========================================================
 
-  const validExperience = experience.filter((item) =>
-    getValue(item, [
-      "jobTitle",
-      "title",
-      "position",
-      "role",
-      "company",
-      "companyName",
-      "organization",
-      "description",
-      "details",
-      "responsibilities",
-    ])
-  );
+  const validExperience = Array.isArray(experience)
+    ? experience.filter((item) =>
+        getValue(item, [
+          "jobTitle",
+          "title",
+          "position",
+          "role",
+          "company",
+          "companyName",
+          "organization",
+          "description",
+          "details",
+          "responsibilities",
+        ])
+      )
+    : [];
 
-  const validEducation = education.filter((item) =>
-    getValue(item, [
-      "degree",
-      "program",
-      "qualification",
-      "title",
-      "institution",
-      "university",
-      "school",
-      "college",
-    ])
-  );
+  const validEducation = Array.isArray(education)
+    ? education.filter((item) =>
+        getValue(item, [
+          "degree",
+          "program",
+          "qualification",
+          "title",
+          "institution",
+          "university",
+          "school",
+          "college",
+        ])
+      )
+    : [];
 
-  const validProjects = projects.filter((item) =>
-    getValue(item, [
-      "name",
-      "title",
-      "projectName",
-      "description",
-    ])
-  );
+  const validProjects = Array.isArray(projects)
+    ? projects.filter((item) =>
+        getValue(item, [
+          "name",
+          "title",
+          "projectName",
+          "description",
+        ])
+      )
+    : [];
 
-  const validCertifications = certifications.filter((item) =>
-    getValue(item, [
-      "name",
-      "title",
-      "certificate",
-      "certification",
-      "issuer",
-    ])
-  );
+  const validCertifications = Array.isArray(
+    certifications
+  )
+    ? certifications.filter((item) =>
+        getValue(item, [
+          "name",
+          "title",
+          "certificate",
+          "certification",
+          "issuer",
+        ])
+      )
+    : [];
 
-  const validLanguages = languages.filter((item) =>
-    getValue(item, [
-      "name",
-      "language",
-      "title",
-    ])
-  );
+  const validLanguages = Array.isArray(languages)
+    ? languages.filter((item) =>
+        getValue(item, [
+          "name",
+          "language",
+          "title",
+        ])
+      )
+    : [];
 
-  const validAchievements = achievements.filter((item) =>
-    getValue(item, [
-      "title",
-      "name",
-      "achievement",
-      "description",
-    ])
-  );
+  const validAchievements = Array.isArray(achievements)
+    ? achievements.filter((item) => {
+        return (
+          getValue(item, [
+            "title",
+            "name",
+            "achievement",
+          ]) ||
+          getValue(item, [
+            "description",
+            "details",
+          ])
+        );
+      })
+    : [];
 
-  const validReferences = references.filter((item) =>
-    getValue(item, [
-      "name",
-      "fullName",
-      "person",
-      "position",
-      "company",
-      "email",
-    ])
-  );
+  const validReferences = Array.isArray(references)
+    ? references.filter((item) =>
+        getValue(item, [
+          "name",
+          "fullName",
+          "person",
+          "position",
+          "company",
+          "email",
+        ])
+      )
+    : [];
 
-  const validInterests = interests.filter((item) => {
-    if (typeof item === "string") {
-      return item.trim() !== "";
-    }
+  const validInterests = Array.isArray(interests)
+    ? interests.filter((item) => {
+        if (typeof item === "string") {
+          return item.trim() !== "";
+        }
 
-    return Boolean(
-      getValue(item, [
-        "name",
-        "interest",
-        "title",
-        "label",
-      ])
-    );
-  });
+        return Boolean(
+          getValue(item, [
+            "name",
+            "interest",
+            "title",
+            "label",
+          ])
+        );
+      })
+    : [];
 
   const finalSkills = skills
     .map(getSkillName)
@@ -584,7 +692,7 @@ function ModernPreview({
   // =========================================================
 
   return (
-    <div className="h-[1123px] w-[794px] overflow-hidden bg-slate-50 font-sans">
+    <div className="min-h-[1123px] w-[794px] bg-slate-50 font-sans">
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -959,13 +1067,26 @@ function ModernPreview({
                         ["description", "details"]
                       );
 
+                      const date = getValue(item, [
+                        "date",
+                        "year",
+                      ]);
+
                       return (
-                        <div key={index}>
-                          {title && (
-                            <div className="text-[10px] font-semibold text-slate-900">
-                              {title}
-                            </div>
-                          )}
+                        <div key={item.id || index}>
+                          <div className="flex items-start justify-between gap-3">
+                            {title && (
+                              <div className="text-[10px] font-semibold text-slate-900">
+                                {title}
+                              </div>
+                            )}
+
+                            {date && (
+                              <div className="shrink-0 text-[9px] text-slate-500">
+                                {date}
+                              </div>
+                            )}
+                          </div>
 
                           {description && (
                             <TinyText className="mt-1">

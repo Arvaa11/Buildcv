@@ -74,9 +74,9 @@ function ResumePreview({
     typeof selectedTemplate === "string"
       ? selectedTemplate.trim().toLowerCase()
       : selectedTemplate?.id ||
-        selectedTemplate?.slug ||
-        selectedTemplate?.preview ||
-        "modern";
+      selectedTemplate?.slug ||
+      selectedTemplate?.preview ||
+      "modern";
 
   // ===================================================
   // PERSONAL INFORMATION
@@ -132,73 +132,73 @@ function ResumePreview({
 
     certifications: formData.certifications
       ? {
-          ...formData.certifications,
-          items: Array.isArray(
-            formData.certifications.items
-          )
-            ? formData.certifications.items
-            : [],
-        }
+        ...formData.certifications,
+        items: Array.isArray(
+          formData.certifications.items
+        )
+          ? formData.certifications.items
+          : [],
+      }
       : {
-          enabled: false,
-          items: [],
-        },
+        enabled: false,
+        items: [],
+      },
 
     languages: formData.languages
       ? {
-          ...formData.languages,
-          items: Array.isArray(
-            formData.languages.items
-          )
-            ? formData.languages.items
-            : [],
-        }
+        ...formData.languages,
+        items: Array.isArray(
+          formData.languages.items
+        )
+          ? formData.languages.items
+          : [],
+      }
       : {
-          enabled: false,
-          items: [],
-        },
+        enabled: false,
+        items: [],
+      },
 
     achievements: formData.achievements
       ? {
-          ...formData.achievements,
-          items: Array.isArray(
-            formData.achievements.items
-          )
-            ? formData.achievements.items
-            : [],
-        }
+        ...formData.achievements,
+        items: Array.isArray(
+          formData.achievements.items
+        )
+          ? formData.achievements.items
+          : [],
+      }
       : {
-          enabled: false,
-          items: [],
-        },
+        enabled: false,
+        items: [],
+      },
 
     interests: formData.interests
       ? {
-          ...formData.interests,
-          value:
-            typeof formData.interests.value ===
+        ...formData.interests,
+        value:
+          typeof formData.interests.value ===
             "string"
-              ? formData.interests.value
-              : "",
-        }
+            ? formData.interests.value
+            : "",
+      }
       : {
-          enabled: false,
-          value: "",
-        },
+        enabled: false,
+        value: "",
+      },
 
     references: formData.references
       ? {
-          ...formData.references,
-          items: Array.isArray(
-            formData.references.items
-          )
-            ? formData.references.items
-            : [],
-        }
+        ...formData.references,
+        items: Array.isArray(
+          formData.references.items
+        )
+          ? formData.references.items
+          : [],
+      }
       : {
-          enabled: false,
-          items: [],
-        },
+        enabled: false,
+        items: [],
+      },
 
     // -----------------------------------------------
     // Flat values for templates that use them
@@ -237,37 +237,38 @@ function ResumePreview({
 
   return (
     <div
-      id={previewId}
-      className={`resume-preview${
-        fitToContainer
-          ? " resume-preview--fit"
-          : ""
-      }`}
-      data-template={templateId}
-      style={{
-        width: "210mm",
-        minWidth: "210mm",
+  id={previewId}
+  className={`resume-preview${
+    fitToContainer
+      ? " resume-preview--fit"
+      : ""
+  }`}
+  data-template={templateId}
+  style={{
+    width: "210mm",
+    minWidth: "210mm",
 
-        height: "297mm",
-        minHeight: "297mm",
+    minHeight: "297mm",
+    height: "auto",
 
-        margin: 0,
-        padding: 0,
+    margin: 0,
+    padding: 0,
 
-        backgroundColor: "#FFFFFF",
-        color: "#111827",
+    backgroundColor: "#FFFFFF",
+    color: "#111827",
 
-        boxSizing: "border-box",
+    boxSizing: "border-box",
 
-        overflow: "hidden",
+    overflow: "visible",
 
-        position: "relative",
-      }}
-    >
-      <TemplateComponent
-        {...templateProps}
-      />
-    </div>
+    position: "relative",
+
+    flexShrink: 0,
+  }}
+>
+  <TemplateComponent {...templateProps} />
+</div>
+    
   );
 }
 

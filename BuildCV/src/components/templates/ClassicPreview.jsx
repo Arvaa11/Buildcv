@@ -658,7 +658,7 @@ if (!useSampleData) {
     <div
       className="
         box-border
-        h-[1123px]
+        min-h-[1123px]
         w-[794px]
         overflow-hidden
         bg-white

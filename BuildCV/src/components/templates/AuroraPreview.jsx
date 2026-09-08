@@ -317,49 +317,117 @@ function AuroraPreview({
     return sampleItems;
   };
 
-  const certifications = getOptionalSection(
-    formData.certifications,
-    data.certifications,
-    sampleCertifications
-  );
+const certifications = useSampleData
+  ? formData.certifications?.enabled &&
+    Array.isArray(formData.certifications.items) &&
+    formData.certifications.items.length > 0
+    ? formData.certifications.items
+    : data.certifications?.enabled &&
+      Array.isArray(data.certifications.items) &&
+      data.certifications.items.length > 0
+    ? data.certifications.items
+    : Array.isArray(formData.certifications)
+    ? formData.certifications
+    : Array.isArray(data.certifications)
+    ? data.certifications
+    : sampleCertifications
+  : formData.certifications?.enabled &&
+    Array.isArray(formData.certifications.items)
+  ? formData.certifications.items
+  : Array.isArray(formData.certifications)
+  ? formData.certifications
+  : [];
 
-  const languages = getOptionalSection(
-    formData.languages,
-    data.languages,
-    sampleLanguages
-  );
+const languages = useSampleData
+  ? formData.languages?.enabled &&
+    Array.isArray(formData.languages.items) &&
+    formData.languages.items.length > 0
+    ? formData.languages.items
+    : data.languages?.enabled &&
+      Array.isArray(data.languages.items) &&
+      data.languages.items.length > 0
+    ? data.languages.items
+    : Array.isArray(formData.languages)
+    ? formData.languages
+    : Array.isArray(data.languages)
+    ? data.languages
+    : sampleLanguages
+  : formData.languages?.enabled &&
+    Array.isArray(formData.languages.items)
+  ? formData.languages.items
+  : Array.isArray(formData.languages)
+  ? formData.languages
+  : [];
 
-  const achievements = getOptionalSection(
-    formData.achievements,
-    data.achievements,
-    sampleAchievements
-  );
+const achievements = useSampleData
+  ? formData.achievements?.enabled &&
+    Array.isArray(formData.achievements.items) &&
+    formData.achievements.items.length > 0
+    ? formData.achievements.items
+    : data.achievements?.enabled &&
+      Array.isArray(data.achievements.items) &&
+      data.achievements.items.length > 0
+    ? data.achievements.items
+    : Array.isArray(formData.achievements)
+    ? formData.achievements
+    : Array.isArray(data.achievements)
+    ? data.achievements
+    : sampleAchievements
+  : formData.achievements?.enabled &&
+    Array.isArray(formData.achievements.items)
+  ? formData.achievements.items
+  : Array.isArray(formData.achievements)
+  ? formData.achievements
+  : [];
 
-  const references = getOptionalSection(
-    formData.references,
-    data.references,
-    sampleReferences
-  );
+const interests = useSampleData
+  ? formData.interests?.enabled &&
+    String(formData.interests.value || "").trim()
+    ? String(formData.interests.value)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : data.interests?.enabled &&
+      String(data.interests.value || "").trim()
+    ? String(data.interests.value)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : Array.isArray(formData.interests)
+    ? formData.interests
+    : Array.isArray(data.interests)
+    ? data.interests
+    : sampleInterests
+  : formData.interests?.enabled &&
+    String(formData.interests.value || "").trim()
+  ? String(formData.interests.value)
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
+  : Array.isArray(formData.interests)
+  ? formData.interests
+  : [];
 
-  // =========================================================
-  // INTERESTS
-  // =========================================================
-
-  let interests = "";
-
-  if (formData.interests !== undefined) {
-    interests = formData.interests.enabled
-      ? String(formData.interests.value || "").trim()
-      : "";
-  } else if (useSampleData) {
-    if (data.interests !== undefined) {
-      interests = data.interests.enabled
-        ? String(data.interests.value || "").trim()
-        : "";
-    } else {
-      interests = sampleInterests;
-    }
-  }
+const references = useSampleData
+  ? formData.references?.enabled &&
+    Array.isArray(formData.references.items) &&
+    formData.references.items.length > 0
+    ? formData.references.items
+    : data.references?.enabled &&
+      Array.isArray(data.references.items) &&
+      data.references.items.length > 0
+    ? data.references.items
+    : Array.isArray(formData.references)
+    ? formData.references
+    : Array.isArray(data.references)
+    ? data.references
+    : sampleReferences
+  : formData.references?.enabled &&
+    Array.isArray(formData.references.items)
+  ? formData.references.items
+  : Array.isArray(formData.references)
+  ? formData.references
+  : [];
 
   // =========================================================
   // HELPERS
@@ -684,9 +752,9 @@ function AuroraPreview({
     <div
       className="
         box-border
-        h-[1123px]
+        min-h-[1123px]
         w-[794px]
-        overflow-hidden
+        overflow-visible
         bg-white
         font-sans
         text-slate-900
