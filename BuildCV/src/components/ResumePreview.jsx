@@ -57,6 +57,167 @@ const templateComponents = {
 };
 
 // =====================================================
+// BUILDCV — DEFAULT OPTIONAL SECTIONS
+// =====================================================
+
+const DEFAULT_CERTIFICATIONS = {
+  enabled: false,
+  items: [],
+};
+
+const DEFAULT_LANGUAGES = {
+  enabled: false,
+  items: [],
+};
+
+const DEFAULT_ACHIEVEMENTS = {
+  enabled: false,
+  items: [],
+};
+
+const DEFAULT_INTERESTS = {
+  enabled: false,
+  value: "",
+};
+
+const DEFAULT_REFERENCES = {
+  enabled: false,
+  items: [],
+};
+
+// =====================================================
+// BUILDCV — SAFE ARRAY
+// =====================================================
+
+function safeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+// =====================================================
+// BUILDCV — SAFE OPTIONAL ARRAY SECTION
+// =====================================================
+//
+// Supports:
+//
+// {
+//   enabled: true,
+//   items: [...]
+// }
+//
+// Also safely handles an old/direct array format.
+//
+
+function normalizeArraySection(value, fallback) {
+  if (Array.isArray(value)) {
+    return {
+      ...fallback,
+      enabled: value.length > 0,
+      items: value,
+    };
+  }
+
+  if (value && typeof value === "object") {
+    return {
+      ...fallback,
+      ...value,
+      enabled:
+        typeof value.enabled === "boolean"
+          ? value.enabled
+          : safeArray(value.items).length > 0,
+      items: safeArray(value.items),
+    };
+  }
+
+  return {
+    ...fallback,
+    items: [],
+  };
+}
+
+// =====================================================
+// BUILDCV — SAFE INTERESTS
+// =====================================================
+//
+// Supports:
+//
+// {
+//   enabled: true,
+//   value: "Reading, Travel"
+// }
+//
+// {
+//   enabled: true,
+//   items: ["Reading", "Travel"]
+// }
+//
+// "Reading, Travel"
+//
+// ["Reading", "Travel"]
+//
+
+function normalizeInterests(value) {
+  if (Array.isArray(value)) {
+    return {
+      enabled: value.length > 0,
+      value: value.join(", "),
+      items: value,
+    };
+  }
+
+  if (typeof value === "string") {
+    return {
+      enabled: value.trim().length > 0,
+      value,
+      items: value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
+    };
+  }
+
+  if (value && typeof value === "object") {
+    const items = safeArray(value.items);
+
+    const stringValue =
+      typeof value.value === "string"
+        ? value.value
+        : items
+            .map((item) => {
+              if (typeof item === "string") return item;
+
+              if (item && typeof item === "object") {
+                return (
+                  item.name ||
+                  item.title ||
+                  item.value ||
+                  ""
+                );
+              }
+
+              return "";
+            })
+            .filter(Boolean)
+            .join(", ");
+
+    return {
+      ...DEFAULT_INTERESTS,
+      ...value,
+      enabled:
+        typeof value.enabled === "boolean"
+          ? value.enabled
+          : stringValue.trim().length > 0,
+      value: stringValue,
+      items,
+    };
+  }
+
+  return {
+    ...DEFAULT_INTERESTS,
+    items: [],
+  };
+}
+
+// =====================================================
 // BUILDCV — RESUME PREVIEW
 // =====================================================
 
@@ -67,6 +228,15 @@ function ResumePreview({
   fitToContainer = false,
 }) {
   // ===================================================
+  // SAFETY
+  // ===================================================
+
+  const sourceData =
+    formData && typeof formData === "object"
+      ? formData
+      : {};
+
+  // ===================================================
   // GET TEMPLATE ID
   // ===================================================
 
@@ -74,9 +244,9 @@ function ResumePreview({
     typeof selectedTemplate === "string"
       ? selectedTemplate.trim().toLowerCase()
       : selectedTemplate?.id ||
-      selectedTemplate?.slug ||
-      selectedTemplate?.preview ||
-      "modern";
+        selectedTemplate?.slug ||
+        selectedTemplate?.preview ||
+        "modern";
 
   // ===================================================
   // PERSONAL INFORMATION
@@ -92,117 +262,86 @@ function ResumePreview({
     github: "",
     summary: "",
     profileImage: "",
-    ...(formData.personal || {}),
+    ...(sourceData.personal &&
+    typeof sourceData.personal === "object"
+      ? sourceData.personal
+      : {}),
   };
 
   // ===================================================
   // NORMALIZED RESUME DATA
   // ===================================================
+  //
+  // IMPORTANT:
+  // Start with ...sourceData.
+  //
+  // This means we DO NOT throw away any fields that
+  // another template may use.
+  //
+  // Then normalize the known sections safely.
+  // ===================================================
 
   const normalizedData = {
-    // -----------------------------------------------
-    // REQUIRED SECTIONS
-    // -----------------------------------------------
+    // Preserve EVERYTHING coming from Builder
+    ...sourceData,
+
+    // -------------------------------------------------
+    // Personal
+    // -------------------------------------------------
 
     personal,
 
-    education: Array.isArray(formData.education)
-      ? formData.education
-      : [],
+    // -------------------------------------------------
+    // Required sections
+    // -------------------------------------------------
 
-    experience: Array.isArray(formData.experience)
-      ? formData.experience
-      : [],
+    education: safeArray(sourceData.education),
 
-    skills: Array.isArray(formData.skills)
-      ? formData.skills
-      : [],
+    experience: safeArray(sourceData.experience),
 
-    projects: Array.isArray(formData.projects)
-      ? formData.projects
-      : [],
+    skills: safeArray(sourceData.skills),
 
-    // -----------------------------------------------
-    // OPTIONAL SECTIONS
+    projects: safeArray(sourceData.projects),
+
+    // -------------------------------------------------
+    // Optional sections
+    // -------------------------------------------------
+
+    certifications: normalizeArraySection(
+      sourceData.certifications,
+      DEFAULT_CERTIFICATIONS
+    ),
+
+    languages: normalizeArraySection(
+      sourceData.languages,
+      DEFAULT_LANGUAGES
+    ),
+
+    achievements: normalizeArraySection(
+      sourceData.achievements,
+      DEFAULT_ACHIEVEMENTS
+    ),
+
+    references: normalizeArraySection(
+      sourceData.references,
+      DEFAULT_REFERENCES
+    ),
+
+    interests: normalizeInterests(
+      sourceData.interests
+    ),
+
+    // -------------------------------------------------
+    // Flat personal values
     //
-    // IMPORTANT:
-    // Preserve the complete section object,
-    // including `enabled` and `items` / `value`.
-    // -----------------------------------------------
-
-    certifications: formData.certifications
-      ? {
-        ...formData.certifications,
-        items: Array.isArray(
-          formData.certifications.items
-        )
-          ? formData.certifications.items
-          : [],
-      }
-      : {
-        enabled: false,
-        items: [],
-      },
-
-    languages: formData.languages
-      ? {
-        ...formData.languages,
-        items: Array.isArray(
-          formData.languages.items
-        )
-          ? formData.languages.items
-          : [],
-      }
-      : {
-        enabled: false,
-        items: [],
-      },
-
-    achievements: formData.achievements
-      ? {
-        ...formData.achievements,
-        items: Array.isArray(
-          formData.achievements.items
-        )
-          ? formData.achievements.items
-          : [],
-      }
-      : {
-        enabled: false,
-        items: [],
-      },
-
-    interests: formData.interests
-      ? {
-        ...formData.interests,
-        value:
-          typeof formData.interests.value ===
-            "string"
-            ? formData.interests.value
-            : "",
-      }
-      : {
-        enabled: false,
-        value: "",
-      },
-
-    references: formData.references
-      ? {
-        ...formData.references,
-        items: Array.isArray(
-          formData.references.items
-        )
-          ? formData.references.items
-          : [],
-      }
-      : {
-        enabled: false,
-        items: [],
-      },
-
-    // -----------------------------------------------
-    // Flat values for templates that use them
-    // -----------------------------------------------
+    // Some templates use:
+    // data.fullName
+    //
+    // while others use:
+    // data.personal.fullName
+    //
+    // Keep BOTH formats available.
+    // -------------------------------------------------
 
     fullName: personal.fullName,
     jobTitle: personal.jobTitle,
@@ -218,6 +357,15 @@ function ResumePreview({
   // ===================================================
   // TEMPLATE PROPS
   // ===================================================
+  //
+  // Every template receives the SAME complete data.
+  //
+  // formData → normalizedData
+  // data     → normalizedData
+  //
+  // This prevents one template from receiving less data
+  // than another.
+  // ===================================================
 
   const templateProps = {
     formData: normalizedData,
@@ -225,11 +373,12 @@ function ResumePreview({
   };
 
   // ===================================================
-  // SELECT TEMPLATE COMPONENT
+  // SELECT TEMPLATE
   // ===================================================
 
   const TemplateComponent =
-    templateComponents[templateId] || ModernPreview;
+    templateComponents[templateId] ||
+    ModernPreview;
 
   // ===================================================
   // RENDER
@@ -237,38 +386,63 @@ function ResumePreview({
 
   return (
     <div
-  id={previewId}
-  className={`resume-preview${
-    fitToContainer
-      ? " resume-preview--fit"
-      : ""
-  }`}
-  data-template={templateId}
-  style={{
-    width: "210mm",
-    minWidth: "210mm",
+      id={previewId}
+      className={`resume-preview${
+        fitToContainer
+          ? " resume-preview--fit"
+          : ""
+      }`}
+      data-template={templateId}
+      style={{
+        // ---------------------------------------------
+        // A4 PAGE SIZE
+        // ---------------------------------------------
 
-    minHeight: "297mm",
-    height: "auto",
+        width: "210mm",
+        minWidth: "210mm",
 
-    margin: 0,
-    padding: 0,
+        minHeight: "297mm",
+        height: "auto",
 
-    backgroundColor: "#FFFFFF",
-    color: "#111827",
+        // ---------------------------------------------
+        // IMPORTANT:
+        // NO GLOBAL PADDING
+        //
+        // Every template controls its own padding.
+        // ---------------------------------------------
 
-    boxSizing: "border-box",
+        margin: 0,
+        padding: 0,
 
-    overflow: "visible",
+        // ---------------------------------------------
+        // Resume background
+        // ---------------------------------------------
 
-    position: "relative",
+        backgroundColor: "#FFFFFF",
+        color: "#111827",
 
-    flexShrink: 0,
-  }}
->
-  <TemplateComponent {...templateProps} />
-</div>
-    
+        // ---------------------------------------------
+        // Layout
+        // ---------------------------------------------
+
+        boxSizing: "border-box",
+
+        // ---------------------------------------------
+        // IMPORTANT:
+        // Never clip template content.
+        // ---------------------------------------------
+
+        overflow: "visible",
+
+        position: "relative",
+
+        flexShrink: 0,
+      }}
+    >
+      <TemplateComponent
+        {...templateProps}
+      />
+    </div>
   );
 }
 

@@ -28,18 +28,31 @@ function ElegantPreview({
       company: "Northstar Digital",
       startDate: "2024",
       endDate: "Present",
+      description: [
+        "Built responsive web applications using React and modern JavaScript.",
+        "Collaborated with designers and backend engineers to deliver scalable products.",
+        "Improved usability and performance across key product experiences.",
+      ],
     },
     {
       jobTitle: "Frontend Developer",
       company: "Pixel & Co.",
       startDate: "2022",
       endDate: "2024",
+      description: [
+        "Developed reusable interface components and responsive layouts.",
+        "Worked closely with product teams to turn concepts into production-ready features.",
+      ],
     },
     {
       jobTitle: "UI Developer",
       company: "Studio Eight",
       startDate: "2020",
       endDate: "2022",
+      description: [
+        "Created accessible interfaces and interactive web experiences.",
+        "Worked with designers to translate visual concepts into responsive websites.",
+      ],
     },
   ];
 
@@ -189,6 +202,7 @@ function ElegantPreview({
         github: "",
         summary: "",
         profileImage: "",
+        ...(data.personal || {}),
         ...(formData.personal || {}),
       };
 
@@ -236,165 +250,118 @@ function ElegantPreview({
     ? formData.projects
     : [];
 
-// =========================================================
-// OPTIONAL SECTION DATA
-// =========================================================
+  // =========================================================
+  // OPTIONAL SECTION DATA
+  // =========================================================
 
-const getOptionalSection = (
-  formSection,
-  dataSection,
-  sampleItems
-) => {
-  // =====================================================
-  // LIVE BUILDER
-  // =====================================================
+  const getOptionalSection = (
+    formSection,
+    dataSection,
+    sampleItems
+  ) => {
+    if (!useSampleData) {
+      if (
+        formSection?.enabled &&
+        Array.isArray(formSection.items)
+      ) {
+        return formSection.items;
+      }
 
-  if (!useSampleData) {
+      return [];
+    }
+
     if (
       formSection?.enabled &&
-      Array.isArray(formSection.items)
+      Array.isArray(formSection.items) &&
+      formSection.items.length > 0
     ) {
       return formSection.items;
     }
 
-    return [];
-  }
-
-  // =====================================================
-  // SAMPLE / TEMPLATE PREVIEW
-  // =====================================================
-
-  // Use user's entered data first
-  if (
-    formSection?.enabled &&
-    Array.isArray(formSection.items) &&
-    formSection.items.length > 0
-  ) {
-    return formSection.items;
-  }
-
-  // Otherwise use template data
-  if (
-    dataSection?.enabled &&
-    Array.isArray(dataSection.items) &&
-    dataSection.items.length > 0
-  ) {
-    return dataSection.items;
-  }
-
-  // Otherwise use sample data
-  return sampleItems;
-};
-
-
-// =========================================================
-// CERTIFICATIONS
-// =========================================================
-
-const certifications = getOptionalSection(
-  formData.certifications,
-  data.certifications,
-  sampleCertifications
-);
-
-
-// =========================================================
-// LANGUAGES
-// =========================================================
-
-const languages = getOptionalSection(
-  formData.languages,
-  data.languages,
-  sampleLanguages
-);
-
-
-// =========================================================
-// ACHIEVEMENTS
-// =========================================================
-
-const achievements = getOptionalSection(
-  formData.achievements,
-  data.achievements,
-  sampleAchievements
-);
-
-
-// =========================================================
-// REFERENCES
-// =========================================================
-
-const references = getOptionalSection(
-  formData.references,
-  data.references,
-  sampleReferences
-);
-
-
-// =========================================================
-// INTERESTS
-// =========================================================
-
-let interests = [];
-
-if (!useSampleData) {
-  // -----------------------------------------------------
-  // LIVE BUILDER
-  // -----------------------------------------------------
-
-  if (formData.interests?.enabled) {
-    const value = String(
-      formData.interests.value || ""
-    ).trim();
-
-    if (value) {
-      interests = value
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
+    if (
+      dataSection?.enabled &&
+      Array.isArray(dataSection.items) &&
+      dataSection.items.length > 0
+    ) {
+      return dataSection.items;
     }
-  }
-} else {
-  // -----------------------------------------------------
-  // SAMPLE / TEMPLATE PREVIEW
-  // -----------------------------------------------------
 
-  // Use user's interests first
-  if (
-    formData.interests?.enabled &&
-    String(formData.interests.value || "").trim()
-  ) {
-    interests = String(
-      formData.interests.value
-    )
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-  }
+    return sampleItems;
+  };
 
-  // Otherwise use template interests
-  else if (
-    data.interests?.enabled &&
-    String(data.interests.value || "").trim()
-  ) {
-    interests = String(
-      data.interests.value
-    )
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
-  }
+  // =========================================================
+  // OPTIONAL SECTIONS
+  // =========================================================
 
-  // Otherwise use sample interests
-  else {
-    interests = Array.isArray(sampleInterests)
-      ? sampleInterests
-      : String(sampleInterests || "")
+  const certifications = getOptionalSection(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getOptionalSection(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getOptionalSection(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const references = getOptionalSection(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // =========================================================
+
+  let interests = [];
+
+  if (!useSampleData) {
+    if (formData.interests?.enabled) {
+      const value = String(
+        formData.interests.value || ""
+      ).trim();
+
+      if (value) {
+        interests = value
           .split(",")
           .map((item) => item.trim())
           .filter(Boolean);
+      }
+    }
+  } else {
+    if (
+      formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+    ) {
+      interests = String(formData.interests.value)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    } else if (
+      data.interests?.enabled &&
+      String(data.interests.value || "").trim()
+    ) {
+      interests = String(data.interests.value)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    } else {
+      interests = Array.isArray(sampleInterests)
+        ? sampleInterests
+        : String(sampleInterests || "")
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+    }
   }
-}
 
   // =========================================================
   // HELPERS
@@ -424,6 +391,38 @@ if (!useSampleData) {
       "title",
       "label",
     ]);
+  };
+
+  const getDescriptionLines = (description) => {
+    if (!description) return [];
+
+    if (Array.isArray(description)) {
+      return description
+        .flatMap((item) => {
+          if (typeof item === "string") {
+            return item
+              .split("\n")
+              .map((line) =>
+                line
+                  .replace(/^[-•*]\s*/, "")
+                  .trim()
+              )
+              .filter(Boolean);
+          }
+
+          return [];
+        })
+        .filter(Boolean);
+    }
+
+    return String(description)
+      .split("\n")
+      .map((line) =>
+        line
+          .replace(/^[-•*]\s*/, "")
+          .trim()
+      )
+      .filter(Boolean);
   };
 
   // =========================================================
@@ -565,6 +564,7 @@ if (!useSampleData) {
         inline-block
         h-[3px]
         w-[3px]
+        shrink-0
         rounded-full
         bg-violet-300
       "
@@ -586,7 +586,8 @@ if (!useSampleData) {
     return (
       <p
         className={`
-          text-[10px]
+          pb-1
+          text-[12px]
           leading-[1.6]
           text-slate-500
           ${className}
@@ -607,21 +608,22 @@ if (!useSampleData) {
         flex
         items-center
         gap-3
-        text-[11px]
-        font-semibold
+        pb-1
+        text-[14px]
+        font-extrabold
         tracking-[0.2em]
         text-violet-600
         ${centered ? "justify-center" : ""}
       `}
     >
       {accent && (
-        <span className="h-px w-7 bg-violet-300" />
+        <span className="h-px w-8 shrink-0 bg-violet-300" />
       )}
 
-      {children}
+      <span>{children}</span>
 
-      {accent && centered && (
-        <span className="h-px w-7 bg-violet-300" />
+      {accent && (
+        <span className="h-px w-8 shrink-0 bg-violet-300" />
       )}
     </div>
   );
@@ -635,8 +637,9 @@ if (!useSampleData) {
         bg-violet-50
         px-3
         py-1.5
-        text-[9px]
+        text-[10.5px]
         font-medium
+        leading-[1.4]
         text-violet-700
       "
     >
@@ -670,7 +673,6 @@ if (!useSampleData) {
       );
     }
 
-    // No fake image/initials in live Builder.
     if (!useSampleData) {
       return null;
     }
@@ -700,7 +702,7 @@ if (!useSampleData) {
         <span
           className="
             font-serif
-            text-[13px]
+            text-[15px]
             font-semibold
             text-violet-600
           "
@@ -712,13 +714,6 @@ if (!useSampleData) {
   };
 
   // =========================================================
-  // DISPLAY VALUES
-  // =========================================================
-
-  const displayName = personal.fullName;
-  const displayJobTitle = personal.jobTitle;
-
-  // =========================================================
   // RENDER
   // =========================================================
 
@@ -727,11 +722,12 @@ if (!useSampleData) {
       className="
         min-h-[1123px]
         w-[794px]
-        overflow-hidden
+        overflow-visible
         bg-white
-        px-[52px]
-        py-[48px]
+        px-[48px]
+        py-[42px]
         font-sans
+        text-slate-900
       "
     >
       {/* =====================================================
@@ -741,14 +737,13 @@ if (!useSampleData) {
       <header className="text-center">
         <PhotoCircle large />
 
-        {/* NAME */}
-
-        {displayName && (
+        {personal.fullName && (
           <div
             className="
-              mt-6
+              mt-5
+              pb-1
               font-serif
-              text-[34px]
+              text-[46px]
               font-semibold
               uppercase
               leading-[1.05]
@@ -756,28 +751,26 @@ if (!useSampleData) {
               text-slate-900
             "
           >
-            {displayName}
+            {personal.fullName}
           </div>
         )}
 
-        {/* JOB TITLE */}
-
-        {displayJobTitle && (
+        {personal.jobTitle && (
           <div
             className="
               mt-3
-              text-[11px]
+              pb-1
+              text-[16px]
               font-medium
               uppercase
-              tracking-[0.28em]
+              leading-[1.4]
+              tracking-[0.24em]
               text-violet-600
             "
           >
-            {displayJobTitle}
+            {personal.jobTitle}
           </div>
         )}
-
-        {/* CONTACT */}
 
         {(personal.email ||
           personal.phone ||
@@ -786,19 +779,23 @@ if (!useSampleData) {
           personal.github) && (
           <div
             className="
+              mx-auto
               mt-4
               flex
+              max-w-[680px]
               flex-wrap
               items-center
               justify-center
-              text-[9px]
-              leading-[1.5]
+              text-[12px]
+              leading-[1.55]
               text-slate-500
             "
           >
             {personal.email && (
               <>
-                <span>{personal.email}</span>
+                <span className="pb-1">
+                  {personal.email}
+                </span>
 
                 {(personal.phone ||
                   personal.location ||
@@ -809,7 +806,9 @@ if (!useSampleData) {
 
             {personal.phone && (
               <>
-                <span>{personal.phone}</span>
+                <span className="pb-1">
+                  {personal.phone}
+                </span>
 
                 {(personal.location ||
                   personal.linkedin ||
@@ -819,7 +818,9 @@ if (!useSampleData) {
 
             {personal.location && (
               <>
-                <span>{personal.location}</span>
+                <span className="pb-1">
+                  {personal.location}
+                </span>
 
                 {(personal.linkedin ||
                   personal.github) && <Dot />}
@@ -828,14 +829,18 @@ if (!useSampleData) {
 
             {personal.linkedin && (
               <>
-                <span>{personal.linkedin}</span>
+                <span className="break-all pb-1">
+                  {personal.linkedin}
+                </span>
 
                 {personal.github && <Dot />}
               </>
             )}
 
             {personal.github && (
-              <span>{personal.github}</span>
+              <span className="break-all pb-1">
+                {personal.github}
+              </span>
             )}
           </div>
         )}
@@ -845,535 +850,894 @@ if (!useSampleData) {
           DECORATIVE LINE
       ====================================================== */}
 
-      <div className="mx-auto mt-7 h-px w-24 bg-violet-300" />
+      <div className="mx-auto mt-6 h-px w-24 bg-violet-300" />
 
       {/* =====================================================
-          ABOUT ME
+          SUMMARY
       ====================================================== */}
 
-      {(personal.summary || useSampleData) && (
-        <section className="mt-8">
+      {personal.summary && (
+        <section className="mt-7">
           <SectionTitle accent centered>
             ABOUT ME
           </SectionTitle>
 
-          <div className="mt-5 text-center">
-            {personal.summary && (
-              <TinyText className="mx-auto max-w-[610px]">
-                {personal.summary}
-              </TinyText>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          EXPERIENCE
-      ====================================================== */}
-
-      {validExperience.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            EXPERIENCE
-          </SectionTitle>
-
-          <div className="mt-5 space-y-7 text-center">
-            {validExperience
-              .slice(0, 3)
-              .map((item, index) => {
-                const jobTitle = getValue(item, [
-                  "jobTitle",
-                  "title",
-                  "position",
-                  "role",
-                ]);
-
-                const company = getValue(item, [
-                  "company",
-                  "companyName",
-                  "organization",
-                ]);
-
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
-
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
-
-                return (
-                  <article key={index}>
-                    {jobTitle && (
-                      <div
-                        className="
-                          text-[12px]
-                          font-semibold
-                          leading-[1.35]
-                          text-slate-900
-                        "
-                      >
-                        {jobTitle}
-                      </div>
-                    )}
-
-                    {(company ||
-                      startDate ||
-                      endDate) && (
-                      <TinyText className="mt-2">
-                        {company}
-
-                        {(startDate || endDate) && (
-                          <>
-                            {" "}
-                            • {startDate || ""} —{" "}
-                            {endDate || "Present"}
-                          </>
-                        )}
-                      </TinyText>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          EDUCATION
-      ====================================================== */}
-
-      {validEducation.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            EDUCATION
-          </SectionTitle>
-
-          <div className="mt-5 space-y-7 text-center">
-            {validEducation
-              .slice(0, 3)
-              .map((item, index) => {
-                const degree = getValue(item, [
-                  "degree",
-                  "program",
-                  "qualification",
-                  "title",
-                ]);
-
-                const institution = getValue(item, [
-                  "institution",
-                  "university",
-                  "school",
-                  "college",
-                ]);
-
-                const startDate = getValue(item, [
-                  "startDate",
-                  "start",
-                  "from",
-                ]);
-
-                const endDate = getValue(item, [
-                  "endDate",
-                  "end",
-                  "to",
-                ]);
-
-                return (
-                  <article key={index}>
-                    {degree && (
-                      <div
-                        className="
-                          text-[12px]
-                          font-semibold
-                          leading-[1.35]
-                          text-slate-900
-                        "
-                      >
-                        {degree}
-                      </div>
-                    )}
-
-                    {(institution ||
-                      startDate ||
-                      endDate) && (
-                      <TinyText className="mt-2">
-                        {institution}
-
-                        {(startDate || endDate) && (
-                          <>
-                            {" "}
-                            • {startDate || ""} —{" "}
-                            {endDate || "Present"}
-                          </>
-                        )}
-                      </TinyText>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          SKILLS
-      ====================================================== */}
-
-      {finalSkills.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            SKILLS
-          </SectionTitle>
-
-          <div
+          <p
             className="
-              mt-5
-              flex
-              flex-wrap
-              justify-center
-              gap-2
+              mx-auto
+              mt-4
+              max-w-[690px]
+              pb-2
+              text-center
+              text-[13px]
+              leading-[1.65]
+              text-slate-600
             "
           >
-            {finalSkills
-              .slice(0, 10)
-              .map((skill, index) => (
-                <SkillPill
-                  key={`${skill}-${index}`}
-                >
-                  {skill}
-                </SkillPill>
-              ))}
-          </div>
+            {personal.summary}
+          </p>
         </section>
       )}
 
       {/* =====================================================
-          FEATURED PROJECTS
+          TWO COLUMN CONTENT
       ====================================================== */}
 
-      {validProjects.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            SELECTED WORK
-          </SectionTitle>
+      <div
+        className="
+          mt-8
+          grid
+          grid-cols-[1.65fr_1fr]
+          gap-x-9
+          items-start
+        "
+      >
+        {/* ===================================================
+            LEFT COLUMN
+        =================================================== */}
 
-          <div className="mt-5 grid grid-cols-3 gap-4">
-            {validProjects
-              .slice(0, 3)
-              .map((project, index) => {
-                const projectName = getValue(
-                  project,
-                  [
-                    "name",
+        <div className="min-w-0">
+
+          {/* =================================================
+              EXPERIENCE
+          ================================================= */}
+
+          {validExperience.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle accent>
+                EXPERIENCE
+              </SectionTitle>
+
+              <div className="mt-5 space-y-7">
+                {validExperience.map((item, index) => {
+                  const jobTitle = getValue(item, [
+                    "jobTitle",
                     "title",
-                    "projectName",
-                  ]
-                );
+                    "position",
+                    "role",
+                  ]);
 
-                const description = getValue(
-                  project,
-                  [
+                  const company = getValue(item, [
+                    "company",
+                    "companyName",
+                    "organization",
+                  ]);
+
+                  const location = getValue(item, [
+                    "location",
+                    "city",
+                  ]);
+
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
+
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
+
+                  const description = getValue(item, [
                     "description",
                     "details",
-                    "summary",
-                  ]
-                );
+                    "responsibilities",
+                  ]);
 
-                return (
-                  <article
-                    key={index}
-                    className="
-                      rounded-xl
-                      border
-                      border-violet-100
-                      bg-violet-50/50
-                      p-3
-                      text-center
-                    "
-                  >
-                    {projectName && (
-                      <div
+                  const descriptionLines =
+                    getDescriptionLines(description);
+
+                  return (
+                    <article
+                      key={index}
+                      className="
+                        break-inside-avoid
+                        pb-2
+                      "
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          {jobTitle && (
+                            <h3
+                              className="
+                                pb-1
+                                text-[15px]
+                                font-bold
+                                leading-[1.4]
+                                text-slate-900
+                              "
+                            >
+                              {jobTitle}
+                            </h3>
+                          )}
+
+                          {(company || location) && (
+                            <p
+                              className="
+                                pb-1
+                                text-[11.5px]
+                                font-medium
+                                leading-[1.5]
+                                text-slate-500
+                              "
+                            >
+                              {[company, location]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </p>
+                          )}
+                        </div>
+
+                        {(startDate || endDate) && (
+                          <span
+                            className="
+                              shrink-0
+                              pb-1
+                              text-right
+                              text-[11.5px]
+                              leading-[1.5]
+                              text-slate-400
+                            "
+                          >
+                            {startDate || ""}
+                            {startDate || endDate
+                              ? " — "
+                              : ""}
+                            {endDate || "Present"}
+                          </span>
+                        )}
+                      </div>
+
+                      {descriptionLines.length > 0 && (
+                        <ul className="mt-2 space-y-2 pb-1">
+                          {descriptionLines.map(
+                            (line, lineIndex) => (
+                              <li
+                                key={lineIndex}
+                                className="
+                                  relative
+                                  pl-4
+                                  pb-1
+                                  text-[12px]
+                                  leading-[1.6]
+                                  text-slate-600
+                                "
+                              >
+                                <span
+                                  className="
+                                    absolute
+                                    left-0
+                                    top-[9px]
+                                    h-[4px]
+                                    w-[4px]
+                                    rounded-full
+                                    bg-violet-300
+                                  "
+                                />
+                                {line}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      )}
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              EDUCATION
+          ================================================= */}
+
+          {validEducation.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle accent>
+                EDUCATION
+              </SectionTitle>
+
+              <div className="mt-5 space-y-6">
+                {validEducation.map((item, index) => {
+                  const degree = getValue(item, [
+                    "degree",
+                    "program",
+                    "qualification",
+                    "title",
+                  ]);
+
+                  const institution = getValue(item, [
+                    "institution",
+                    "university",
+                    "school",
+                    "college",
+                  ]);
+
+                  const location = getValue(item, [
+                    "location",
+                    "city",
+                  ]);
+
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
+
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                    "graduationDate",
+                  ]);
+
+                  const description = getValue(item, [
+                    "description",
+                    "details",
+                  ]);
+
+                  return (
+                    <article
+                      key={index}
+                      className="
+                        break-inside-avoid
+                        pb-2
+                      "
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          {degree && (
+                            <h3
+                              className="
+                                pb-1
+                                text-[14px]
+                                font-bold
+                                leading-[1.45]
+                                text-slate-900
+                              "
+                            >
+                              {degree}
+                            </h3>
+                          )}
+
+                          {(institution || location) && (
+                            <p
+                              className="
+                                pb-1
+                                text-[12px]
+                                leading-[1.55]
+                                text-slate-500
+                              "
+                            >
+                              {[institution, location]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </p>
+                          )}
+                        </div>
+
+                        {(startDate || endDate) && (
+                          <span
+                            className="
+                              shrink-0
+                              pb-1
+                              text-right
+                              text-[11px]
+                              leading-[1.5]
+                              text-slate-400
+                            "
+                          >
+                            {startDate || ""}
+                            {startDate || endDate
+                              ? " — "
+                              : ""}
+                            {endDate || "Present"}
+                          </span>
+                        )}
+                      </div>
+
+                      {description && (
+                        <TinyText className="mt-2">
+                          {description}
+                        </TinyText>
+                      )}
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              PROJECTS
+          ================================================= */}
+
+          {validProjects.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle accent>
+                SELECTED WORK
+              </SectionTitle>
+
+              <div className="mt-5 space-y-6">
+                {validProjects.map((project, index) => {
+                  const projectName = getValue(
+                    project,
+                    [
+                      "name",
+                      "title",
+                      "projectName",
+                    ]
+                  );
+
+                  const description = getValue(
+                    project,
+                    [
+                      "description",
+                      "details",
+                      "summary",
+                    ]
+                  );
+
+                  const link = getValue(project, [
+                    "link",
+                    "url",
+                    "website",
+                    "github",
+                  ]);
+
+                  const technologies =
+                    project.technologies ||
+                    project.technology ||
+                    project.techStack ||
+                    project.tech ||
+                    [];
+
+                  const techList = Array.isArray(
+                    technologies
+                  )
+                    ? technologies
+                    : String(technologies || "")
+                        .split(",")
+                        .map((item) => item.trim())
+                        .filter(Boolean);
+
+                  return (
+                    <article
+                      key={index}
+                      className="
+                        break-inside-avoid
+                        border-b
+                        border-violet-100
+                        pb-4
+                      "
+                    >
+                      {projectName && (
+                        <h3
+                          className="
+                            pb-1
+                            text-[14px]
+                            font-bold
+                            leading-[1.45]
+                            text-slate-900
+                          "
+                        >
+                          {projectName}
+                        </h3>
+                      )}
+
+                      {description && (
+                        <p
+                          className="
+                            pb-2
+                            text-[12px]
+                            leading-[1.6]
+                            text-slate-600
+                          "
+                        >
+                          {description}
+                        </p>
+                      )}
+
+                      {techList.length > 0 && (
+                        <div className="flex flex-wrap gap-x-2 gap-y-1 pb-1">
+                          {techList.map(
+                            (technology, techIndex) => (
+                              <span
+                                key={techIndex}
+                                className="
+                                  text-[10.5px]
+                                  font-medium
+                                  leading-[1.5]
+                                  text-violet-600
+                                "
+                              >
+                                {technology}
+                                {techIndex <
+                                techList.length - 1
+                                  ? " ·"
+                                  : ""}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      )}
+
+                      {link && (
+                        <p
+                          className="
+                            mt-1
+                            break-all
+                            pb-1
+                            text-[10.5px]
+                            leading-[1.5]
+                            text-slate-400
+                          "
+                        >
+                          {link}
+                        </p>
+                      )}
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* ===================================================
+            RIGHT COLUMN
+        =================================================== */}
+
+        <aside className="min-w-0">
+
+          {/* =================================================
+              SKILLS
+          ================================================= */}
+
+          {finalSkills.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle>
+                SKILLS
+              </SectionTitle>
+
+              <div
+                className="
+                  mt-4
+                  flex
+                  flex-wrap
+                  gap-2
+                  pb-1
+                "
+              >
+                {finalSkills.map((skill, index) => (
+                  <SkillPill key={`${skill}-${index}`}>
+                    {skill}
+                  </SkillPill>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              CERTIFICATIONS
+          ================================================= */}
+
+          {validCertifications.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle>
+                CERTIFICATIONS
+              </SectionTitle>
+
+              <div className="mt-4 space-y-5">
+                {validCertifications.map(
+                  (item, index) => {
+                    const name = getValue(item, [
+                      "name",
+                      "title",
+                      "certificate",
+                    ]);
+
+                    const issuer = getValue(item, [
+                      "issuer",
+                      "organization",
+                      "provider",
+                    ]);
+
+                    const date = getValue(item, [
+                      "date",
+                      "year",
+                    ]);
+
+                    return (
+                      <article
+                        key={index}
                         className="
-                          text-[10px]
-                          font-semibold
-                          text-slate-900
+                          break-inside-avoid
+                          pb-2
                         "
                       >
-                        {projectName}
-                      </div>
-                    )}
+                        {name && (
+                          <h3
+                            className="
+                              pb-1
+                              text-[12px]
+                              font-bold
+                              leading-[1.5]
+                              text-slate-900
+                            "
+                          >
+                            {name}
+                          </h3>
+                        )}
 
-                    {description && (
-                      <TinyText className="mt-2">
-                        {description}
-                      </TinyText>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-      )}
+                        {(issuer || date) && (
+                          <p
+                            className="
+                              pb-1
+                              text-[11px]
+                              leading-[1.55]
+                              text-slate-500
+                            "
+                          >
+                            {issuer}
+                            {issuer && date
+                              ? " · "
+                              : ""}
+                            {date}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
 
-      {/* =====================================================
-          CERTIFICATIONS
-      ====================================================== */}
+          {/* =================================================
+              ACHIEVEMENTS
+          ================================================= */}
 
-      {validCertifications.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            CERTIFICATIONS
-          </SectionTitle>
+          {validAchievements.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle>
+                ACHIEVEMENTS
+              </SectionTitle>
 
-          <div className="mt-5 grid grid-cols-3 gap-5 text-center">
-            {validCertifications
-              .slice(0, 3)
-              .map((item, index) => {
-                const name = getValue(item, [
-                  "name",
-                  "title",
-                  "certificate",
-                ]);
+              <div className="mt-4 space-y-5">
+                {validAchievements.map(
+                  (item, index) => {
+                    const title = getValue(item, [
+                      "title",
+                      "name",
+                    ]);
 
-                const issuer = getValue(item, [
-                  "issuer",
-                  "organization",
-                  "provider",
-                ]);
+                    const description = getValue(
+                      item,
+                      [
+                        "description",
+                        "details",
+                      ]
+                    );
 
-                const date = getValue(item, [
-                  "date",
-                  "year",
-                ]);
+                    const date = getValue(item, [
+                      "date",
+                      "year",
+                    ]);
 
-                return (
-                  <article key={index}>
-                    {name && (
-                      <div className="text-[10px] font-semibold text-slate-900">
-                        {name}
-                      </div>
-                    )}
+                    return (
+                      <article
+                        key={index}
+                        className="
+                          break-inside-avoid
+                          pb-2
+                        "
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          {title && (
+                            <h3
+                              className="
+                                pb-1
+                                text-[13px]
+                                font-bold
+                                leading-[1.45]
+                                text-slate-900
+                              "
+                            >
+                              {title}
+                            </h3>
+                          )}
 
-                    {(issuer || date) && (
-                      <TinyText className="mt-1">
-                        {issuer}
-                        {issuer && date ? " • " : ""}
-                        {date}
-                      </TinyText>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          ACHIEVEMENTS
-      ====================================================== */}
-
-      {validAchievements.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            ACHIEVEMENTS
-          </SectionTitle>
-
-          <div className="mt-5 space-y-4 text-center">
-            {validAchievements
-              .slice(0, 3)
-              .map((item, index) => {
-                const title = getValue(item, [
-                  "title",
-                  "name",
-                ]);
-
-                const description = getValue(
-                  item,
-                  [
-                    "description",
-                    "details",
-                  ]
-                );
-
-                const date = getValue(item, [
-                  "date",
-                  "year",
-                ]);
-
-                return (
-                  <article key={index}>
-                    <div className="flex items-center justify-center gap-3">
-                      {title && (
-                        <div className="text-[10px] font-semibold text-slate-900">
-                          {title}
+                          {date && (
+                            <span
+                              className="
+                                shrink-0
+                                pb-1
+                                text-[10px]
+                                text-slate-400
+                              "
+                            >
+                              {date}
+                            </span>
+                          )}
                         </div>
-                      )}
 
-                      {date && (
-                        <div className="text-[8px] text-slate-400">
-                          {date}
-                        </div>
-                      )}
-                    </div>
+                        {description && (
+                          <p
+                            className="
+                              pb-1
+                              text-[11.5px]
+                              leading-[1.6]
+                              text-slate-500
+                            "
+                          >
+                            {description}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
 
-                    {description && (
-                      <TinyText className="mx-auto mt-1 max-w-[600px]">
-                        {description}
-                      </TinyText>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-      )}
+          {/* =================================================
+              LANGUAGES
+          ================================================= */}
 
-      {/* =====================================================
-          LANGUAGES
-      ====================================================== */}
+          {validLanguages.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle>
+                LANGUAGES
+              </SectionTitle>
 
-      {validLanguages.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            LANGUAGES
-          </SectionTitle>
+              <div className="mt-4 space-y-4">
+                {validLanguages.map(
+                  (item, index) => {
+                    const language = getValue(item, [
+                      "language",
+                      "name",
+                    ]);
 
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {validLanguages
-              .slice(0, 5)
-              .map((item, index) => {
-                const language = getValue(item, [
-                  "language",
-                  "name",
-                ]);
+                    const level = getValue(item, [
+                      "level",
+                      "proficiency",
+                      "fluency",
+                    ]);
 
-                const level = getValue(item, [
-                  "level",
-                  "proficiency",
-                ]);
+                    return (
+                      <div
+                        key={index}
+                        className="
+                          break-inside-avoid
+                          pb-1
+                        "
+                      >
+                        {language && (
+                          <p
+                            className="
+                              pb-1
+                              text-[12px]
+                              font-semibold
+                              leading-[1.5]
+                              text-slate-900
+                            "
+                          >
+                            {language}
+                          </p>
+                        )}
 
-                return (
-                  <SkillPill key={index}>
-                    {language}
-                    {level ? ` • ${level}` : ""}
-                  </SkillPill>
-                );
-              })}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          INTERESTS
-      ====================================================== */}
-
-      {validInterests.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            INTERESTS
-          </SectionTitle>
-
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {validInterests
-              .slice(0, 6)
-              .map((interest, index) => {
-                const name =
-                  typeof interest === "string"
-                    ? interest
-                    : getValue(interest, [
-                        "name",
-                        "title",
-                        "interest",
-                      ]);
-
-                return (
-                  <SkillPill key={`${name}-${index}`}>
-                    {name}
-                  </SkillPill>
-                );
-              })}
-          </div>
-        </section>
-      )}
-
-      {/* =====================================================
-          REFERENCES
-      ====================================================== */}
-
-      {validReferences.length > 0 && (
-        <section className="mt-9">
-          <SectionTitle accent centered>
-            REFERENCES
-          </SectionTitle>
-
-          <div className="mt-5 grid grid-cols-2 gap-5 text-center">
-            {validReferences
-              .slice(0, 2)
-              .map((item, index) => {
-                const name = getValue(item, [
-                  "name",
-                  "fullName",
-                ]);
-
-                const position = getValue(
-                  item,
-                  [
-                    "position",
-                    "jobTitle",
-                    "role",
-                  ]
-                );
-
-                const company = getValue(item, [
-                  "company",
-                  "organization",
-                ]);
-
-                const email = getValue(item, [
-                  "email",
-                ]);
-
-                const phone = getValue(item, [
-                  "phone",
-                  "telephone",
-                ]);
-
-                return (
-                  <article key={index}>
-                    {name && (
-                      <div className="text-[10px] font-semibold text-slate-900">
-                        {name}
+                        {level && (
+                          <p
+                            className="
+                              text-[11px]
+                              leading-[1.5]
+                              text-slate-500
+                            "
+                          >
+                            {level}
+                          </p>
+                        )}
                       </div>
-                    )}
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
 
-                    {(position || company) && (
-                      <TinyText className="mt-1">
-                        {position}
-                        {position && company
-                          ? " • "
-                          : ""}
-                        {company}
-                      </TinyText>
-                    )}
+          {/* =================================================
+              INTERESTS
+          ================================================= */}
 
-                    {(email || phone) && (
-                      <TinyText className="mt-1">
-                        {email}
-                        {email && phone ? " • " : ""}
-                        {phone}
-                      </TinyText>
-                    )}
-                  </article>
-                );
-              })}
-          </div>
-        </section>
-      )}
+          {validInterests.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle>
+                INTERESTS
+              </SectionTitle>
+
+              <div
+                className="
+                  mt-4
+                  flex
+                  flex-wrap
+                  gap-2
+                  pb-1
+                "
+              >
+                {validInterests.map(
+                  (interest, index) => {
+                    const name =
+                      typeof interest === "string"
+                        ? interest
+                        : getValue(interest, [
+                            "name",
+                            "title",
+                            "interest",
+                          ]);
+
+                    return (
+                      <span
+                        key={`${name}-${index}`}
+                        className="
+                          rounded-full
+                          border
+                          border-violet-200
+                          px-2.5
+                          py-1
+                          text-[10.5px]
+                          leading-[1.4]
+                          text-slate-600
+                        "
+                      >
+                        {name}
+                      </span>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              REFERENCES
+          ================================================= */}
+
+          {validReferences.length > 0 && (
+            <section className="mb-8">
+              <SectionTitle>
+                REFERENCES
+              </SectionTitle>
+
+              <div className="mt-4 space-y-6">
+                {validReferences.map(
+                  (item, index) => {
+                    const name = getValue(item, [
+                      "name",
+                      "fullName",
+                    ]);
+
+                    const position = getValue(
+                      item,
+                      [
+                        "position",
+                        "jobTitle",
+                        "role",
+                      ]
+                    );
+
+                    const company = getValue(
+                      item,
+                      [
+                        "company",
+                        "organization",
+                      ]
+                    );
+
+                    const email = getValue(item, [
+                      "email",
+                    ]);
+
+                    const phone = getValue(item, [
+                      "phone",
+                      "telephone",
+                    ]);
+
+                    return (
+                      <article
+                        key={index}
+                        className="
+                          break-inside-avoid
+                          pb-2
+                        "
+                      >
+                        {name && (
+                          <p
+                            className="
+                              pb-1
+                              text-[12px]
+                              font-semibold
+                              leading-[1.5]
+                              text-slate-900
+                            "
+                          >
+                            {name}
+                          </p>
+                        )}
+
+                        {(position || company) && (
+                          <p
+                            className="
+                              pb-1
+                              text-[11px]
+                              leading-[1.55]
+                              text-slate-500
+                            "
+                          >
+                            {[position, company]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </p>
+                        )}
+
+                        {email && (
+                          <p
+                            className="
+                              break-all
+                              pb-1
+                              text-[10.5px]
+                              leading-[1.5]
+                              text-slate-500
+                            "
+                          >
+                            {email}
+                          </p>
+                        )}
+
+                        {phone && (
+                          <p
+                            className="
+                              pb-1
+                              text-[10.5px]
+                              leading-[1.5]
+                              text-slate-500
+                            "
+                          >
+                            {phone}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }

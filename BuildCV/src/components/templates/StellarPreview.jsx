@@ -8,7 +8,6 @@ function StellarPreview({
 }) {
   // =========================================================
   // SAMPLE DATA
-  // Same sample data used across all BuildCV templates
   // =========================================================
 
   const samplePersonal = {
@@ -236,7 +235,7 @@ function StellarPreview({
   };
 
   // =========================================================
-  // RESUME SECTIONS
+  // REQUIRED SECTIONS
   // =========================================================
 
   const experience = getArrayData(
@@ -263,117 +262,121 @@ function StellarPreview({
     sampleProjects
   );
 
-const certifications = useSampleData
-  ? formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items) &&
-    formData.certifications.items.length > 0
+  // =========================================================
+  // OPTIONAL SECTIONS
+  // =========================================================
+
+  const certifications = useSampleData
+    ? formData.certifications?.enabled &&
+      Array.isArray(formData.certifications.items) &&
+      formData.certifications.items.length > 0
+      ? formData.certifications.items
+      : data.certifications?.enabled &&
+        Array.isArray(data.certifications.items) &&
+        data.certifications.items.length > 0
+      ? data.certifications.items
+      : Array.isArray(formData.certifications)
+      ? formData.certifications
+      : Array.isArray(data.certifications)
+      ? data.certifications
+      : sampleCertifications
+    : formData.certifications?.enabled &&
+      Array.isArray(formData.certifications.items)
     ? formData.certifications.items
-    : data.certifications?.enabled &&
-      Array.isArray(data.certifications.items) &&
-      data.certifications.items.length > 0
-    ? data.certifications.items
     : Array.isArray(formData.certifications)
     ? formData.certifications
-    : Array.isArray(data.certifications)
-    ? data.certifications
-    : sampleCertifications
-  : formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items)
-  ? formData.certifications.items
-  : Array.isArray(formData.certifications)
-  ? formData.certifications
-  : [];
+    : [];
 
-const languages = useSampleData
-  ? formData.languages?.enabled &&
-    Array.isArray(formData.languages.items) &&
-    formData.languages.items.length > 0
+  const languages = useSampleData
+    ? formData.languages?.enabled &&
+      Array.isArray(formData.languages.items) &&
+      formData.languages.items.length > 0
+      ? formData.languages.items
+      : data.languages?.enabled &&
+        Array.isArray(data.languages.items) &&
+        data.languages.items.length > 0
+      ? data.languages.items
+      : Array.isArray(formData.languages)
+      ? formData.languages
+      : Array.isArray(data.languages)
+      ? data.languages
+      : sampleLanguages
+    : formData.languages?.enabled &&
+      Array.isArray(formData.languages.items)
     ? formData.languages.items
-    : data.languages?.enabled &&
-      Array.isArray(data.languages.items) &&
-      data.languages.items.length > 0
-    ? data.languages.items
     : Array.isArray(formData.languages)
     ? formData.languages
-    : Array.isArray(data.languages)
-    ? data.languages
-    : sampleLanguages
-  : formData.languages?.enabled &&
-    Array.isArray(formData.languages.items)
-  ? formData.languages.items
-  : Array.isArray(formData.languages)
-  ? formData.languages
-  : [];
+    : [];
 
-const achievements = useSampleData
-  ? formData.achievements?.enabled &&
-    Array.isArray(formData.achievements.items) &&
-    formData.achievements.items.length > 0
+  const achievements = useSampleData
+    ? formData.achievements?.enabled &&
+      Array.isArray(formData.achievements.items) &&
+      formData.achievements.items.length > 0
+      ? formData.achievements.items
+      : data.achievements?.enabled &&
+        Array.isArray(data.achievements.items) &&
+        data.achievements.items.length > 0
+      ? data.achievements.items
+      : Array.isArray(formData.achievements)
+      ? formData.achievements
+      : Array.isArray(data.achievements)
+      ? data.achievements
+      : sampleAchievements
+    : formData.achievements?.enabled &&
+      Array.isArray(formData.achievements.items)
     ? formData.achievements.items
-    : data.achievements?.enabled &&
-      Array.isArray(data.achievements.items) &&
-      data.achievements.items.length > 0
-    ? data.achievements.items
     : Array.isArray(formData.achievements)
     ? formData.achievements
-    : Array.isArray(data.achievements)
-    ? data.achievements
-    : sampleAchievements
-  : formData.achievements?.enabled &&
-    Array.isArray(formData.achievements.items)
-  ? formData.achievements.items
-  : Array.isArray(formData.achievements)
-  ? formData.achievements
-  : [];
+    : [];
 
-const interests = useSampleData
-  ? formData.interests?.enabled &&
-    String(formData.interests.value || "").trim()
+  const interests = useSampleData
+    ? formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+      ? String(formData.interests.value)
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : data.interests?.enabled &&
+        String(data.interests.value || "").trim()
+      ? String(data.interests.value)
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : Array.isArray(formData.interests)
+      ? formData.interests
+      : Array.isArray(data.interests)
+      ? data.interests
+      : sampleInterests
+    : formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
     ? String(formData.interests.value)
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-    : data.interests?.enabled &&
-      String(data.interests.value || "").trim()
-    ? String(data.interests.value)
         .split(",")
         .map((item) => item.trim())
         .filter(Boolean)
     : Array.isArray(formData.interests)
     ? formData.interests
-    : Array.isArray(data.interests)
-    ? data.interests
-    : sampleInterests
-  : formData.interests?.enabled &&
-    String(formData.interests.value || "").trim()
-  ? String(formData.interests.value)
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean)
-  : Array.isArray(formData.interests)
-  ? formData.interests
-  : [];
+    : [];
 
-const references = useSampleData
-  ? formData.references?.enabled &&
-    Array.isArray(formData.references.items) &&
-    formData.references.items.length > 0
+  const references = useSampleData
+    ? formData.references?.enabled &&
+      Array.isArray(formData.references.items) &&
+      formData.references.items.length > 0
+      ? formData.references.items
+      : data.references?.enabled &&
+        Array.isArray(data.references.items) &&
+        data.references.items.length > 0
+      ? data.references.items
+      : Array.isArray(formData.references)
+      ? formData.references
+      : Array.isArray(data.references)
+      ? data.references
+      : sampleReferences
+    : formData.references?.enabled &&
+      Array.isArray(formData.references.items)
     ? formData.references.items
-    : data.references?.enabled &&
-      Array.isArray(data.references.items) &&
-      data.references.items.length > 0
-    ? data.references.items
     : Array.isArray(formData.references)
     ? formData.references
-    : Array.isArray(data.references)
-    ? data.references
-    : sampleReferences
-  : formData.references?.enabled &&
-    Array.isArray(formData.references.items)
-  ? formData.references.items
-  : Array.isArray(formData.references)
-  ? formData.references
-  : [];
+    : [];
 
   // =========================================================
   // HELPERS
@@ -463,7 +466,7 @@ const references = useSampleData
 
     return (
       <p
-        className={`text-[10px] leading-[1.65] ${color} ${className}`}
+        className={`text-[10px] leading-[1.5] ${color} ${className}`}
       >
         {children}
       </p>
@@ -485,11 +488,11 @@ const references = useSampleData
     }
 
     return (
-      <ul className="space-y-1.5">
+      <ul className="space-y-1">
         {lines.map((line, index) => (
           <li
             key={index}
-            className="relative pl-3 text-[10px] leading-[1.55] text-white/55"
+            className="relative pl-3 text-[10px] leading-[1.45] text-white/55"
           >
             <span
               className={`absolute left-0 top-[6px] h-[3px] w-[3px] rounded-full ${color}`}
@@ -525,8 +528,6 @@ const references = useSampleData
       );
     }
 
-    // Only show initials in sample mode.
-    // Live Builder stays empty when no photo is provided.
     if (!useSampleData) {
       return null;
     }
@@ -568,14 +569,19 @@ const references = useSampleData
   // =========================================================
 
   return (
-    <div className="min-h-[1123px] w-[794px] overflow-hidden bg-[#0b1020] font-sans text-white">
+    <div
+      className="w-[794px] bg-[#0b1020] font-sans text-white"
+      style={{
+        minHeight: "1123px",
+        height: "auto",
+        overflow: "visible",
+      }}
+    >
       {/* =====================================================
           HEADER
       ===================================================== */}
 
-      <header className="relative overflow-hidden px-[52px] py-[48px]">
-        {/* Decorative circle */}
-
+      <header className="relative overflow-hidden px-[52px] py-[38px]">
         <div className="absolute right-[-55px] top-[-55px] h-56 w-56 rounded-full border border-violet-400/20" />
 
         <div className="absolute right-[55px] top-[55px] h-3 w-3 rounded-full bg-violet-400" />
@@ -584,39 +590,28 @@ const references = useSampleData
 
         <div className="absolute right-[110px] top-[105px] h-1.5 w-1.5 rounded-full bg-violet-300/60" />
 
-        <div className="relative flex items-center gap-6">
-          {/* PROFILE PHOTO */}
-
+        <div className="relative flex items-center gap-5">
           <PhotoCircle
             large
             ring="ring-violet-300"
             background="bg-violet-100"
           />
 
-          {/* NAME */}
-
-          <div>
+          <div className="min-w-0">
             {displayName && (
-              <div className="text-[36px] font-black leading-none tracking-tight text-white">
+              <div className="break-words text-[34px] font-black leading-[1] tracking-tight text-white">
                 {displayName.toUpperCase()}
               </div>
             )}
 
-            {/* JOB TITLE */}
-
             {displayJobTitle && (
-              <div className="mt-3 font-mono text-[11px] tracking-[0.2em] text-violet-300">
+              <div className="mt-2.5 font-mono text-[11px] tracking-[0.2em] text-violet-300">
                 {displayJobTitle.toUpperCase()}
               </div>
             )}
 
-            {/* TAGLINE */}
-
             {displayTagline && (
-              <TinyText
-                className="mt-3"
-                color="text-white/50"
-              >
+              <TinyText className="mt-2">
                 {displayTagline}
               </TinyText>
             )}
@@ -628,44 +623,44 @@ const references = useSampleData
           MAIN
       ===================================================== */}
 
-      <main className="px-[52px] py-4">
-        <div className="grid grid-cols-[1.4fr_0.75fr] gap-7">
+      <main className="px-[52px] pb-[40px] pt-2">
+        {/* IMPORTANT:
+            items-start keeps both columns aligned at the top.
+        */}
+
+        <div className="grid grid-cols-[1.4fr_0.75fr] items-start gap-7">
           {/* =================================================
               LEFT COLUMN
           ================================================= */}
 
-          <section>
-            {/* =================================================
-                PROFILE
-            ================================================= */}
+          <section className="min-w-0">
+            {/* PROFILE */}
 
             {displaySummary && (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
                 <div className="font-mono text-[11px] text-violet-300">
                   01 — PROFILE
                 </div>
 
-                <div className="mt-4 text-[16px] font-extrabold leading-[1.35]">
+                <div className="mt-3 text-[15px] font-extrabold leading-[1.35]">
                   {displaySummary}
                 </div>
               </div>
             )}
 
-            {/* =================================================
-                EXPERIENCE
-            ================================================= */}
+            {/* EXPERIENCE */}
 
             {experience.length > 0 && (
               <section
                 className={
-                  displaySummary ? "mt-9" : ""
+                  displaySummary ? "mt-7" : ""
                 }
               >
                 <div className="font-mono text-[11px] text-violet-300">
                   02 — EXPERIENCE
                 </div>
 
-                <div className="mt-5 space-y-8">
+                <div className="mt-4 space-y-6">
                   {experience
                     .slice(0, 4)
                     .map((item, index) => {
@@ -726,11 +721,9 @@ const references = useSampleData
 
                       return (
                         <div key={index}>
-                          {/* JOB TITLE + DATE */}
-
-                          <div className="flex items-start justify-between gap-6">
+                          <div className="flex items-start justify-between gap-4">
                             {jobTitle && (
-                              <div className="text-[13px] font-bold text-white">
+                              <div className="min-w-0 text-[13px] font-bold text-white">
                                 {jobTitle}
                               </div>
                             )}
@@ -739,23 +732,20 @@ const references = useSampleData
                               endDate) && (
                               <div className="shrink-0 text-[10px] text-white/40">
                                 {startDate || ""} —{" "}
-                                {endDate || "Present"}
+                                {endDate ||
+                                  "Present"}
                               </div>
                             )}
                           </div>
 
-                          {/* COMPANY */}
-
                           {company && (
-                            <div className="mt-1.5 text-[10px] text-violet-300">
+                            <div className="mt-1 text-[10px] text-violet-300">
                               {company}
                             </div>
                           )}
 
-                          {/* DESCRIPTION */}
-
                           {description && (
-                            <div className="mt-3">
+                            <div className="mt-2.5">
                               <ResumeLines
                                 description={
                                   description
@@ -771,17 +761,15 @@ const references = useSampleData
               </section>
             )}
 
-            {/* =================================================
-                SELECTED WORK
-            ================================================= */}
+            {/* SELECTED WORK */}
 
             {projects.length > 0 && (
-              <section className="mt-9">
+              <section className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   05 — SELECTED WORK
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-2 gap-3">
                   {projects
                     .slice(0, 4)
                     .map((project, index) => {
@@ -813,7 +801,7 @@ const references = useSampleData
                       return (
                         <div
                           key={`${projectName}-${index}`}
-                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                          className="rounded-xl border border-white/10 bg-white/5 p-3.5"
                         >
                           {projectName && (
                             <div className="text-[11px] font-bold text-white">
@@ -822,14 +810,14 @@ const references = useSampleData
                           )}
 
                           {description && (
-                            <TinyText className="mt-2">
+                            <TinyText className="mt-1.5">
                               {description}
                             </TinyText>
                           )}
 
                           {technologies.length >
                             0 && (
-                            <div className="mt-3 flex flex-wrap gap-1.5">
+                            <div className="mt-2.5 flex flex-wrap gap-1.5">
                               {technologies
                                 .slice(0, 3)
                                 .map(
@@ -854,17 +842,15 @@ const references = useSampleData
               </section>
             )}
 
-            {/* =================================================
-                ACHIEVEMENTS
-            ================================================= */}
+            {/* ACHIEVEMENTS */}
 
             {achievements.length > 0 && (
-              <section className="mt-9">
+              <section className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   06 — ACHIEVEMENTS
                 </div>
 
-                <div className="mt-5 space-y-4">
+                <div className="mt-4 space-y-3">
                   {achievements
                     .slice(0, 3)
                     .map((item, index) => {
@@ -887,7 +873,7 @@ const references = useSampleData
                       return (
                         <div
                           key={index}
-                          className="border-l-2 border-violet-400/40 pl-4"
+                          className="border-l-2 border-violet-400/40 pl-3"
                         >
                           {title && (
                             <div className="text-[11px] font-bold text-white">
@@ -896,7 +882,7 @@ const references = useSampleData
                           )}
 
                           {description && (
-                            <TinyText className="mt-1.5">
+                            <TinyText className="mt-1">
                               {description}
                             </TinyText>
                           )}
@@ -907,17 +893,15 @@ const references = useSampleData
               </section>
             )}
 
-            {/* =================================================
-                CERTIFICATIONS
-            ================================================= */}
+            {/* CERTIFICATIONS */}
 
             {certifications.length > 0 && (
-              <section className="mt-9">
+              <section className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   07 — CERTIFICATIONS
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-2 gap-3">
                   {certifications
                     .slice(0, 4)
                     .map((item, index) => {
@@ -959,7 +943,7 @@ const references = useSampleData
                       return (
                         <div
                           key={index}
-                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                          className="rounded-xl border border-white/10 bg-white/5 p-3.5"
                         >
                           {name && (
                             <div className="text-[10px] font-bold text-white">
@@ -968,7 +952,7 @@ const references = useSampleData
                           )}
 
                           {issuer && (
-                            <TinyText className="mt-1.5">
+                            <TinyText className="mt-1">
                               {issuer}
                             </TinyText>
                           )}
@@ -988,17 +972,15 @@ const references = useSampleData
               </section>
             )}
 
-            {/* =================================================
-                REFERENCES
-            ================================================= */}
+            {/* REFERENCES */}
 
             {references.length > 0 && (
-              <section className="mt-9">
+              <section className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   08 — REFERENCES
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-2 gap-3">
                   {references
                     .slice(0, 2)
                     .map((reference, index) => {
@@ -1047,7 +1029,7 @@ const references = useSampleData
                       return (
                         <div
                           key={index}
-                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                          className="rounded-xl border border-white/10 bg-white/5 p-3.5"
                         >
                           {name && (
                             <div className="text-[11px] font-bold text-white">
@@ -1056,18 +1038,15 @@ const references = useSampleData
                           )}
 
                           {(role || company) && (
-                            <TinyText className="mt-1.5">
-                              {[
-                                role,
-                                company,
-                              ]
+                            <TinyText className="mt-1">
+                              {[role, company]
                                 .filter(Boolean)
                                 .join(" · ")}
                             </TinyText>
                           )}
 
                           {email && (
-                            <TinyText className="mt-2">
+                            <TinyText className="mt-1.5">
                               {email}
                             </TinyText>
                           )}
@@ -1086,16 +1065,16 @@ const references = useSampleData
           </section>
 
           {/* =================================================
-              RIGHT SIDEBAR — STACK
+              RIGHT SIDEBAR
           ================================================= */}
 
-          <aside className="rounded-2xl bg-violet-500/10 p-6">
+          <aside className="self-start rounded-2xl bg-violet-500/10 p-5">
             <div className="font-mono text-[11px] text-violet-300">
               03 — STACK
             </div>
 
             {skills.length > 0 && (
-              <div className="mt-6 space-y-3">
+              <div className="mt-5 space-y-2.5">
                 {skills
                   .slice(0, 10)
                   .map((skill, index) => {
@@ -1109,7 +1088,7 @@ const references = useSampleData
                     return (
                       <div
                         key={`${skillName}-${index}`}
-                        className="rounded-xl border border-violet-300/10 px-4 py-3 text-[10px] text-white/80"
+                        className="rounded-xl border border-violet-300/10 px-3.5 py-2.5 text-[10px] text-white/80"
                       >
                         {skillName}
                       </div>
@@ -1118,17 +1097,15 @@ const references = useSampleData
               </div>
             )}
 
-            {/* =================================================
-                EDUCATION
-            ================================================= */}
+            {/* EDUCATION */}
 
             {education.length > 0 && (
-              <div className="mt-10">
+              <div className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   04 — EDUCATION
                 </div>
 
-                <div className="mt-5 space-y-5">
+                <div className="mt-4 space-y-4">
                   {education
                     .slice(0, 3)
                     .map((item, index) => {
@@ -1208,17 +1185,15 @@ const references = useSampleData
               </div>
             )}
 
-            {/* =================================================
-                LANGUAGES
-            ================================================= */}
+            {/* LANGUAGES */}
 
             {languages.length > 0 && (
-              <div className="mt-10">
+              <div className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   LANGUAGES
                 </div>
 
-                <div className="mt-5 space-y-4">
+                <div className="mt-4 space-y-3">
                   {languages
                     .slice(0, 4)
                     .map((language, index) => {
@@ -1264,23 +1239,20 @@ const references = useSampleData
               </div>
             )}
 
-            {/* =================================================
-                INTERESTS
-            ================================================= */}
+            {/* INTERESTS */}
 
             {interests.length > 0 && (
-              <div className="mt-10">
+              <div className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   INTERESTS
                 </div>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {interests
                     .slice(0, 8)
                     .map((interest, index) => {
                       const name =
-                        typeof interest ===
-                        "string"
+                        typeof interest === "string"
                           ? interest
                           : getValue(
                               interest,
@@ -1308,21 +1280,19 @@ const references = useSampleData
               </div>
             )}
 
-            {/* =================================================
-                CONTACT
-            ================================================= */}
+            {/* CONTACT */}
 
             {(personal.email ||
               personal.phone ||
               personal.location ||
               personal.linkedin ||
               personal.github) && (
-              <div className="mt-10">
+              <div className="mt-7">
                 <div className="font-mono text-[11px] text-violet-300">
                   CONTACT
                 </div>
 
-                <div className="mt-5 space-y-3">
+                <div className="mt-4 space-y-2.5">
                   {personal.email && (
                     <div className="break-all text-[10px] leading-[1.5] text-white/50">
                       {personal.email}

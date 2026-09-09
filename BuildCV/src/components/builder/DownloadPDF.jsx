@@ -1,4 +1,5 @@
 import { useState } from "react"
+
 import html2canvas from "html2canvas"
 import { jsPDF } from "jspdf"
 
@@ -130,9 +131,11 @@ function oklabToRgb(L, a, b) {
     r: Math.round(
       clamp(linearToSrgb(red)) * 255
     ),
+
     g: Math.round(
       clamp(linearToSrgb(green)) * 255
     ),
+
     b: Math.round(
       clamp(linearToSrgb(blue)) * 255
     ),
@@ -157,16 +160,14 @@ function convertOklabColor(
       String(aValue)
         .trim()
         .endsWith("%")
-        ? (parseFloat(aValue) / 100) *
-          0.4
+        ? (parseFloat(aValue) / 100) * 0.4
         : parseFloat(aValue)
 
     const b =
       String(bValue)
         .trim()
         .endsWith("%")
-        ? (parseFloat(bValue) / 100) *
-          0.4
+        ? (parseFloat(bValue) / 100) * 0.4
         : parseFloat(bValue)
 
     if (
@@ -178,7 +179,6 @@ function convertOklabColor(
     }
 
     const rgb = oklabToRgb(L, a, b)
-
     const alpha = parseAlpha(alphaValue)
 
     if (alpha < 1) {
@@ -225,7 +225,6 @@ function convertOklchColor(
       C * Math.sin(radians)
 
     const rgb = oklabToRgb(L, a, b)
-
     const alpha = parseAlpha(alphaValue)
 
     if (alpha < 1) {
@@ -249,17 +248,15 @@ function sanitizeCssValue(value) {
 
   let result = String(value)
 
-  /*
-   * Convert OKLCH colors.
-   */
+  /* Convert OKLCH colors */
+
   result = result.replace(
     /oklch\(\s*([^\s/]+)\s+([^\s/]+)\s+([^\s/]+)(?:\s*\/\s*([^)]+))?\s*\)/gi,
     convertOklchColor
   )
 
-  /*
-   * Convert OKLAB colors.
-   */
+  /* Convert OKLAB colors */
+
   result = result.replace(
     /oklab\(\s*([^\s/]+)\s+([^\s/]+)\s+([^\s/]+)(?:\s*\/\s*([^)]+))?\s*\)/gi,
     convertOklabColor
@@ -284,11 +281,9 @@ function copyComputedStyles(
     window.getComputedStyle(source)
 
   /*
-   * Copy the browser's FINAL computed styles.
-   *
-   * This preserves the appearance without
-   * depending on Tailwind classes in the clone.
+   * Copy browser's final computed styles.
    */
+
   for (
     let i = 0;
     i < computed.length;
@@ -322,10 +317,9 @@ function copyComputedStyles(
   }
 
   /*
-   * Remove classes ONLY from the clone.
-   *
-   * The original resume remains untouched.
+   * Remove classes only from clone.
    */
+
   target.removeAttribute("class")
 }
 
@@ -337,24 +331,10 @@ function copyRenderedTree(
   source,
   target
 ) {
-  /*
-   * Copy this element's computed appearance.
-   */
   copyComputedStyles(
     source,
     target
   )
-
-  /*
-   * IMPORTANT:
-   *
-   * Do NOT add pseudo-elements here.
-   *
-   * Adding ::before / ::after as real
-   * children changes child indexes and
-   * causes resume information to be copied
-   * into the wrong elements.
-   */
 
   const sourceChildren =
     Array.from(
@@ -366,10 +346,6 @@ function copyRenderedTree(
       target.children
     )
 
-  /*
-   * Source and target now have exactly
-   * the same DOM structure.
-   */
   sourceChildren.forEach(
     (sourceChild, index) => {
       const targetChild =
@@ -394,11 +370,10 @@ function copyRenderedTree(
 async function waitForImages(
   container
 ) {
-  const images = Array.from(
-    container.querySelectorAll(
-      "img"
+  const images =
+    Array.from(
+      container.querySelectorAll("img")
     )
-  )
 
   await Promise.all(
     images.map(
@@ -442,10 +417,6 @@ async function waitForImages(
               finish
             )
 
-            /*
-             * Prevent one broken image
-             * from blocking PDF generation.
-             */
             setTimeout(
               finish,
               10000
@@ -539,9 +510,10 @@ function DownloadPDF({
         )
 
         /*
-         * Keep it rendered but place it
-         * far outside the visible viewport.
+         * Keep the capture area outside
+         * the visible viewport.
          */
+
         captureWrapper.style.position =
           "absolute"
 
@@ -554,23 +526,28 @@ function DownloadPDF({
         captureWrapper.style.width =
           "794px"
 
-        captureWrapper.style.height =
-          "1123px"
+        /*
+         * IMPORTANT:
+         *
+         * Do NOT force the wrapper
+         * to 1123px height.
+         *
+         * The resume is allowed to
+         * grow according to its
+         * actual content.
+         */
 
-        captureWrapper.style.minWidth =
-          "794px"
+        captureWrapper.style.height =
+          "auto"
 
         captureWrapper.style.minHeight =
-          "1123px"
-
-        captureWrapper.style.maxWidth =
-          "794px"
+          "0"
 
         captureWrapper.style.maxHeight =
-          "1123px"
+          "none"
 
         captureWrapper.style.overflow =
-          "hidden"
+          "visible"
 
         captureWrapper.style.margin =
           "0"
@@ -612,29 +589,35 @@ function DownloadPDF({
         )
 
         /* =================================================
-           FORCE RESUME SIZE
+           FORCE WIDTH ONLY
         ================================================= */
 
         clone.style.width =
           "794px"
 
-        clone.style.height =
-          "1123px"
-
         clone.style.minWidth =
           "794px"
-
-        clone.style.minHeight =
-          "1123px"
 
         clone.style.maxWidth =
           "794px"
 
+        /*
+         * IMPORTANT:
+         *
+         * Height must remain AUTO.
+         */
+
+        clone.style.height =
+          "auto"
+
+        clone.style.minHeight =
+          "0"
+
         clone.style.maxHeight =
-          "1123px"
+          "none"
 
         clone.style.overflow =
-          "hidden"
+          "visible"
 
         clone.style.transform =
           "none"
@@ -645,15 +628,8 @@ function DownloadPDF({
         clone.style.margin =
           "0"
 
-        /*
-         * Make sure the wrapper itself
-         * doesn't affect the dimensions.
-         */
-        captureWrapper.style.transform =
-          "none"
-
         /* =================================================
-           WAIT FOR CLONE IMAGES
+           WAIT FOR CLONE ASSETS
         ================================================= */
 
         await waitForImages(
@@ -663,9 +639,9 @@ function DownloadPDF({
         await waitForFonts()
 
         /*
-         * Give browser time to finish
-         * layout and painting.
+         * Allow browser to finish layout.
          */
+
         await new Promise(
           (resolve) => {
             requestAnimationFrame(
@@ -679,17 +655,51 @@ function DownloadPDF({
         )
 
         /* =================================================
-           CAPTURE RESUME
+           DETERMINE ACTUAL RESUME HEIGHT
+        ================================================= */
+
+        const resumeWidth =
+          794
+
+        const resumeHeight =
+          Math.max(
+            clone.scrollHeight,
+            clone.offsetHeight,
+            clone.getBoundingClientRect()
+              .height
+          )
+
+        if (
+          !Number.isFinite(
+            resumeHeight
+          ) ||
+          resumeHeight <= 0
+        ) {
+          throw new Error(
+            "Unable to determine the resume height."
+          )
+        }
+
+        /*
+         * Make sure the wrapper has
+         * exactly the required content
+         * height.
+         */
+
+        captureWrapper.style.height =
+          `${resumeHeight}px`
+
+        clone.style.height =
+          `${resumeHeight}px`
+
+        /* =================================================
+           CAPTURE FULL RESUME
         ================================================= */
 
         const canvas =
           await html2canvas(
             clone,
             {
-              /*
-               * 2x resolution keeps text
-               * sharp in the PDF.
-               */
               scale: 2,
 
               useCORS: true,
@@ -700,24 +710,29 @@ function DownloadPDF({
                 "#FFFFFF",
 
               /*
-               * Exact BuildCV resume
-               * dimensions.
+               * Width is fixed.
+               *
+               * Height is the ACTUAL
+               * resume height.
                */
-              width: 794,
 
-              height: 1123,
+              width:
+                resumeWidth,
 
-              windowWidth: 794,
+              height:
+                resumeHeight,
 
-              windowHeight: 1123,
+              windowWidth:
+                resumeWidth,
 
-              imageTimeout: 15000,
+              windowHeight:
+                resumeHeight,
+
+              imageTimeout:
+                15000,
 
               logging: false,
 
-              /*
-               * We don't use foreignObjectRendering.
-               */
               foreignObjectRendering:
                 false,
 
@@ -726,7 +741,7 @@ function DownloadPDF({
           )
 
         /* =================================================
-           CREATE ONE-PAGE A4 PDF
+           CREATE A4 PDF
         ================================================= */
 
         const pdf =
@@ -741,37 +756,106 @@ function DownloadPDF({
             compress: true,
           })
 
+        /* =================================================
+           A4 DIMENSIONS
+        ================================================= */
+
+        const A4_WIDTH =
+          210
+
+        const A4_HEIGHT =
+          297
+
         /*
-         * PNG is used here instead of JPEG.
+         * Small safe margin.
          *
-         * This keeps:
-         * - text
-         * - thin borders
-         * - small icons
-         * - profile image
-         * - fine details
-         *
-         * much cleaner.
+         * This prevents the resume
+         * from touching the physical
+         * edge of the PDF.
          */
+
+        const margin =
+          4
+
+        const availableWidth =
+          A4_WIDTH -
+          margin * 2
+
+        const availableHeight =
+          A4_HEIGHT -
+          margin * 2
+
+        /* =================================================
+           PRESERVE ASPECT RATIO
+        ================================================= */
+
+        const imageRatio =
+          canvas.height /
+          canvas.width
+
+        let imageWidth =
+          availableWidth
+
+        let imageHeight =
+          imageWidth *
+          imageRatio
+
+        /*
+         * If the resume is taller
+         * than the available A4 area,
+         * scale it down proportionally.
+         */
+
+        if (
+          imageHeight >
+          availableHeight
+        ) {
+          imageHeight =
+            availableHeight
+
+          imageWidth =
+            imageHeight /
+            imageRatio
+        }
+
+        /*
+         * Center horizontally.
+         */
+
+        const x =
+          (A4_WIDTH -
+            imageWidth) /
+          2
+
+        /*
+         * Center vertically only when
+         * there is extra space.
+         */
+
+        const y =
+          Math.max(
+            margin,
+            (A4_HEIGHT -
+              imageHeight) /
+              2
+          )
+
+        /* =================================================
+           ADD COMPLETE RESUME
+        ================================================= */
+
         const imageData =
           canvas.toDataURL(
             "image/png"
           )
 
-        /*
-         * A4:
-         *
-         * 210mm × 297mm
-         *
-         * One image = one page.
-         */
         pdf.addImage(
           imageData,
           "PNG",
-          0,
-          0,
-          210,
-          297,
+          x,
+          y,
+          imageWidth,
+          imageHeight,
           undefined,
           "FAST"
         )

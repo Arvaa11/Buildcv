@@ -60,171 +60,402 @@ const templateOptions = [
 ========================================================= */
 
 function ModernPreview() {
+  const skills = [
+    "React",
+    "TypeScript",
+    "JavaScript",
+    "UI Design",
+    "Figma",
+    "Tailwind CSS",
+  ];
+
   return (
-    <div className="h-full w-full bg-white p-5 text-slate-900">
+    <div className="h-full w-full bg-slate-50 font-sans text-slate-900">
 
-      {/* Header */}
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-      <div className="flex items-start justify-between gap-3">
+      <header className="relative overflow-hidden bg-white px-5 py-5">
 
-        <div>
+        {/* Decorative Circle */}
 
-          <h2 className="text-[15px] font-extrabold tracking-tight">
-            Alex Morgan
-          </h2>
+        <div className="absolute right-[-25px] top-[-25px] h-20 w-20 rounded-full bg-indigo-100" />
 
-          <p className="mt-1 text-[7px] font-bold uppercase tracking-[0.12em] text-buildcv-violet">
-            Frontend Developer
-          </p>
+        <div className="relative flex items-center gap-3">
 
-        </div>
+          {/* Profile */}
 
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-buildcv-violet-50 text-[8px] font-bold text-buildcv-violet">
-          AM
-        </div>
-
-      </div>
-
-
-      {/* Contact */}
-
-      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[5.5px] text-slate-500">
-        <span>alex@email.com</span>
-        <span>+1 234 567</span>
-        <span>New York</span>
-        <span>linkedin.com/alex</span>
-      </div>
-
-
-      <div className="my-3 h-px bg-slate-200" />
-
-
-      {/* Profile */}
-
-      <PreviewSectionTitle>
-        Profile
-      </PreviewSectionTitle>
-
-      <p className="mt-1.5 text-[6.5px] leading-[1.5] text-slate-500">
-        Frontend developer passionate about creating responsive
-        and user-friendly web experiences.
-      </p>
-
-
-      {/* Experience */}
-
-      <div className="mt-4">
-
-        <PreviewSectionTitle>
-          Experience
-        </PreviewSectionTitle>
-
-        <div className="mt-2 space-y-3">
-
-          <ModernExperience
-            title="Frontend Developer"
-            company="Tech Company"
-            date="2023 — Present"
-          />
-
-          <ModernExperience
-            title="Web Developer"
-            company="Creative Studio"
-            date="2021 — 2023"
-          />
-
-        </div>
-
-      </div>
-
-
-      {/* Education */}
-
-      <div className="mt-4">
-
-        <PreviewSectionTitle>
-          Education
-        </PreviewSectionTitle>
-
-        <div className="mt-2">
-
-          <p className="text-[7px] font-bold">
-            BS Computer Science
-          </p>
-
-          <p className="mt-0.5 text-[6px] text-slate-500">
-            University of Technology
-          </p>
-
-        </div>
-
-      </div>
-
-
-      {/* Projects */}
-
-      <div className="mt-4">
-
-        <PreviewSectionTitle>
-          Projects
-        </PreviewSectionTitle>
-
-        <div className="mt-2">
-
-          <p className="text-[7px] font-bold">
-            Portfolio Website
-          </p>
-
-          <p className="mt-0.5 text-[6px] text-slate-500">
-            React • Tailwind CSS • JavaScript
-          </p>
-
-        </div>
-
-      </div>
-
-
-      {/* Skills */}
-
-      <div className="mt-4">
-
-        <PreviewSectionTitle>
-          Skills
-        </PreviewSectionTitle>
-
-        <div className="mt-2 flex flex-wrap gap-1">
-
-          {[
-            "React",
-            "JavaScript",
-            "TypeScript",
-            "Git",
-            "CSS",
-          ].map((skill) => (
-
-            <span
-              key={skill}
-              className="
-                rounded
-                bg-buildcv-violet-50
-                px-1.5
-                py-1
-                text-[5.5px]
-                font-semibold
-                text-buildcv-violet-600
-              "
-            >
-              {skill}
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 ring-1 ring-indigo-200">
+            <span className="text-[7px] font-black text-indigo-600">
+              OC
             </span>
+          </div>
 
-          ))}
+          <div className="min-w-0">
+
+            {/* Name */}
+
+            <h2 className="text-[16px] font-black leading-none tracking-[-0.04em] text-slate-900">
+              OLIVIA CARTER
+            </h2>
+
+            {/* Job Title */}
+
+            <p className="mt-1.5 text-[6px] font-bold tracking-[0.18em] text-indigo-600">
+              FRONTEND DEVELOPER
+            </p>
+
+            {/* Contact */}
+
+            <p className="mt-1.5 text-[4.5px] leading-[1.5] text-slate-400">
+              olivia.carter@example.com • +1 415 555 0198 • San Francisco, CA
+            </p>
+
+          </div>
 
         </div>
 
-      </div>
+      </header>
+
+
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
+
+      <main className="px-5 py-4">
+
+        <div className="grid grid-cols-[1.5fr_0.7fr] gap-4">
+
+          {/* =================================================
+              LEFT COLUMN
+          ================================================= */}
+
+          <div>
+
+            {/* =================================================
+                PROFILE
+            ================================================= */}
+
+            <section className="rounded-xl bg-indigo-600 p-3.5 text-white">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-200">
+                PROFILE
+              </div>
+
+              <p className="mt-1.5 text-[9px] font-extrabold leading-[1.25]">
+                Frontend developer combining technology, design,
+                and usability to create scalable digital products
+                and effortless user experiences.
+              </p>
+
+            </section>
+
+
+            {/* =================================================
+                EXPERIENCE
+            ================================================= */}
+
+            <section className="mt-4">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                EXPERIENCE
+              </div>
+
+              <div className="mt-2.5 space-y-2.5">
+
+                {/* Experience 1 */}
+
+                <div className="rounded-lg bg-white p-2.5 shadow-sm">
+
+                  <p className="text-[7px] font-bold leading-tight text-slate-900">
+                    Senior Frontend Developer
+                  </p>
+
+                  <p className="mt-0.5 text-[5px] text-indigo-600">
+                    Northstar Digital • 2024 — Present
+                  </p>
+
+                  <ul className="mt-1.5 space-y-1">
+
+                    <li className="relative pl-2 text-[4.8px] leading-[1.45] text-slate-600">
+                      <span className="absolute left-0 top-[3px] h-[3px] w-[3px] rounded-full bg-indigo-400" />
+                      Built scalable React interfaces for digital products.
+                    </li>
+
+                    <li className="relative pl-2 text-[4.8px] leading-[1.45] text-slate-600">
+                      <span className="absolute left-0 top-[3px] h-[3px] w-[3px] rounded-full bg-indigo-400" />
+                      Created accessible and reusable UI components.
+                    </li>
+
+                  </ul>
+
+                </div>
+
+
+                {/* Experience 2 */}
+
+                <div className="rounded-lg bg-white p-2.5 shadow-sm">
+
+                  <p className="text-[7px] font-bold leading-tight text-slate-900">
+                    Frontend Developer
+                  </p>
+
+                  <p className="mt-0.5 text-[5px] text-indigo-600">
+                    Brightline Technologies • 2022 — 2024
+                  </p>
+
+                  <ul className="mt-1.5 space-y-1">
+
+                    <li className="relative pl-2 text-[4.8px] leading-[1.45] text-slate-600">
+                      <span className="absolute left-0 top-[3px] h-[3px] w-[3px] rounded-full bg-indigo-400" />
+                      Developed responsive React applications.
+                    </li>
+
+                    <li className="relative pl-2 text-[4.8px] leading-[1.45] text-slate-600">
+                      <span className="absolute left-0 top-[3px] h-[3px] w-[3px] rounded-full bg-indigo-400" />
+                      Integrated REST APIs and design systems.
+                    </li>
+
+                  </ul>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            {/* =================================================
+                PROJECTS
+            ================================================= */}
+
+            <section className="mt-4">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                PROJECTS
+              </div>
+
+              <div className="mt-2.5 space-y-2">
+
+                <div>
+
+                  <p className="text-[6.5px] font-bold text-slate-900">
+                    BuildCV
+                  </p>
+
+                  <p className="mt-0.5 text-[4.8px] leading-[1.5] text-slate-600">
+                    Professional resume builder with live previews
+                    and customizable templates.
+                  </p>
+
+                  <p className="mt-0.5 text-[4px] text-indigo-500">
+                    React • Tailwind CSS • JavaScript
+                  </p>
+
+                </div>
+
+
+                <div>
+
+                  <p className="text-[6.5px] font-bold text-slate-900">
+                    Analytics Dashboard
+                  </p>
+
+                  <p className="mt-0.5 text-[4.8px] leading-[1.5] text-slate-600">
+                    Responsive analytics interface for visualizing
+                    business insights.
+                  </p>
+
+                  <p className="mt-0.5 text-[4px] text-indigo-500">
+                    React • TypeScript • Charts
+                  </p>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            {/* =================================================
+                EDUCATION
+            ================================================= */}
+
+            <section className="mt-4">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                EDUCATION
+              </div>
+
+              <div className="mt-2.5">
+
+                <p className="text-[6.5px] font-bold text-slate-900">
+                  Bachelor of Computer Science
+                </p>
+
+                <p className="mt-0.5 text-[4.8px] text-slate-500">
+                  University of California • 2016 — 2020
+                </p>
+
+              </div>
+
+            </section>
+
+          </div>
+
+
+          {/* =================================================
+              RIGHT COLUMN
+          ================================================= */}
+
+          <aside>
+
+            {/* =================================================
+                SKILLS
+            ================================================= */}
+
+            <section className="rounded-xl bg-white p-3 shadow-sm">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                SKILLS
+              </div>
+
+              <div className="mt-2.5 space-y-1.5">
+
+                {skills.map((skill) => (
+                  <div
+                    key={skill}
+                    className="rounded-md bg-indigo-50 px-2 py-1.5 text-[4.8px] font-semibold leading-tight text-indigo-700"
+                  >
+                    {skill}
+                  </div>
+                ))}
+
+              </div>
+
+            </section>
+
+
+            {/* =================================================
+                CONTACT
+            ================================================= */}
+
+            <section className="mt-3 rounded-xl bg-white p-3 shadow-sm">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                CONTACT
+              </div>
+
+              <div className="mt-2.5 space-y-1 text-[4.8px] leading-[1.5] text-slate-500">
+
+                <p>
+                  olivia.carter@example.com
+                </p>
+
+                <p>
+                  +1 415 555 0198
+                </p>
+
+                <p>
+                  San Francisco, CA
+                </p>
+
+                <p>
+                  linkedin.com/in/oliviacarter
+                </p>
+
+                <p>
+                  github.com/oliviacarter
+                </p>
+
+              </div>
+
+            </section>
+
+
+            {/* =================================================
+                LANGUAGES
+            ================================================= */}
+
+            <section className="mt-3 rounded-xl bg-white p-3 shadow-sm">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                LANGUAGES
+              </div>
+
+              <div className="mt-2.5 space-y-1.5">
+
+                <p className="text-[4.8px] text-slate-600">
+                  <span className="font-semibold">
+                    English
+                  </span>
+                  <span className="text-slate-400">
+                    {" "}• Native
+                  </span>
+                </p>
+
+                <p className="text-[4.8px] text-slate-600">
+                  <span className="font-semibold">
+                    Spanish
+                  </span>
+                  <span className="text-slate-400">
+                    {" "}• Professional
+                  </span>
+                </p>
+
+                <p className="text-[4.8px] text-slate-600">
+                  <span className="font-semibold">
+                    French
+                  </span>
+                  <span className="text-slate-400">
+                    {" "}• Conversational
+                  </span>
+                </p>
+
+              </div>
+
+            </section>
+
+
+            {/* =================================================
+                INTERESTS
+            ================================================= */}
+
+            <section className="mt-3 rounded-xl bg-white p-3 shadow-sm">
+
+              <div className="text-[6px] font-bold tracking-[0.18em] text-indigo-700">
+                INTERESTS
+              </div>
+
+              <div className="mt-2.5 flex flex-wrap gap-1">
+
+                {[
+                  "Web Design",
+                  "Open Source",
+                  "Photography",
+                  "Technology",
+                ].map((interest) => (
+                  <span
+                    key={interest}
+                    className="rounded-full bg-indigo-50 px-1.5 py-1 text-[4px] font-medium text-indigo-600"
+                  >
+                    {interest}
+                  </span>
+                ))}
+
+              </div>
+
+            </section>
+
+          </aside>
+
+        </div>
+
+      </main>
 
     </div>
-  )
+  );
 }
 
 
@@ -244,7 +475,6 @@ function ProfessionalPreview() {
           AM
         </div>
 
-
         {/* Contact */}
 
         <div className="mt-4">
@@ -254,14 +484,15 @@ function ProfessionalPreview() {
           </SideTitle>
 
           <div className="mt-2 space-y-2 text-[5.5px] leading-tight text-slate-300">
+
             <p>alex@email.com</p>
             <p>+1 234 567</p>
             <p>New York</p>
             <p>linkedin.com/alex</p>
+
           </div>
 
         </div>
-
 
         {/* Skills */}
 
@@ -310,7 +541,6 @@ function ProfessionalPreview() {
 
         </div>
 
-
         {/* Education */}
 
         <div className="mt-5">
@@ -331,7 +561,6 @@ function ProfessionalPreview() {
 
       </aside>
 
-
       {/* MAIN */}
 
       <main className="flex-1 p-4">
@@ -346,7 +575,6 @@ function ProfessionalPreview() {
 
         <div className="my-3 h-px bg-slate-200" />
 
-
         <ProfessionalSection title="Professional Summary">
 
           <p className="text-[6.5px] leading-[1.5] text-slate-500">
@@ -355,7 +583,6 @@ function ProfessionalPreview() {
           </p>
 
         </ProfessionalSection>
-
 
         <ProfessionalSection title="Work Experience">
 
@@ -371,7 +598,6 @@ function ProfessionalPreview() {
 
         </ProfessionalSection>
 
-
         <ProfessionalSection title="Projects">
 
           <p className="text-[7px] font-bold">
@@ -383,7 +609,6 @@ function ProfessionalPreview() {
           </p>
 
         </ProfessionalSection>
-
 
         <ProfessionalSection title="Certifications">
 
@@ -399,107 +624,354 @@ function ProfessionalPreview() {
   )
 }
 
-
 /* =========================================================
    MINIMAL PREVIEW
 ========================================================= */
 
 function MinimalPreview() {
   return (
-    <div className="h-full w-full bg-white p-5 text-slate-900">
+    <div className="h-full w-full bg-white px-5 py-5 text-slate-900">
 
-      <div>
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-        <h2 className="text-[17px] font-extrabold tracking-tight">
-          Alex Morgan
-        </h2>
+      <header className="border-b-2 border-slate-900 pb-4">
 
-        <p className="mt-1 text-[7px] font-medium text-slate-500">
-          Frontend Developer
-        </p>
+        <div className="flex items-end justify-between gap-3">
 
-        <p className="mt-2 text-[5.5px] text-slate-400">
-          alex@email.com • +1 234 567 • New York
-        </p>
+          <div className="min-w-0 flex-1">
 
-      </div>
+            <h2 className="text-[17px] font-black leading-none tracking-[-0.04em] text-slate-900">
+              Olivia Carter
+            </h2>
 
-
-      <div className="my-4 h-px bg-slate-200" />
-
-
-      <MinimalSection title="About">
-
-        <p className="text-[6.5px] leading-[1.5] text-slate-500">
-          Creative frontend developer focused on building
-          clean and engaging digital experiences.
-        </p>
-
-      </MinimalSection>
-
-
-      <MinimalSection title="Experience">
-
-        <MinimalExperience
-          title="Frontend Developer"
-          company="Tech Company"
-          date="2023 — Present"
-        />
-
-        <MinimalExperience
-          title="Web Developer"
-          company="Creative Studio"
-          date="2021 — 2023"
-        />
-
-      </MinimalSection>
-
-
-      <MinimalSection title="Education">
-
-        <div className="flex justify-between gap-2">
-
-          <div>
-
-            <p className="text-[7px] font-bold">
-              BS Computer Science
-            </p>
-
-            <p className="mt-0.5 text-[6px] text-slate-500">
-              University of Technology
+            <p className="mt-2 text-[7px] font-semibold uppercase tracking-[0.16em] text-slate-600">
+              Creative Developer
             </p>
 
           </div>
 
-          <span className="text-[5.5px] text-slate-400">
-            2021 — 2025
-          </span>
+          {/* Profile placeholder */}
+
+          <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border border-slate-200">
+            <div className="flex h-full w-full items-center justify-center bg-slate-50 text-[6px] font-bold text-slate-400">
+              OC
+            </div>
+          </div>
 
         </div>
 
-      </MinimalSection>
+        <div className="mt-3 flex flex-wrap gap-x-2.5 gap-y-1 text-[5.5px] leading-[1.5] text-slate-500">
+          <span>olivia.carter@example.com</span>
+          <span>+1 415 555 0182</span>
+          <span>San Francisco, CA</span>
+        </div>
+
+      </header>
 
 
-      <MinimalSection title="Projects">
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
 
-        <p className="text-[7px] font-bold">
-          Portfolio Website
-        </p>
+      <main className="mt-5">
 
-        <p className="mt-0.5 text-[6px] text-slate-500">
-          React • Tailwind CSS • JavaScript
-        </p>
+        {/* ===================================================
+            PROFILE
+        =================================================== */}
 
-      </MinimalSection>
+        <section className="mb-5">
+
+          <div className="mb-2 pb-0.5 text-[8px] font-extrabold tracking-[0.16em] text-slate-900">
+            PROFILE
+          </div>
+
+          <p className="text-[6.5px] leading-[1.55] text-slate-600">
+            Creative developer focused on building thoughtful
+            digital experiences with clean interfaces,
+            accessible interactions, and scalable front-end
+            architecture.
+          </p>
+
+        </section>
 
 
-      <MinimalSection title="Skills">
+        {/* ===================================================
+            EXPERIENCE
+        =================================================== */}
 
-        <p className="text-[6.5px] leading-5 text-slate-500">
-          React • JavaScript • TypeScript • Git • CSS
-        </p>
+        <section className="mb-5">
 
-      </MinimalSection>
+          <div className="mb-2 pb-0.5 text-[8px] font-extrabold tracking-[0.16em] text-slate-900">
+            EXPERIENCE
+          </div>
+
+          <div className="space-y-3.5">
+
+            <article>
+
+              <div className="flex items-start justify-between gap-3">
+
+                <div className="min-w-0 flex-1">
+
+                  <h3 className="text-[7px] font-bold leading-[1.4] text-slate-900">
+                    Senior Frontend Developer
+                  </h3>
+
+                  <p className="mt-0.5 text-[5.5px] leading-[1.5] text-slate-500">
+                    Northstar Digital · San Francisco, CA
+                  </p>
+
+                </div>
+
+                <span className="shrink-0 text-[5px] text-slate-500">
+                  2022 — Present
+                </span>
+
+              </div>
+
+              <ul className="mt-1.5 space-y-0.5">
+
+                <li className="relative pl-2 text-[5.5px] leading-[1.5] text-slate-600">
+                  <span className="absolute left-0 top-[4px] h-[2px] w-[2px] rounded-full bg-slate-400" />
+                  Built responsive web applications using React.
+                </li>
+
+                <li className="relative pl-2 text-[5.5px] leading-[1.5] text-slate-600">
+                  <span className="absolute left-0 top-[4px] h-[2px] w-[2px] rounded-full bg-slate-400" />
+                  Collaborated with designers and engineers.
+                </li>
+
+              </ul>
+
+            </article>
+
+
+            <article>
+
+              <div className="flex items-start justify-between gap-3">
+
+                <div className="min-w-0 flex-1">
+
+                  <h3 className="text-[7px] font-bold leading-[1.4] text-slate-900">
+                    Frontend Developer
+                  </h3>
+
+                  <p className="mt-0.5 text-[5.5px] leading-[1.5] text-slate-500">
+                    Pixel Studio · San Francisco, CA
+                  </p>
+
+                </div>
+
+                <span className="shrink-0 text-[5px] text-slate-500">
+                  2020 — 2022
+                </span>
+
+              </div>
+
+              <p className="mt-1 text-[5.5px] leading-[1.5] text-slate-600">
+                Developed reusable interface components and responsive layouts.
+              </p>
+
+            </article>
+
+          </div>
+
+        </section>
+
+
+        {/* ===================================================
+            EDUCATION
+        =================================================== */}
+
+        <section className="mb-5">
+
+          <div className="mb-2 pb-0.5 text-[8px] font-extrabold tracking-[0.16em] text-slate-900">
+            EDUCATION
+          </div>
+
+          <div className="flex items-start justify-between gap-3">
+
+            <div>
+
+              <p className="text-[7px] font-bold text-slate-900">
+                Bachelor of Computer Science
+              </p>
+
+              <p className="mt-0.5 text-[5.5px] text-slate-500">
+                University of California · Berkeley, CA
+              </p>
+
+            </div>
+
+            <span className="shrink-0 text-[5px] text-slate-500">
+              2016 — 2020
+            </span>
+
+          </div>
+
+        </section>
+
+
+        {/* ===================================================
+            SKILLS
+        =================================================== */}
+
+        <section className="mb-5">
+
+          <div className="mb-2 pb-0.5 text-[8px] font-extrabold tracking-[0.16em] text-slate-900">
+            SKILLS
+          </div>
+
+          <div className="flex flex-wrap gap-1">
+
+            {[
+              "React",
+              "JavaScript",
+              "TypeScript",
+              "HTML & CSS",
+              "Git & GitHub",
+              "Node.js",
+              "UI/UX",
+            ].map((skill) => (
+              <span
+                key={skill}
+                className="rounded border border-slate-200 px-1.5 py-1 text-[5px] font-medium leading-none text-slate-600"
+              >
+                {skill}
+              </span>
+            ))}
+
+          </div>
+
+        </section>
+
+
+        {/* ===================================================
+            PROJECTS
+        =================================================== */}
+
+        <section className="mb-5">
+
+          <div className="mb-2 pb-0.5 text-[8px] font-extrabold tracking-[0.16em] text-slate-900">
+            PROJECTS
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+
+            <article>
+
+              <h3 className="text-[6.5px] font-bold text-slate-900">
+                Portfolio Platform
+              </h3>
+
+              <p className="mt-0.5 text-[5.5px] leading-[1.5] text-slate-600">
+                Responsive portfolio platform for creative projects.
+              </p>
+
+              <p className="mt-1 text-[4.5px] uppercase tracking-wide text-slate-500">
+                React · JavaScript · CSS
+              </p>
+
+            </article>
+
+
+            <article>
+
+              <h3 className="text-[6.5px] font-bold text-slate-900">
+                Task Management App
+              </h3>
+
+              <p className="mt-0.5 text-[5.5px] leading-[1.5] text-slate-600">
+                Productivity application for organizing daily tasks.
+              </p>
+
+              <p className="mt-1 text-[4.5px] uppercase tracking-wide text-slate-500">
+                React · Node.js · MongoDB
+              </p>
+
+            </article>
+
+          </div>
+
+        </section>
+
+
+        {/* ===================================================
+            ADDITIONAL INFORMATION
+        =================================================== */}
+
+        <div className="grid grid-cols-3 gap-x-4 border-t border-slate-200 pt-3">
+
+          <section>
+
+            <div className="mb-2 text-[7px] font-extrabold tracking-[0.12em] text-slate-900">
+              LANGUAGES
+            </div>
+
+            <p className="text-[5.5px] font-semibold text-slate-900">
+              English
+            </p>
+
+            <p className="text-[5px] text-slate-500">
+              Native
+            </p>
+
+            <p className="mt-1 text-[5.5px] font-semibold text-slate-900">
+              Spanish
+            </p>
+
+            <p className="text-[5px] text-slate-500">
+              Professional
+            </p>
+
+          </section>
+
+
+          <section>
+
+            <div className="mb-2 text-[7px] font-extrabold tracking-[0.12em] text-slate-900">
+              INTERESTS
+            </div>
+
+            <div className="flex flex-wrap gap-1">
+
+              {["Design", "Photography", "Technology"].map(
+                (interest) => (
+                  <span
+                    key={interest}
+                    className="border border-slate-200 px-1 py-0.5 text-[4.5px] text-slate-500"
+                  >
+                    {interest}
+                  </span>
+                )
+              )}
+
+            </div>
+
+          </section>
+
+
+          <section>
+
+            <div className="mb-2 text-[7px] font-extrabold tracking-[0.12em] text-slate-900">
+              CERTIFICATIONS
+            </div>
+
+            <p className="text-[5.5px] font-semibold text-slate-900">
+              Meta Front-End Developer
+            </p>
+
+            <p className="mt-0.5 text-[5px] text-slate-500">
+              Meta · 2023
+            </p>
+
+          </section>
+
+        </div>
+
+      </main>
 
     </div>
   )
@@ -526,7 +998,6 @@ function PreviewSectionTitle({ children }) {
   )
 }
 
-
 function SideTitle({ children }) {
   return (
     <h3
@@ -545,7 +1016,6 @@ function SideTitle({ children }) {
     </h3>
   )
 }
-
 
 function ModernExperience({ title, company, date }) {
   return (
@@ -582,7 +1052,6 @@ function ModernExperience({ title, company, date }) {
   )
 }
 
-
 function ProfessionalSection({ title, children }) {
   return (
     <section className="mt-4">
@@ -596,7 +1065,6 @@ function ProfessionalSection({ title, children }) {
     </section>
   )
 }
-
 
 function ProfessionalJob({ title, company }) {
   return (
@@ -621,7 +1089,6 @@ function ProfessionalJob({ title, company }) {
   )
 }
 
-
 function MinimalSection({ title, children }) {
   return (
     <section className="mt-4">
@@ -635,7 +1102,6 @@ function MinimalSection({ title, children }) {
     </section>
   )
 }
-
 
 function MinimalExperience({ title, company, date }) {
   return (
@@ -665,6 +1131,34 @@ function MinimalExperience({ title, company, date }) {
   )
 }
 
+/* =========================================================
+   TAG
+========================================================= */
+
+function Tag({ children }) {
+  return (
+    <span
+      className="
+        rounded-full
+        border
+        border-slate-200
+        bg-slate-50
+        px-2.5
+        py-1
+        text-[10px]
+        font-semibold
+        text-slate-600
+        transition-colors
+        duration-300
+        group-hover:border-buildcv-violet/10
+        group-hover:bg-buildcv-violet-50
+        group-hover:text-buildcv-violet-600
+      "
+    >
+      {children}
+    </span>
+  )
+}
 
 /* =========================================================
    MAIN COMPONENT
@@ -674,22 +1168,32 @@ function Templates() {
 
   const navigate = useNavigate()
 
+  /* =======================================================
+     SELECT TEMPLATE → BUILDER
+  ======================================================= */
 
   const handleUseTemplate = (template) => {
 
+    // Save selected template ID
     localStorage.setItem(
       "buildcv-template",
       template.id
     )
 
+    // Save complete template information
     sessionStorage.setItem(
       "buildcv-selected-template",
       JSON.stringify(template)
     )
 
+    // Open Builder
     navigate("/builder")
   }
 
+
+  /* =======================================================
+     RENDER TEMPLATE PREVIEW
+  ======================================================= */
 
   const renderPreview = (templateId) => {
 
@@ -752,7 +1256,6 @@ function Templates() {
         "
       />
 
-
       {/* Grid */}
 
       <div
@@ -767,9 +1270,7 @@ function Templates() {
         "
       />
 
-
       <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-
 
         {/* =====================================================
             HEADER
@@ -805,7 +1306,6 @@ function Templates() {
 
           </div>
 
-
           <h2
             data-template-title
             className="
@@ -839,7 +1339,6 @@ function Templates() {
 
           </h2>
 
-
           <p
             data-template-description
             className="
@@ -859,7 +1358,6 @@ function Templates() {
           </p>
 
         </div>
-
 
         {/* =====================================================
             TEMPLATE GRID
@@ -900,9 +1398,7 @@ function Templates() {
               "
             >
 
-              {/* =================================================
-                  CARD GLOW
-              ================================================== */}
+              {/* CARD GLOW */}
 
               <div
                 className="
@@ -921,10 +1417,7 @@ function Templates() {
                 "
               />
 
-
-              {/* =================================================
-                  PREVIEW AREA
-              ================================================== */}
+              {/* PREVIEW AREA */}
 
               <div
                 className="
@@ -957,7 +1450,6 @@ function Templates() {
                     group-hover:opacity-100
                   "
                 />
-
 
                 {/* Category */}
 
@@ -994,7 +1486,6 @@ function Templates() {
 
                 </div>
 
-
                 {/* Resume */}
 
                 <div
@@ -1023,10 +1514,7 @@ function Templates() {
 
                 </div>
 
-
-                {/* =================================================
-                    HOVER OVERLAY
-                ================================================== */}
+                {/* HOVER OVERLAY */}
 
                 <div
                   className="
@@ -1080,12 +1568,10 @@ function Templates() {
                         bg-gradient-to-r
                         from-transparent
                         via-buildcv-violet/20
-                        hover:text-buildcv-text
                         to-transparent
                         transition-transform
                         duration-700
                         group-hover/button:translate-x-full
-                        
                       "
                     />
 
@@ -1099,7 +1585,6 @@ function Templates() {
                         transition-transform
                         duration-300
                         group-hover/button:translate-x-1
-                      
                       "
                     >
                       →
@@ -1111,10 +1596,7 @@ function Templates() {
 
               </div>
 
-
-              {/* =================================================
-                  INFORMATION
-              ================================================== */}
+              {/* INFORMATION */}
 
               <div className="relative p-6">
 
@@ -1149,7 +1631,6 @@ function Templates() {
 
                   </div>
 
-
                   {/* Number */}
 
                   <span
@@ -1167,7 +1648,6 @@ function Templates() {
 
                 </div>
 
-
                 <p
                   className="
                     mt-3
@@ -1178,7 +1658,6 @@ function Templates() {
                 >
                   {template.description}
                 </p>
-
 
                 {/* Tags */}
 
@@ -1193,7 +1672,6 @@ function Templates() {
                   ))}
 
                 </div>
-
 
                 {/* Button */}
 
@@ -1249,6 +1727,57 @@ function Templates() {
 
         </div>
 
+        {/* =====================================================
+            EXPLORE ALL TEMPLATES
+        ====================================================== */}
+
+        <div className="mt-12 flex justify-center">
+
+          <button
+            type="button"
+            onClick={() => navigate("/templates")}
+            className="
+              group
+    relative
+    inline-flex
+    items-center
+    justify-center
+    gap-2.5
+    overflow-hidden
+    rounded-buildcv-md
+    bg-gradient-to-r
+    from-buildcv-violet
+    to-buildcv-accent
+    px-6
+    py-3.5
+    text-sm
+    font-semibold
+    text-white
+    shadow-buildcv-violet
+    transition-all
+    duration-500
+    hover:-translate-y-1
+    hover:shadow-buildcv-xl
+            "
+          >
+
+            <span>
+              Explore All Templates
+            </span>
+
+            <span
+              className="
+                transition-transform
+                duration-300
+                group-hover:translate-x-1
+              "
+            >
+              →
+            </span>
+
+          </button>
+
+        </div>
 
         {/* =====================================================
             FOOTER NOTE
@@ -1257,7 +1786,7 @@ function Templates() {
         <div
           data-template-footer
           className="
-            mt-12
+            mt-8
             flex
             items-center
             justify-center
@@ -1277,37 +1806,6 @@ function Templates() {
       </div>
 
     </section>
-  )
-}
-
-
-/* =========================================================
-   TAG
-========================================================= */
-
-function Tag({ children }) {
-
-  return (
-    <span
-      className="
-        rounded-full
-        border
-        border-slate-200
-        bg-slate-50
-        px-2.5
-        py-1
-        text-[10px]
-        font-semibold
-        text-slate-600
-        transition-colors
-        duration-300
-        group-hover:border-buildcv-violet/10
-        group-hover:bg-buildcv-violet-50
-        group-hover:text-buildcv-violet-600
-      "
-    >
-      {children}
-    </span>
   )
 }
 

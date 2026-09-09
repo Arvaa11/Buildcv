@@ -132,16 +132,19 @@ function NoirPreview({
       title: "Design System Initiative",
       description:
         "Established reusable interface patterns that improved consistency across product experiences.",
+      date: "2025",
     },
     {
       title: "Frontend Mentorship",
       description:
         "Supported junior developers through code reviews, technical guidance, and collaborative learning.",
+      date: "2024",
     },
     {
       title: "Product Experience Improvement",
       description:
         "Partnered with product teams to simplify workflows and create more intuitive user experiences.",
+      date: "2023",
     },
   ];
 
@@ -172,169 +175,147 @@ function NoirPreview({
   ];
 
   // =========================================================
-  // PERSONAL DATA
-  // =========================================================
-
-  const personal = useSampleData
-    ? {
-        ...samplePersonal,
-        ...(data.personal || {}),
-        ...(formData.personal || {}),
-      }
-    : {
-        fullName: "",
-        jobTitle: "",
-        email: "",
-        phone: "",
-        location: "",
-        linkedin: "",
-        github: "",
-        summary: "",
-        profileImage: "",
-        ...(data.personal || {}),
-        ...(formData.personal || {}),
-      };
-
-  // =========================================================
-  // RESUME SECTIONS
-  // =========================================================
-
-  const education = useSampleData
-    ? Array.isArray(formData.education) &&
-      formData.education.length > 0
-      ? formData.education
-      : Array.isArray(data.education) &&
-        data.education.length > 0
-      ? data.education
-      : sampleEducation
-    : Array.isArray(formData.education)
-    ? formData.education
-    : Array.isArray(data.education)
-    ? data.education
-    : [];
-
-  const experience = useSampleData
-    ? Array.isArray(formData.experience) &&
-      formData.experience.length > 0
-      ? formData.experience
-      : Array.isArray(data.experience) &&
-        data.experience.length > 0
-      ? data.experience
-      : sampleExperience
-    : Array.isArray(formData.experience)
-    ? formData.experience
-    : Array.isArray(data.experience)
-    ? data.experience
-    : [];
-
-  const skills = useSampleData
-    ? Array.isArray(formData.skills) &&
-      formData.skills.length > 0
-      ? formData.skills
-      : Array.isArray(data.skills) &&
-        data.skills.length > 0
-      ? data.skills
-      : sampleSkills
-    : Array.isArray(formData.skills)
-    ? formData.skills
-    : Array.isArray(data.skills)
-    ? data.skills
-    : [];
-
-  const projects = useSampleData
-    ? Array.isArray(formData.projects) &&
-      formData.projects.length > 0
-      ? formData.projects
-      : Array.isArray(data.projects) &&
-        data.projects.length > 0
-      ? data.projects
-      : sampleProjects
-    : Array.isArray(formData.projects)
-    ? formData.projects
-    : Array.isArray(data.projects)
-    ? data.projects
-    : [];
-
-const certifications = useSampleData
-  ? formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items) &&
-    formData.certifications.items.length > 0
-    ? formData.certifications.items
-    : data.certifications?.enabled &&
-      Array.isArray(data.certifications.items) &&
-      data.certifications.items.length > 0
-    ? data.certifications.items
-    : Array.isArray(formData.certifications)
-    ? formData.certifications
-    : Array.isArray(data.certifications)
-    ? data.certifications
-    : sampleCertifications
-  : formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items)
-  ? formData.certifications.items
-  : Array.isArray(formData.certifications)
-  ? formData.certifications
-  : [];
-
-  const languages = useSampleData
-    ? Array.isArray(formData.languages) &&
-      formData.languages.length > 0
-      ? formData.languages
-      : Array.isArray(data.languages) &&
-        data.languages.length > 0
-      ? data.languages
-      : sampleLanguages
-    : Array.isArray(formData.languages)
-    ? formData.languages
-    : Array.isArray(data.languages)
-    ? data.languages
-    : [];
-
-  const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
-      ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
-      ? data.achievements
-      : sampleAchievements
-    : Array.isArray(formData.achievements)
-    ? formData.achievements
-    : Array.isArray(data.achievements)
-    ? data.achievements
-    : [];
-
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) &&
-      formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) &&
-        data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : Array.isArray(data.interests)
-    ? data.interests
-    : [];
-
-  const references = useSampleData
-    ? Array.isArray(formData.references) &&
-      formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) &&
-        data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : Array.isArray(data.references)
-    ? data.references
-    : [];
-
-  // =========================================================
   // HELPERS
   // =========================================================
+
+  const hasExplicitEnabledState = (section) => {
+    return (
+      section &&
+      typeof section === "object" &&
+      !Array.isArray(section) &&
+      Object.prototype.hasOwnProperty.call(section, "enabled")
+    );
+  };
+
+  /**
+   * Converts sections such as:
+   *
+   * { enabled: true, items: [...] }
+   *
+   * or:
+   *
+   * [...]
+   *
+   * into a normal array.
+   *
+   * Explicit enabled:false is respected.
+   */
+  const resolveSectionItems = (
+    formSection,
+    dataSection,
+    sampleItems = []
+  ) => {
+    // -----------------------------
+    // FORM DATA
+    // -----------------------------
+
+    if (hasExplicitEnabledState(formSection)) {
+      if (formSection.enabled === false) {
+        return [];
+      }
+
+      if (Array.isArray(formSection.items)) {
+        return formSection.items;
+      }
+
+      return [];
+    }
+
+    if (Array.isArray(formSection)) {
+      if (formSection.length > 0) {
+        return formSection;
+      }
+    }
+
+    // -----------------------------
+    // DATA
+    // -----------------------------
+
+    if (hasExplicitEnabledState(dataSection)) {
+      if (dataSection.enabled === false) {
+        return [];
+      }
+
+      if (Array.isArray(dataSection.items)) {
+        return dataSection.items;
+      }
+
+      return [];
+    }
+
+    if (Array.isArray(dataSection)) {
+      if (dataSection.length > 0) {
+        return dataSection;
+      }
+    }
+
+    // -----------------------------
+    // SAMPLE DATA
+    // -----------------------------
+
+    return useSampleData ? sampleItems : [];
+  };
+
+  /**
+   * Interests use:
+   *
+   * { enabled: true, value: "Web Design, Reading, Travel" }
+   */
+  const resolveInterests = (
+    formSection,
+    dataSection,
+    sampleItems = []
+  ) => {
+    // FORM DATA
+    if (hasExplicitEnabledState(formSection)) {
+      if (formSection.enabled === false) {
+        return [];
+      }
+
+      if (typeof formSection.value === "string") {
+        return formSection.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      if (Array.isArray(formSection.items)) {
+        return formSection.items;
+      }
+
+      return [];
+    }
+
+    if (Array.isArray(formSection)) {
+      return formSection;
+    }
+
+    // DATA
+    if (hasExplicitEnabledState(dataSection)) {
+      if (dataSection.enabled === false) {
+        return [];
+      }
+
+      if (typeof dataSection.value === "string") {
+        return dataSection.value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+
+      if (Array.isArray(dataSection.items)) {
+        return dataSection.items;
+      }
+
+      return [];
+    }
+
+    if (Array.isArray(dataSection)) {
+      return dataSection;
+    }
+
+    return useSampleData ? sampleItems : [];
+  };
 
   const getValue = (item, keys) => {
     for (const key of keys) {
@@ -402,88 +383,197 @@ const certifications = useSampleData
   };
 
   // =========================================================
+  // PERSONAL DATA
+  // =========================================================
+
+  const personal = useSampleData
+    ? {
+        ...samplePersonal,
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      }
+    : {
+        fullName: "",
+        jobTitle: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        summary: "",
+        profileImage: "",
+        ...(data.personal || {}),
+        ...(formData.personal || {}),
+      };
+
+  // =========================================================
+  // MAIN RESUME SECTIONS
+  // =========================================================
+
+  const education = resolveSectionItems(
+    formData.education,
+    data.education,
+    sampleEducation
+  );
+
+  const experience = resolveSectionItems(
+    formData.experience,
+    data.experience,
+    sampleExperience
+  );
+
+  const skills = resolveSectionItems(
+    formData.skills,
+    data.skills,
+    sampleSkills
+  );
+
+  const projects = resolveSectionItems(
+    formData.projects,
+    data.projects,
+    sampleProjects
+  );
+
+  // =========================================================
+  // OPTIONAL SECTIONS
+  // =========================================================
+
+  const certifications = resolveSectionItems(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = resolveSectionItems(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = resolveSectionItems(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const interests = resolveInterests(
+    formData.interests,
+    data.interests,
+    sampleInterests
+  );
+
+  const references = resolveSectionItems(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
   // VALID DATA
   // =========================================================
 
-  const validSkills = skills.filter((skill) =>
-    String(getSkillName(skill) || "").trim()
-  );
+  const validSkills = Array.isArray(skills)
+    ? skills.filter((skill) =>
+        String(getSkillName(skill) || "").trim()
+      )
+    : [];
 
-  const validExperience = experience.filter((item) =>
-    getValue(item, [
-      "jobTitle",
-      "title",
-      "position",
-      "role",
-      "company",
-      "companyName",
-      "organization",
-    ])
-  );
+  const validExperience = Array.isArray(experience)
+    ? experience.filter((item) =>
+        getValue(item, [
+          "jobTitle",
+          "title",
+          "position",
+          "role",
+          "company",
+          "companyName",
+          "organization",
+        ])
+      )
+    : [];
 
-  const validEducation = education.filter((item) =>
-    getValue(item, [
-      "degree",
-      "program",
-      "qualification",
-      "title",
-      "institution",
-      "university",
-      "school",
-      "college",
-    ])
-  );
+  const validEducation = Array.isArray(education)
+    ? education.filter((item) =>
+        getValue(item, [
+          "degree",
+          "program",
+          "qualification",
+          "title",
+          "institution",
+          "university",
+          "school",
+          "college",
+        ])
+      )
+    : [];
 
-  const validProjects = projects.filter((item) =>
-    getValue(item, [
-      "name",
-      "title",
-      "projectName",
-      "description",
-      "details",
-      "summary",
-    ])
-  );
+  const validProjects = Array.isArray(projects)
+    ? projects.filter((item) =>
+        getValue(item, [
+          "name",
+          "title",
+          "projectName",
+          "description",
+          "details",
+          "summary",
+        ])
+      )
+    : [];
 
-  const validCertifications = certifications.filter((item) =>
-    getValue(item, [
-      "name",
-      "title",
-      "certificate",
-    ])
-  );
+  const validCertifications = Array.isArray(
+    certifications
+  )
+    ? certifications.filter((item) =>
+        getValue(item, [
+          "name",
+          "title",
+          "certificate",
+        ])
+      )
+    : [];
 
-  const validLanguages = languages.filter((item) =>
-    getValue(item, ["name", "language"])
-  );
+  const validLanguages = Array.isArray(languages)
+    ? languages.filter((item) =>
+        getValue(item, ["name", "language"])
+      )
+    : [];
 
-  const validAchievements = achievements.filter((item) =>
-    getValue(item, [
-      "title",
-      "name",
-      "description",
-    ])
-  );
+  const validAchievements = Array.isArray(achievements)
+    ? achievements.filter((item) =>
+        getValue(item, [
+          "title",
+          "name",
+          "achievement",
+          "description",
+          "details",
+          "summary",
+        ])
+      )
+    : [];
 
-  const validInterests = interests.filter((item) => {
-    const value =
-      typeof item === "string"
-        ? item
-        : getValue(item, [
-            "name",
-            "title",
-            "interest",
-          ]);
+  const validInterests = Array.isArray(interests)
+    ? interests.filter((item) => {
+        const value =
+          typeof item === "string"
+            ? item
+            : getValue(item, [
+                "name",
+                "title",
+                "interest",
+              ]);
 
-    return String(value || "").trim();
-  });
+        return String(value || "").trim();
+      })
+    : [];
 
-  const validReferences = references.filter((item) =>
-    getValue(item, [
-      "name",
-      "fullName",
-    ])
-  );
+  const validReferences = Array.isArray(references)
+    ? references.filter((item) =>
+        getValue(item, [
+          "name",
+          "fullName",
+        ])
+      )
+    : [];
 
   // =========================================================
   // SMALL TEXT COMPONENT
@@ -595,7 +685,7 @@ const certifications = useSampleData
   // =========================================================
 
   return (
-    <div className="min-h-[1123px] w-[794px] overflow-hidden bg-[#111111] font-sans text-white">
+    <div className="min-h-[1123px] w-[794px] bg-[#111111] font-sans text-white">
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -603,15 +693,11 @@ const certifications = useSampleData
       <header className="border-b border-white/10 px-[52px] py-[48px]">
         <div className="flex items-center justify-between">
           <div>
-            {/* Name */}
-
             {displayName && (
               <div className="font-serif text-[38px] font-bold leading-none tracking-wide">
                 {displayName.toUpperCase()}
               </div>
             )}
-
-            {/* Job Title */}
 
             {displayJobTitle && (
               <div className="mt-3 text-[11px] tracking-[0.3em] text-amber-300">
@@ -620,15 +706,13 @@ const certifications = useSampleData
             )}
           </div>
 
-          {/* Profile Photo */}
-
           <PhotoCircle
             ring="ring-amber-300"
             background="bg-amber-100"
           />
         </div>
 
-        {/* Contact */}
+        {/* CONTACT */}
 
         {(personal.email ||
           personal.phone ||
@@ -717,9 +801,7 @@ const certifications = useSampleData
           {validExperience.length > 0 && (
             <section
               className={
-                personal.summary
-                  ? "mt-9"
-                  : "mt-0"
+                personal.summary ? "mt-9" : "mt-0"
               }
             >
               <div className="text-[11px] font-bold tracking-[0.22em] text-amber-300">
@@ -727,84 +809,74 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-5 space-y-7">
-                {validExperience
-                  .slice(0, 4)
-                  .map((item, index) => {
-                    const jobTitle = getValue(item, [
-                      "jobTitle",
-                      "title",
-                      "position",
-                      "role",
-                    ]);
+                {validExperience.map((item, index) => {
+                  const jobTitle = getValue(item, [
+                    "jobTitle",
+                    "title",
+                    "position",
+                    "role",
+                  ]);
 
-                    const company = getValue(item, [
-                      "company",
-                      "companyName",
-                      "organization",
-                    ]);
+                  const company = getValue(item, [
+                    "company",
+                    "companyName",
+                    "organization",
+                  ]);
 
-                    const startDate = getValue(item, [
-                      "startDate",
-                      "start",
-                      "from",
-                    ]);
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
 
-                    const endDate = getValue(item, [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]);
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                    const description = getValue(
-                      item,
-                      [
-                        "description",
-                        "details",
-                        "responsibilities",
-                        "summary",
-                      ]
-                    );
+                  const description = getValue(item, [
+                    "description",
+                    "details",
+                    "responsibilities",
+                    "summary",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        {jobTitle && (
-                          <div className="text-[12px] font-bold">
-                            {jobTitle}
-                          </div>
-                        )}
+                  return (
+                    <div key={item.id || index}>
+                      {jobTitle && (
+                        <div className="text-[12px] font-bold">
+                          {jobTitle}
+                        </div>
+                      )}
 
-                        {(company ||
-                          startDate ||
-                          endDate) && (
-                          <div className="mt-1.5 text-[9.5px] text-amber-200/70">
-                            {company}
+                      {(company ||
+                        startDate ||
+                        endDate) && (
+                        <div className="mt-1.5 text-[9.5px] text-amber-200/70">
+                          {company}
 
-                            {(startDate ||
-                              endDate) && (
-                              <>
-                                {company && " "}
-                                • {startDate || ""}{" "}
-                                —{" "}
-                                {endDate ||
-                                  "Present"}
-                              </>
-                            )}
-                          </div>
-                        )}
+                          {(startDate || endDate) && (
+                            <>
+                              {company && " "}
+                              • {startDate || ""} —{" "}
+                              {endDate || "Present"}
+                            </>
+                          )}
+                        </div>
+                      )}
 
-                        {description && (
-                          <div className="mt-3">
-                            <ResumeLines
-                              description={
-                                description
-                              }
-                              color="bg-white/10"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {description && (
+                        <div className="mt-3">
+                          <ResumeLines
+                            description={description}
+                            color="bg-white/10"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -818,69 +890,62 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-3">
-                {validProjects
-                  .slice(0, 4)
-                  .map((project, index) => {
-                    const name = getValue(project, [
-                      "name",
-                      "title",
-                      "projectName",
-                    ]);
+                {validProjects.map((project, index) => {
+                  const name = getValue(project, [
+                    "name",
+                    "title",
+                    "projectName",
+                  ]);
 
-                    const description = getValue(
-                      project,
-                      [
-                        "description",
-                        "details",
-                        "summary",
-                      ]
-                    );
+                  const description = getValue(
+                    project,
+                    [
+                      "description",
+                      "details",
+                      "summary",
+                    ]
+                  );
 
-                    const technologies =
-                      getTechnologies(project);
+                  const technologies =
+                    getTechnologies(project);
 
-                    return (
-                      <div
-                        key={`${name}-${index}`}
-                        className="rounded-lg border border-white/10 p-3.5"
-                      >
-                        {name && (
-                          <div className="text-[10px] font-bold">
-                            {name}
-                          </div>
-                        )}
+                  return (
+                    <div
+                      key={`${name}-${index}`}
+                      className="rounded-lg border border-white/10 p-3.5"
+                    >
+                      {name && (
+                        <div className="text-[10px] font-bold">
+                          {name}
+                        </div>
+                      )}
 
-                        {description && (
-                          <TinyText
-                            className="mt-1.5"
-                            color="text-white/45"
-                          >
-                            {description}
-                          </TinyText>
-                        )}
+                      {description && (
+                        <TinyText
+                          className="mt-1.5"
+                          color="text-white/45"
+                        >
+                          {description}
+                        </TinyText>
+                      )}
 
-                        {technologies.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-1.5">
-                            {technologies
-                              .slice(0, 4)
-                              .map(
-                                (
-                                  technology,
-                                  techIndex
-                                ) => (
-                                  <span
-                                    key={`${technology}-${techIndex}`}
-                                    className="rounded bg-white/5 px-1.5 py-0.5 text-[7px] text-amber-200/70"
-                                  >
-                                    {technology}
-                                  </span>
-                                )
-                              )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {technologies.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {technologies.map(
+                            (technology, techIndex) => (
+                              <span
+                                key={`${technology}-${techIndex}`}
+                                className="rounded bg-white/5 px-1.5 py-0.5 text-[7px] text-amber-200/70"
+                              >
+                                {technology}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -894,42 +959,54 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-5 space-y-4">
-                {validAchievements
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const title = getValue(item, [
-                      "title",
-                      "name",
-                    ]);
+                {validAchievements.map((item, index) => {
+                  const title = getValue(item, [
+                    "title",
+                    "name",
+                    "achievement",
+                  ]);
 
-                    const description = getValue(
-                      item,
-                      [
-                        "description",
-                        "details",
-                        "summary",
-                      ]
-                    );
+                  const description = getValue(
+                    item,
+                    [
+                      "description",
+                      "details",
+                      "summary",
+                    ]
+                  );
 
-                    return (
-                      <div key={index}>
+                  const date = getValue(item, [
+                    "date",
+                    "year",
+                  ]);
+
+                  return (
+                    <div key={item.id || index}>
+                      <div className="flex items-start justify-between gap-3">
                         {title && (
                           <div className="text-[10px] font-bold">
                             {title}
                           </div>
                         )}
 
-                        {description && (
-                          <TinyText
-                            className="mt-1"
-                            color="text-white/45"
-                          >
-                            {description}
-                          </TinyText>
+                        {date && (
+                          <span className="shrink-0 text-[8px] text-amber-200/60">
+                            {date}
+                          </span>
                         )}
                       </div>
-                    );
-                  })}
+
+                      {description && (
+                        <TinyText
+                          className="mt-1"
+                          color="text-white/45"
+                        >
+                          {description}
+                        </TinyText>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -943,9 +1020,8 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-5 space-y-3">
-                {validCertifications
-                  .slice(0, 3)
-                  .map((item, index) => {
+                {validCertifications.map(
+                  (item, index) => {
                     const name = getValue(item, [
                       "name",
                       "title",
@@ -965,7 +1041,7 @@ const certifications = useSampleData
 
                     return (
                       <div
-                        key={index}
+                        key={item.id || index}
                         className="flex items-start justify-between gap-3 border-b border-white/10 pb-3"
                       >
                         <div>
@@ -990,7 +1066,8 @@ const certifications = useSampleData
                         )}
                       </div>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}
@@ -1004,73 +1081,69 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-4">
-                {validReferences
-                  .slice(0, 2)
-                  .map((item, index) => {
-                    const name = getValue(item, [
-                      "name",
-                      "fullName",
-                    ]);
+                {validReferences.map((item, index) => {
+                  const name = getValue(item, [
+                    "name",
+                    "fullName",
+                  ]);
 
-                    const role = getValue(item, [
-                      "role",
-                      "position",
-                      "title",
-                    ]);
+                  const role = getValue(item, [
+                    "role",
+                    "position",
+                    "title",
+                  ]);
 
-                    const company = getValue(item, [
-                      "company",
-                      "organization",
-                    ]);
+                  const company = getValue(item, [
+                    "company",
+                    "organization",
+                  ]);
 
-                    const email = getValue(item, [
-                      "email",
-                    ]);
+                  const email = getValue(item, [
+                    "email",
+                  ]);
 
-                    const phone = getValue(item, [
-                      "phone",
-                      "mobile",
-                    ]);
+                  const phone = getValue(item, [
+                    "phone",
+                    "mobile",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        <div className="text-[10px] font-bold">
-                          {name}
-                        </div>
-
-                        {(role || company) && (
-                          <TinyText
-                            className="mt-1"
-                            color="text-amber-200/60"
-                          >
-                            {role}
-                            {role &&
-                              company &&
-                              " • "}
-                            {company}
-                          </TinyText>
-                        )}
-
-                        {email && (
-                          <TinyText
-                            className="mt-1"
-                            color="text-white/40"
-                          >
-                            {email}
-                          </TinyText>
-                        )}
-
-                        {phone && (
-                          <TinyText
-                            className="mt-0.5"
-                            color="text-white/40"
-                          >
-                            {phone}
-                          </TinyText>
-                        )}
+                  return (
+                    <div key={item.id || index}>
+                      <div className="text-[10px] font-bold">
+                        {name}
                       </div>
-                    );
-                  })}
+
+                      {(role || company) && (
+                        <TinyText
+                          className="mt-1"
+                          color="text-amber-200/60"
+                        >
+                          {role}
+                          {role && company && " • "}
+                          {company}
+                        </TinyText>
+                      )}
+
+                      {email && (
+                        <TinyText
+                          className="mt-1"
+                          color="text-white/40"
+                        >
+                          {email}
+                        </TinyText>
+                      )}
+
+                      {phone && (
+                        <TinyText
+                          className="mt-0.5"
+                          color="text-white/40"
+                        >
+                          {phone}
+                        </TinyText>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -1090,21 +1163,19 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-5 space-y-4">
-                {validSkills
-                  .slice(0, 10)
-                  .map((skill, index) => {
-                    const skillName =
-                      getSkillName(skill);
+                {validSkills.map((skill, index) => {
+                  const skillName =
+                    getSkillName(skill);
 
-                    return (
-                      <div
-                        key={`${skillName}-${index}`}
-                        className="border-b border-white/10 pb-3 text-[10px]"
-                      >
-                        {skillName}
-                      </div>
-                    );
-                  })}
+                  return (
+                    <div
+                      key={`${skillName}-${index}`}
+                      className="border-b border-white/10 pb-3 text-[10px]"
+                    >
+                      {skillName}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -1118,72 +1189,68 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-4 space-y-5">
-                {validEducation
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const degree = getValue(item, [
-                      "degree",
-                      "program",
-                      "qualification",
-                      "title",
-                    ]);
+                {validEducation.map((item, index) => {
+                  const degree = getValue(item, [
+                    "degree",
+                    "program",
+                    "qualification",
+                    "title",
+                  ]);
 
-                    const institution =
-                      getValue(item, [
-                        "institution",
-                        "university",
-                        "school",
-                        "college",
-                      ]);
+                  const institution = getValue(
+                    item,
+                    [
+                      "institution",
+                      "university",
+                      "school",
+                      "college",
+                    ]
+                  );
 
-                    const startDate = getValue(
-                      item,
-                      [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]
-                    );
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
 
-                    const endDate = getValue(item, [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]);
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        {degree && (
-                          <TinyText color="text-white/70">
-                            {degree}
-                          </TinyText>
-                        )}
+                  return (
+                    <div key={item.id || index}>
+                      {degree && (
+                        <TinyText color="text-white/70">
+                          {degree}
+                        </TinyText>
+                      )}
 
-                        {institution && (
-                          <TinyText
-                            className="mt-1"
-                            color="text-white/40"
-                          >
-                            {institution}
-                          </TinyText>
-                        )}
+                      {institution && (
+                        <TinyText
+                          className="mt-1"
+                          color="text-white/40"
+                        >
+                          {institution}
+                        </TinyText>
+                      )}
 
-                        {(startDate ||
-                          endDate) && (
-                          <TinyText
-                            className="mt-1"
-                            color="text-amber-200/60"
-                          >
-                            {startDate || ""}{" "}
-                            {startDate || endDate
-                              ? "—"
-                              : ""}{" "}
-                            {endDate || ""}
-                          </TinyText>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {(startDate || endDate) && (
+                        <TinyText
+                          className="mt-1"
+                          color="text-amber-200/60"
+                        >
+                          {startDate || ""}{" "}
+                          {startDate || endDate
+                            ? "—"
+                            : ""}{" "}
+                          {endDate || ""}
+                        </TinyText>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -1197,37 +1264,35 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-4 space-y-3">
-                {validLanguages
-                  .slice(0, 4)
-                  .map((item, index) => {
-                    const name = getValue(item, [
-                      "name",
-                      "language",
-                    ]);
+                {validLanguages.map((item, index) => {
+                  const name = getValue(item, [
+                    "name",
+                    "language",
+                  ]);
 
-                    const level = getValue(item, [
-                      "level",
-                      "proficiency",
-                      "fluency",
-                    ]);
+                  const level = getValue(item, [
+                    "level",
+                    "proficiency",
+                    "fluency",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        <div className="text-[10px] font-bold">
-                          {name}
-                        </div>
-
-                        {level && (
-                          <TinyText
-                            className="mt-0.5"
-                            color="text-white/40"
-                          >
-                            {level}
-                          </TinyText>
-                        )}
+                  return (
+                    <div key={item.id || index}>
+                      <div className="text-[10px] font-bold">
+                        {name}
                       </div>
-                    );
-                  })}
+
+                      {level && (
+                        <TinyText
+                          className="mt-0.5"
+                          color="text-white/40"
+                        >
+                          {level}
+                        </TinyText>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -1241,27 +1306,25 @@ const certifications = useSampleData
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {validInterests
-                  .slice(0, 6)
-                  .map((interest, index) => {
-                    const value =
-                      typeof interest === "string"
-                        ? interest
-                        : getValue(interest, [
-                            "name",
-                            "title",
-                            "interest",
-                          ]);
+                {validInterests.map((interest, index) => {
+                  const value =
+                    typeof interest === "string"
+                      ? interest
+                      : getValue(interest, [
+                          "name",
+                          "title",
+                          "interest",
+                        ]);
 
-                    return (
-                      <span
-                        key={`${value}-${index}`}
-                        className="rounded-full border border-white/10 px-2.5 py-1 text-[8px] text-white/60"
-                      >
-                        {value}
-                      </span>
-                    );
-                  })}
+                  return (
+                    <span
+                      key={`${value}-${index}`}
+                      className="rounded-full border border-white/10 px-2.5 py-1 text-[8px] text-white/60"
+                    >
+                      {value}
+                    </span>
+                  );
+                })}
               </div>
             </section>
           )}

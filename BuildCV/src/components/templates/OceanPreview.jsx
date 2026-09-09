@@ -122,9 +122,18 @@ function OceanPreview({
   ];
 
   const sampleLanguages = [
-    { name: "English", level: "Native" },
-    { name: "Spanish", level: "Professional" },
-    { name: "French", level: "Conversational" },
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Spanish",
+      level: "Professional",
+    },
+    {
+      name: "French",
+      level: "Conversational",
+    },
   ];
 
   const sampleAchievements = [
@@ -196,6 +205,182 @@ function OceanPreview({
       };
 
   // =========================================================
+  // HELPERS
+  // =========================================================
+
+  const getValue = (item, keys) => {
+    for (const key of keys) {
+      if (
+        item &&
+        item[key] !== undefined &&
+        item[key] !== null &&
+        String(item[key]).trim() !== ""
+      ) {
+        return item[key];
+      }
+    }
+
+    return "";
+  };
+
+  const getSkillName = (skill) => {
+    if (typeof skill === "string") {
+      return skill;
+    }
+
+    return getValue(skill, [
+      "name",
+      "skill",
+      "title",
+      "label",
+    ]);
+  };
+
+  const getDescriptionLines = (description) => {
+    if (!description) {
+      return [];
+    }
+
+    if (Array.isArray(description)) {
+      return description
+        .map((line) => String(line).trim())
+        .filter(Boolean);
+    }
+
+    return String(description)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+  };
+
+  const getTechnologies = (project) => {
+    const technologies = getValue(project, [
+      "technologies",
+      "tech",
+      "stack",
+      "tools",
+    ]);
+
+    if (Array.isArray(technologies)) {
+      return technologies
+        .map((item) => String(item).trim())
+        .filter(Boolean);
+    }
+
+    if (technologies) {
+      return String(technologies)
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
+  // =========================================================
+  // OPTIONAL SECTION HELPER
+  // Supports:
+  // 1. { enabled: true, items: [...] }
+  // 2. [...]
+  // 3. empty / disabled
+  // =========================================================
+
+  const getOptionalSection = (
+    formSection,
+    dataSection,
+    sampleItems = []
+  ) => {
+    const formIsObject =
+      formSection &&
+      typeof formSection === "object" &&
+      !Array.isArray(formSection);
+
+    const dataIsObject =
+      dataSection &&
+      typeof dataSection === "object" &&
+      !Array.isArray(dataSection);
+
+    // USER FORM DATA
+    if (formIsObject) {
+      if (
+        formSection.enabled === true &&
+        Array.isArray(formSection.items)
+      ) {
+        return formSection.items;
+      }
+
+      // If items exist even when enabled isn't explicitly true,
+      // preserve the information.
+      if (
+        Array.isArray(formSection.items) &&
+        formSection.items.length > 0
+      ) {
+        return formSection.items;
+      }
+
+      // Explicitly disabled means don't render.
+      if (formSection.enabled === false) {
+        return [];
+      }
+    }
+
+    if (Array.isArray(formSection)) {
+      return formSection;
+    }
+
+    // SAVED / SAMPLE DATA
+    if (useSampleData) {
+      if (dataIsObject) {
+        if (
+          dataSection.enabled === true &&
+          Array.isArray(dataSection.items)
+        ) {
+          return dataSection.items;
+        }
+
+        if (
+          Array.isArray(dataSection.items) &&
+          dataSection.items.length > 0
+        ) {
+          return dataSection.items;
+        }
+
+        if (dataSection.enabled === false) {
+          return [];
+        }
+      }
+
+      if (Array.isArray(dataSection) && dataSection.length > 0) {
+        return dataSection;
+      }
+
+      return sampleItems;
+    }
+
+    if (dataIsObject) {
+      if (
+        dataSection.enabled === true &&
+        Array.isArray(dataSection.items)
+      ) {
+        return dataSection.items;
+      }
+
+      if (
+        Array.isArray(dataSection.items) &&
+        dataSection.items.length > 0
+      ) {
+        return dataSection.items;
+      }
+    }
+
+    if (Array.isArray(dataSection)) {
+      return dataSection;
+    }
+
+    return [];
+  };
+
+  // =========================================================
   // RESUME SECTIONS
   // =========================================================
 
@@ -255,152 +440,148 @@ function OceanPreview({
     ? data.projects
     : [];
 
-const certifications = useSampleData
-  ? formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items) &&
-    formData.certifications.items.length > 0
-    ? formData.certifications.items
-    : data.certifications?.enabled &&
-      Array.isArray(data.certifications.items) &&
-      data.certifications.items.length > 0
-    ? data.certifications.items
-    : Array.isArray(formData.certifications)
-    ? formData.certifications
-    : Array.isArray(data.certifications)
-    ? data.certifications
-    : sampleCertifications
-  : formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items)
-  ? formData.certifications.items
-  : Array.isArray(formData.certifications)
-  ? formData.certifications
-  : [];
-
-  
-  const languages = useSampleData
-    ? Array.isArray(formData.languages) &&
-      formData.languages.length > 0
-      ? formData.languages
-      : Array.isArray(data.languages) &&
-        data.languages.length > 0
-      ? data.languages
-      : sampleLanguages
-    : Array.isArray(formData.languages)
-    ? formData.languages
-    : Array.isArray(data.languages)
-    ? data.languages
-    : [];
-
-  const achievements = useSampleData
-    ? Array.isArray(formData.achievements) &&
-      formData.achievements.length > 0
-      ? formData.achievements
-      : Array.isArray(data.achievements) &&
-        data.achievements.length > 0
-      ? data.achievements
-      : sampleAchievements
-    : Array.isArray(formData.achievements)
-    ? formData.achievements
-    : Array.isArray(data.achievements)
-    ? data.achievements
-    : [];
-
-  const interests = useSampleData
-    ? Array.isArray(formData.interests) &&
-      formData.interests.length > 0
-      ? formData.interests
-      : Array.isArray(data.interests) &&
-        data.interests.length > 0
-      ? data.interests
-      : sampleInterests
-    : Array.isArray(formData.interests)
-    ? formData.interests
-    : Array.isArray(data.interests)
-    ? data.interests
-    : [];
-
-  const references = useSampleData
-    ? Array.isArray(formData.references) &&
-      formData.references.length > 0
-      ? formData.references
-      : Array.isArray(data.references) &&
-        data.references.length > 0
-      ? data.references
-      : sampleReferences
-    : Array.isArray(formData.references)
-    ? formData.references
-    : Array.isArray(data.references)
-    ? data.references
-    : [];
-
   // =========================================================
-  // HELPERS
+  // OPTIONAL SECTIONS
   // =========================================================
 
-  const getValue = (item, keys) => {
-    for (const key of keys) {
-      if (
-        item &&
-        item[key] !== undefined &&
-        item[key] !== null &&
-        String(item[key]).trim() !== ""
-      ) {
-        return item[key];
+  const certifications = getOptionalSection(
+    formData.certifications,
+    data.certifications,
+    sampleCertifications
+  );
+
+  const languages = getOptionalSection(
+    formData.languages,
+    data.languages,
+    sampleLanguages
+  );
+
+  const achievements = getOptionalSection(
+    formData.achievements,
+    data.achievements,
+    sampleAchievements
+  );
+
+  const references = getOptionalSection(
+    formData.references,
+    data.references,
+    sampleReferences
+  );
+
+  // =========================================================
+  // INTERESTS
+  // Supports:
+  // { enabled: true, value: "Design, Travel" }
+  // { enabled: true, items: [...] }
+  // [...]
+  // =========================================================
+
+  const getInterests = () => {
+    const formInterests = formData.interests;
+    const dataInterests = data.interests;
+
+    const parseInterestValue = (value) => {
+      if (!value) {
+        return [];
       }
-    }
 
-    return "";
-  };
+      if (Array.isArray(value)) {
+        return value;
+      }
 
-  const getSkillName = (skill) => {
-    if (typeof skill === "string") {
-      return skill;
-    }
-
-    return getValue(skill, [
-      "name",
-      "skill",
-      "title",
-      "label",
-    ]);
-  };
-
-  const getDescriptionLines = (description) => {
-    if (!description) {
-      return [];
-    }
-
-    if (Array.isArray(description)) {
-      return description.filter(Boolean);
-    }
-
-    return String(description)
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-  };
-
-  const getTechnologies = (project) => {
-    const technologies = getValue(project, [
-      "technologies",
-      "tech",
-      "stack",
-      "tools",
-    ]);
-
-    if (Array.isArray(technologies)) {
-      return technologies.filter(Boolean);
-    }
-
-    if (technologies) {
-      return String(technologies)
+      return String(value)
         .split(",")
         .map((item) => item.trim())
         .filter(Boolean);
+    };
+
+    // Form object
+    if (
+      formInterests &&
+      typeof formInterests === "object" &&
+      !Array.isArray(formInterests)
+    ) {
+      if (formInterests.enabled === true) {
+        if (Array.isArray(formInterests.items)) {
+          return formInterests.items;
+        }
+
+        if (formInterests.value) {
+          return parseInterestValue(formInterests.value);
+        }
+      }
+
+      if (formInterests.enabled === false) {
+        return [];
+      }
+    }
+
+    // Form array
+    if (
+      Array.isArray(formInterests) &&
+      formInterests.length > 0
+    ) {
+      return formInterests;
+    }
+
+    if (useSampleData) {
+      // Data object
+      if (
+        dataInterests &&
+        typeof dataInterests === "object" &&
+        !Array.isArray(dataInterests)
+      ) {
+        if (dataInterests.enabled === true) {
+          if (Array.isArray(dataInterests.items)) {
+            return dataInterests.items;
+          }
+
+          if (dataInterests.value) {
+            return parseInterestValue(dataInterests.value);
+          }
+        }
+
+        if (dataInterests.enabled === false) {
+          return [];
+        }
+      }
+
+      // Data array
+      if (
+        Array.isArray(dataInterests) &&
+        dataInterests.length > 0
+      ) {
+        return dataInterests;
+      }
+
+      return sampleInterests;
+    }
+
+    // Non-sample data object
+    if (
+      dataInterests &&
+      typeof dataInterests === "object" &&
+      !Array.isArray(dataInterests)
+    ) {
+      if (dataInterests.enabled === true) {
+        if (Array.isArray(dataInterests.items)) {
+          return dataInterests.items;
+        }
+
+        if (dataInterests.value) {
+          return parseInterestValue(dataInterests.value);
+        }
+      }
+    }
+
+    if (Array.isArray(dataInterests)) {
+      return dataInterests;
     }
 
     return [];
   };
+
+  const interests = getInterests();
 
   // =========================================================
   // VALID DATA
@@ -451,11 +632,20 @@ const certifications = useSampleData
       "name",
       "title",
       "certificate",
+      "issuer",
+      "organization",
+      "provider",
     ])
   );
 
   const validLanguages = languages.filter((item) =>
-    getValue(item, ["name", "language"])
+    getValue(item, [
+      "name",
+      "language",
+      "level",
+      "proficiency",
+      "fluency",
+    ])
   );
 
   const validAchievements = achievements.filter((item) =>
@@ -463,6 +653,8 @@ const certifications = useSampleData
       "title",
       "name",
       "description",
+      "details",
+      "summary",
     ])
   );
 
@@ -483,6 +675,10 @@ const certifications = useSampleData
     getValue(item, [
       "name",
       "fullName",
+      "position",
+      "role",
+      "company",
+      "organization",
     ])
   );
 
@@ -505,7 +701,7 @@ const certifications = useSampleData
 
     return (
       <p
-        className={`text-[10px] leading-[1.55] ${color} ${className}`}
+        className={`pb-1 text-[11.5px] leading-[1.6] ${color} ${className}`}
       >
         {children}
       </p>
@@ -513,12 +709,22 @@ const certifications = useSampleData
   };
 
   // =========================================================
+  // SECTION TITLE
+  // =========================================================
+
+  const SectionTitle = ({ children }) => (
+    <div className="pb-1 text-[13px] font-extrabold tracking-[0.18em] text-[#087ea4]">
+      {children}
+    </div>
+  );
+
+  // =========================================================
   // EXPERIENCE DESCRIPTION
   // =========================================================
 
   const ResumeLines = ({
     description,
-    color = "bg-cyan-100",
+    color = "bg-cyan-200",
   }) => {
     const lines = getDescriptionLines(description);
 
@@ -531,10 +737,10 @@ const certifications = useSampleData
         {lines.map((line, index) => (
           <li
             key={index}
-            className="relative pl-3 text-[9.5px] leading-[1.5] text-slate-600"
+            className="relative pb-1 pl-4 text-[11.5px] leading-[1.55] text-slate-600"
           >
             <span
-              className={`absolute left-0 top-[7px] h-[4px] w-[4px] rounded-full ${color}`}
+              className={`absolute left-0 top-[8px] h-[5px] w-[5px] rounded-full ${color}`}
             />
 
             {line}
@@ -556,70 +762,73 @@ const certifications = useSampleData
   // =========================================================
 
   return (
-    <div className="min-h-[1123px] w-[794px] overflow-hidden bg-white font-sans">
+    <div className="min-h-[1123px] w-[794px] overflow-visible bg-white font-sans text-slate-700">
+
       {/* =====================================================
           HEADER
       ===================================================== */}
 
-      <header className="bg-[#082f49] px-[52px] py-[48px] text-white">
-        <div className="flex items-end justify-between">
-          <div>
-            {/* Name */}
+      <header className="bg-[#082f49] px-[42px] py-[36px] text-white">
+        <div className="flex items-end justify-between gap-8">
+
+          <div className="min-w-0 flex-1">
 
             {displayName && (
-              <div className="text-[38px] font-black leading-none">
+              <div className="pb-1 text-[42px] font-black leading-[1.02] tracking-[-0.02em]">
                 {displayName.toUpperCase()}
               </div>
             )}
 
-            {/* Job Title */}
-
             {displayJobTitle && (
-              <div className="mt-3 text-[12px] font-semibold tracking-[0.22em] text-cyan-200">
-                {displayJobTitle.toUpperCase()}
+              <div className="mt-3 pb-1 text-[14px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
+                {displayJobTitle}
               </div>
             )}
+
           </div>
 
-          {/* Contact */}
+          {/* CONTACT */}
 
           {(personal.email ||
             personal.phone ||
             personal.location ||
             personal.linkedin ||
             personal.github) && (
-            <div className="max-w-[230px] text-right text-[9.5px] leading-[1.6] text-white/60">
+            <div className="w-[235px] shrink-0 text-right text-[11px] leading-[1.6] text-white/70">
+
               {personal.email && (
-                <>
+                <div className="pb-1 break-words">
                   {personal.email}
-                  <br />
-                </>
+                </div>
               )}
 
               {personal.phone && (
-                <>
+                <div className="pb-1 break-words">
                   {personal.phone}
-                  <br />
-                </>
+                </div>
               )}
 
               {personal.location && (
-                <>
+                <div className="pb-1 break-words">
                   {personal.location}
-                  <br />
-                </>
+                </div>
               )}
 
               {personal.linkedin && (
-                <>
+                <div className="pb-1 break-words">
                   {personal.linkedin}
-                  <br />
-                </>
+                </div>
               )}
 
-              {personal.github && personal.github}
+              {personal.github && (
+                <div className="pb-1 break-words">
+                  {personal.github}
+                </div>
+              )}
+
             </div>
           )}
+
         </div>
       </header>
 
@@ -627,202 +836,222 @@ const certifications = useSampleData
           MAIN LAYOUT
       ===================================================== */}
 
-      <div className="grid grid-cols-[0.72fr_1.5fr]">
+      <div className="grid grid-cols-[0.78fr_1.52fr]">
+
         {/* ===================================================
             SIDEBAR
         =================================================== */}
 
-        <aside className="bg-[#e8f6fb] px-[34px] py-[40px]">
+        <aside className="bg-[#e8f6fb] px-[30px] py-[34px]">
+
           {/* EXPERTISE */}
 
           {validSkills.length > 0 && (
-            <section>
-              <div className="text-[11px] font-bold tracking-[0.18em] text-[#087ea4]">
+            <section className="break-inside-avoid">
+
+              <SectionTitle>
                 EXPERTISE
+              </SectionTitle>
+
+              <div className="mt-4 space-y-2.5">
+
+                {validSkills.map((skill, index) => {
+                  const skillName = getSkillName(skill);
+
+                  return (
+                    <div
+                      key={`${skillName}-${index}`}
+                      className="break-inside-avoid rounded-lg bg-white px-3 py-2.5 pb-1.5 text-[11px] font-semibold leading-[1.45] text-slate-700"
+                    >
+                      {skillName}
+                    </div>
+                  );
+                })}
+
               </div>
 
-              <div className="mt-5 space-y-3">
-                {validSkills
-                  .slice(0, 10)
-                  .map((skill, index) => {
-                    const skillName =
-                      getSkillName(skill);
-
-                    return (
-                      <div
-                        key={`${skillName}-${index}`}
-                        className="rounded-lg bg-white px-3 py-2.5 text-[9.5px] font-semibold text-slate-700"
-                      >
-                        {skillName}
-                      </div>
-                    );
-                  })}
-              </div>
             </section>
           )}
 
           {/* EDUCATION */}
 
           {validEducation.length > 0 && (
-            <section className="mt-10">
-              <div className="text-[11px] font-bold tracking-[0.18em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 EDUCATION
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 space-y-5">
-                {validEducation
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const degree = getValue(item, [
-                      "degree",
-                      "program",
-                      "qualification",
-                      "title",
-                    ]);
 
-                    const institution =
-                      getValue(item, [
-                        "institution",
-                        "university",
-                        "school",
-                        "college",
-                      ]);
+                {validEducation.map((item, index) => {
+                  const degree = getValue(item, [
+                    "degree",
+                    "program",
+                    "qualification",
+                    "title",
+                  ]);
 
-                    const startDate = getValue(
-                      item,
-                      [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]
-                    );
+                  const institution = getValue(item, [
+                    "institution",
+                    "university",
+                    "school",
+                    "college",
+                  ]);
 
-                    const endDate = getValue(item, [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]);
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        {degree && (
-                          <TinyText>
-                            {degree}
-                          </TinyText>
-                        )}
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                        {institution && (
-                          <TinyText className="mt-1.5">
-                            {institution}
-                          </TinyText>
-                        )}
+                  return (
+                    <div
+                      key={index}
+                      className="break-inside-avoid pb-1"
+                    >
 
-                        {(startDate ||
-                          endDate) && (
-                          <TinyText className="mt-1.5">
-                            {startDate || ""} —{" "}
-                            {endDate || ""}
-                          </TinyText>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {degree && (
+                        <div className="pb-1 text-[12.5px] font-bold leading-[1.35] text-slate-800">
+                          {degree}
+                        </div>
+                      )}
+
+                      {institution && (
+                        <TinyText className="mt-1">
+                          {institution}
+                        </TinyText>
+                      )}
+
+                      {(startDate || endDate) && (
+                        <TinyText className="mt-0.5">
+                          {startDate || ""} —{" "}
+                          {endDate || "Present"}
+                        </TinyText>
+                      )}
+
+                    </div>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
 
           {/* LANGUAGES */}
 
           {validLanguages.length > 0 && (
-            <section className="mt-10">
-              <div className="text-[11px] font-bold tracking-[0.18em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 LANGUAGES
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 space-y-3">
-                {validLanguages
-                  .slice(0, 4)
-                  .map((item, index) => {
-                    const name = getValue(item, [
-                      "name",
-                      "language",
-                    ]);
 
-                    const level = getValue(item, [
-                      "level",
-                      "proficiency",
-                      "fluency",
-                    ]);
+                {validLanguages.map((item, index) => {
+                  const name = getValue(item, [
+                    "name",
+                    "language",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        <div className="text-[9.5px] font-semibold text-slate-700">
+                  const level = getValue(item, [
+                    "level",
+                    "proficiency",
+                    "fluency",
+                  ]);
+
+                  return (
+                    <div
+                      key={index}
+                      className="break-inside-avoid pb-1"
+                    >
+
+                      {name && (
+                        <div className="pb-1 text-[11.5px] font-bold text-slate-700">
                           {name}
                         </div>
+                      )}
 
-                        {level && (
-                          <TinyText className="mt-0.5">
-                            {level}
-                          </TinyText>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {level && (
+                        <TinyText className="mt-0.5">
+                          {level}
+                        </TinyText>
+                      )}
+
+                    </div>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
 
           {/* INTERESTS */}
 
           {validInterests.length > 0 && (
-            <section className="mt-10">
-              <div className="text-[11px] font-bold tracking-[0.18em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 INTERESTS
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {validInterests
-                  .slice(0, 6)
-                  .map((interest, index) => {
-                    const value =
-                      typeof interest === "string"
-                        ? interest
-                        : getValue(interest, [
-                            "name",
-                            "title",
-                            "interest",
-                          ]);
 
-                    return (
-                      <span
-                        key={`${value}-${index}`}
-                        className="rounded-full bg-white px-2.5 py-1 text-[8px] font-medium text-slate-600"
-                      >
-                        {value}
-                      </span>
-                    );
-                  })}
+                {validInterests.map((interest, index) => {
+                  const value =
+                    typeof interest === "string"
+                      ? interest
+                      : getValue(interest, [
+                          "name",
+                          "title",
+                          "interest",
+                        ]);
+
+                  return (
+                    <span
+                      key={`${value}-${index}`}
+                      className="rounded-full bg-white px-2.5 py-1.5 pb-1 text-[10px] font-medium leading-[1.3] text-slate-600"
+                    >
+                      {value}
+                    </span>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
+
         </aside>
 
         {/* ===================================================
             MAIN CONTENT
         =================================================== */}
 
-        <main className="px-[40px] py-[40px]">
+        <main className="px-[34px] py-[34px]">
+
           {/* PROFESSIONAL PROFILE */}
 
           {personal.summary && (
-            <section className="rounded-2xl bg-[#f0fafc] p-6">
-              <div className="text-[11px] font-bold tracking-[0.2em] text-[#087ea4]">
-                PROFESSIONAL PROFILE
-              </div>
+            <section className="break-inside-avoid rounded-2xl bg-[#f0fafc] p-5">
 
-              <TinyText className="mt-3">
+              <SectionTitle>
+                PROFESSIONAL PROFILE
+              </SectionTitle>
+
+              <TinyText className="mt-3 pb-1">
                 {personal.summary}
               </TinyText>
+
             </section>
           )}
 
@@ -832,351 +1061,363 @@ const certifications = useSampleData
             <section
               className={
                 personal.summary
-                  ? "mt-9"
-                  : "mt-0"
+                  ? "mt-8 break-inside-avoid"
+                  : "mt-0 break-inside-avoid"
               }
             >
-              <div className="text-[11px] font-bold tracking-[0.2em] text-[#087ea4]">
+
+              <SectionTitle>
                 EXPERIENCE
-              </div>
+              </SectionTitle>
 
-              <div className="mt-5 space-y-7">
-                {validExperience
-                  .slice(0, 4)
-                  .map((item, index) => {
-                    const jobTitle = getValue(item, [
-                      "jobTitle",
-                      "title",
-                      "position",
-                      "role",
-                    ]);
+              <div className="mt-5 space-y-6">
 
-                    const company = getValue(item, [
-                      "company",
-                      "companyName",
-                      "organization",
-                    ]);
+                {validExperience.map((item, index) => {
+                  const jobTitle = getValue(item, [
+                    "jobTitle",
+                    "title",
+                    "position",
+                    "role",
+                  ]);
 
-                    const startDate = getValue(
-                      item,
-                      [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]
-                    );
+                  const company = getValue(item, [
+                    "company",
+                    "companyName",
+                    "organization",
+                  ]);
 
-                    const endDate = getValue(item, [
-                      "endDate",
-                      "end",
-                      "to",
-                    ]);
+                  const startDate = getValue(item, [
+                    "startDate",
+                    "start",
+                    "from",
+                  ]);
 
-                    const description = getValue(
-                      item,
-                      [
-                        "description",
-                        "details",
-                        "responsibilities",
-                        "summary",
-                      ]
-                    );
+                  const endDate = getValue(item, [
+                    "endDate",
+                    "end",
+                    "to",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        <div className="flex items-center justify-between gap-4">
+                  const description = getValue(item, [
+                    "description",
+                    "details",
+                    "responsibilities",
+                    "summary",
+                  ]);
+
+                  return (
+                    <article
+                      key={index}
+                      className="break-inside-avoid pb-1"
+                    >
+
+                      <div className="flex items-start justify-between gap-4">
+
+                        <div className="min-w-0 flex-1">
+
                           {jobTitle && (
-                            <div className="text-[12px] font-bold text-slate-900">
+                            <div className="pb-1 text-[14px] font-bold leading-[1.35] text-slate-900">
                               {jobTitle}
                             </div>
                           )}
 
-                          {(startDate ||
-                            endDate) && (
-                            <div className="shrink-0 text-[9.5px] text-slate-500">
-                              {startDate || ""} —{" "}
-                              {endDate ||
-                                "Present"}
+                          {company && (
+                            <div className="mt-1 pb-1 text-[11.5px] font-semibold text-[#087ea4]">
+                              {company}
                             </div>
                           )}
+
                         </div>
 
-                        {company && (
-                          <div className="mt-1.5 text-[9.5px] font-semibold text-[#087ea4]">
-                            {company}
+                        {(startDate || endDate) && (
+                          <div className="shrink-0 pt-0.5 text-[11px] leading-[1.4] text-slate-500">
+                            {startDate || ""} —{" "}
+                            {endDate || "Present"}
                           </div>
                         )}
 
-                        {description && (
-                          <div className="mt-3">
-                            <ResumeLines
-                              description={
-                                description
-                              }
-                              color="bg-cyan-100"
-                            />
-                          </div>
-                        )}
                       </div>
-                    );
-                  })}
+
+                      {description && (
+                        <div className="mt-2 pb-1">
+                          <ResumeLines
+                            description={description}
+                            color="bg-cyan-200"
+                          />
+                        </div>
+                      )}
+
+                    </article>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
 
           {/* PROJECTS */}
 
           {validProjects.length > 0 && (
-            <section className="mt-9">
-              <div className="text-[11px] font-bold tracking-[0.2em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 PROJECTS
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 grid grid-cols-2 gap-3">
-                {validProjects
-                  .slice(0, 6)
-                  .map((project, index) => {
-                    const projectName = getValue(
-                      project,
-                      [
-                        "name",
-                        "title",
-                        "projectName",
-                      ]
-                    );
 
-                    const description = getValue(
-                      project,
-                      [
-                        "description",
-                        "details",
-                        "summary",
-                      ]
-                    );
+                {validProjects.map((project, index) => {
+                  const projectName = getValue(project, [
+                    "name",
+                    "title",
+                    "projectName",
+                  ]);
 
-                    const technologies =
-                      getTechnologies(project);
+                  const description = getValue(project, [
+                    "description",
+                    "details",
+                    "summary",
+                  ]);
 
-                    return (
-                      <div
-                        key={`${projectName}-${index}`}
-                        className="rounded-xl border border-cyan-100 p-4"
-                      >
-                        {projectName && (
-                          <div className="text-[10px] font-bold text-slate-900">
-                            {projectName}
-                          </div>
-                        )}
+                  const technologies =
+                    getTechnologies(project);
 
-                        {description && (
-                          <TinyText className="mt-1.5">
-                            {description}
-                          </TinyText>
-                        )}
+                  return (
+                    <article
+                      key={`${projectName}-${index}`}
+                      className="break-inside-avoid rounded-xl border border-cyan-100 p-3.5 pb-2.5"
+                    >
 
-                        {technologies.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-1.5">
-                            {technologies
-                              .slice(0, 4)
-                              .map(
-                                (
-                                  technology,
-                                  techIndex
-                                ) => (
-                                  <span
-                                    key={`${technology}-${techIndex}`}
-                                    className="rounded bg-[#e8f6fb] px-1.5 py-0.5 text-[7.5px] font-medium text-[#087ea4]"
-                                  >
-                                    {technology}
-                                  </span>
-                                )
-                              )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {projectName && (
+                        <div className="pb-1 text-[12.5px] font-bold leading-[1.35] text-slate-900">
+                          {projectName}
+                        </div>
+                      )}
+
+                      {description && (
+                        <TinyText className="mt-1.5 pb-1">
+                          {description}
+                        </TinyText>
+                      )}
+
+                      {technologies.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+
+                          {technologies.map(
+                            (technology, techIndex) => (
+                              <span
+                                key={`${technology}-${techIndex}`}
+                                className="rounded bg-[#e8f6fb] px-1.5 py-1 text-[9px] font-medium leading-[1.25] text-[#087ea4]"
+                              >
+                                {technology}
+                              </span>
+                            )
+                          )}
+
+                        </div>
+                      )}
+
+                    </article>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
 
           {/* ACHIEVEMENTS */}
 
           {validAchievements.length > 0 && (
-            <section className="mt-9">
-              <div className="text-[11px] font-bold tracking-[0.2em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 ACHIEVEMENTS
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 space-y-4">
-                {validAchievements
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const title = getValue(item, [
-                      "title",
-                      "name",
-                    ]);
 
-                    const description = getValue(
-                      item,
-                      [
-                        "description",
-                        "details",
-                        "summary",
-                      ]
-                    );
+                {validAchievements.map((item, index) => {
+                  const title = getValue(item, [
+                    "title",
+                    "name",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        {title && (
-                          <div className="text-[10px] font-bold text-slate-900">
-                            {title}
-                          </div>
-                        )}
+                  const description = getValue(item, [
+                    "description",
+                    "details",
+                    "summary",
+                  ]);
 
-                        {description && (
-                          <TinyText className="mt-1">
-                            {description}
-                          </TinyText>
-                        )}
-                      </div>
-                    );
-                  })}
+                  return (
+                    <article
+                      key={index}
+                      className="break-inside-avoid pb-1"
+                    >
+
+                      {title && (
+                        <div className="pb-1 text-[12px] font-bold leading-[1.35] text-slate-900">
+                          {title}
+                        </div>
+                      )}
+
+                      {description && (
+                        <TinyText className="mt-1 pb-1">
+                          {description}
+                        </TinyText>
+                      )}
+
+                    </article>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
 
           {/* CERTIFICATIONS */}
 
           {validCertifications.length > 0 && (
-            <section className="mt-9">
-              <div className="text-[11px] font-bold tracking-[0.2em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 CERTIFICATIONS
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 space-y-3">
-                {validCertifications
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const name = getValue(item, [
-                      "name",
-                      "title",
-                      "certificate",
-                    ]);
 
-                    const issuer = getValue(item, [
-                      "issuer",
-                      "organization",
-                      "provider",
-                    ]);
+                {validCertifications.map((item, index) => {
+                  const name = getValue(item, [
+                    "name",
+                    "title",
+                    "certificate",
+                  ]);
 
-                    const date = getValue(item, [
-                      "date",
-                      "year",
-                    ]);
+                  const issuer = getValue(item, [
+                    "issuer",
+                    "organization",
+                    "provider",
+                  ]);
 
-                    return (
-                      <div
-                        key={index}
-                        className="rounded-xl bg-[#f0fafc] p-3"
-                      >
-                        {name && (
-                          <div className="text-[9.5px] font-bold text-slate-900">
-                            {name}
-                          </div>
-                        )}
+                  const date = getValue(item, [
+                    "date",
+                    "year",
+                  ]);
 
-                        {(issuer || date) && (
-                          <div className="mt-1 text-[8px] text-slate-500">
-                            {issuer}
-                            {issuer &&
-                              date &&
-                              " • "}
-                            {date}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                  return (
+                    <article
+                      key={index}
+                      className="break-inside-avoid rounded-xl bg-[#f0fafc] p-3 pb-2"
+                    >
+
+                      {name && (
+                        <div className="pb-1 text-[11.5px] font-bold leading-[1.4] text-slate-900">
+                          {name}
+                        </div>
+                      )}
+
+                      {(issuer || date) && (
+                        <div className="mt-1 pb-1 text-[10.5px] leading-[1.45] text-slate-500">
+                          {issuer}
+                          {issuer && date && " • "}
+                          {date}
+                        </div>
+                      )}
+
+                    </article>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
 
           {/* REFERENCES */}
 
           {validReferences.length > 0 && (
-            <section className="mt-9">
-              <div className="text-[11px] font-bold tracking-[0.2em] text-[#087ea4]">
+            <section className="mt-8 break-inside-avoid">
+
+              <SectionTitle>
                 REFERENCES
-              </div>
+              </SectionTitle>
 
               <div className="mt-4 grid grid-cols-2 gap-4">
-                {validReferences
-                  .slice(0, 2)
-                  .map((item, index) => {
-                    const name = getValue(item, [
-                      "name",
-                      "fullName",
-                    ]);
 
-                    const role = getValue(item, [
-                      "role",
-                      "position",
-                      "title",
-                    ]);
+                {validReferences.map((item, index) => {
+                  const name = getValue(item, [
+                    "name",
+                    "fullName",
+                  ]);
 
-                    const company = getValue(item, [
-                      "company",
-                      "organization",
-                    ]);
+                  const role = getValue(item, [
+                    "role",
+                    "position",
+                    "title",
+                    "jobTitle",
+                  ]);
 
-                    const email = getValue(item, [
-                      "email",
-                    ]);
+                  const company = getValue(item, [
+                    "company",
+                    "organization",
+                  ]);
 
-                    const phone = getValue(item, [
-                      "phone",
-                      "mobile",
-                    ]);
+                  const email = getValue(item, [
+                    "email",
+                  ]);
 
-                    return (
-                      <div key={index}>
-                        {name && (
-                          <div className="text-[10px] font-bold text-slate-900">
-                            {name}
-                          </div>
-                        )}
+                  const phone = getValue(item, [
+                    "phone",
+                    "mobile",
+                    "telephone",
+                  ]);
 
-                        {(role || company) && (
-                          <TinyText
-                            className="mt-1"
-                            color="text-[#087ea4]"
-                          >
-                            {role}
-                            {role &&
-                              company &&
-                              " • "}
-                            {company}
-                          </TinyText>
-                        )}
+                  return (
+                    <article
+                      key={index}
+                      className="break-inside-avoid pb-1"
+                    >
 
-                        {email && (
-                          <TinyText className="mt-1">
-                            {email}
-                          </TinyText>
-                        )}
+                      {name && (
+                        <div className="pb-1 text-[12px] font-bold leading-[1.35] text-slate-900">
+                          {name}
+                        </div>
+                      )}
 
-                        {phone && (
-                          <TinyText className="mt-0.5">
-                            {phone}
-                          </TinyText>
-                        )}
-                      </div>
-                    );
-                  })}
+                      {(role || company) && (
+                        <TinyText
+                          className="mt-1 pb-1"
+                          color="text-[#087ea4]"
+                        >
+                          {role}
+                          {role && company && " • "}
+                          {company}
+                        </TinyText>
+                      )}
+
+                      {email && (
+                        <TinyText className="mt-1 pb-1 break-words">
+                          {email}
+                        </TinyText>
+                      )}
+
+                      {phone && (
+                        <TinyText className="mt-0.5 pb-1">
+                          {phone}
+                        </TinyText>
+                      )}
+
+                    </article>
+                  );
+                })}
+
               </div>
+
             </section>
           )}
+
         </main>
       </div>
     </div>

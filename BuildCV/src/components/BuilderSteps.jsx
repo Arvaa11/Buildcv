@@ -775,43 +775,8 @@ function BuilderSteps({
                             gap-2
                           "
                         >
-                          {/* ICON */}
-
-                          <span
-                            className={`
-                              flex
-                              h-7
-                              w-7
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-lg
-                              border
-                              text-sm
-                              font-bold
-                              transition-all
-                              duration-200
-                              ${
-                                isActive
-                                  ? `
-                                    border-[#6366F1]
-                                    bg-[#6366F1]
-                                    text-white
-                                    shadow-sm
-                                  `
-                                  : `
-                                    border-[#E2E8F0]
-                                    bg-[#F8FAFC]
-                                    text-[#718096]
-                                    group-hover:border-[#A5B4FC]
-                                    group-hover:bg-white
-                                    group-hover:text-[#4F46E5]
-                                  `
-                              }
-                            `}
-                          >
-                            {isActive ? "✓" : "+"}
-                          </span>
+                          
+                             
 
                           {/* SELECTED LABEL */}
 

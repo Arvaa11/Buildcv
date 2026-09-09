@@ -25,15 +25,21 @@ import Achievements from "../components/builder/Achievements"
 import Interests from "../components/builder/Interests"
 import References from "../components/builder/References"
 
-
 import ResumePreview from "../components/ResumePreview"
-import DownloadPDF from "../components/builder/DownloadPDF";
+import DownloadPDF from "../components/builder/DownloadPDF"
+
 // =====================================================
 // STORAGE
 // =====================================================
 
 const STORAGE_KEY = "buildcv-form-data"
-const TEMPLATE_STORAGE_KEY = "buildcv-selected-template"
+
+// Stores only the template ID
+const TEMPLATE_STORAGE_KEY = "buildcv-template"
+
+// Stores the complete template object
+const SELECTED_TEMPLATE_KEY =
+  "buildcv-selected-template"
 
 // =====================================================
 // OPTIONAL SECTIONS
@@ -183,28 +189,37 @@ function normalizeFormData(data) {
 
     education: Array.isArray(data.education)
       ? data.education.map((item) => ({
-        id: item.id || createId(),
-        institution: item.institution || "",
-        degree: item.degree || "",
-        field: item.field || "",
-        startDate: item.startDate || "",
-        endDate: item.endDate || "",
-        description: item.description || "",
-      }))
+          id: item.id || createId(),
+          institution:
+            item.institution || "",
+          degree: item.degree || "",
+          field: item.field || "",
+          startDate:
+            item.startDate || "",
+          endDate:
+            item.endDate || "",
+          description:
+            item.description || "",
+        }))
       : defaults.education,
 
-    experience: Array.isArray(data.experience)
+    experience: Array.isArray(
+      data.experience
+    )
       ? data.experience.map((item) => ({
-        id: item.id || createId(),
-        company: item.company || "",
-        position:
-          item.position ||
-          item.jobTitle ||
-          "",
-        startDate: item.startDate || "",
-        endDate: item.endDate || "",
-        description: item.description || "",
-      }))
+          id: item.id || createId(),
+          company: item.company || "",
+          position:
+            item.position ||
+            item.jobTitle ||
+            "",
+          startDate:
+            item.startDate || "",
+          endDate:
+            item.endDate || "",
+          description:
+            item.description || "",
+        }))
       : defaults.experience,
 
     skills: Array.isArray(data.skills)
@@ -213,75 +228,87 @@ function normalizeFormData(data) {
 
     projects: Array.isArray(data.projects)
       ? data.projects.map((item) => ({
-        id: item.id || createId(),
-        name: item.name || "",
-        description: item.description || "",
-        technologies: item.technologies || "",
-        link: item.link || "",
-        liveUrl: item.liveUrl || "",
-        githubUrl: item.githubUrl || "",
-      }))
+          id: item.id || createId(),
+          name: item.name || "",
+          description:
+            item.description || "",
+          technologies:
+            item.technologies || "",
+          link: item.link || "",
+          liveUrl: item.liveUrl || "",
+          githubUrl:
+            item.githubUrl || "",
+        }))
       : defaults.projects,
 
     certifications: {
       enabled:
-        data.certifications?.enabled === true,
+        data.certifications?.enabled ===
+        true,
 
       items: Array.isArray(
         data.certifications?.items
       )
         ? data.certifications.items.map(
-          (item) => ({
-            id: item.id || createId(),
-            name: item.name || "",
-            organization:
-              item.organization || "",
-            date: item.date || "",
-            link: item.link || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              name: item.name || "",
+              organization:
+                item.organization ||
+                "",
+              date: item.date || "",
+              link: item.link || "",
+            })
+          )
         : [],
     },
 
     languages: {
       enabled:
-        data.languages?.enabled === true,
+        data.languages?.enabled ===
+        true,
 
       items: Array.isArray(
         data.languages?.items
       )
         ? data.languages.items.map(
-          (item) => ({
-            id: item.id || createId(),
-            language: item.language || "",
-            level: item.level || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              language:
+                item.language || "",
+              level: item.level || "",
+            })
+          )
         : [],
     },
 
     achievements: {
       enabled:
-        data.achievements?.enabled === true,
+        data.achievements?.enabled ===
+        true,
 
       items: Array.isArray(
         data.achievements?.items
       )
         ? data.achievements.items.map(
-          (item) => ({
-            id: item.id || createId(),
-            title: item.title || "",
-            description:
-              item.description || "",
-            date: item.date || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              title: item.title || "",
+              description:
+                item.description || "",
+              date: item.date || "",
+            })
+          )
         : [],
     },
 
     interests: {
       enabled:
-        data.interests?.enabled === true,
+        data.interests?.enabled ===
+        true,
 
       value:
         data.interests?.value || "",
@@ -289,21 +316,27 @@ function normalizeFormData(data) {
 
     references: {
       enabled:
-        data.references?.enabled === true,
+        data.references?.enabled ===
+        true,
 
       items: Array.isArray(
         data.references?.items
       )
         ? data.references.items.map(
-          (item) => ({
-            id: item.id || createId(),
-            name: item.name || "",
-            position: item.position || "",
-            company: item.company || "",
-            email: item.email || "",
-            phone: item.phone || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              name: item.name || "",
+              position:
+                item.position || "",
+              company:
+                item.company || "",
+              email:
+                item.email || "",
+              phone:
+                item.phone || "",
+            })
+          )
         : [],
     },
   }
@@ -345,14 +378,13 @@ function getTemplateId(value) {
   }
 
   if (typeof value === "string") {
-    return value
+    return value.toLowerCase()
   }
 
   if (typeof value === "object") {
     return (
-      value.id ||
-      value.slug ||
-      value.name ||
+      value.id?.toLowerCase() ||
+      value.slug?.toLowerCase() ||
       "modern"
     )
   }
@@ -387,7 +419,7 @@ function Builder() {
   const [activeStep, setActiveStep] =
     useState(
       BUILDER_STEPS[0]?.id ||
-      "personal"
+        "personal"
     )
 
   // ===================================================
@@ -395,28 +427,77 @@ function Builder() {
   // ===================================================
 
   const selectedTemplate = useMemo(() => {
+    // =================================================
+    // 1. REACT ROUTER STATE
+    // =================================================
+
     const stateTemplate =
       location.state?.selectedTemplate
 
-    let savedTemplate = null
+    if (stateTemplate) {
+      return getTemplateId(
+        stateTemplate
+      )
+    }
+
+    // =================================================
+    // 2. COMPLETE TEMPLATE OBJECT
+    //    FROM LOCAL STORAGE
+    // =================================================
 
     try {
-      savedTemplate =
+      const storedSelectedTemplate =
         localStorage.getItem(
-          TEMPLATE_STORAGE_KEY
+          SELECTED_TEMPLATE_KEY
         )
+
+      if (storedSelectedTemplate) {
+        const parsedTemplate =
+          JSON.parse(
+            storedSelectedTemplate
+          )
+
+        if (parsedTemplate) {
+          return getTemplateId(
+            parsedTemplate
+          )
+        }
+      }
     } catch (error) {
       console.error(
-        "Failed to read selected template:",
+        "Failed to read selected template from localStorage:",
         error
       )
     }
 
-    return getTemplateId(
-      stateTemplate ||
-      savedTemplate ||
-      "modern"
-    )
+    // =================================================
+    // 3. TEMPLATE ID
+    //    FROM LOCAL STORAGE
+    // =================================================
+
+    try {
+      const storedTemplate =
+        localStorage.getItem(
+          TEMPLATE_STORAGE_KEY
+        )
+
+      if (storedTemplate) {
+        return getTemplateId(
+          storedTemplate
+        )
+      }
+    } catch (error) {
+      console.error(
+        "Failed to read template ID from localStorage:",
+        error
+      )
+    }
+
+    // =================================================
+    // 4. DEFAULT TEMPLATE
+    // =================================================
+
+    return "modern"
   }, [location.state])
 
   // ===================================================
@@ -427,11 +508,6 @@ function Builder() {
     try {
       localStorage.setItem(
         TEMPLATE_STORAGE_KEY,
-        selectedTemplate
-      )
-
-      localStorage.setItem(
-        "buildcv-template",
         selectedTemplate
       )
     } catch (error) {
@@ -511,22 +587,23 @@ function Builder() {
   const currentStep =
     requiredStepIndex >= 0
       ? BUILDER_STEPS[
-      requiredStepIndex
-      ]
+          requiredStepIndex
+        ]
       : OPTIONAL_SECTIONS.find(
-        (section) =>
-          section.id === activeStep
-      )
+          (section) =>
+            section.id === activeStep
+        )
 
   const progressPercentage =
     isOptionalSection
       ? 100
       : BUILDER_STEPS.length > 1
         ? Math.round(
-          (currentStepIndex /
-            (BUILDER_STEPS.length - 1)) *
-          100
-        )
+            (currentStepIndex /
+              (BUILDER_STEPS.length -
+                1)) *
+              100
+          )
         : 0
 
   // ===================================================
@@ -534,29 +611,89 @@ function Builder() {
   // ===================================================
 
   const goNext = () => {
-    if (isOptionalSection) {
+    // =========================================================
+    // REQUIRED SECTIONS
+    // =========================================================
+
+    if (!isOptionalSection) {
+      if (
+        currentStepIndex <
+        BUILDER_STEPS.length - 1
+      ) {
+        setActiveStep(
+          BUILDER_STEPS[
+            currentStepIndex + 1
+          ].id
+        )
+
+        return
+      }
+
+      // Projects → More Information
+      if (
+        OPTIONAL_SECTIONS.length > 0
+      ) {
+        setActiveStep(
+          OPTIONAL_SECTIONS[0].id
+        )
+      }
+
       return
     }
+
+    // =========================================================
+    // OPTIONAL SECTIONS
+    // =========================================================
+
+    const optionalIndex =
+      OPTIONAL_SECTIONS.findIndex(
+        (section) =>
+          section.id === activeStep
+      )
 
     if (
-      currentStepIndex >=
-      BUILDER_STEPS.length - 1
+      optionalIndex >= 0 &&
+      optionalIndex <
+        OPTIONAL_SECTIONS.length - 1
     ) {
-      return
+      setActiveStep(
+        OPTIONAL_SECTIONS[
+          optionalIndex + 1
+        ].id
+      )
     }
-
-    setActiveStep(
-      BUILDER_STEPS[
-        currentStepIndex + 1
-      ].id
-    )
   }
 
   const goPrevious = () => {
+    // =========================================================
+    // OPTIONAL SECTIONS
+    // =========================================================
+
     if (isOptionalSection) {
-      setActiveStep("projects")
-      return
+      const optionalIndex =
+        OPTIONAL_SECTIONS.findIndex(
+          (section) =>
+            section.id === activeStep
+        )
+
+      if (optionalIndex === 0) {
+        setActiveStep("projects")
+        return
+      }
+
+      if (optionalIndex > 0) {
+        setActiveStep(
+          OPTIONAL_SECTIONS[
+            optionalIndex - 1
+          ].id
+        )
+        return
+      }
     }
+
+    // =========================================================
+    // REQUIRED SECTIONS
+    // =========================================================
 
     if (currentStepIndex <= 0) {
       return
@@ -717,6 +854,7 @@ function Builder() {
               <div className="flex items-center gap-3">
 
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#6366F1]">
+
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -743,9 +881,11 @@ function Builder() {
                       strokeLinecap="round"
                     />
                   </svg>
+
                 </div>
 
                 <div className="min-w-0">
+
                   <h1 className="truncate text-xl font-bold tracking-tight text-[#111827] sm:text-2xl">
                     Build Your Resume
                   </h1>
@@ -753,6 +893,7 @@ function Builder() {
                   <p className="mt-0.5 hidden text-sm text-[#718096] sm:block">
                     Complete each section to create your professional CV.
                   </p>
+
                 </div>
 
               </div>
@@ -762,17 +903,21 @@ function Builder() {
             <div className="flex shrink-0 items-center gap-3">
 
               <div className="hidden rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2.5 lg:block">
+
                 <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#718096]">
                   Current template
                 </p>
 
                 <div className="mt-0.5 flex items-center gap-2">
+
                   <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1]" />
 
                   <p className="text-sm font-semibold capitalize text-[#111827]">
                     {selectedTemplate}
                   </p>
+
                 </div>
+
               </div>
 
               <button
@@ -800,6 +945,7 @@ function Builder() {
                   hover:text-[#4F46E5]
                 "
               >
+
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -829,6 +975,7 @@ function Builder() {
                 <span className="sm:hidden">
                   Template
                 </span>
+
               </button>
 
             </div>
@@ -859,9 +1006,12 @@ function Builder() {
                   <p className="hidden text-[10px] text-[#718096] sm:block">
                     {isOptionalSection
                       ? "Optional section"
-                      : `Step ${currentStepIndex + 1
-                      } of ${BUILDER_STEPS.length
-                      }`}
+                      : `Step ${
+                          currentStepIndex +
+                          1
+                        } of ${
+                          BUILDER_STEPS.length
+                        }`}
                   </p>
 
                 </div>
@@ -919,14 +1069,17 @@ function Builder() {
 
                 const isCompleted =
                   !isOptionalSection &&
-                  index < currentStepIndex
+                  index <
+                    currentStepIndex
 
                 return (
                   <button
                     key={step.id}
                     type="button"
                     onClick={() =>
-                      setActiveStep(step.id)
+                      setActiveStep(
+                        step.id
+                      )
                     }
                     className={`
                       flex
@@ -942,9 +1095,10 @@ function Builder() {
                       transition-all
                       duration-200
 
-                      ${isActive
-                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5] shadow-sm"
-                        : "border-[#E2E8F0] bg-white text-[#718096] hover:border-[#6366F1] hover:bg-[#EEF2FF]"
+                      ${
+                        isActive
+                          ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5] shadow-sm"
+                          : "border-[#E2E8F0] bg-white text-[#718096] hover:border-[#6366F1] hover:bg-[#EEF2FF]"
                       }
                     `}
                   >
@@ -960,11 +1114,12 @@ function Builder() {
                         text-[10px]
                         font-bold
 
-                        ${isActive
-                          ? "bg-[#6366F1] text-white"
-                          : isCompleted
-                            ? "bg-[#EEF2FF] text-[#6366F1]"
-                            : "bg-[#F8FAFC] text-[#718096]"
+                        ${
+                          isActive
+                            ? "bg-[#6366F1] text-white"
+                            : isCompleted
+                              ? "bg-[#EEF2FF] text-[#6366F1]"
+                              : "bg-[#F8FAFC] text-[#718096]"
                         }
                       `}
                     >
@@ -992,16 +1147,15 @@ function Builder() {
 
       <div className="mx-auto max-w-[2000px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
 
-
         <div
           className="
-    grid
-    items-stretch
-    gap-6
-    lg:grid-cols-[250px_minmax(0,1fr)]
-    xl:grid-cols-[260px_minmax(0,1fr)_520px]
-    2xl:grid-cols-[280px_minmax(0,1fr)_560px]
-  "
+            grid
+            items-stretch
+            gap-6
+            lg:grid-cols-[250px_minmax(0,1fr)]
+            xl:grid-cols-[260px_minmax(0,1fr)_520px]
+            2xl:grid-cols-[280px_minmax(0,1fr)_560px]
+          "
         >
 
           {/* =================================================
@@ -1049,7 +1203,9 @@ function Builder() {
 
               <BuilderSteps
                 activeStep={activeStep}
-                onStepChange={setActiveStep}
+                onStepChange={
+                  setActiveStep
+                }
                 steps={BUILDER_STEPS}
                 optionalSections={
                   OPTIONAL_SECTIONS
@@ -1069,8 +1225,8 @@ function Builder() {
             <div
               className="
                 flex
-                h-full
-                min-h-[620px]
+                h-auto
+                min-h-0
                 flex-col
                 overflow-hidden
                 rounded-2xl
@@ -1078,6 +1234,8 @@ function Builder() {
                 border-[#E2E8F0]
                 bg-white
                 shadow-[0_4px_24px_rgba(15,23,42,0.045)]
+                lg:h-full
+                lg:min-h-[620px]
               "
             >
 
@@ -1102,18 +1260,18 @@ function Builder() {
                 <div className="hidden shrink-0 rounded-lg bg-[#EEF2FF] px-2.5 py-1.5 text-[9px] font-bold text-[#6366F1] sm:block">
                   {isOptionalSection
                     ? "OPTIONAL"
-                    : `STEP ${currentStepIndex + 1
-                    }`}
+                    : `STEP ${
+                        currentStepIndex +
+                        1
+                      }`}
                 </div>
 
               </div>
 
               {/* FORM CONTENT */}
 
-              <div className="min-w-0 min-h-[680px] flex-1">
-
+              <div className="min-w-0 min-h-0 lg:min-h-[680px] lg:flex-1">
                 {renderStepContent()}
-
               </div>
 
               {/* NAVIGATION */}
@@ -1155,8 +1313,10 @@ function Builder() {
                       disabled:opacity-40
                     "
                   >
+
                     <span>←</span>
                     <span>Back</span>
+
                   </button>
 
                   {/* STEP INDICATORS */}
@@ -1173,14 +1333,15 @@ function Builder() {
                             transition-all
                             duration-300
 
-                            ${!isOptionalSection &&
+                            ${
+                              !isOptionalSection &&
                               index ===
-                              currentStepIndex
-                              ? "w-7 bg-[#6366F1]"
-                              : index <
                                 currentStepIndex
-                                ? "w-3 bg-[#6366F1]"
-                                : "w-3 bg-[#E2E8F0]"
+                                ? "w-7 bg-[#6366F1]"
+                                : index <
+                                    currentStepIndex
+                                  ? "w-3 bg-[#6366F1]"
+                                  : "w-3 bg-[#E2E8F0]"
                             }
                           `}
                         />
@@ -1195,9 +1356,14 @@ function Builder() {
                     type="button"
                     onClick={goNext}
                     disabled={
-                      isOptionalSection ||
-                      currentStepIndex ===
-                      BUILDER_STEPS.length - 1
+                      isOptionalSection &&
+                      OPTIONAL_SECTIONS.findIndex(
+                        (section) =>
+                          section.id ===
+                          activeStep
+                      ) ===
+                        OPTIONAL_SECTIONS.length -
+                          1
                     }
                     className="
                       inline-flex
@@ -1222,8 +1388,20 @@ function Builder() {
                       disabled:shadow-none
                     "
                   >
-                    <span>Continue</span>
-                    <span>→</span>
+
+                    <span>
+                      {!isOptionalSection &&
+                      currentStepIndex ===
+                        BUILDER_STEPS.length -
+                          1
+                        ? "More Information"
+                        : "Continue"}
+                    </span>
+
+                    <span aria-hidden="true">
+                      →
+                    </span>
+
                   </button>
 
                 </div>
@@ -1236,7 +1414,7 @@ function Builder() {
                 MOBILE PREVIEW
             ================================================= */}
 
-            <div className="mt-6 xl:hidden">
+            <div className="mt-4 w-full xl:hidden sm:mt-6">
 
               <div
                 className="
@@ -1273,7 +1451,7 @@ function Builder() {
 
                 </div>
 
-                <div className="bg-[#F8FAFC] p-4 sm:p-6">
+                <div className="w-full overflow-x-auto bg-[#F8FAFC] p-3 sm:p-6">
 
                   <div
                     className="
@@ -1306,9 +1484,13 @@ function Builder() {
 
                 <div className="border-t border-[#E2E8F0] bg-white p-4">
 
-                  <DownloadPDF
-                    previewId="resume-preview-mobile"
-                  />
+                  <div className="flex w-full justify-center">
+
+                    <DownloadPDF
+                      previewId="resume-preview-mobile"
+                    />
+
+                  </div>
 
                   <p className="mt-2 text-center text-[10px] text-[#718096]">
                     Your resume will be exported as PDF
@@ -1403,7 +1585,9 @@ function Builder() {
                   <button
                     type="button"
                     onClick={() =>
-                      setIsPreviewExpanded(true)
+                      setIsPreviewExpanded(
+                        true
+                      )
                     }
                     className="
                       flex
@@ -1553,7 +1737,9 @@ function Builder() {
               event.target ===
               event.currentTarget
             ) {
-              setIsPreviewExpanded(false)
+              setIsPreviewExpanded(
+                false
+              )
             }
           }}
         >
@@ -1624,7 +1810,9 @@ function Builder() {
               <button
                 type="button"
                 onClick={() =>
-                  setIsPreviewExpanded(false)
+                  setIsPreviewExpanded(
+                    false
+                  )
                 }
                 className="
                   flex
@@ -1718,7 +1906,9 @@ function Builder() {
                 <button
                   type="button"
                   onClick={() =>
-                    setIsPreviewExpanded(false)
+                    setIsPreviewExpanded(
+                      false
+                    )
                   }
                   className="
                     rounded-xl
@@ -1758,3 +1948,4 @@ function Builder() {
 }
 
 export default Builder
+

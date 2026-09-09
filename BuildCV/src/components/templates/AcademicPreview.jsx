@@ -220,11 +220,9 @@ function AcademicPreview({
   // =========================================================
 
   const education = useSampleData
-    ? Array.isArray(formData.education) &&
-      formData.education.length > 0
+    ? Array.isArray(formData.education) && formData.education.length > 0
       ? formData.education
-      : Array.isArray(data.education) &&
-        data.education.length > 0
+      : Array.isArray(data.education) && data.education.length > 0
       ? data.education
       : sampleEducation
     : Array.isArray(formData.education)
@@ -232,11 +230,9 @@ function AcademicPreview({
     : [];
 
   const experience = useSampleData
-    ? Array.isArray(formData.experience) &&
-      formData.experience.length > 0
+    ? Array.isArray(formData.experience) && formData.experience.length > 0
       ? formData.experience
-      : Array.isArray(data.experience) &&
-        data.experience.length > 0
+      : Array.isArray(data.experience) && data.experience.length > 0
       ? data.experience
       : sampleExperience
     : Array.isArray(formData.experience)
@@ -244,11 +240,9 @@ function AcademicPreview({
     : [];
 
   const skills = useSampleData
-    ? Array.isArray(formData.skills) &&
-      formData.skills.length > 0
+    ? Array.isArray(formData.skills) && formData.skills.length > 0
       ? formData.skills
-      : Array.isArray(data.skills) &&
-        data.skills.length > 0
+      : Array.isArray(data.skills) && data.skills.length > 0
       ? data.skills
       : sampleSkills
     : Array.isArray(formData.skills)
@@ -256,11 +250,9 @@ function AcademicPreview({
     : [];
 
   const projects = useSampleData
-    ? Array.isArray(formData.projects) &&
-      formData.projects.length > 0
+    ? Array.isArray(formData.projects) && formData.projects.length > 0
       ? formData.projects
-      : Array.isArray(data.projects) &&
-        data.projects.length > 0
+      : Array.isArray(data.projects) && data.projects.length > 0
       ? data.projects
       : sampleProjects
     : Array.isArray(formData.projects)
@@ -268,11 +260,9 @@ function AcademicPreview({
     : [];
 
   const publications = useSampleData
-    ? Array.isArray(formData.publications) &&
-      formData.publications.length > 0
+    ? Array.isArray(formData.publications) && formData.publications.length > 0
       ? formData.publications
-      : Array.isArray(data.publications) &&
-        data.publications.length > 0
+      : Array.isArray(data.publications) && data.publications.length > 0
       ? data.publications
       : samplePublications
     : Array.isArray(formData.publications)
@@ -460,14 +450,15 @@ function AcademicPreview({
 
   const SectionTitle = ({ children }) => (
     <div className="mb-3 flex items-center gap-2.5">
-      <span className="h-[3px] w-5 rounded-full bg-indigo-600" />
+      <span className="h-[3px] w-5 shrink-0 rounded-full bg-indigo-600" />
 
       <h2
         className="
           text-[11px]
           font-extrabold
           uppercase
-          tracking-[0.2em]
+          tracking-[0.18em]
+          leading-tight
           text-slate-900
         "
       >
@@ -482,7 +473,7 @@ function AcademicPreview({
   }) => (
     <p
       className={`
-        text-[10.5px]
+        text-[9.5px]
         leading-[1.55]
         text-slate-500
         ${className}
@@ -496,45 +487,41 @@ function AcademicPreview({
     description,
     count = 3,
   }) => {
-    const lines =
-      getDescriptionLines(description);
+    const lines = getDescriptionLines(description);
 
     if (lines.length > 0) {
       return (
         <ul className="space-y-1.5">
-          {lines.slice(0, 4).map(
-            (line, index) => (
-              <li
-                key={index}
+          {lines.map((line, index) => (
+            <li
+              key={index}
+              className="
+                relative
+                pl-3.5
+                text-[9.5px]
+                leading-[1.55]
+                text-slate-600
+              "
+            >
+              <span
                 className="
-                  relative
-                  pl-3.5
-                  text-[9.5px]
-                  leading-[1.5]
-                  text-slate-600
+                  absolute
+                  left-0
+                  top-[7px]
+                  h-[4px]
+                  w-[4px]
+                  rounded-full
+                  bg-indigo-600
                 "
-              >
-                <span
-                  className="
-                    absolute
-                    left-0
-                    top-[6px]
-                    h-[4px]
-                    w-[4px]
-                    rounded-full
-                    bg-indigo-600
-                  "
-                />
+              />
 
-                {line}
-              </li>
-            )
-          )}
+              {line}
+            </li>
+          ))}
         </ul>
       );
     }
 
-    // Never show fake text in Builder.
     if (!useSampleData) {
       return null;
     }
@@ -549,7 +536,7 @@ function AcademicPreview({
                 relative
                 pl-3.5
                 text-[9.5px]
-                leading-[1.5]
+                leading-[1.55]
                 text-slate-400
               "
             >
@@ -557,7 +544,7 @@ function AcademicPreview({
                 className="
                   absolute
                   left-0
-                  top-[6px]
+                  top-[7px]
                   h-[4px]
                   w-[4px]
                   rounded-full
@@ -581,8 +568,8 @@ function AcademicPreview({
           src={personal.profileImage}
           alt=""
           className="
-            h-16
-            w-16
+            h-[68px]
+            w-[68px]
             shrink-0
             rounded-full
             border
@@ -601,8 +588,8 @@ function AcademicPreview({
       <div
         className="
           flex
-          h-16
-          w-16
+          h-[68px]
+          w-[68px]
           shrink-0
           items-center
           justify-center
@@ -610,7 +597,7 @@ function AcademicPreview({
           border
           border-slate-300
           bg-slate-50
-          text-[7px]
+          text-[8px]
           font-semibold
           text-slate-400
         "
@@ -629,11 +616,11 @@ function AcademicPreview({
         border
         border-slate-200
         bg-slate-50
-        px-2
+        px-2.5
         py-1.5
         text-[9px]
         font-semibold
-        leading-none
+        leading-tight
         text-slate-700
       "
     >
@@ -650,6 +637,7 @@ function AcademicPreview({
     personal.phone,
     personal.location,
     personal.linkedin,
+    personal.github,
   ].filter(Boolean);
 
   // =========================================================
@@ -731,11 +719,11 @@ function AcademicPreview({
         box-border
         min-h-[1123px]
         h-auto
-        overflow-visible
         w-[794px]
+        overflow-visible
         bg-white
-        px-[52px]
-        py-[48px]
+        px-[38px]
+        py-[38px]
         font-sans
         text-slate-900
       "
@@ -748,7 +736,7 @@ function AcademicPreview({
         className="
           border-b
           border-slate-900
-          pb-6
+          pb-5
         "
       >
         <div
@@ -768,9 +756,9 @@ function AcademicPreview({
             {personal.fullName && (
               <h1
                 className="
-                  text-[38px]
+                  text-[34px]
                   font-black
-                  leading-none
+                  leading-[0.98]
                   tracking-[-0.035em]
                   text-slate-900
                 "
@@ -782,11 +770,12 @@ function AcademicPreview({
             {personal.jobTitle && (
               <div
                 className="
-                  mt-3
-                  text-[13px]
+                  mt-2.5
+                  text-[11px]
                   font-bold
                   uppercase
-                  tracking-[0.18em]
+                  tracking-[0.16em]
+                  leading-tight
                   text-indigo-600
                 "
               >
@@ -799,7 +788,7 @@ function AcademicPreview({
 
           <div
             className="
-              h-10
+              h-11
               w-1
               shrink-0
               rounded-full
@@ -813,32 +802,31 @@ function AcademicPreview({
         {contactItems.length > 0 && (
           <div
             className="
-              mt-5
+              mt-4
               flex
               flex-wrap
               items-center
               gap-x-3
               gap-y-1.5
-              text-[9.5px]
+              text-[9px]
               font-medium
+              leading-tight
               text-slate-500
             "
           >
-            {contactItems.map(
-              (item, index) => (
-                <React.Fragment
-                  key={`${item}-${index}`}
-                >
-                  {index > 0 && (
-                    <span className="text-slate-300">
-                      •
-                    </span>
-                  )}
+            {contactItems.map((item, index) => (
+              <React.Fragment
+                key={`${item}-${index}`}
+              >
+                {index > 0 && (
+                  <span className="text-slate-300">
+                    •
+                  </span>
+                )}
 
-                  <span>{item}</span>
-                </React.Fragment>
-              )
-            )}
+                <span>{item}</span>
+              </React.Fragment>
+            ))}
           </div>
         )}
       </header>
@@ -848,7 +836,7 @@ function AcademicPreview({
       ===================================================== */}
 
       {researchInterests.length > 0 && (
-        <section className="mt-6">
+        <section className="mt-5">
           <SectionTitle>
             Research Interests
           </SectionTitle>
@@ -856,7 +844,9 @@ function AcademicPreview({
           <div className="flex flex-wrap gap-2">
             {researchInterests.map(
               (item, index) => (
-                <SkillPill key={`${item}-${index}`}>
+                <SkillPill
+                  key={`${item}-${index}`}
+                >
                   {item}
                 </SkillPill>
               )
@@ -873,8 +863,8 @@ function AcademicPreview({
         className="
           mt-6
           grid
-          grid-cols-[1.7fr_0.9fr]
-          gap-8
+          grid-cols-[1.65fr_0.95fr]
+          gap-[30px]
         "
       >
         {/* ===================================================
@@ -882,9 +872,7 @@ function AcademicPreview({
         =================================================== */}
 
         <main className="min-w-0">
-          {/* =================================================
-              PROFILE
-          ================================================= */}
+          {/* PROFILE */}
 
           {personal.summary && (
             <section>
@@ -898,413 +886,377 @@ function AcademicPreview({
             </section>
           )}
 
-          {/* =================================================
-              EDUCATION
-          ================================================= */}
+          {/* EDUCATION */}
 
           {education.length > 0 && (
-            <section className="mt-7">
+            <section className="mt-6">
               <SectionTitle>
                 Education
               </SectionTitle>
 
               <div className="space-y-5">
-                {education
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const degree =
-                      getValue(item, [
-                        "degree",
-                        "program",
-                        "qualification",
-                        "title",
-                      ]);
+                {education.map((item, index) => {
+                  const degree = getValue(item, [
+                    "degree",
+                    "program",
+                    "qualification",
+                    "title",
+                  ]);
 
-                    const institution =
-                      getValue(item, [
-                        "institution",
-                        "university",
-                        "school",
-                        "college",
-                      ]);
+                  const institution =
+                    getValue(item, [
+                      "institution",
+                      "university",
+                      "school",
+                      "college",
+                    ]);
 
-                    const startDate =
-                      getValue(item, [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]);
+                  const startDate =
+                    getValue(item, [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]);
 
-                    const endDate =
-                      getValue(item, [
-                        "endDate",
-                        "end",
-                        "to",
-                      ]);
+                  const endDate =
+                    getValue(item, [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]);
 
-                    return (
-                      <article
-                        key={index}
+                  return (
+                    <article
+                      key={index}
+                      className="
+                        relative
+                        break-inside-avoid
+                        pl-4
+                      "
+                    >
+                      <span
                         className="
-                          relative
-                          break-inside-avoid
-                          pl-4
+                          absolute
+                          left-0
+                          top-[5px]
+                          h-2
+                          w-2
+                          rounded-full
+                          bg-indigo-600
                         "
-                      >
-                        {/* TIMELINE DOT */}
+                      />
 
-                        <span
+                      {degree && (
+                        <h3
                           className="
-                            absolute
-                            left-0
-                            top-[5px]
-                            h-2
-                            w-2
-                            rounded-full
-                            bg-indigo-600
+                            text-[11px]
+                            font-bold
+                            leading-[1.4]
+                            text-slate-900
                           "
-                        />
+                        >
+                          {degree}
+                        </h3>
+                      )}
 
-                        {/* DEGREE */}
+                      {institution && (
+                        <div
+                          className="
+                            mt-1
+                            text-[9.5px]
+                            font-medium
+                            leading-[1.4]
+                            text-slate-500
+                          "
+                        >
+                          {institution}
+                        </div>
+                      )}
 
-                        {degree && (
-                          <h3
-                            className="
-                              text-[11px]
-                              font-bold
-                              leading-[1.4]
-                              text-slate-900
-                            "
-                          >
-                            {degree}
-                          </h3>
-                        )}
+                      {(startDate || endDate) && (
+                        <div
+                          className="
+                            mt-1
+                            text-[9px]
+                            font-semibold
+                            leading-tight
+                            text-indigo-600
+                          "
+                        >
+                          {startDate || ""}
 
-                        {/* INSTITUTION */}
+                          {startDate && endDate
+                            ? " — "
+                            : ""}
 
-                        {institution && (
-                          <div
-                            className="
-                              mt-1
-                              text-[10px]
-                              font-medium
-                              text-slate-500
-                            "
-                          >
-                            {institution}
-                          </div>
-                        )}
-
-                        {/* DATE */}
-
-                        {(startDate ||
-                          endDate) && (
-                          <div
-                            className="
-                              mt-1
-                              text-[9.5px]
-                              font-semibold
-                              text-indigo-600
-                            "
-                          >
-                            {startDate || ""}
-                            {startDate &&
-                            endDate
-                              ? " — "
-                              : ""}
-                            {endDate || ""}
-                          </div>
-                        )}
-                      </article>
-                    );
-                  })}
+                          {endDate || ""}
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              RESEARCH & EXPERIENCE
-          ================================================= */}
+          {/* RESEARCH & EXPERIENCE */}
 
           {experience.length > 0 && (
-            <section className="mt-7">
+            <section className="mt-6">
               <SectionTitle>
                 Research & Experience
               </SectionTitle>
 
               <div className="space-y-6">
-                {experience
-                  .slice(0, 3)
-                  .map((item, index) => {
-                    const jobTitle =
-                      getValue(item, [
-                        "jobTitle",
-                        "title",
-                        "position",
-                        "role",
-                      ]);
+                {experience.map((item, index) => {
+                  const jobTitle =
+                    getValue(item, [
+                      "jobTitle",
+                      "title",
+                      "position",
+                      "role",
+                    ]);
 
-                    const company =
-                      getValue(item, [
-                        "company",
-                        "companyName",
-                        "organization",
-                        "institution",
-                      ]);
+                  const company =
+                    getValue(item, [
+                      "company",
+                      "companyName",
+                      "organization",
+                      "institution",
+                    ]);
 
-                    const startDate =
-                      getValue(item, [
-                        "startDate",
-                        "start",
-                        "from",
-                      ]);
+                  const startDate =
+                    getValue(item, [
+                      "startDate",
+                      "start",
+                      "from",
+                    ]);
 
-                    const endDate =
-                      getValue(item, [
-                        "endDate",
-                        "end",
-                        "to",
-                      ]);
+                  const endDate =
+                    getValue(item, [
+                      "endDate",
+                      "end",
+                      "to",
+                    ]);
 
-                    const description =
-                      getValue(item, [
-                        "description",
-                        "details",
-                        "responsibilities",
-                      ]);
+                  const description =
+                    getValue(item, [
+                      "description",
+                      "details",
+                      "responsibilities",
+                    ]);
 
-                    return (
-                      <article
-                        key={index}
+                  return (
+                    <article
+                      key={index}
+                      className="
+                        relative
+                        break-inside-avoid
+                        pl-4
+                      "
+                    >
+                      <span
                         className="
-                          relative
-                          break-inside-avoid
-                          pl-4
+                          absolute
+                          left-0
+                          top-[5px]
+                          h-2
+                          w-2
+                          rounded-full
+                          bg-indigo-600
                         "
-                      >
-                        {/* TIMELINE DOT */}
+                      />
 
+                      {index <
+                        experience.length - 1 && (
                         <span
                           className="
                             absolute
-                            left-0
-                            top-[5px]
-                            h-2
-                            w-2
-                            rounded-full
-                            bg-indigo-600
+                            left-[3px]
+                            top-4
+                            h-[calc(100%+24px)]
+                            w-px
+                            bg-slate-200
                           "
                         />
+                      )}
 
-                        {/* TIMELINE LINE */}
+                      {jobTitle && (
+                        <h3
+                          className="
+                            text-[11.5px]
+                            font-bold
+                            leading-[1.3]
+                            text-slate-900
+                          "
+                        >
+                          {jobTitle}
+                        </h3>
+                      )}
 
-                        {index <
-                          experience
-                            .slice(0, 3)
-                            .length -
-                            1 && (
-                          <span
-                            className="
-                              absolute
-                              left-[3px]
-                              top-4
-                              h-[calc(100%+24px)]
-                              w-px
-                              bg-slate-200
-                            "
-                          />
-                        )}
+                      {(company ||
+                        startDate ||
+                        endDate) && (
+                        <div
+                          className="
+                            mt-1
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-1.5
+                            text-[9px]
+                            font-semibold
+                            leading-tight
+                          "
+                        >
+                          {company && (
+                            <span className="text-indigo-600">
+                              {company}
+                            </span>
+                          )}
 
-                        {/* ROLE */}
-
-                        {jobTitle && (
-                          <h3
-                            className="
-                              text-[12px]
-                              font-bold
-                              leading-[1.3]
-                              text-slate-900
-                            "
-                          >
-                            {jobTitle}
-                          </h3>
-                        )}
-
-                        {/* ORGANIZATION + DATE */}
-
-                        {(company ||
-                          startDate ||
-                          endDate) && (
-                          <div
-                            className="
-                              mt-1
-                              flex
-                              flex-wrap
-                              items-center
-                              gap-1.5
-                              text-[9.5px]
-                              font-semibold
-                            "
-                          >
-                            {company && (
-                              <span className="text-indigo-600">
-                                {company}
-                              </span>
-                            )}
-
-                            {(startDate ||
-                              endDate) && (
-                              <>
-                                {company && (
-                                  <span className="text-slate-300">
-                                    •
-                                  </span>
-                                )}
-
-                                <span className="text-slate-400">
-                                  {startDate ||
-                                    ""}
-                                  {startDate &&
-                                  endDate
-                                    ? " — "
-                                    : ""}
-                                  {endDate ||
-                                    ""}
+                          {(startDate ||
+                            endDate) && (
+                            <>
+                              {company && (
+                                <span className="text-slate-300">
+                                  •
                                 </span>
-                              </>
-                            )}
-                          </div>
-                        )}
+                              )}
 
-                        {/* DESCRIPTION */}
+                              <span className="text-slate-400">
+                                {startDate || ""}
 
-                        {description && (
-                          <div className="mt-2">
-                            <ResumeLines
-                              description={
-                                description
-                              }
-                              count={3}
-                            />
-                          </div>
-                        )}
-                      </article>
-                    );
-                  })}
+                                {startDate &&
+                                endDate
+                                  ? " — "
+                                  : ""}
+
+                                {endDate || ""}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      )}
+
+                      {description && (
+                        <div className="mt-2">
+                          <ResumeLines
+                            description={
+                              description
+                            }
+                            count={3}
+                          />
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              PUBLICATIONS
-          ================================================= */}
+          {/* PUBLICATIONS */}
 
           {publications.length > 0 && (
-            <section className="mt-7">
+            <section className="mt-6">
               <SectionTitle>
                 Publications
               </SectionTitle>
 
               <div className="space-y-4">
-                {publications
-                  .slice(0, 3)
-                  .map(
-                    (
-                      publication,
-                      index
-                    ) => {
-                      const title =
-                        typeof publication ===
-                        "string"
-                          ? publication
-                          : getValue(
-                              publication,
-                              [
-                                "title",
-                                "name",
-                              ]
-                            );
+                {publications.map(
+                  (publication, index) => {
+                    const title =
+                      typeof publication ===
+                      "string"
+                        ? publication
+                        : getValue(
+                            publication,
+                            [
+                              "title",
+                              "name",
+                            ]
+                          );
 
-                      const publisher =
-                        getValue(
-                          publication,
-                          [
-                            "publisher",
-                            "journal",
-                            "conference",
-                            "venue",
-                          ]
-                        );
-
-                      const year =
-                        getValue(
-                          publication,
-                          [
-                            "year",
-                            "date",
-                          ]
-                        );
-
-                      return (
-                        <article
-                          key={index}
-                          className="break-inside-avoid"
-                        >
-                          {title && (
-                            <h3
-                              className="
-                                text-[10.5px]
-                                font-bold
-                                leading-[1.4]
-                                text-slate-900
-                              "
-                            >
-                              {title}
-                            </h3>
-                          )}
-
-                          {(publisher ||
-                            year) && (
-                            <p
-                              className="
-                                mt-1
-                                text-[9.5px]
-                                leading-[1.4]
-                                text-slate-500
-                              "
-                            >
-                              {publisher}
-
-                              {publisher &&
-                              year
-                                ? " • "
-                                : ""}
-
-                              {year}
-                            </p>
-                          )}
-                        </article>
+                    const publisher =
+                      getValue(
+                        publication,
+                        [
+                          "publisher",
+                          "journal",
+                          "conference",
+                          "venue",
+                        ]
                       );
-                    }
-                  )}
+
+                    const year =
+                      getValue(
+                        publication,
+                        [
+                          "year",
+                          "date",
+                        ]
+                      );
+
+                    return (
+                      <article
+                        key={index}
+                        className="break-inside-avoid"
+                      >
+                        {title && (
+                          <h3
+                            className="
+                              text-[10.5px]
+                              font-bold
+                              leading-[1.4]
+                              text-slate-900
+                            "
+                          >
+                            {title}
+                          </h3>
+                        )}
+
+                        {(publisher ||
+                          year) && (
+                          <p
+                            className="
+                              mt-1
+                              text-[9px]
+                              leading-[1.45]
+                              text-slate-500
+                            "
+                          >
+                            {publisher}
+
+                            {publisher &&
+                            year
+                              ? " • "
+                              : ""}
+
+                            {year}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  }
+                )}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              CERTIFICATIONS
-          ================================================= */}
+          {/* CERTIFICATIONS */}
 
-          {validCertifications.length > 0 && (
-            <section className="mt-7">
+          {validCertifications.length >
+            0 && (
+            <section className="mt-6">
               <SectionTitle>
                 Certifications
               </SectionTitle>
 
               <div className="space-y-4">
-                {validCertifications
-                  .slice(0, 3)
-                  .map((item, index) => {
+                {validCertifications.map(
+                  (item, index) => {
                     const name =
                       getValue(item, [
                         "name",
@@ -1348,33 +1300,33 @@ function AcademicPreview({
                         {(issuer || year) && (
                           <TinyText className="mt-1">
                             {issuer}
+
                             {issuer && year
                               ? " • "
                               : ""}
+
                             {year}
                           </TinyText>
                         )}
                       </article>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              ACHIEVEMENTS
-          ================================================= */}
+          {/* ACHIEVEMENTS */}
 
           {validAchievements.length > 0 && (
-            <section className="mt-7">
+            <section className="mt-6">
               <SectionTitle>
                 Achievements
               </SectionTitle>
 
               <div className="space-y-4">
-                {validAchievements
-                  .slice(0, 3)
-                  .map((item, index) => {
+                {validAchievements.map(
+                  (item, index) => {
                     const title =
                       getValue(item, [
                         "title",
@@ -1413,28 +1365,25 @@ function AcademicPreview({
                         )}
                       </article>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              INTERESTS
-          ================================================= */}
+          {/* INTERESTS */}
 
           {validInterests.length > 0 && (
-            <section className="mt-7">
+            <section className="mt-6">
               <SectionTitle>
                 Interests
               </SectionTitle>
 
               <div className="flex flex-wrap gap-x-5 gap-y-2">
-                {validInterests
-                  .slice(0, 8)
-                  .map((item, index) => {
+                {validInterests.map(
+                  (item, index) => {
                     const name =
-                      typeof item ===
-                      "string"
+                      typeof item === "string"
                         ? item
                         : getValue(item, [
                             "name",
@@ -1447,15 +1396,17 @@ function AcademicPreview({
                       <span
                         key={index}
                         className="
-                          text-[9.5px]
+                          text-[9px]
                           font-medium
+                          leading-tight
                           text-slate-600
                         "
                       >
                         {name}
                       </span>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}
@@ -1470,12 +1421,10 @@ function AcademicPreview({
             min-w-0
             border-l
             border-slate-200
-            pl-6
+            pl-[22px]
           "
         >
-          {/* =================================================
-              SKILLS
-          ================================================= */}
+          {/* SKILLS */}
 
           {displaySkills.length > 0 && (
             <section>
@@ -1484,27 +1433,23 @@ function AcademicPreview({
               </SectionTitle>
 
               <div className="flex flex-wrap gap-1.5">
-                {displaySkills
-                  .slice(0, 14)
-                  .map(
-                    (skill, index) => (
-                      <SkillPill
-                        key={`${skill}-${index}`}
-                      >
-                        {skill}
-                      </SkillPill>
-                    )
-                  )}
+                {displaySkills.map(
+                  (skill, index) => (
+                    <SkillPill
+                      key={`${skill}-${index}`}
+                    >
+                      {skill}
+                    </SkillPill>
+                  )
+                )}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              RESEARCH AREAS
-          ================================================= */}
+          {/* RESEARCH AREAS */}
 
           {researchInterests.length > 0 && (
-            <section className="mt-8">
+            <section className="mt-7">
               <SectionTitle>
                 Research Areas
               </SectionTitle>
@@ -1518,8 +1463,9 @@ function AcademicPreview({
                         flex
                         items-center
                         gap-2
-                        text-[9.5px]
+                        text-[9px]
                         font-medium
+                        leading-tight
                         text-slate-600
                       "
                     >
@@ -1541,20 +1487,17 @@ function AcademicPreview({
             </section>
           )}
 
-          {/* =================================================
-              PROJECTS
-          ================================================= */}
+          {/* PROJECTS */}
 
           {projects.length > 0 && (
-            <section className="mt-8">
+            <section className="mt-7">
               <SectionTitle>
                 Projects
               </SectionTitle>
 
               <div className="space-y-5">
-                {projects
-                  .slice(0, 2)
-                  .map((project, index) => {
+                {projects.map(
+                  (project, index) => {
                     const title =
                       typeof project ===
                       "string"
@@ -1604,17 +1547,16 @@ function AcademicPreview({
                         )}
                       </article>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              ACADEMIC FOCUS
-          ================================================= */}
+          {/* ACADEMIC FOCUS */}
 
           {academicFocus.length > 0 && (
-            <section className="mt-8">
+            <section className="mt-7">
               <SectionTitle>
                 Academic Focus
               </SectionTitle>
@@ -1628,8 +1570,9 @@ function AcademicPreview({
                         flex
                         items-center
                         gap-2
-                        text-[9.5px]
+                        text-[9px]
                         font-medium
+                        leading-tight
                         text-slate-600
                       "
                     >
@@ -1651,23 +1594,19 @@ function AcademicPreview({
             </section>
           )}
 
-          {/* =================================================
-              LANGUAGES
-          ================================================= */}
+          {/* LANGUAGES */}
 
           {validLanguages.length > 0 && (
-            <section className="mt-8">
+            <section className="mt-7">
               <SectionTitle>
                 Languages
               </SectionTitle>
 
               <div className="space-y-2.5">
-                {validLanguages
-                  .slice(0, 5)
-                  .map((item, index) => {
+                {validLanguages.map(
+                  (item, index) => {
                     const name =
-                      typeof item ===
-                      "string"
+                      typeof item === "string"
                         ? item
                         : getValue(item, [
                             "name",
@@ -1676,8 +1615,7 @@ function AcademicPreview({
                           ]);
 
                     const level =
-                      typeof item ===
-                      "string"
+                      typeof item === "string"
                         ? ""
                         : getValue(item, [
                             "level",
@@ -1689,8 +1627,9 @@ function AcademicPreview({
                       <div
                         key={index}
                         className="
-                          text-[9.5px]
+                          text-[9px]
                           font-medium
+                          leading-tight
                           text-slate-600
                         "
                       >
@@ -1706,25 +1645,23 @@ function AcademicPreview({
                         )}
                       </div>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}
 
-          {/* =================================================
-              REFERENCES
-          ================================================= */}
+          {/* REFERENCES */}
 
           {validReferences.length > 0 && (
-            <section className="mt-8">
+            <section className="mt-7">
               <SectionTitle>
                 References
               </SectionTitle>
 
               <div className="space-y-4">
-                {validReferences
-                  .slice(0, 3)
-                  .map((item, index) => {
+                {validReferences.map(
+                  (item, index) => {
                     const name =
                       getValue(item, [
                         "name",
@@ -1788,7 +1725,8 @@ function AcademicPreview({
                         )}
                       </article>
                     );
-                  })}
+                  }
+                )}
               </div>
             </section>
           )}

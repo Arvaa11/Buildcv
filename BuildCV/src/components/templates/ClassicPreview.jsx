@@ -218,8 +218,6 @@ function ClassicPreview({
     ? formData.projects
     : [];
 
-
-
   // =========================================================
   // SAMPLE OPTIONAL DATA
   // =========================================================
@@ -289,49 +287,48 @@ function ClassicPreview({
   // OPTIONAL SECTION SOURCE
   // =========================================================
 
-const getOptionalSection = (
-  formSection,
-  dataSection,
-  sampleItems
-) => {
-  // =====================================================
-  // LIVE BUILDER
-  // =====================================================
+  const getOptionalSection = (
+    formSection,
+    dataSection,
+    sampleItems
+  ) => {
+    // =====================================================
+    // LIVE BUILDER
+    // =====================================================
 
-  if (!useSampleData) {
+    if (!useSampleData) {
+      if (
+        formSection?.enabled &&
+        Array.isArray(formSection.items)
+      ) {
+        return formSection.items;
+      }
+
+      return [];
+    }
+
+    // =====================================================
+    // SAMPLE / TEMPLATE PREVIEW
+    // =====================================================
+
     if (
       formSection?.enabled &&
-      Array.isArray(formSection.items)
+      Array.isArray(formSection.items) &&
+      formSection.items.length > 0
     ) {
       return formSection.items;
     }
 
-    return [];
-  }
+    if (
+      dataSection?.enabled &&
+      Array.isArray(dataSection.items) &&
+      dataSection.items.length > 0
+    ) {
+      return dataSection.items;
+    }
 
-  // =====================================================
-  // SAMPLE / TEMPLATE PREVIEW
-  // =====================================================
-
-  if (
-    formSection?.enabled &&
-    Array.isArray(formSection.items) &&
-    formSection.items.length > 0
-  ) {
-    return formSection.items;
-  }
-
-  if (
-    dataSection?.enabled &&
-    Array.isArray(dataSection.items) &&
-    dataSection.items.length > 0
-  ) {
-    return dataSection.items;
-  }
-
-  return sampleItems;
-};
-
+    return sampleItems;
+  };
 
   const certifications = getOptionalSection(
     formData.certifications,
@@ -361,33 +358,33 @@ const getOptionalSection = (
   // INTERESTS
   // =========================================================
 
-let interests = "";
+  let interests = "";
 
-if (!useSampleData) {
-  if (formData.interests?.enabled) {
-    interests = String(
-      formData.interests.value || ""
-    ).trim();
-  }
-} else {
-  if (
-    formData.interests?.enabled &&
-    String(formData.interests.value || "").trim()
-  ) {
-    interests = String(
-      formData.interests.value
-    ).trim();
-  } else if (
-    data.interests?.enabled &&
-    String(data.interests.value || "").trim()
-  ) {
-    interests = String(
-      data.interests.value
-    ).trim();
+  if (!useSampleData) {
+    if (formData.interests?.enabled) {
+      interests = String(
+        formData.interests.value || ""
+      ).trim();
+    }
   } else {
-    interests = sampleInterests;
+    if (
+      formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+    ) {
+      interests = String(
+        formData.interests.value
+      ).trim();
+    } else if (
+      data.interests?.enabled &&
+      String(data.interests.value || "").trim()
+    ) {
+      interests = String(
+        data.interests.value
+      ).trim();
+    } else {
+      interests = sampleInterests;
+    }
   }
-}
 
   // =========================================================
   // HELPERS
@@ -531,7 +528,7 @@ if (!useSampleData) {
       <span
         className="
           h-[3px]
-          w-6
+          w-7
           shrink-0
           rounded-full
           bg-indigo-600
@@ -540,7 +537,7 @@ if (!useSampleData) {
 
       <h2
         className="
-          text-[12px]
+          text-[14px]
           font-extrabold
           uppercase
           tracking-[0.2em]
@@ -563,7 +560,7 @@ if (!useSampleData) {
   }) => (
     <p
       className={`
-        text-[11px]
+        text-[12.5px]
         leading-[1.6]
         text-slate-500
         ${className}
@@ -601,8 +598,8 @@ if (!useSampleData) {
             className="
               relative
               pl-4
-              text-[10px]
-              leading-[1.55]
+              text-[11.5px]
+              leading-[1.6]
               text-slate-600
             "
           >
@@ -610,7 +607,7 @@ if (!useSampleData) {
               className="
                 absolute
                 left-0
-                top-[6px]
+                top-[8px]
                 h-[5px]
                 w-[5px]
                 rounded-full
@@ -640,7 +637,7 @@ if (!useSampleData) {
         bg-slate-50
         px-2.5
         py-2
-        text-[9.5px]
+        text-[10.5px]
         font-semibold
         leading-none
         text-slate-700
@@ -659,11 +656,12 @@ if (!useSampleData) {
       className="
         box-border
         min-h-[1123px]
+        h-auto
         w-[794px]
-        overflow-hidden
+        overflow-visible
         bg-white
-        px-[52px]
-        py-[48px]
+        px-[38px]
+        py-[36px]
         font-sans
         text-slate-900
       "
@@ -672,13 +670,13 @@ if (!useSampleData) {
           HEADER
       ====================================================== */}
 
-      <header className="border-b border-slate-200 pb-6">
-        <div className="flex items-end justify-between gap-8">
+      <header className="border-b border-slate-200 pb-7">
+        <div className="flex items-end justify-between gap-7">
           <div className="min-w-0">
             {personal.fullName && (
               <h1
                 className="
-                  text-[44px]
+                  text-[46px]
                   font-black
                   leading-none
                   tracking-[-0.04em]
@@ -693,7 +691,7 @@ if (!useSampleData) {
               <div
                 className="
                   mt-3
-                  text-[15px]
+                  text-[16px]
                   font-bold
                   uppercase
                   tracking-[0.22em]
@@ -710,7 +708,7 @@ if (!useSampleData) {
             <div
               className="
                 mb-1
-                h-11
+                h-12
                 w-1
                 shrink-0
                 rounded-full
@@ -731,8 +729,9 @@ if (!useSampleData) {
               items-center
               gap-x-3
               gap-y-2
-              text-[10.5px]
+              text-[12px]
               font-medium
+              leading-[1.45]
               text-slate-500
             "
           >
@@ -762,7 +761,7 @@ if (!useSampleData) {
           mt-8
           grid
           grid-cols-[1.7fr_0.9fr]
-          gap-8
+          gap-6
         "
       >
         {/* ===================================================
@@ -778,7 +777,7 @@ if (!useSampleData) {
                 Profile
               </SectionTitle>
 
-              <TinyText>
+              <TinyText className="text-[13px] leading-[1.65]">
                 {personal.summary}
               </TinyText>
             </section>
@@ -866,7 +865,7 @@ if (!useSampleData) {
                           className="
                             absolute
                             left-0
-                            top-[5px]
+                            top-[6px]
                             h-2.5
                             w-2.5
                             rounded-full
@@ -897,7 +896,7 @@ if (!useSampleData) {
                         {jobTitle && (
                           <h3
                             className="
-                              text-[13px]
+                              text-[15px]
                               font-bold
                               leading-[1.35]
                               text-slate-900
@@ -917,8 +916,9 @@ if (!useSampleData) {
                               flex-wrap
                               items-center
                               gap-1.5
-                              text-[10px]
+                              text-[11.5px]
                               font-semibold
+                              leading-[1.4]
                             "
                           >
                             {company && (
@@ -1026,7 +1026,7 @@ if (!useSampleData) {
                           {name && (
                             <h3
                               className="
-                                text-[12px]
+                                text-[14.5px]
                                 font-bold
                                 leading-[1.35]
                                 text-slate-900
@@ -1043,7 +1043,7 @@ if (!useSampleData) {
                                 max-w-[150px]
                                 shrink-0
                                 truncate
-                                text-[8.5px]
+                                text-[10px]
                                 font-semibold
                                 text-indigo-600
                               "
@@ -1137,7 +1137,7 @@ if (!useSampleData) {
                         {name && (
                           <h3
                             className="
-                              text-[11px]
+                              text-[13px]
                               font-bold
                               leading-[1.35]
                               text-slate-900
@@ -1156,7 +1156,8 @@ if (!useSampleData) {
                               flex-wrap
                               items-center
                               gap-1.5
-                              text-[9.5px]
+                              text-[11px]
+                              leading-[1.4]
                             "
                           >
                             {organization && (
@@ -1236,7 +1237,7 @@ if (!useSampleData) {
                           {title && (
                             <h3
                               className="
-                                text-[11px]
+                                text-[13px]
                                 font-bold
                                 leading-[1.35]
                                 text-slate-900
@@ -1250,7 +1251,7 @@ if (!useSampleData) {
                             <span
                               className="
                                 shrink-0
-                                text-[8.5px]
+                                text-[10px]
                                 font-semibold
                                 text-indigo-600
                               "
@@ -1298,7 +1299,7 @@ if (!useSampleData) {
             min-w-0
             border-l
             border-slate-200
-            pl-6
+            pl-5
           "
         >
           {/* EDUCATION */}
@@ -1362,7 +1363,7 @@ if (!useSampleData) {
                         {degree && (
                           <h3
                             className="
-                              text-[11.5px]
+                              text-[13px]
                               font-bold
                               leading-[1.4]
                               text-slate-900
@@ -1383,7 +1384,7 @@ if (!useSampleData) {
                           <p
                             className="
                               mt-1.5
-                              text-[9.5px]
+                              text-[11px]
                               font-semibold
                               text-indigo-600
                             "
@@ -1472,7 +1473,7 @@ if (!useSampleData) {
                           {language && (
                             <span
                               className="
-                                text-[10.5px]
+                                text-[11.5px]
                                 font-bold
                                 text-slate-800
                               "
@@ -1484,7 +1485,7 @@ if (!useSampleData) {
                           {level && (
                             <span
                               className="
-                                text-[9px]
+                                text-[10.5px]
                                 text-slate-400
                               "
                             >
@@ -1570,7 +1571,7 @@ if (!useSampleData) {
                         {name && (
                           <h3
                             className="
-                              text-[11px]
+                              text-[12.5px]
                               font-bold
                               leading-[1.35]
                               text-slate-900
@@ -1595,7 +1596,7 @@ if (!useSampleData) {
                             className="
                               mt-1
                               break-all
-                              text-[8.5px]
+                              text-[10px]
                               leading-[1.5]
                               text-slate-500
                             "
@@ -1635,7 +1636,7 @@ if (!useSampleData) {
                       flex
                       items-center
                       gap-2.5
-                      text-[10px]
+                      text-[11.5px]
                       font-medium
                       text-slate-600
                     "

@@ -576,3 +576,121 @@ button:focus-visible {
 
   pointer-events: none;
 }
+
+/* =========================================================
+   MOBILE-FIRST FINISHING LAYER
+   Keeps every existing view and piece of content available,
+   while making compact screens comfortable to use.
+========================================================= */
+
+@media (max-width: 639px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    line-height: 1.5;
+  }
+
+  main,
+  section,
+  article,
+  aside,
+  header,
+  footer,
+  div {
+    min-width: 0;
+  }
+
+  /* Avoid iOS zooming the page when a user edits their CV. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Make every primary interaction comfortably tappable. */
+  button,
+  a,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a[class] {
+    touch-action: manipulation;
+  }
+
+  button:not([class*="h-"]),
+  a.inline-flex,
+  a.flex {
+    min-height: 44px;
+  }
+
+  /* Long values, email addresses, and template names stay contained. */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  a,
+  button,
+  label,
+  span {
+    overflow-wrap: anywhere;
+  }
+
+  /* The full A4 preview remains legible and fully visible on a phone. */
+  .resume-preview-frame {
+    border-radius: 1rem;
+  }
+
+  .resume-preview--fit {
+    transform: scale(calc(min(1, 100cqw / 794px) * 0.88));
+  }
+
+  /* Builder: preserve its controls without forcing a horizontal scroll. */
+  main.bg-\[\#F8FAFC\] > header > div > div {
+    gap: 0.75rem;
+  }
+
+  main.bg-\[\#F8FAFC\] > header > div > div > div:first-child {
+    min-width: 0;
+  }
+
+  main.bg-\[\#F8FAFC\] > header h1 {
+    font-size: 1.0625rem;
+    line-height: 1.2;
+  }
+
+  main.bg-\[\#F8FAFC\] > header button {
+    min-height: 44px;
+    padding-inline: 0.75rem;
+  }
+
+  main.bg-\[\#F8FAFC\] > header button span:not([aria-hidden]) {
+    white-space: nowrap;
+  }
+
+  /* Modal actions stay side-by-side without clipping on narrow devices. */
+  main.bg-\[\#F8FAFC\] [class*="max-h-\[95vh\]"] > :last-child {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 374px) {
+  /* Extra-small phones retain the builder action while releasing title space. */
+  main.bg-\[\#F8FAFC\] > header h1 {
+    font-size: 0.9375rem;
+  }
+
+  main.bg-\[\#F8FAFC\] > header > div > div > div:first-child > div > div:first-child {
+    display: none;
+  }
+
+  .resume-preview--fit {
+    transform: scale(calc(min(1, 100cqw / 794px) * 0.84));
+  }
+}

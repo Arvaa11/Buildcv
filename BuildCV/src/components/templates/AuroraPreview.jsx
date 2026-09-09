@@ -292,7 +292,6 @@ function AuroraPreview({
     dataSection,
     sampleItems
   ) => {
-    // User has configured this section.
     if (formSection !== undefined) {
       return formSection.enabled &&
         Array.isArray(formSection.items)
@@ -300,12 +299,10 @@ function AuroraPreview({
         : [];
     }
 
-    // Builder/PDF must NEVER use sample data.
     if (!useSampleData) {
       return [];
     }
 
-    // Preview can use saved data.
     if (dataSection !== undefined) {
       return dataSection.enabled &&
         Array.isArray(dataSection.items)
@@ -313,121 +310,120 @@ function AuroraPreview({
         : [];
     }
 
-    // Otherwise use template sample data.
     return sampleItems;
   };
 
-const certifications = useSampleData
-  ? formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items) &&
-    formData.certifications.items.length > 0
+  const certifications = useSampleData
+    ? formData.certifications?.enabled &&
+      Array.isArray(formData.certifications.items) &&
+      formData.certifications.items.length > 0
+      ? formData.certifications.items
+      : data.certifications?.enabled &&
+        Array.isArray(data.certifications.items) &&
+        data.certifications.items.length > 0
+      ? data.certifications.items
+      : Array.isArray(formData.certifications)
+      ? formData.certifications
+      : Array.isArray(data.certifications)
+      ? data.certifications
+      : sampleCertifications
+    : formData.certifications?.enabled &&
+      Array.isArray(formData.certifications.items)
     ? formData.certifications.items
-    : data.certifications?.enabled &&
-      Array.isArray(data.certifications.items) &&
-      data.certifications.items.length > 0
-    ? data.certifications.items
     : Array.isArray(formData.certifications)
     ? formData.certifications
-    : Array.isArray(data.certifications)
-    ? data.certifications
-    : sampleCertifications
-  : formData.certifications?.enabled &&
-    Array.isArray(formData.certifications.items)
-  ? formData.certifications.items
-  : Array.isArray(formData.certifications)
-  ? formData.certifications
-  : [];
+    : [];
 
-const languages = useSampleData
-  ? formData.languages?.enabled &&
-    Array.isArray(formData.languages.items) &&
-    formData.languages.items.length > 0
+  const languages = useSampleData
+    ? formData.languages?.enabled &&
+      Array.isArray(formData.languages.items) &&
+      formData.languages.items.length > 0
+      ? formData.languages.items
+      : data.languages?.enabled &&
+        Array.isArray(data.languages.items) &&
+        data.languages.items.length > 0
+      ? data.languages.items
+      : Array.isArray(formData.languages)
+      ? formData.languages
+      : Array.isArray(data.languages)
+      ? data.languages
+      : sampleLanguages
+    : formData.languages?.enabled &&
+      Array.isArray(formData.languages.items)
     ? formData.languages.items
-    : data.languages?.enabled &&
-      Array.isArray(data.languages.items) &&
-      data.languages.items.length > 0
-    ? data.languages.items
     : Array.isArray(formData.languages)
     ? formData.languages
-    : Array.isArray(data.languages)
-    ? data.languages
-    : sampleLanguages
-  : formData.languages?.enabled &&
-    Array.isArray(formData.languages.items)
-  ? formData.languages.items
-  : Array.isArray(formData.languages)
-  ? formData.languages
-  : [];
+    : [];
 
-const achievements = useSampleData
-  ? formData.achievements?.enabled &&
-    Array.isArray(formData.achievements.items) &&
-    formData.achievements.items.length > 0
+  const achievements = useSampleData
+    ? formData.achievements?.enabled &&
+      Array.isArray(formData.achievements.items) &&
+      formData.achievements.items.length > 0
+      ? formData.achievements.items
+      : data.achievements?.enabled &&
+        Array.isArray(data.achievements.items) &&
+        data.achievements.items.length > 0
+      ? data.achievements.items
+      : Array.isArray(formData.achievements)
+      ? formData.achievements
+      : Array.isArray(data.achievements)
+      ? data.achievements
+      : sampleAchievements
+    : formData.achievements?.enabled &&
+      Array.isArray(formData.achievements.items)
     ? formData.achievements.items
-    : data.achievements?.enabled &&
-      Array.isArray(data.achievements.items) &&
-      data.achievements.items.length > 0
-    ? data.achievements.items
     : Array.isArray(formData.achievements)
     ? formData.achievements
-    : Array.isArray(data.achievements)
-    ? data.achievements
-    : sampleAchievements
-  : formData.achievements?.enabled &&
-    Array.isArray(formData.achievements.items)
-  ? formData.achievements.items
-  : Array.isArray(formData.achievements)
-  ? formData.achievements
-  : [];
+    : [];
 
-const interests = useSampleData
-  ? formData.interests?.enabled &&
-    String(formData.interests.value || "").trim()
+  const interests = useSampleData
+    ? formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
+      ? String(formData.interests.value)
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : data.interests?.enabled &&
+        String(data.interests.value || "").trim()
+      ? String(data.interests.value)
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : Array.isArray(formData.interests)
+      ? formData.interests
+      : Array.isArray(data.interests)
+      ? data.interests
+      : sampleInterests
+    : formData.interests?.enabled &&
+      String(formData.interests.value || "").trim()
     ? String(formData.interests.value)
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-    : data.interests?.enabled &&
-      String(data.interests.value || "").trim()
-    ? String(data.interests.value)
         .split(",")
         .map((item) => item.trim())
         .filter(Boolean)
     : Array.isArray(formData.interests)
     ? formData.interests
-    : Array.isArray(data.interests)
-    ? data.interests
-    : sampleInterests
-  : formData.interests?.enabled &&
-    String(formData.interests.value || "").trim()
-  ? String(formData.interests.value)
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean)
-  : Array.isArray(formData.interests)
-  ? formData.interests
-  : [];
+    : [];
 
-const references = useSampleData
-  ? formData.references?.enabled &&
-    Array.isArray(formData.references.items) &&
-    formData.references.items.length > 0
+  const references = useSampleData
+    ? formData.references?.enabled &&
+      Array.isArray(formData.references.items) &&
+      formData.references.items.length > 0
+      ? formData.references.items
+      : data.references?.enabled &&
+        Array.isArray(data.references.items) &&
+        data.references.items.length > 0
+      ? data.references.items
+      : Array.isArray(formData.references)
+      ? formData.references
+      : Array.isArray(data.references)
+      ? data.references
+      : sampleReferences
+    : formData.references?.enabled &&
+      Array.isArray(formData.references.items)
     ? formData.references.items
-    : data.references?.enabled &&
-      Array.isArray(data.references.items) &&
-      data.references.items.length > 0
-    ? data.references.items
     : Array.isArray(formData.references)
     ? formData.references
-    : Array.isArray(data.references)
-    ? data.references
-    : sampleReferences
-  : formData.references?.enabled &&
-    Array.isArray(formData.references.items)
-  ? formData.references.items
-  : Array.isArray(formData.references)
-  ? formData.references
-  : [];
+    : [];
 
   // =========================================================
   // HELPERS
@@ -584,13 +580,13 @@ const references = useSampleData
   // =========================================================
 
   const SectionTitle = ({ children }) => (
-    <div className="mb-3">
+    <div className="mb-3.5">
       <div className="flex items-center gap-2">
         <span className="h-[3px] w-5 rounded-full bg-teal-400" />
 
         <h2
           className="
-            text-[11px]
+            text-[12px]
             font-black
             uppercase
             tracking-[0.16em]
@@ -612,9 +608,13 @@ const references = useSampleData
   }) => (
     <p
       className={`
-        text-[9.5px]
+        text-[10.5px]
         leading-[1.55]
-        ${dark ? "text-white/65" : "text-slate-500"}
+        ${
+          dark
+            ? "text-white/70"
+            : "text-slate-600"
+        }
         ${className}
       `}
     >
@@ -652,8 +652,8 @@ const references = useSampleData
             className={`
               relative
               pl-4
-              text-[9px]
-              leading-[1.5]
+              text-[10px]
+              leading-[1.55]
               ${
                 lines.length > 0
                   ? "text-slate-600"
@@ -665,9 +665,9 @@ const references = useSampleData
               className="
                 absolute
                 left-0
-                top-[6px]
-                h-[4px]
-                w-[4px]
+                top-[7px]
+                h-[5px]
+                w-[5px]
                 rounded-full
                 bg-teal-400
               "
@@ -737,7 +737,7 @@ const references = useSampleData
           ${background}
         `}
       >
-        <span className="text-[14px] font-black text-teal-700">
+        <span className="text-[15px] font-black text-teal-700">
           {initials}
         </span>
       </div>
@@ -753,6 +753,7 @@ const references = useSampleData
       className="
         box-border
         min-h-[1123px]
+        h-auto
         w-[794px]
         overflow-visible
         bg-white
@@ -764,7 +765,7 @@ const references = useSampleData
           HEADER
       ====================================================== */}
 
-      <header className="relative overflow-hidden px-[52px] py-[48px] pb-7">
+      <header className="relative overflow-hidden px-[42px] pt-[40px] pb-6">
         {/* DECORATIVE BLUR */}
 
         <div
@@ -797,7 +798,7 @@ const references = useSampleData
 
         {/* HEADER CONTENT */}
 
-        <div className="relative flex items-center justify-between gap-8">
+        <div className="relative flex items-center justify-between gap-7">
           {/* PHOTO */}
 
           {(useSampleData || personal.profileImage) && (
@@ -822,9 +823,9 @@ const references = useSampleData
             {personal.fullName && (
               <h1
                 className="
-                  text-[38px]
+                  text-[36px]
                   font-black
-                  leading-[0.95]
+                  leading-[0.98]
                   tracking-[-0.04em]
                   text-slate-900
                 "
@@ -836,8 +837,8 @@ const references = useSampleData
             {personal.jobTitle && (
               <div
                 className="
-                  mt-4
-                  text-[11px]
+                  mt-3
+                  text-[12px]
                   font-bold
                   uppercase
                   tracking-[0.2em]
@@ -851,8 +852,8 @@ const references = useSampleData
             {useSampleData && (
               <div
                 className="
-                  mt-3
-                  text-[9px]
+                  mt-2.5
+                  text-[10px]
                   font-medium
                   text-slate-500
                 "
@@ -870,7 +871,7 @@ const references = useSampleData
 
       <div
         className="
-          mx-[52px]
+          mx-[42px]
           h-[3px]
           rounded-full
           bg-gradient-to-r
@@ -884,12 +885,12 @@ const references = useSampleData
           MAIN
       ====================================================== */}
 
-      <main className="px-[52px] py-7">
+      <main className="px-[42px] py-6">
         <div
           className="
             grid
             grid-cols-[1.55fr_0.72fr]
-            gap-8
+            gap-7
           "
         >
           {/* =================================================
@@ -907,9 +908,9 @@ const references = useSampleData
 
                 <div
                   className="
-                    text-[17px]
+                    text-[18px]
                     font-extrabold
-                    leading-[1.15]
+                    leading-[1.2]
                     tracking-[-0.025em]
                     text-slate-900
                   "
@@ -917,7 +918,7 @@ const references = useSampleData
                   {personal.summary}
                 </div>
 
-                <TinyText className="mt-4">
+                <TinyText className="mt-3.5">
                   {personal.summary}
                 </TinyText>
               </section>
@@ -929,7 +930,7 @@ const references = useSampleData
               <section
                 className={
                   personal.summary
-                    ? "mt-8"
+                    ? "mt-7"
                     : ""
                 }
               >
@@ -937,7 +938,7 @@ const references = useSampleData
                   Experience
                 </SectionTitle>
 
-                <div className="space-y-5">
+                <div className="space-y-4.5">
                   {experience
                     .slice(0, 3)
                     .map((item, index) => {
@@ -997,7 +998,7 @@ const references = useSampleData
                             relative
                             rounded-xl
                             bg-slate-50
-                            p-5
+                            p-4.5
                             break-inside-avoid
                           "
                         >
@@ -1005,7 +1006,7 @@ const references = useSampleData
                             className="
                               absolute
                               left-0
-                              top-5
+                              top-4.5
                               h-8
                               w-[3px]
                               rounded-r-full
@@ -1016,7 +1017,7 @@ const references = useSampleData
                           {jobTitle && (
                             <h3
                               className="
-                                text-[12px]
+                                text-[13px]
                                 font-bold
                                 leading-[1.3]
                                 text-slate-900
@@ -1036,7 +1037,7 @@ const references = useSampleData
                                 flex-wrap
                                 items-center
                                 gap-1.5
-                                text-[9px]
+                                text-[10px]
                                 font-semibold
                               "
                             >
@@ -1086,12 +1087,12 @@ const references = useSampleData
             {/* PROJECTS */}
 
             {validProjects.length > 0 && (
-              <section className="mt-8">
+              <section className="mt-7">
                 <SectionTitle>
                   Projects
                 </SectionTitle>
 
-                <div className="space-y-5">
+                <div className="space-y-4.5">
                   {validProjects
                     .slice(0, 3)
                     .map((project, index) => {
@@ -1108,9 +1109,7 @@ const references = useSampleData
                         ]);
 
                       const technologies =
-                        getTechnologies(
-                          project
-                        );
+                        getTechnologies(project);
 
                       const liveUrl =
                         getValue(project, [
@@ -1146,7 +1145,7 @@ const references = useSampleData
                             {name && (
                               <h3
                                 className="
-                                  text-[12px]
+                                  text-[13px]
                                   font-bold
                                   leading-[1.35]
                                   text-slate-900
@@ -1163,7 +1162,7 @@ const references = useSampleData
                                   max-w-[150px]
                                   shrink-0
                                   truncate
-                                  text-[8.5px]
+                                  text-[9px]
                                   font-semibold
                                   text-teal-700
                                 "
@@ -1210,15 +1209,13 @@ const references = useSampleData
                                         bg-white
                                         px-2
                                         py-1.5
-                                        text-[8.5px]
+                                        text-[9px]
                                         font-semibold
                                         leading-none
                                         text-slate-700
                                       "
                                     >
-                                      {
-                                        technology
-                                      }
+                                      {technology}
                                     </span>
                                   )
                                 )}
@@ -1234,12 +1231,12 @@ const references = useSampleData
             {/* CERTIFICATIONS */}
 
             {validCertifications.length > 0 && (
-              <section className="mt-8">
+              <section className="mt-7">
                 <SectionTitle>
                   Certifications
                 </SectionTitle>
 
-                <div className="space-y-4">
+                <div className="space-y-3.5">
                   {validCertifications
                     .slice(0, 3)
                     .map((item, index) => {
@@ -1271,8 +1268,9 @@ const references = useSampleData
                           {name && (
                             <h3
                               className="
-                                text-[11px]
+                                text-[12px]
                                 font-bold
+                                leading-[1.35]
                                 text-slate-900
                               "
                             >
@@ -1289,7 +1287,7 @@ const references = useSampleData
                                 flex-wrap
                                 items-center
                                 gap-1.5
-                                text-[9px]
+                                text-[10px]
                               "
                             >
                               {organization && (
@@ -1324,12 +1322,12 @@ const references = useSampleData
             {/* ACHIEVEMENTS */}
 
             {validAchievements.length > 0 && (
-              <section className="mt-8">
+              <section className="mt-7">
                 <SectionTitle>
                   Achievements
                 </SectionTitle>
 
-                <div className="space-y-4">
+                <div className="space-y-3.5">
                   {validAchievements
                     .slice(0, 3)
                     .map((item, index) => {
@@ -1369,8 +1367,9 @@ const references = useSampleData
                             {title && (
                               <h3
                                 className="
-                                  text-[11px]
+                                  text-[12px]
                                   font-bold
+                                  leading-[1.35]
                                   text-slate-900
                                 "
                               >
@@ -1382,7 +1381,7 @@ const references = useSampleData
                               <span
                                 className="
                                   shrink-0
-                                  text-[8.5px]
+                                  text-[9px]
                                   font-semibold
                                   text-teal-700
                                 "
@@ -1409,7 +1408,7 @@ const references = useSampleData
             {/* INTERESTS */}
 
             {interests && (
-              <section className="mt-8">
+              <section className="mt-7">
                 <SectionTitle>
                   Interests
                 </SectionTitle>
@@ -1436,7 +1435,7 @@ const references = useSampleData
                 min-w-0
                 rounded-2xl
                 bg-slate-950
-                p-6
+                p-5
                 text-white
               "
             >
@@ -1446,7 +1445,7 @@ const references = useSampleData
                 <section>
                   <div
                     className="
-                      text-[10px]
+                      text-[11px]
                       font-bold
                       uppercase
                       tracking-[0.18em]
@@ -1456,7 +1455,7 @@ const references = useSampleData
                     Education
                   </div>
 
-                  <div className="mt-5 space-y-5">
+                  <div className="mt-4.5 space-y-4.5">
                     {education
                       .slice(0, 3)
                       .map((item, index) => {
@@ -1511,7 +1510,7 @@ const references = useSampleData
                             {degree && (
                               <h3
                                 className="
-                                  text-[11px]
+                                  text-[12px]
                                   font-bold
                                   leading-[1.4]
                                   text-white
@@ -1535,7 +1534,7 @@ const references = useSampleData
                               <p
                                 className="
                                   mt-1.5
-                                  text-[8.5px]
+                                  text-[9px]
                                   font-semibold
                                   text-teal-300
                                 "
@@ -1559,13 +1558,13 @@ const references = useSampleData
                 <section
                   className={
                     education.length > 0
-                      ? "mt-8 border-t border-white/10 pt-6"
+                      ? "mt-7 border-t border-white/10 pt-5"
                       : ""
                   }
                 >
                   <div
                     className="
-                      text-[10px]
+                      text-[11px]
                       font-bold
                       uppercase
                       tracking-[0.18em]
@@ -1575,7 +1574,7 @@ const references = useSampleData
                     Expertise
                   </div>
 
-                  <div className="mt-5 space-y-4">
+                  <div className="mt-4.5 space-y-3.5">
                     {finalSkills
                       .slice(0, 12)
                       .map((skill, index) => (
@@ -1584,10 +1583,10 @@ const references = useSampleData
                           className="
                             border-b
                             border-white/10
-                            pb-3
-                            text-[9px]
+                            pb-2.5
+                            text-[10px]
                             font-medium
-                            leading-[1.35]
+                            leading-[1.4]
                             text-white/90
                           "
                         >
@@ -1601,10 +1600,10 @@ const references = useSampleData
               {/* CONTACT */}
 
               {hasContact && (
-                <section className="mt-8 border-t border-white/10 pt-6">
+                <section className="mt-7 border-t border-white/10 pt-5">
                   <div
                     className="
-                      text-[10px]
+                      text-[11px]
                       font-bold
                       uppercase
                       tracking-[0.18em]
@@ -1651,10 +1650,10 @@ const references = useSampleData
               {/* LANGUAGES */}
 
               {validLanguages.length > 0 && (
-                <section className="mt-8 border-t border-white/10 pt-6">
+                <section className="mt-7 border-t border-white/10 pt-5">
                   <div
                     className="
-                      text-[10px]
+                      text-[11px]
                       font-bold
                       uppercase
                       tracking-[0.18em]
@@ -1664,7 +1663,7 @@ const references = useSampleData
                     Languages
                   </div>
 
-                  <div className="mt-5 space-y-4">
+                  <div className="mt-4.5 space-y-3.5">
                     {validLanguages
                       .slice(0, 5)
                       .map((item, index) => {
@@ -1692,7 +1691,7 @@ const references = useSampleData
                               {language && (
                                 <span
                                   className="
-                                    text-[9.5px]
+                                    text-[10px]
                                     font-bold
                                     text-white/90
                                   "
@@ -1704,8 +1703,8 @@ const references = useSampleData
                               {level && (
                                 <span
                                   className="
-                                    text-[8px]
-                                    text-white/45
+                                    text-[9px]
+                                    text-white/50
                                   "
                                 >
                                   {level}
@@ -1743,10 +1742,10 @@ const references = useSampleData
               {/* REFERENCES */}
 
               {validReferences.length > 0 && (
-                <section className="mt-8 border-t border-white/10 pt-6">
+                <section className="mt-7 border-t border-white/10 pt-5">
                   <div
                     className="
-                      text-[10px]
+                      text-[11px]
                       font-bold
                       uppercase
                       tracking-[0.18em]
@@ -1756,7 +1755,7 @@ const references = useSampleData
                     References
                   </div>
 
-                  <div className="mt-5 space-y-5">
+                  <div className="mt-4.5 space-y-4.5">
                     {validReferences
                       .slice(0, 3)
                       .map((item, index) => {
@@ -1798,7 +1797,7 @@ const references = useSampleData
                             {name && (
                               <h3
                                 className="
-                                  text-[10px]
+                                  text-[11px]
                                   font-bold
                                   text-white
                                 "
@@ -1825,9 +1824,9 @@ const references = useSampleData
                                 className="
                                   mt-1
                                   break-all
-                                  text-[8px]
+                                  text-[9px]
                                   leading-[1.5]
-                                  text-white/45
+                                  text-white/50
                                 "
                               >
                                 {[email, phone]
@@ -1850,7 +1849,7 @@ const references = useSampleData
                 <>
                   <div
                     className="
-                      mt-10
+                      mt-8
                       h-px
                       bg-gradient-to-r
                       from-teal-400
@@ -1861,8 +1860,8 @@ const references = useSampleData
 
                   <div
                     className="
-                      mt-4
-                      text-[8px]
+                      mt-3.5
+                      text-[9px]
                       leading-[1.5]
                       text-white/40
                     "

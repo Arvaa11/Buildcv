@@ -313,71 +313,87 @@ export default function Templates() {
   }, [activeFilter, searchQuery]);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <main className="min-h-screen bg-buildcv-background text-buildcv-text">
       {/* ===================================================
           HERO
       =================================================== */}
 
-      <section className="relative overflow-hidden border-b border-slate-200 bg-white">
-        <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-indigo-200/30 blur-3xl" />
+      <section className="relative overflow-hidden border-b border-buildcv-border bg-buildcv-surface">
+        {/* Center Violet Glow */}
+        <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-buildcv-violet/10 blur-3xl" />
 
-        <div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-fuchsia-200/20 blur-3xl" />
+        {/* Left Pink Glow */}
+        <div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-buildcv-accent/5 blur-3xl" />
 
-        <div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-cyan-200/20 blur-3xl" />
+        {/* Right Violet Glow */}
+        <div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-buildcv-violet/10 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-5 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-xs font-bold text-indigo-700 shadow-sm">
-            <span className="text-indigo-500">✦</span>
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-buildcv-border-violet bg-buildcv-violet-50 px-4 py-1.5 text-xs font-bold text-buildcv-violet shadow-sm">
+            <span className="text-buildcv-violet-500">
+              ✦
+            </span>
 
             24 Premium Resume Templates
 
-            <span className="rounded-full bg-white px-2 py-0.5 text-[9px] text-indigo-600">
+            <span className="rounded-full bg-buildcv-surface px-2 py-0.5 text-[9px] text-buildcv-violet-600">
               FREE
             </span>
           </div>
 
-          <h1 className="mx-auto mt-6 max-w-4xl font-display text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+          {/* Heading */}
+          <h1 className="mx-auto mt-6 max-w-4xl font-display text-4xl font-extrabold tracking-tight text-buildcv-ink sm:text-5xl lg:text-6xl">
             Design a Resume
             <br className="sm:hidden" />{" "}
-            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-buildcv-violet via-buildcv-violet-500 to-buildcv-accent bg-clip-text text-transparent">
               They Remember
             </span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+          {/* Description */}
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-buildcv-text-secondary sm:text-lg">
             Choose from professionally crafted templates
             designed for recruiters, creatives, developers,
             executives and ambitious professionals.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold text-slate-500">
+          {/* Feature Row */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold text-buildcv-text-muted">
             <span className="flex items-center gap-1.5">
-              <span className="text-indigo-500">✦</span>
+              <span className="text-buildcv-violet-500">
+                ✦
+              </span>
               24 Unique Designs
             </span>
 
-            <span className="hidden text-slate-300 sm:block">
+            <span className="hidden text-buildcv-border-strong sm:block">
               •
             </span>
 
             <span className="flex items-center gap-1.5">
-              <span className="text-emerald-500">✓</span>
+              <span className="text-buildcv-success">
+                ✓
+              </span>
               ATS-Friendly Options
             </span>
 
-            <span className="hidden text-slate-300 sm:block">
+            <span className="hidden text-buildcv-border-strong sm:block">
               •
             </span>
 
             <span className="flex items-center gap-1.5">
-              <span className="text-violet-500">✦</span>
+              <span className="text-buildcv-accent">
+                ✦
+              </span>
               Photo & Non-Photo
             </span>
           </div>
 
+          {/* Search */}
           <div className="mx-auto mt-9 max-w-xl">
             <div className="group relative">
-              <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400">
+              <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-buildcv-text-muted">
                 <svg
                   viewBox="0 0 24 24"
                   className="h-5 w-5"
@@ -397,7 +413,7 @@ export default function Templates() {
                   setSearchQuery(event.target.value)
                 }
                 placeholder="Search templates, styles or categories..."
-                className="h-13 w-full rounded-2xl border border-slate-200 bg-white px-12 pr-5 text-sm font-medium text-slate-700 shadow-lg shadow-slate-200/50 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100"
+                className="h-13 w-full rounded-2xl border border-buildcv-border bg-buildcv-surface px-12 pr-5 text-sm font-medium text-buildcv-text outline-none shadow-buildcv-lg transition placeholder:text-buildcv-text-muted focus:border-buildcv-violet-300 focus:ring-4 focus:ring-buildcv-violet/10"
               />
             </div>
           </div>
@@ -409,6 +425,8 @@ export default function Templates() {
       =================================================== */}
 
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 lg:py-14">
+        {/* FILTERS */}
+
         <div className="mb-10">
           <div className="flex flex-wrap justify-center gap-2">
             {filters.map((filter) => {
@@ -424,8 +442,8 @@ export default function Templates() {
                   }
                   className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
                     isActive
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
-                      : "border border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600"
+                      ? "bg-buildcv-gradient text-buildcv-white shadow-buildcv-violet"
+                      : "border border-buildcv-border bg-buildcv-surface text-buildcv-ink-600 hover:border-buildcv-border-violet hover:bg-buildcv-violet-50 hover:text-buildcv-violet"
                   }`}
                 >
                   {filter}
@@ -434,8 +452,8 @@ export default function Templates() {
                     <span
                       className={`ml-1.5 ${
                         isActive
-                          ? "text-indigo-100"
-                          : "text-emerald-500"
+                          ? "text-buildcv-violet-100"
+                          : "text-buildcv-success"
                       }`}
                     >
                       ✓
@@ -452,26 +470,26 @@ export default function Templates() {
         <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-buildcv-ink">
                 {activeFilter === "All"
                   ? "All Templates"
                   : activeFilter}
               </h2>
 
-              <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[10px] font-bold text-indigo-600">
+              <span className="rounded-full bg-buildcv-violet-50 px-2.5 py-1 text-[10px] font-bold text-buildcv-violet">
                 {filteredTemplates.length}
               </span>
             </div>
 
-            <p className="mt-1.5 text-sm text-slate-500">
+            <p className="mt-1.5 text-sm text-buildcv-text-muted">
               {searchQuery
                 ? `Results for "${searchQuery}"`
                 : "Choose a design that matches your professional story."}
             </p>
           </div>
 
-          <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-500 shadow-sm sm:flex">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          <div className="hidden items-center gap-2 rounded-full border border-buildcv-border bg-buildcv-surface px-4 py-2 text-xs font-semibold text-buildcv-text-muted shadow-buildcv-sm sm:flex">
+            <span className="h-2 w-2 rounded-full bg-buildcv-success" />
             Designed for first impressions
           </div>
         </div>
@@ -492,16 +510,16 @@ export default function Templates() {
         ) : (
           /* EMPTY STATE */
 
-          <div className="rounded-[28px] border border-slate-200 bg-white px-6 py-20 text-center shadow-sm">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-2xl text-indigo-600">
+          <div className="rounded-buildcv-3xl border border-buildcv-border bg-buildcv-surface px-6 py-20 text-center shadow-buildcv-sm">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-buildcv-violet-50 text-2xl text-buildcv-violet">
               ✦
             </div>
 
-            <h3 className="mt-5 font-display text-xl font-bold text-slate-900">
+            <h3 className="mt-5 font-display text-xl font-bold text-buildcv-ink">
               No templates found
             </h3>
 
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-buildcv-text-muted">
               We couldn't find a template matching your
               search. Try another keyword or browse all
               designs.
@@ -514,7 +532,7 @@ export default function Templates() {
                   setSearchQuery("");
                   setActiveFilter("All");
                 }}
-                className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+                className="rounded-xl bg-buildcv-gradient px-5 py-2.5 text-sm font-semibold text-buildcv-white shadow-buildcv-violet transition hover:-translate-y-0.5"
               >
                 View All Templates
               </button>
@@ -525,7 +543,7 @@ export default function Templates() {
                   onClick={() =>
                     setSearchQuery("")
                   }
-                  className="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                  className="rounded-xl border border-buildcv-border bg-buildcv-surface px-5 py-2.5 text-sm font-semibold text-buildcv-ink-600 transition hover:border-buildcv-border-strong hover:bg-buildcv-surface-soft"
                 >
                   Clear Search
                 </button>
@@ -540,13 +558,15 @@ export default function Templates() {
       =================================================== */}
 
       <section className="mx-auto max-w-7xl px-5 pb-14 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-[32px] bg-slate-950 px-6 py-12 text-center text-white sm:px-10">
-          <div className="pointer-events-none absolute -left-20 -top-20 h-52 w-52 rounded-full bg-indigo-600/30 blur-3xl" />
+        <div className="relative overflow-hidden rounded-[32px] bg-buildcv-ink px-6 py-12 text-center text-buildcv-white sm:px-10">
+          {/* Violet Glow */}
+          <div className="pointer-events-none absolute -left-20 -top-20 h-52 w-52 rounded-full bg-buildcv-violet/25 blur-3xl" />
 
-          <div className="pointer-events-none absolute -bottom-20 -right-20 h-52 w-52 rounded-full bg-violet-600/30 blur-3xl" />
+          {/* Pink Glow */}
+          <div className="pointer-events-none absolute -bottom-20 -right-20 h-52 w-52 rounded-full bg-buildcv-accent/20 blur-3xl" />
 
           <div className="relative">
-            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-200">
+            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-buildcv-violet-300">
               Your next opportunity starts here
             </span>
 
@@ -571,7 +591,7 @@ export default function Templates() {
                   behavior: "smooth",
                 });
               }}
-              className="mt-7 rounded-2xl bg-white px-6 py-3 text-sm font-bold text-slate-900 shadow-xl transition hover:-translate-y-0.5 hover:bg-indigo-50"
+              className="mt-7 rounded-2xl bg-buildcv-gradient px-6 py-3 text-sm font-bold text-buildcv-white shadow-buildcv-violet transition hover:-translate-y-0.5"
             >
               Explore All Templates
             </button>
