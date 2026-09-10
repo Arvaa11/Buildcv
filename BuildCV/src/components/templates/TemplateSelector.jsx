@@ -5,6 +5,12 @@ import gsap from "gsap"
 import { templates } from "../../data/templates"
 import TemplatePreview from "./TemplatePreveiw"
 
+import {
+  templateQuestions,
+  DEFAULT_TEMPLATE_ANSWERS,
+} from "../../data/templateQuestions"
+
+
 function TemplateSelector({
   selectedTemplate,
   setSelectedTemplate,
@@ -125,126 +131,130 @@ function TemplateSelector({
     <section className="min-w-0 space-y-6 px-4 pb-8 pt-24 sm:space-y-8 sm:px-7 sm:pb-10 sm:pt-25">
 
       {/* =================================================
-    HERO
-================================================= */}
+          HERO
+      ================================================= */}
 
       <div
         className="
-    relative
-    overflow-hidden
-    rounded-3xl
-    border
-    border-buildcv-border
-    bg-buildcv-surface
-    px-5
-    py-7
-    shadow-buildcv-md
-    sm:px-8
-    sm:py-10
-    lg:px-10
-    lg:py-12
-  "
+          relative
+          overflow-hidden
+          rounded-3xl
+          border
+          border-buildcv-border
+          bg-buildcv-surface
+          px-5
+          py-7
+          shadow-buildcv-md
+          sm:px-8
+          sm:py-10
+          lg:px-10
+          lg:py-12
+        "
       >
         {/* Ambient violet glow */}
+
         <div
           className="
-      pointer-events-none
-      absolute
-      -right-24
-      -top-28
-      h-80
-      w-80
-      rounded-full
-      bg-buildcv-violet-50
-      opacity-80
-      blur-3xl
-    "
+            pointer-events-none
+            absolute
+            -right-24
+            -top-28
+            h-80
+            w-80
+            rounded-full
+            bg-buildcv-violet-50
+            opacity-80
+            blur-3xl
+          "
         />
 
         <div
           className="
-      pointer-events-none
-      absolute
-      -bottom-32
-      left-1/3
-      h-64
-      w-64
-      rounded-full
-      bg-buildcv-indigo-50
-      opacity-60
-      blur-3xl
-    "
+            pointer-events-none
+            absolute
+            -bottom-32
+            left-1/3
+            h-64
+            w-64
+            rounded-full
+            bg-buildcv-indigo-50
+            opacity-60
+            blur-3xl
+          "
         />
 
         <div className="relative">
 
           {/* Step Badge */}
+
           <div
             className="
-        mb-6
-        inline-flex
-        items-center
-        gap-2.5
-        rounded-full
-        border
-        border-buildcv-border-violet
-        bg-buildcv-violet-50
-        px-4
-        py-2
-        text-[11px]
-        font-bold
-        uppercase
-        tracking-[0.15em]
-        text-buildcv-violet
-      "
+              mb-6
+              inline-flex
+              items-center
+              gap-2.5
+              rounded-full
+              border
+              border-buildcv-border-violet
+              bg-buildcv-violet-50
+              px-4
+              py-2
+              text-[11px]
+              font-bold
+              uppercase
+              tracking-[0.15em]
+              text-buildcv-violet
+            "
           >
             <span
               className="
-          h-2
-          w-2
-          rounded-full
-          bg-buildcv-violet
-        "
+                h-2
+                w-2
+                rounded-full
+                bg-buildcv-violet
+              "
             />
 
             Step 1 · Choose your design
           </div>
 
           {/* Heading */}
+
           <h1
             className="
-        max-w-4xl
-        font-display
-        text-4xl
-        font-extrabold
-        leading-[1.08]
-        tracking-tight
-        text-buildcv-text
-        sm:text-5xl
-      "
+              max-w-4xl
+              font-display
+              text-4xl
+              font-extrabold
+              leading-[1.08]
+              tracking-tight
+              text-buildcv-text
+              sm:text-5xl
+            "
           >
             Build a resume that
 
             <span
               className="
-          block
-          text-buildcv-violet
-        "
+                block
+                text-buildcv-violet
+              "
             >
               looks as good as it reads.
             </span>
           </h1>
 
           {/* Description */}
+
           <p
             className="
-        mt-5
-        max-w-2xl
-        text-base
-        leading-7
-        text-buildcv-text-secondary
-        sm:text-lg
-      "
+              mt-5
+              max-w-2xl
+              text-base
+              leading-7
+              text-buildcv-text-secondary
+              sm:text-lg
+            "
           >
             Choose a professionally designed template
             and create a resume that looks polished,
@@ -252,6 +262,7 @@ function TemplateSelector({
           </p>
 
           {/* Stats */}
+
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
 
             <StatCard
@@ -273,141 +284,177 @@ function TemplateSelector({
 
         </div>
       </div>
-      {/* =================================================
-          FIND YOUR TEMPLATE
-      ================================================= */}
+
+    {/* =================================================
+    FIND YOUR TEMPLATE
+================================================= */}
+
+<div
+  className="
+    relative
+    z-10
+    overflow-hidden
+    rounded-3xl
+    border
+    border-indigo-100
+    bg-white
+    shadow-[0_12px_40px_rgba(15,23,42,0.08)]
+  "
+>
+  {/* Decorative glow */}
+
+  <div
+    className="
+      pointer-events-none
+      absolute
+      -right-20
+      -top-24
+      h-64
+      w-64
+      rounded-full
+      bg-indigo-50
+      blur-3xl
+    "
+  />
+
+  <div
+    className="
+      pointer-events-none
+      absolute
+      -bottom-24
+      -left-20
+      h-48
+      w-48
+      rounded-full
+      bg-indigo-50
+      blur-3xl
+    "
+  />
+
+  <div
+    className="
+      relative
+      flex
+      flex-col
+      gap-6
+      p-6
+      sm:p-8
+      lg:flex-row
+      lg:items-center
+      lg:justify-between
+      lg:p-9
+    "
+  >
+
+    {/* Content */}
+
+    <div className="flex items-start gap-4">
 
       <div
         className="
-          relative
-          overflow-hidden
-          rounded-3xl
-          border
-          border-buildcv-indigo/20
-          bg-buildcv-ink
-          shadow-buildcv-sm
+          flex
+          h-14
+          w-14
+          shrink-0
+          items-center
+          justify-center
+          rounded-2xl
+          bg-indigo-50
+          text-2xl
+          text-indigo-600
         "
       >
-        <div
+        ✦
+      </div>
+
+      <div>
+
+        <p
           className="
-            relative
-            flex
-            flex-col
-            gap-6
-            p-6
-            sm:p-8
-            lg:flex-row
-            lg:items-center
-            lg:justify-between
+            font-display
+            text-lg
+            font-bold
+            text-gray-900
+            sm:text-xl
           "
         >
+          Not sure which template to choose?
+        </p>
 
-          <div className="flex items-start gap-4">
+        <p
+          className="
+            mt-2
+            max-w-xl
+            text-sm
+            leading-6
+            text-slate-500
+          "
+        >
+          Answer a few quick questions and we'll
+          recommend the template that best matches
+          your career, goals, experience, and style.
+        </p>
 
-            <div
-              className="
-                flex
-                h-14
-                w-14
-                shrink-0
-                items-center
-                justify-center
-                rounded-2xl
-                bg-buildcv-indigo/10
-                text-2xl
-                text-buildcv-indigo
-              "
-            >
-              ✦
-            </div>
-
-            <div>
-
-              <p
-                className="
-                  font-display
-                  text-lg
-                  font-bold
-                  text-white
-                  sm:text-xl
-                "
-              >
-                Not sure which template to choose?
-              </p>
-
-              <p
-                className="
-                  mt-2
-                  max-w-xl
-                  text-sm
-                  leading-6
-                  text-buildcv-text-secondary
-                "
-              >
-                Answer three quick questions and
-                we'll recommend the best template
-                for your role, experience, and style.
-              </p>
-
-            </div>
-
-          </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              setShowRecommendation(true)
-            }
-            className="
-    group
-    inline-flex
-    shrink-0
-    items-center
-    justify-center
-    gap-2.5
-    rounded-xl
-    bg-buildcv-violet
-    px-6
-    py-3.5
-    text-sm
-    font-bold
-    text-white
-    shadow-buildcv-violet
-    transition-all
-    duration-200
-    hover:-translate-y-0.5
-    hover:bg-buildcv-violet-600
-    active:translate-y-0
-    active:scale-[0.98]
-  "
-          >
-            <span
-              className="
-      text-base
-      transition-transform
-      duration-200
-      group-hover:rotate-12
-    "
-            >
-              ✦
-            </span>
-
-            Find My Template
-
-            <span
-              className="
-      text-base
-      transition-transform
-      duration-200
-      group-hover:translate-x-1
-    "
-            >
-              →
-            </span>
-          </button>
-
-        </div>
       </div>
+
+    </div>
+
+    {/* Button */}
+
+    <button
+      type="button"
+      onClick={() => setShowRecommendation(true)}
+      className="
+        group
+        inline-flex
+        shrink-0
+        items-center
+        justify-center
+        gap-2.5
+        rounded-xl
+        bg-indigo-600
+        px-6
+        py-3.5
+        text-sm
+        font-bold
+        text-white
+        shadow-[0_8px_20px_rgba(79,70,229,0.22)]
+        transition-all
+        duration-200
+        hover:-translate-y-0.5
+        hover:bg-indigo-700
+        hover:shadow-[0_12px_25px_rgba(79,70,229,0.28)]
+        active:translate-y-0
+        active:scale-[0.98]
+      "
+    >
+      <span
+        className="
+          text-base
+          transition-transform
+          duration-200
+          group-hover:rotate-12
+        "
+      >
+        ✦
+      </span>
+
+      Find My Template
+
+      <span
+        className="
+          text-base
+          transition-transform
+          duration-200
+          group-hover:translate-x-1
+        "
+      >
+        →
+      </span>
+    </button>
+
+  </div>
+</div>
 
       {/* =================================================
           FILTERS
@@ -458,9 +505,10 @@ function TemplateSelector({
                     text-sm
                     font-semibold
                     transition-all
-                    ${isActive
-                      ? "bg-buildcv-indigo text-white shadow-md"
-                      : "text-buildcv-text-secondary hover:bg-buildcv-border hover:text-buildcv-text"
+                    ${
+                      isActive
+                        ? "bg-buildcv-indigo text-white shadow-md"
+                        : "text-buildcv-text-secondary hover:bg-buildcv-border hover:text-buildcv-text"
                     }
                   `}
                 >
@@ -549,22 +597,22 @@ function TemplateSelector({
             type="button"
             onClick={handleContinue}
             className="
-    group
-    rounded-xl
-    bg-buildcv-violet
-    px-7
-    py-3.5
-    text-sm
-    font-bold
-    text-white
-    shadow-buildcv-violet
-    transition-all
-    duration-200
-    hover:-translate-y-0.5
-    hover:bg-buildcv-violet-600
-    active:translate-y-0
-    active:scale-[0.98]
-  "
+              group
+              rounded-xl
+              bg-buildcv-violet
+              px-7
+              py-3.5
+              text-sm
+              font-bold
+              text-white
+              shadow-buildcv-violet
+              transition-all
+              duration-200
+              hover:-translate-y-0.5
+              hover:bg-buildcv-violet-600
+              active:translate-y-0
+              active:scale-[0.98]
+            "
           >
             Continue with{" "}
             {templates.find(
@@ -574,12 +622,12 @@ function TemplateSelector({
 
             <span
               className="
-      ml-1.5
-      inline-block
-      transition-transform
-      duration-200
-      group-hover:translate-x-1
-    "
+                ml-1.5
+                inline-block
+                transition-transform
+                duration-200
+                group-hover:translate-x-1
+              "
             >
               →
             </span>
@@ -613,9 +661,11 @@ function TemplateSelector({
   )
 }
 
+
 /* =========================================================
    STAT CARD
 ========================================================= */
+
 function StatCard({ label, value }) {
   return (
     <div
@@ -664,6 +714,7 @@ function StatCard({ label, value }) {
   )
 }
 
+
 /* =========================================================
    TEMPLATE CARD
 ========================================================= */
@@ -685,9 +736,10 @@ function TemplateCard({
         bg-buildcv-background
         transition-all
         duration-300
-        ${isSelected
-          ? "border-buildcv-indigo shadow-[0_20px_55px_rgba(99,102,241,0.20)]"
-          : "border-buildcv-border shadow-buildcv-sm hover:-translate-y-2 hover:border-buildcv-indigo/50"
+        ${
+          isSelected
+            ? "border-buildcv-indigo shadow-[0_20px_55px_rgba(99,102,241,0.20)]"
+            : "border-buildcv-border shadow-buildcv-sm hover:-translate-y-2 hover:border-buildcv-indigo/50"
         }
       `}
     >
@@ -847,7 +899,16 @@ function TemplateCard({
           </div>
         )}
 
-        <div className="mt-5 border-t border-buildcv-border pt-4 sm:mt-6 sm:pt-5">
+        <div
+          className="
+            mt-5
+            border-t
+            border-buildcv-border
+            pt-4
+            sm:mt-6
+            sm:pt-5
+          "
+        >
 
           <button
             type="button"
@@ -864,9 +925,10 @@ function TemplateCard({
               text-sm
               font-bold
               transition-all
-              ${isSelected
-                ? "bg-buildcv-indigo text-white"
-                : "bg-buildcv-indigo/5 text-buildcv-text hover:bg-buildcv-indigo hover:text-white"
+              ${
+                isSelected
+                  ? "bg-buildcv-indigo text-white"
+                  : "bg-buildcv-indigo/5 text-buildcv-text hover:bg-buildcv-indigo hover:text-white"
               }
             `}
           >
@@ -889,8 +951,9 @@ function TemplateCard({
   )
 }
 
+
 /* =========================================================
-   RECOMMENDATION MODAL
+   TEMPLATE RECOMMENDATION MODAL
 ========================================================= */
 
 function TemplateRecommendation({
@@ -899,90 +962,20 @@ function TemplateRecommendation({
 }) {
   const [step, setStep] = useState(1)
 
-  const [answers, setAnswers] = useState({
-    role: "",
-    experience: "",
-    style: "",
-  })
+  const [answers, setAnswers] = useState(
+    DEFAULT_TEMPLATE_ANSWERS
+  )
 
   const backdropRef = useRef(null)
   const panelRef = useRef(null)
 
-  const questions = [
-    {
-      id: "role",
-      title:
-        "What type of role are you applying for?",
-      options: [
-        {
-          value: "technology",
-          label: "Software & Technology",
-        },
-        {
-          value: "business",
-          label: "Business & Corporate",
-        },
-        {
-          value: "design",
-          label: "Design & Creative",
-        },
-        {
-          value: "education",
-          label: "Education & Academic",
-        },
-      ],
-    },
-
-    {
-      id: "experience",
-      title:
-        "What's your experience level?",
-      options: [
-        {
-          value: "student",
-          label: "Student / Fresh Graduate",
-        },
-        {
-          value: "entry-level",
-          label: "Entry Level",
-        },
-        {
-          value: "professional",
-          label: "Professional",
-        },
-        {
-          value: "executive",
-          label: "Senior / Executive",
-        },
-      ],
-    },
-
-    {
-      id: "style",
-      title:
-        "What resume style do you prefer?",
-      options: [
-        {
-          value: "modern",
-          label: "Modern",
-        },
-        {
-          value: "professional",
-          label: "Professional",
-        },
-        {
-          value: "minimal",
-          label: "Minimal",
-        },
-      ],
-    },
-  ]
+  const questions = templateQuestions
 
   const currentQuestion =
     questions[step - 1]
 
   // =====================================================
-  // MODAL ANIMATION
+  // MODAL ANIMATION + KEYBOARD
   // =====================================================
 
   useEffect(() => {
@@ -993,30 +986,37 @@ function TemplateRecommendation({
 
     const ctx = gsap.context(() => {
 
-      gsap.fromTo(
-        backdropRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.25,
-        }
-      )
+      if (backdropRef.current) {
+        gsap.fromTo(
+          backdropRef.current,
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            duration: 0.25,
+            ease: "power2.out",
+          }
+        )
+      }
 
-      gsap.fromTo(
-        panelRef.current,
-        {
-          opacity: 0,
-          y: 24,
-          scale: 0.96,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          ease: "power3.out",
-        }
-      )
+      if (panelRef.current) {
+        gsap.fromTo(
+          panelRef.current,
+          {
+            opacity: 0,
+            y: 24,
+            scale: 0.97,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.35,
+            ease: "power3.out",
+          }
+        )
+      }
 
     })
 
@@ -1098,6 +1098,14 @@ function TemplateRecommendation({
     onSelect(recommendedTemplate)
   }
 
+  // =====================================================
+  // RENDER
+  // =====================================================
+
+  if (!currentQuestion) {
+    return null
+  }
+
   return (
     <div
       ref={backdropRef}
@@ -1122,6 +1130,7 @@ function TemplateRecommendation({
       "
       role="dialog"
       aria-modal="true"
+      aria-labelledby="template-recommendation-title"
     >
 
       <div
@@ -1139,7 +1148,9 @@ function TemplateRecommendation({
         "
       >
 
-        {/* HEADER */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
         <div
           className="
@@ -1156,6 +1167,7 @@ function TemplateRecommendation({
           <div>
 
             <p
+              id="template-recommendation-title"
               className="
                 text-[11px]
                 font-bold
@@ -1183,6 +1195,7 @@ function TemplateRecommendation({
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close template recommendation"
             className="
               flex
               h-9
@@ -1193,6 +1206,7 @@ function TemplateRecommendation({
               bg-buildcv-indigo/5
               text-xl
               text-buildcv-text-secondary
+              transition-all
               hover:bg-buildcv-indigo
               hover:text-white
             "
@@ -1202,7 +1216,9 @@ function TemplateRecommendation({
 
         </div>
 
-        {/* PROGRESS */}
+        {/* =================================================
+            PROGRESS
+        ================================================= */}
 
         <div className="h-1.5 bg-[#F8FAFC]">
 
@@ -1214,16 +1230,17 @@ function TemplateRecommendation({
               duration-300
             "
             style={{
-              width: `${(step /
-                questions.length) *
-                100
-                }%`,
+              width: `${
+                (step / questions.length) * 100
+              }%`,
             }}
           />
 
         </div>
 
-        {/* QUESTION */}
+        {/* =================================================
+            QUESTION
+        ================================================= */}
 
         <div
           data-quiz-question
@@ -1251,8 +1268,7 @@ function TemplateRecommendation({
               text-buildcv-text-secondary
             "
           >
-            Choose the option that best
-            describes you.
+            {currentQuestion.description}
           </p>
 
           <div className="mt-7 space-y-3">
@@ -1260,7 +1276,7 @@ function TemplateRecommendation({
             {currentQuestion.options.map(
               (option) => (
                 <button
-                  key={option.value}
+                  key={option.id}
                   type="button"
                   onClick={() =>
                     handleAnswer(
@@ -1281,6 +1297,7 @@ function TemplateRecommendation({
                     py-4
                     text-left
                     transition-all
+                    duration-200
                     hover:-translate-y-0.5
                     hover:border-buildcv-indigo
                     hover:bg-buildcv-indigo/5
@@ -1301,6 +1318,9 @@ function TemplateRecommendation({
                     className="
                       text-lg
                       text-buildcv-text-muted
+                      transition-transform
+                      duration-200
+                      group-hover:translate-x-1
                       group-hover:text-buildcv-indigo
                     "
                   >
@@ -1327,6 +1347,7 @@ function TemplateRecommendation({
                 text-xs
                 font-semibold
                 text-buildcv-text-muted
+                transition-colors
                 hover:text-buildcv-indigo
               "
             >
@@ -1337,84 +1358,341 @@ function TemplateRecommendation({
         </div>
 
       </div>
+
     </div>
   )
 }
+
 
 /* =========================================================
    RECOMMENDATION LOGIC
 ========================================================= */
 
-function getRecommendedTemplate(answers) {
-
-  // TECHNOLOGY
-  if (answers.role === "technology") {
-
-    if (
-      answers.style === "minimal"
-    ) {
-      return "tech-pro"
-    }
-
-    return "developer"
+function getRecommendedTemplate(answers = {}) {
+  const scores = {
+    modern: 0,
+    professional: 0,
+    minimal: 0,
+    executive: 0,
+    creative: 0,
+    elegant: 0,
+    classic: 0,
+    academic: 0,
+    bold: 0,
+    clean: 0,
+    tech: 0,
+    portfolio: 0,
+    aurora: 0,
+    monarch: 0,
+    nexus: 0,
+    sage: 0,
+    vertex: 0,
+    muse: 0,
+    orbit: 0,
+    noir: 0,
+    coral: 0,
+    ocean: 0,
+    stellar: 0,
+    atelier: 0,
   }
 
-  // DESIGN
-  if (answers.role === "design") {
-    return "creative"
+  // =====================================================
+  // CAREER FIELD
+  // =====================================================
+
+  switch (answers.careerField) {
+
+    case "technology":
+      scores.tech += 7
+      scores.nexus += 6
+      scores.vertex += 6
+      scores.modern += 3
+      scores.aurora += 2
+      break
+
+    case "business":
+      scores.professional += 7
+      scores.sage += 6
+      scores.ocean += 5
+      scores.executive += 3
+      scores.classic += 2
+      break
+
+    case "academic":
+      scores.academic += 10
+      scores.classic += 3
+      scores.minimal += 2
+      break
+
+    case "creative":
+      scores.creative += 7
+      scores.portfolio += 7
+      scores.atelier += 6
+      scores.muse += 5
+      scores.coral += 4
+      scores.aurora += 3
+      break
+
+    case "general":
+      scores.professional += 5
+      scores.modern += 4
+      scores.sage += 4
+      scores.clean += 3
+      scores.classic += 2
+      break
+
   }
 
-  // EDUCATION
-  if (answers.role === "education") {
-    return "academic"
+  // =====================================================
+  // EXPERIENCE LEVEL
+  // =====================================================
+
+  switch (answers.experienceLevel) {
+
+    case "student":
+      scores.academic += 4
+      scores.clean += 4
+      scores.minimal += 3
+      scores.modern += 2
+      scores.tech += 2
+      break
+
+    case "entry":
+      scores.modern += 4
+      scores.professional += 4
+      scores.clean += 3
+      scores.tech += 3
+      scores.minimal += 2
+      break
+
+    case "mid":
+      scores.professional += 5
+      scores.modern += 4
+      scores.sage += 4
+      scores.ocean += 3
+      scores.nexus += 2
+      break
+
+    case "senior":
+      scores.executive += 6
+      scores.professional += 5
+      scores.monarch += 5
+      scores.noir += 4
+      scores.sage += 3
+      break
+
+    case "executive":
+      scores.executive += 9
+      scores.monarch += 8
+      scores.noir += 7
+      scores.professional += 3
+      break
+
   }
 
-  // BUSINESS
-  if (answers.role === "business") {
+  // =====================================================
+  // PURPOSE
+  // =====================================================
 
-    if (
-      answers.experience ===
-      "executive"
-    ) {
-      return "executive"
-    }
+  switch (answers.purpose) {
 
-    if (
-      answers.style === "minimal"
-    ) {
-      return "minimal"
-    }
+    case "job":
+      scores.professional += 4
+      scores.modern += 3
+      scores.minimal += 2
+      scores.clean += 2
+      break
 
-    return "professional"
+    case "internship":
+      scores.tech += 4
+      scores.modern += 4
+      scores.clean += 3
+      scores.minimal += 3
+      scores.academic += 2
+      break
+
+    case "freelance":
+      scores.portfolio += 6
+      scores.creative += 5
+      scores.tech += 4
+      scores.modern += 4
+      scores.aurora += 3
+      scores.atelier += 3
+      break
+
+    case "academicPosition":
+      scores.academic += 8
+      scores.classic += 3
+      scores.minimal += 2
+      break
+
+    case "careerChange":
+      scores.professional += 6
+      scores.sage += 5
+      scores.clean += 4
+      scores.modern += 3
+      scores.classic += 2
+      break
+
   }
 
-  // EXECUTIVE
-  if (
-    answers.experience === "executive"
-  ) {
-    return "executive"
+  // =====================================================
+  // ATS IMPORTANCE
+  // =====================================================
+
+  switch (answers.ats) {
+
+    case "veryImportant":
+      scores.minimal += 7
+      scores.clean += 6
+      scores.classic += 6
+      scores.professional += 5
+      scores.academic += 3
+
+      scores.creative -= 2
+      scores.portfolio -= 2
+      scores.muse -= 2
+      scores.coral -= 2
+      scores.atelier -= 2
+      break
+
+    case "important":
+      scores.professional += 4
+      scores.minimal += 4
+      scores.clean += 4
+      scores.classic += 3
+      scores.modern += 2
+      break
+
+    case "notSure":
+      scores.modern += 3
+      scores.professional += 3
+      scores.minimal += 2
+      break
+
+    case "notImportant":
+      scores.creative += 4
+      scores.portfolio += 4
+      scores.aurora += 3
+      scores.muse += 3
+      scores.atelier += 3
+      scores.bold += 2
+      break
+
   }
 
+  // =====================================================
   // STYLE
-  if (
-    answers.style === "modern"
-  ) {
-    return "modern"
+  // =====================================================
+
+  switch (answers.style) {
+
+    case "modern":
+      scores.modern += 7
+      scores.aurora += 6
+      scores.orbit += 6
+      scores.stellar += 5
+      scores.bold += 4
+      scores.nexus += 3
+      scores.vertex += 3
+      break
+
+    case "minimal":
+      scores.minimal += 8
+      scores.clean += 7
+      scores.classic += 3
+      scores.sage += 3
+      scores.ocean += 2
+      break
+
+    case "professional":
+      scores.professional += 8
+      scores.sage += 6
+      scores.ocean += 5
+      scores.classic += 4
+      scores.executive += 3
+      break
+
+    case "creative":
+      scores.creative += 8
+      scores.portfolio += 7
+      scores.atelier += 6
+      scores.muse += 6
+      scores.coral += 5
+      scores.aurora += 3
+      break
+
+    case "traditional":
+      scores.classic += 9
+      scores.academic += 5
+      scores.minimal += 4
+      scores.professional += 3
+      break
+
   }
 
-  if (
-    answers.style === "professional"
-  ) {
-    return "professional"
+  // =====================================================
+  // STRENGTH
+  // =====================================================
+
+  switch (answers.strength) {
+
+    case "projects":
+      scores.tech += 7
+      scores.nexus += 6
+      scores.vertex += 5
+      scores.modern += 4
+      scores.portfolio += 3
+      break
+
+    case "experience":
+      scores.professional += 6
+      scores.executive += 5
+      scores.sage += 4
+      scores.ocean += 3
+      scores.classic += 2
+      break
+
+    case "education":
+      scores.academic += 8
+      scores.classic += 4
+      scores.minimal += 3
+      break
+
+    case "research":
+      scores.academic += 10
+      scores.classic += 3
+      scores.minimal += 2
+      break
+
+    case "portfolio":
+      scores.portfolio += 9
+      scores.creative += 7
+      scores.atelier += 6
+      scores.muse += 5
+      scores.coral += 4
+      break
+
+    case "leadership":
+      scores.executive += 8
+      scores.monarch += 7
+      scores.noir += 6
+      scores.professional += 4
+      scores.bold += 2
+      break
+
   }
 
-  if (
-    answers.style === "minimal"
-  ) {
-    return "minimal"
-  }
+  // =====================================================
+  // FIND HIGHEST SCORING TEMPLATE
+  // =====================================================
 
-  return "modern"
+  const recommendedTemplate =
+    Object.entries(scores)
+      .sort((a, b) => b[1] - a[1])[0]?.[0]
+
+  return recommendedTemplate || "modern"
 }
+
 
 export default TemplateSelector

@@ -530,8 +530,12 @@ export function getTemplateId(template) {
 // =====================================================
 
 export function isValidTemplateId(id) {
+  if (!id) {
+    return false
+  }
+
   return templates.some(
     (template) =>
-      template.id === id
+      template.id === String(id)
   )
 }

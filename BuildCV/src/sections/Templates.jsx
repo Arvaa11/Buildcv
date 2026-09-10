@@ -1228,33 +1228,13 @@ function Templates() {
           BACKGROUND
       ====================================================== */}
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -left-56
-          top-20
-          h-[520px]
-          w-[520px]
-          rounded-full
-          bg-buildcv-violet/7
-          blur-[130px]
-        "
-      />
+     <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-buildcv-violet/20 blur-3xl" />
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -right-56
-          bottom-10
-          h-[520px]
-          w-[520px]
-          rounded-full
-          bg-buildcv-accent/5
-          blur-[130px]
-        "
-      />
+{/* Left Pink Glow */}
+<div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-buildcv-accent/15 blur-3xl" />
+
+{/* Right Violet Glow */}
+<div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-buildcv-violet/20 blur-3xl" />
 
       {/* Grid */}
 

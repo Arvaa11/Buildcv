@@ -17,50 +17,14 @@ function FinalCTA() {
           BACKGROUND GLOW
       ================================================= */}
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          h-96
-          w-96
-          -translate-x-1/2
-          -translate-y-1/2
-          rounded-full
-          bg-buildcv-violet/10
-          blur-[120px]
-        "
-      />
+    
+      <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-buildcv-violet/20 blur-3xl" />
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -left-32
-          bottom-0
-          h-72
-          w-72
-          rounded-full
-          bg-buildcv-accent/10
-          blur-[110px]
-        "
-      />
+{/* Left Pink Glow */}
+<div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-buildcv-accent/15 blur-3xl" />
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -right-32
-          top-0
-          h-72
-          w-72
-          rounded-full
-          bg-buildcv-violet/10
-          blur-[110px]
-        "
-      />
-
+{/* Right Violet Glow */}
+<div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-buildcv-violet/20 blur-3xl" />
       {/* =================================================
           SUBTLE GRID
       ================================================= */}

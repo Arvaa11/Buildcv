@@ -452,18 +452,48 @@ function Home() {
               {/* Main visual glow */}
 
               <div
-                data-hero-main-glow
+                data-hero-orb
                 className="
-                  pointer-events-none
-                  absolute
-                  h-[380px]
-                  w-[380px]
-                  rounded-full
-                  bg-buildcv-violet/20
-                  blur-[100px]
-                  sm:h-[460px]
-                  sm:w-[460px]
-                "
+    pointer-events-none
+    absolute
+    -left-48
+    top-0
+    h-[520px]
+    w-[520px]
+    rounded-full
+    bg-buildcv-violet/35
+    blur-[100px]
+  "
+              />
+
+              <div
+                data-hero-orb
+                className="
+    pointer-events-none
+    absolute
+    -right-48
+    top-24
+    h-[520px]
+    w-[520px]
+    rounded-full
+    bg-buildcv-accent/30
+    blur-[100px]
+  "
+              />
+
+              <div
+                data-hero-orb
+                className="
+    pointer-events-none
+    absolute
+    left-1/3
+    bottom-[-280px]
+    h-[500px]
+    w-[500px]
+    rounded-full
+    bg-buildcv-violet/20
+    blur-[110px]
+  "
               />
 
 
@@ -1083,7 +1113,7 @@ function Home() {
         />
 
       </section>
-     
+
 
       {/* =====================================================
           SECTIONS

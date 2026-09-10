@@ -19,7 +19,7 @@ function PreviewModal({
         items-center
         justify-center
         bg-[#111827]/70
-        p-4
+        p-3
         backdrop-blur-sm
       "
       onMouseDown={(event) => {
@@ -29,6 +29,9 @@ function PreviewModal({
       }}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="template-preview-title"
         className="
           flex
           max-h-[95vh]
@@ -36,7 +39,7 @@ function PreviewModal({
           max-w-6xl
           flex-col
           overflow-hidden
-          rounded-3xl
+          rounded-2xl
           bg-white
           shadow-2xl
         "
@@ -57,7 +60,10 @@ function PreviewModal({
           "
         >
           <div>
-            <h2 className="text-lg font-bold text-[#111827]">
+            <h2
+              id="template-preview-title"
+              className="text-lg font-bold text-[#111827]"
+            >
               {template.name}
             </h2>
 
@@ -97,7 +103,7 @@ function PreviewModal({
             flex-1
             overflow-auto
             bg-[#F8FAFC]
-            p-6
+            p-3
             sm:p-10
           "
         >
@@ -105,26 +111,23 @@ function PreviewModal({
             <div
               className="
                 relative
-                h-[773px]
-                w-[546px]
+                h-[460px]
+                w-[325px]
                 shrink-0
                 overflow-hidden
                 bg-white
                 shadow-2xl
+                sm:h-[773px]
+                sm:w-[546px]
               "
             >
               <div
                 className="
+                  template-modal-canvas
                   absolute
                   left-0
                   top-0
                 "
-                style={{
-                  width: "794px",
-                  height: "1123px",
-                  transform: "scale(0.687657)",
-                  transformOrigin: "top left",
-                }}
               >
                 <TemplatePreview
                   template={template}
@@ -156,7 +159,8 @@ function PreviewModal({
             type="button"
             onClick={onClose}
             className="
-              rounded-xl
+            min-h-11
+            rounded-xl
               border
               border-[#E2E8F0]
               px-5
@@ -178,7 +182,8 @@ function PreviewModal({
               onUseTemplate(template)
             }
             className="
-              rounded-xl
+            min-h-11
+            rounded-xl
               bg-[#6366F1]
               px-6
               py-2.5

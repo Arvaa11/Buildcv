@@ -577,6 +577,19 @@ button:focus-visible {
   pointer-events: none;
 }
 
+/* Scaled source canvas used by the template preview modal. */
+.template-modal-canvas {
+  width: 794px;
+  height: 1123px;
+  transform: scale(0.4093);
+  transform-origin: top left;
+}
+
+.buildcv-scroll-row {
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2fe transparent;
+}
+
 /* =========================================================
    MOBILE-FIRST FINISHING LAYER
    Keeps every existing view and piece of content available,
@@ -677,6 +690,41 @@ button:focus-visible {
   /* Modal actions stay side-by-side without clipping on narrow devices. */
   main.bg-\[\#F8FAFC\] [class*="max-h-\[95vh\]"] > :last-child {
     padding-inline: 1rem;
+  }
+
+  .buildcv-scroll-row {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .buildcv-scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+  Builder sections use independent scroll panels on desktop so the controls,
+  step rail, and preview can stay visible. On smaller screens that pattern
+  traps touch and wheel scrolling inside individual sections. Let the document
+  own vertical scrolling until the three-column workspace is active.
+*/
+@media (max-width: 1023px) {
+  .builder-flow > section {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .builder-flow > section > div[class*="overflow-y-auto"] {
+    min-height: 0 !important;
+    flex: none !important;
+    overflow-y: visible !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .template-modal-canvas {
+    transform: scale(0.687657);
   }
 }
 

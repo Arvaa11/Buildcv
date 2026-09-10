@@ -249,6 +249,7 @@ function Navbar() {
 
             <button
               type="button"
+              aria-controls="mobile-navigation"
               aria-label={
                 isMenuOpen
                   ? "Close navigation menu"
@@ -300,6 +301,7 @@ function Navbar() {
 
         {isMenuOpen && (
           <div
+            id="mobile-navigation"
             className="
               border-t
               border-buildcv-border

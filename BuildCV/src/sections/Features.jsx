@@ -47,34 +47,13 @@ function Features() {
           BACKGROUND DECORATION
       ====================================================== */}
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -left-48
-          top-32
-          h-[420px]
-          w-[420px]
-          rounded-full
-          bg-buildcv-violet/8
-          blur-[120px]
-        "
-      />
+     <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-buildcv-violet/20 blur-3xl" />
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -right-48
-          bottom-0
-          h-[420px]
-          w-[420px]
-          rounded-full
-          bg-buildcv-accent/6
-          blur-[120px]
-        "
-      />
+{/* Left Pink Glow */}
+<div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-buildcv-accent/15 blur-3xl" />
 
+{/* Right Violet Glow */}
+<div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-buildcv-violet/20 blur-3xl" />
       {/* Subtle grid */}
 
       <div

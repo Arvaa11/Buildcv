@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import PreviewModal from "../components/templates/PreviewModal";
+import PreviewModal from "../components/templates/PreviewModal"
+import TemplateRecommendation from "./TemplateRecommendation";
 import TemplateCard from "../components/templates/TemplateCard";
-
 /* =========================================================
    BUILDCV — 24 PREMIUM TEMPLATE DATA
 ========================================================= */
@@ -251,6 +251,11 @@ export default function Templates() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [previewTemplate, setPreviewTemplate] = useState(null);
+  const [showRecommendation, setShowRecommendation] = useState(false);
+
+  /* =======================================================
+     USE TEMPLATE
+  ======================================================= */
 
   const handleUseTemplate = (template) => {
     if (!template?.id) {
@@ -320,13 +325,13 @@ export default function Templates() {
 
       <section className="relative overflow-hidden border-b border-buildcv-border bg-buildcv-surface">
         {/* Center Violet Glow */}
-        <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-buildcv-violet/10 blur-3xl" />
+        <div className="pointer-events-none absolute left-1/2 top-[-250px] h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-buildcv-violet/20 blur-3xl" />
 
         {/* Left Pink Glow */}
-        <div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-buildcv-accent/5 blur-3xl" />
+        <div className="pointer-events-none absolute left-[5%] top-[40%] h-40 w-40 rounded-full bg-buildcv-accent/15 blur-3xl" />
 
         {/* Right Violet Glow */}
-        <div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-buildcv-violet/10 blur-3xl" />
+        <div className="pointer-events-none absolute right-[5%] top-[25%] h-40 w-40 rounded-full bg-buildcv-violet/20 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-5 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
           {/* Badge */}
@@ -425,7 +430,65 @@ export default function Templates() {
       =================================================== */}
 
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 lg:py-14">
-        {/* FILTERS */}
+
+        <div className="mb-10">
+          <div className="relative overflow-hidden rounded-[28px] border border-buildcv-ink bg-buildcv-ink shadow-buildcv-sm">
+            {/* Decorative glow */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-buildcv-violet/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-buildcv-accent/15 blur-3xl" />
+
+            <div className="relative flex flex-col gap-6 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-8">
+              <div className="flex items-start gap-4">
+                {/* Icon */}
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-buildcv-violet/15 text-2xl text-buildcv-violet shadow-sm">
+                  ✦
+                </div>
+
+                {/* Content */}
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-xl font-bold tracking-tight text-buildcv-white sm:text-2xl">
+                      Not sure which template to choose?
+                    </h2>
+
+                    <span className="rounded-full border border-buildcv-violet/30 bg-buildcv-violet/15 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-buildcv-violet">
+                      Smart Match
+                    </span>
+                  </div>
+
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">
+                    Answer a few quick questions and BuildCV will recommend the template
+                    that best matches your career, experience and resume goals.
+                  </p>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <button
+                type="button"
+                onClick={() => setShowRecommendation(true)}
+                className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-buildcv-white px-6 py-3.5 text-sm font-bold text-buildcv-ink shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-buildcv-violet hover:text-buildcv-white"
+              >
+                Find My Template
+
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m13 6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* =================================================
+            FILTERS
+        ================================================= */}
 
         <div className="mb-10">
           <div className="flex flex-wrap justify-center gap-2">
@@ -437,24 +500,20 @@ export default function Templates() {
                 <button
                   key={filter}
                   type="button"
-                  onClick={() =>
-                    setActiveFilter(filter)
-                  }
-                  className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                    isActive
-                      ? "bg-buildcv-gradient text-buildcv-white shadow-buildcv-violet"
+                  onClick={() => setActiveFilter(filter)}
+                  className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${isActive
+                      ? "bg-buildcv-ink text-buildcv-white shadow-lg"
                       : "border border-buildcv-border bg-buildcv-surface text-buildcv-ink-600 hover:border-buildcv-border-violet hover:bg-buildcv-violet-50 hover:text-buildcv-violet"
-                  }`}
+                    }`}
                 >
                   {filter}
 
                   {filter === "ATS" && (
                     <span
-                      className={`ml-1.5 ${
-                        isActive
-                          ? "text-buildcv-violet-100"
+                      className={`ml-1.5 ${isActive
+                          ? "text-white/80"
                           : "text-buildcv-success"
-                      }`}
+                        }`}
                     >
                       ✓
                     </span>
@@ -465,7 +524,9 @@ export default function Templates() {
           </div>
         </div>
 
-        {/* RESULT HEADER */}
+        {/* =================================================
+            RESULT HEADER
+        ================================================= */}
 
         <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -494,7 +555,9 @@ export default function Templates() {
           </div>
         </div>
 
-        {/* GRID */}
+        {/* =================================================
+            GRID
+        ================================================= */}
 
         {filteredTemplates.length > 0 ? (
           <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
@@ -508,7 +571,9 @@ export default function Templates() {
             ))}
           </div>
         ) : (
-          /* EMPTY STATE */
+          /* =================================================
+             EMPTY STATE
+          ================================================= */
 
           <div className="rounded-buildcv-3xl border border-buildcv-border bg-buildcv-surface px-6 py-20 text-center shadow-buildcv-sm">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-buildcv-violet-50 text-2xl text-buildcv-violet">
@@ -559,6 +624,7 @@ export default function Templates() {
 
       <section className="mx-auto max-w-7xl px-5 pb-14 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-[32px] bg-buildcv-ink px-6 py-12 text-center text-buildcv-white sm:px-10">
+
           {/* Violet Glow */}
           <div className="pointer-events-none absolute -left-20 -top-20 h-52 w-52 rounded-full bg-buildcv-violet/25 blur-3xl" />
 
@@ -598,6 +664,25 @@ export default function Templates() {
           </div>
         </div>
       </section>
+
+      {/* ===================================================
+          FIND MY TEMPLATE MODAL
+      =================================================== */}
+
+      {showRecommendation && (
+        <TemplateRecommendation
+          onClose={() =>
+            setShowRecommendation(false)
+          }
+          onSelect={(templateId) => {
+            setShowRecommendation(false);
+
+            handleUseTemplate({
+              id: templateId,
+            });
+          }}
+        />
+      )}
 
       {/* ===================================================
           PREVIEW MODAL

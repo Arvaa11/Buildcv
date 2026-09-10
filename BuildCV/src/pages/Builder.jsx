@@ -847,7 +847,7 @@ function Builder() {
 
           {/* MAIN HEADER */}
 
-          <div className="flex min-h-[82px] items-center justify-between gap-6">
+          <div className="flex min-h-[72px] items-center justify-between gap-3 sm:min-h-[82px] sm:gap-6">
 
             <div className="min-w-0">
 
@@ -1057,7 +1057,7 @@ function Builder() {
 
       <div className="border-b border-[#E2E8F0] bg-white lg:hidden">
 
-        <div className="overflow-x-auto px-4 py-3">
+        <div className="buildcv-scroll-row overflow-x-auto px-4 py-3">
 
           <div className="flex min-w-max gap-2">
 
@@ -1076,10 +1076,15 @@ function Builder() {
                   <button
                     key={step.id}
                     type="button"
-                    onClick={() =>
-                      setActiveStep(
-                        step.id
-                      )
+                    onClick={() => {
+                      setActiveStep(step.id)
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      })
+                    }}
+                    aria-current={
+                      isActive ? "step" : undefined
                     }
                     className={`
                       flex
@@ -1270,7 +1275,7 @@ function Builder() {
 
               {/* FORM CONTENT */}
 
-              <div className="min-w-0 min-h-0 lg:min-h-[680px] lg:flex-1">
+              <div className="builder-flow min-w-0 min-h-0 lg:min-h-[680px] lg:flex-1">
                 {renderStepContent()}
               </div>
 

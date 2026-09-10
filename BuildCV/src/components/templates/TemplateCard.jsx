@@ -50,14 +50,16 @@ function TemplateCard({
         <div
           className="
             flex
-            h-[400px]
+            h-[320px]
             w-full
             items-start
             justify-center
             overflow-hidden
             bg-[#F8FAFC]
             px-4
-            pt-5
+            pt-4
+            sm:h-[400px]
+            sm:pt-5
           "
         >
           {/* ================================================= */}
@@ -67,8 +69,8 @@ function TemplateCard({
           <div
             className="
               relative
-              h-[390px]
-              w-[276px]
+              h-[310px]
+              w-[220px]
               shrink-0
               overflow-hidden
               rounded-[2px]
@@ -77,6 +79,8 @@ function TemplateCard({
               transition-transform
               duration-300
               group-hover:scale-[1.015]
+              sm:h-[390px]
+              sm:w-[276px]
             "
           >
             {/* ================================================= */}
@@ -88,11 +92,12 @@ function TemplateCard({
                 absolute
                 left-0
                 top-0
+                sm:[transform:scale(0.347607)]
               "
               style={{
                 width: "794px",
                 height: "1123px",
-                transform: "scale(0.347607)",
+                transform: "scale(0.277)",
                 transformOrigin: "top left",
               }}
             >
@@ -251,7 +256,7 @@ function TemplateCard({
         {/* ACTIONS */}
         {/* ================================================= */}
 
-        <div className="mt-4 flex gap-2.5">
+        <div className="mt-4 flex flex-col gap-2.5 sm:flex-row">
           {/* PREVIEW */}
 
           <button
