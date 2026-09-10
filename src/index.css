@@ -1,0 +1,744 @@
+@import "tailwindcss";
+
+/* =========================================================
+   BUILDCV — PREMIUM DESIGN SYSTEM
+   Visual Direction:
+   Deep Ink + Electric Violet + Soft Lavender
+========================================================= */
+
+@theme {
+
+  /* =======================================================
+     BACKGROUND SYSTEM
+  ======================================================= */
+
+  --color-buildcv-background: #FAFAFC;
+  --color-buildcv-surface: #FFFFFF;
+  --color-buildcv-surface-soft: #F7F7FB;
+  --color-buildcv-surface-violet: #F3EEFF;
+
+
+  /* =======================================================
+     DEEP INK
+  ======================================================= */
+
+  --color-buildcv-ink: #0B1020;
+  --color-buildcv-ink-900: #111827;
+  --color-buildcv-ink-800: #1F2937;
+  --color-buildcv-ink-700: #344054;
+  --color-buildcv-ink-600: #475467;
+
+  --color-buildcv-navy: #111827;
+  --color-buildcv-navy-800: #1F2937;
+  --color-buildcv-navy-700: #344054;
+  --color-buildcv-indigo: #4F46E5;
+  --color-buildcv-indigo-600: #4338CA;
+  --color-buildcv-indigo-400: #5B5BD6;
+  --color-buildcv-indigo-50: #EEF2FF;
+  --color-buildcv-gold: #A16207;
+  --color-buildcv-primary: #111827;
+  --color-buildcv-card: #FFFFFF;
+  --color-buildcv-charcoal: #1F2937;
+  --color-buildcv-dark: #0B1020;
+
+
+  /* =======================================================
+     PRIMARY — ELECTRIC VIOLET
+  ======================================================= */
+
+  --color-buildcv-violet: #7C3AED;
+  --color-buildcv-violet-600: #6D28D9;
+  --color-buildcv-violet-500: #8B5CF6;
+  --color-buildcv-violet-400: #A78BFA;
+  --color-buildcv-violet-300: #C4B5FD;
+  --color-buildcv-violet-100: #EDE9FE;
+  --color-buildcv-violet-50: #F5F3FF;
+
+
+  /* =======================================================
+     ACCENT
+  ======================================================= */
+
+  --color-buildcv-accent: #EC4899;
+  --color-buildcv-accent-soft: #FCE7F3;
+
+
+  /* =======================================================
+     WHITE
+  ======================================================= */
+
+  --color-buildcv-white: #FFFFFF;
+
+
+  /* =======================================================
+     TEXT
+  ======================================================= */
+
+  --color-buildcv-text: #111827;
+  --color-buildcv-text-secondary: #667085;
+  --color-buildcv-text-muted: #667085;
+  --color-buildcv-text-inverse: #FFFFFF;
+
+
+  /* =======================================================
+     BORDERS
+  ======================================================= */
+
+  --color-buildcv-border: #EAECF0;
+  --color-buildcv-border-soft: #F2F4F7;
+  --color-buildcv-border-strong: #D0D5DD;
+  --color-buildcv-border-violet: #DDD6FE;
+
+
+  /* =======================================================
+     STATUS
+  ======================================================= */
+
+  --color-buildcv-success: #12B76A;
+  --color-buildcv-success-soft: #ECFDF3;
+
+  --color-buildcv-warning: #F79009;
+  --color-buildcv-warning-soft: #FFFAEB;
+
+  --color-buildcv-danger: #F04438;
+  --color-buildcv-danger-soft: #FEF3F2;
+
+
+  /* =======================================================
+     GRADIENT COLORS
+  ======================================================= */
+
+  --color-buildcv-gradient-start: #7C3AED;
+  --color-buildcv-gradient-middle: #8B5CF6;
+  --color-buildcv-gradient-end: #EC4899;
+
+
+  /* =======================================================
+     FONTS
+  ======================================================= */
+
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+
+  /* =======================================================
+     RADIUS
+  ======================================================= */
+
+  --radius-buildcv-xs: 0.375rem;
+  --radius-buildcv-sm: 0.5rem;
+  --radius-buildcv-md: 0.75rem;
+  --radius-buildcv-lg: 1rem;
+  --radius-buildcv-xl: 1.25rem;
+  --radius-buildcv-2xl: 1.5rem;
+  --radius-buildcv-3xl: 2rem;
+
+
+  /* =======================================================
+     SHADOWS
+  ======================================================= */
+
+  --shadow-buildcv-xs:
+    0 1px 2px rgb(16 24 40 / 0.04);
+
+  --shadow-buildcv-sm:
+    0 2px 8px rgb(16 24 40 / 0.05);
+
+  --shadow-buildcv-md:
+    0 8px 24px rgb(16 24 40 / 0.07);
+
+  --shadow-buildcv-lg:
+    0 16px 40px rgb(16 24 40 / 0.09);
+
+  --shadow-buildcv-xl:
+    0 24px 64px rgb(16 24 40 / 0.12);
+
+  --shadow-buildcv-violet:
+    0 12px 40px rgb(124 58 237 / 0.20);
+}
+
+
+/* =========================================================
+   BUILDCV — BUILDER FORM FIELDS
+========================================================= */
+
+.builder-light input,
+.builder-light textarea,
+.builder-light select {
+  background-color: #FFFFFF;
+  color: #111827;
+  border-color: #EAECF0;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+
+.builder-light input::placeholder,
+.builder-light textarea::placeholder,
+.builder-light select::placeholder {
+  color: #98A2B3;
+}
+
+.builder-light input:hover,
+.builder-light textarea:hover,
+.builder-light select:hover {
+  border-color: #D0D5DD;
+}
+
+.builder-light input:focus,
+.builder-light textarea:focus,
+.builder-light select:focus {
+  background-color: #FFFFFF;
+  color: #111827;
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgb(124 58 237 / 0.08);
+}
+
+.builder-light input:focus::placeholder,
+.builder-light textarea:focus::placeholder {
+  color: #98A2B3;
+}
+
+/* =========================================================
+   BUILDCV — FORM LABELS
+========================================================= */
+
+.builder-light label {
+  color: #344054;
+}
+
+/* =========================================================
+   BUILDCV — SELECT
+========================================================= */
+
+.builder-light select {
+  color: #111827;
+}
+
+.builder-light select option {
+  background-color: #FFFFFF;
+  color: #111827;
+}
+
+/* =========================================================
+   BUILDCV — FORM CARDS
+========================================================= */
+
+.builder-light .builder-form-card {
+  background-color: #FFFFFF;
+  border-color: #EAECF0;
+  box-shadow: 0 8px 24px rgb(16 24 40 / 0.05);
+}
+
+/* =========================================================
+   BUILDCV — PRIMARY BUTTON
+========================================================= */
+
+.builder-light .builder-primary-button {
+  background: linear-gradient(
+    135deg,
+    #7C3AED 0%,
+    #8B5CF6 55%,
+    #EC4899 100%
+  );
+
+  color: #FFFFFF;
+
+  box-shadow:
+    0 8px 20px rgb(124 58 237 / 0.18);
+
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.builder-light .builder-primary-button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 12px 28px rgb(124 58 237 / 0.24);
+}
+
+/* =========================================================
+   BUILDCV — SECONDARY BUTTON
+========================================================= */
+
+.builder-light .builder-secondary-button {
+  background-color: #FFFFFF;
+  color: #344054;
+  border: 1px solid #EAECF0;
+
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.builder-light .builder-secondary-button:hover {
+  background-color: #F7F7FB;
+  border-color: #D0D5DD;
+  color: #7C3AED;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html {
+  scroll-behavior: smooth;
+  background: #FAFAFC;
+}
+
+
+body {
+  margin: 0;
+
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: #FAFAFC;
+  color: #111827;
+
+  font-family: "DM Sans", sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BOX SIZING
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   FORM ELEMENTS
+========================================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+.resume-preview-frame {
+  container-type: inline-size;
+  aspect-ratio: 794 / 1123;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.resume-preview--fit {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  transform: scale(calc(min(1, 100cqw / 794px) * 0.82));
+  transform-origin: top center;
+}
+
+.builder-center-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 transparent;
+  scrollbar-gutter: stable;
+}
+
+.builder-center-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.builder-center-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.builder-center-scroll::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+  background-color: #CBD5E1;
+}
+
+.builder-center-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #94A3B8;
+}
+
+@media (max-width: 640px) {
+  html {
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    min-width: 0;
+  }
+
+  .buildcv-ambient {
+    width: 260px;
+    height: 260px;
+  }
+
+  #resume-preview {
+    min-width: 0;
+  }
+
+  .resume-preview-frame {
+    border-radius: 0.75rem;
+  }
+}
+
+/* Keep the builder and template selector bright without changing homepage sections. */
+.builder-light .bg-buildcv-navy,
+.builder-light .bg-buildcv-navy-800,
+.builder-light .bg-buildcv-navy-700 {
+  background-color: var(--color-buildcv-surface-soft) !important;
+}
+
+.builder-light .hover\:bg-buildcv-navy-800:hover,
+.builder-light .hover\:bg-buildcv-navy-700:hover {
+  background-color: var(--color-buildcv-surface-violet) !important;
+}
+
+
+/* =========================================================
+   FORM FOCUS
+========================================================= */
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+
+/* =========================================================
+   CUSTOM FOCUS RING
+========================================================= */
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid #8B5CF6;
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+  background: #7C3AED;
+  color: #FFFFFF;
+}
+
+
+/* =========================================================
+   PREMIUM SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F7FB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C4B5FD;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8B5CF6;
+}
+
+
+/* =========================================================
+   PREMIUM UTILITY EFFECTS
+   These will work especially well with GSAP.
+========================================================= */
+
+.buildcv-gradient-text {
+  background: linear-gradient(
+    135deg,
+    #7C3AED 0%,
+    #8B5CF6 45%,
+    #EC4899 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+
+.buildcv-gradient {
+  background: linear-gradient(
+    135deg,
+    #7C3AED 0%,
+    #8B5CF6 50%,
+    #EC4899 100%
+  );
+}
+
+
+.buildcv-glow {
+  box-shadow:
+    0 0 0 1px rgb(124 58 237 / 0.08),
+    0 12px 40px rgb(124 58 237 / 0.16);
+}
+
+
+.buildcv-glass {
+  background: rgb(255 255 255 / 0.72);
+
+  border: 1px solid rgb(255 255 255 / 0.7);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+
+/* =========================================================
+   SUBTLE GRID BACKGROUND
+   Great for Hero sections
+========================================================= */
+
+.buildcv-grid {
+  background-image:
+    linear-gradient(
+      rgb(124 58 237 / 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgb(124 58 237 / 0.045) 1px,
+      transparent 1px
+    );
+
+  background-size: 32px 32px;
+}
+
+
+/* =========================================================
+   AMBIENT GLOW
+   Can be animated with GSAP
+========================================================= */
+
+.buildcv-ambient {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgb(124 58 237 / 0.16) 0%,
+      rgb(139 92 246 / 0.08) 35%,
+      transparent 70%
+    );
+
+  filter: blur(10px);
+
+  pointer-events: none;
+}
+
+/* Scaled source canvas used by the template preview modal. */
+.template-modal-canvas {
+  width: 794px;
+  height: 1123px;
+  transform: scale(0.4093);
+  transform-origin: top left;
+}
+
+.buildcv-scroll-row {
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2fe transparent;
+}
+
+/* =========================================================
+   MOBILE-FIRST FINISHING LAYER
+   Keeps every existing view and piece of content available,
+   while making compact screens comfortable to use.
+========================================================= */
+
+@media (max-width: 639px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    line-height: 1.5;
+  }
+
+  main,
+  section,
+  article,
+  aside,
+  header,
+  footer,
+  div {
+    min-width: 0;
+  }
+
+  /* Avoid iOS zooming the page when a user edits their CV. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Make every primary interaction comfortably tappable. */
+  button,
+  a,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a[class] {
+    touch-action: manipulation;
+  }
+
+  button:not([class*="h-"]),
+  a.inline-flex,
+  a.flex {
+    min-height: 44px;
+  }
+
+  /* Long values, email addresses, and template names stay contained. */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  a,
+  button,
+  label,
+  span {
+    overflow-wrap: anywhere;
+  }
+
+  /* The full A4 preview remains legible and fully visible on a phone. */
+  .resume-preview-frame {
+    border-radius: 1rem;
+  }
+
+  .resume-preview--fit {
+    transform: scale(calc(min(1, 100cqw / 794px) * 0.88));
+  }
+
+  /* Builder: preserve its controls without forcing a horizontal scroll. */
+  main.bg-\[\#F8FAFC\] > header > div > div {
+    gap: 0.75rem;
+  }
+
+  main.bg-\[\#F8FAFC\] > header > div > div > div:first-child {
+    min-width: 0;
+  }
+
+  main.bg-\[\#F8FAFC\] > header h1 {
+    font-size: 1.0625rem;
+    line-height: 1.2;
+  }
+
+  main.bg-\[\#F8FAFC\] > header button {
+    min-height: 44px;
+    padding-inline: 0.75rem;
+  }
+
+  main.bg-\[\#F8FAFC\] > header button span:not([aria-hidden]) {
+    white-space: nowrap;
+  }
+
+  /* Modal actions stay side-by-side without clipping on narrow devices. */
+  main.bg-\[\#F8FAFC\] [class*="max-h-\[95vh\]"] > :last-child {
+    padding-inline: 1rem;
+  }
+
+  .buildcv-scroll-row {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .buildcv-scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+  Builder sections use independent scroll panels on desktop so the controls,
+  step rail, and preview can stay visible. On smaller screens that pattern
+  traps touch and wheel scrolling inside individual sections. Let the document
+  own vertical scrolling until the three-column workspace is active.
+*/
+@media (max-width: 1023px) {
+  .builder-flow > section {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .builder-flow > section > div[class*="overflow-y-auto"] {
+    min-height: 0 !important;
+    flex: none !important;
+    overflow-y: visible !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .template-modal-canvas {
+    transform: scale(0.687657);
+  }
+}
+
+@media (max-width: 374px) {
+  /* Extra-small phones retain the builder action while releasing title space. */
+  main.bg-\[\#F8FAFC\] > header h1 {
+    font-size: 0.9375rem;
+  }
+
+  main.bg-\[\#F8FAFC\] > header > div > div > div:first-child > div > div:first-child {
+    display: none;
+  }
+
+  .resume-preview--fit {
+    transform: scale(calc(min(1, 100cqw / 794px) * 0.84));
+  }
+}
