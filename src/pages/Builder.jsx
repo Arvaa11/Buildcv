@@ -188,37 +188,37 @@ function normalizeFormData(data) {
 
     education: Array.isArray(data.education)
       ? data.education.map((item) => ({
-        id: item.id || createId(),
-        institution:
-          item.institution || "",
-        degree: item.degree || "",
-        field: item.field || "",
-        startDate:
-          item.startDate || "",
-        endDate:
-          item.endDate || "",
-        description:
-          item.description || "",
-      }))
+          id: item.id || createId(),
+          institution:
+            item.institution || "",
+          degree: item.degree || "",
+          field: item.field || "",
+          startDate:
+            item.startDate || "",
+          endDate:
+            item.endDate || "",
+          description:
+            item.description || "",
+        }))
       : defaults.education,
 
     experience: Array.isArray(
       data.experience
     )
       ? data.experience.map((item) => ({
-        id: item.id || createId(),
-        company: item.company || "",
-        position:
-          item.position ||
-          item.jobTitle ||
-          "",
-        startDate:
-          item.startDate || "",
-        endDate:
-          item.endDate || "",
-        description:
-          item.description || "",
-      }))
+          id: item.id || createId(),
+          company: item.company || "",
+          position:
+            item.position ||
+            item.jobTitle ||
+            "",
+          startDate:
+            item.startDate || "",
+          endDate:
+            item.endDate || "",
+          description:
+            item.description || "",
+        }))
       : defaults.experience,
 
     skills: Array.isArray(data.skills)
@@ -227,17 +227,17 @@ function normalizeFormData(data) {
 
     projects: Array.isArray(data.projects)
       ? data.projects.map((item) => ({
-        id: item.id || createId(),
-        name: item.name || "",
-        description:
-          item.description || "",
-        technologies:
-          item.technologies || "",
-        link: item.link || "",
-        liveUrl: item.liveUrl || "",
-        githubUrl:
-          item.githubUrl || "",
-      }))
+          id: item.id || createId(),
+          name: item.name || "",
+          description:
+            item.description || "",
+          technologies:
+            item.technologies || "",
+          link: item.link || "",
+          liveUrl: item.liveUrl || "",
+          githubUrl:
+            item.githubUrl || "",
+        }))
       : defaults.projects,
 
     certifications: {
@@ -249,17 +249,17 @@ function normalizeFormData(data) {
         data.certifications?.items
       )
         ? data.certifications.items.map(
-          (item) => ({
-            id:
-              item.id || createId(),
-            name: item.name || "",
-            organization:
-              item.organization ||
-              "",
-            date: item.date || "",
-            link: item.link || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              name: item.name || "",
+              organization:
+                item.organization ||
+                "",
+              date: item.date || "",
+              link: item.link || "",
+            })
+          )
         : [],
     },
 
@@ -272,14 +272,14 @@ function normalizeFormData(data) {
         data.languages?.items
       )
         ? data.languages.items.map(
-          (item) => ({
-            id:
-              item.id || createId(),
-            language:
-              item.language || "",
-            level: item.level || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              language:
+                item.language || "",
+              level: item.level || "",
+            })
+          )
         : [],
     },
 
@@ -292,15 +292,15 @@ function normalizeFormData(data) {
         data.achievements?.items
       )
         ? data.achievements.items.map(
-          (item) => ({
-            id:
-              item.id || createId(),
-            title: item.title || "",
-            description:
-              item.description || "",
-            date: item.date || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              title: item.title || "",
+              description:
+                item.description || "",
+              date: item.date || "",
+            })
+          )
         : [],
     },
 
@@ -322,20 +322,20 @@ function normalizeFormData(data) {
         data.references?.items
       )
         ? data.references.items.map(
-          (item) => ({
-            id:
-              item.id || createId(),
-            name: item.name || "",
-            position:
-              item.position || "",
-            company:
-              item.company || "",
-            email:
-              item.email || "",
-            phone:
-              item.phone || "",
-          })
-        )
+            (item) => ({
+              id:
+                item.id || createId(),
+              name: item.name || "",
+              position:
+                item.position || "",
+              company:
+                item.company || "",
+              email:
+                item.email || "",
+              phone:
+                item.phone || "",
+            })
+          )
         : [],
     },
   }
@@ -418,7 +418,7 @@ function Builder() {
   const [activeStep, setActiveStep] =
     useState(
       BUILDER_STEPS[0]?.id ||
-      "personal"
+        "personal"
     )
 
   // ===================================================
@@ -586,23 +586,23 @@ function Builder() {
   const currentStep =
     requiredStepIndex >= 0
       ? BUILDER_STEPS[
-      requiredStepIndex
-      ]
+          requiredStepIndex
+        ]
       : OPTIONAL_SECTIONS.find(
-        (section) =>
-          section.id === activeStep
-      )
+          (section) =>
+            section.id === activeStep
+        )
 
   const progressPercentage =
     isOptionalSection
       ? 100
       : BUILDER_STEPS.length > 1
         ? Math.round(
-          (currentStepIndex /
-            (BUILDER_STEPS.length -
-              1)) *
-          100
-        )
+            (currentStepIndex /
+              (BUILDER_STEPS.length -
+                1)) *
+              100
+          )
         : 0
 
   // ===================================================
@@ -653,7 +653,7 @@ function Builder() {
     if (
       optionalIndex >= 0 &&
       optionalIndex <
-      OPTIONAL_SECTIONS.length - 1
+        OPTIONAL_SECTIONS.length - 1
     ) {
       setActiveStep(
         OPTIONAL_SECTIONS[
@@ -1005,10 +1005,12 @@ function Builder() {
                   <p className="hidden text-[10px] text-[#718096] sm:block">
                     {isOptionalSection
                       ? "Optional section"
-                      : `Step ${currentStepIndex +
-                      1
-                      } of ${BUILDER_STEPS.length
-                      }`}
+                      : `Step ${
+                          currentStepIndex +
+                          1
+                        } of ${
+                          BUILDER_STEPS.length
+                        }`}
                   </p>
 
                 </div>
@@ -1067,7 +1069,7 @@ function Builder() {
                 const isCompleted =
                   !isOptionalSection &&
                   index <
-                  currentStepIndex
+                    currentStepIndex
 
                 return (
                   <button
@@ -1097,9 +1099,10 @@ function Builder() {
                       transition-all
                       duration-200
 
-                      ${isActive
-                        ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5] shadow-sm"
-                        : "border-[#E2E8F0] bg-white text-[#718096] hover:border-[#6366F1] hover:bg-[#EEF2FF]"
+                      ${
+                        isActive
+                          ? "border-[#6366F1] bg-[#EEF2FF] text-[#4F46E5] shadow-sm"
+                          : "border-[#E2E8F0] bg-white text-[#718096] hover:border-[#6366F1] hover:bg-[#EEF2FF]"
                       }
                     `}
                   >
@@ -1115,11 +1118,12 @@ function Builder() {
                         text-[10px]
                         font-bold
 
-                        ${isActive
-                          ? "bg-[#6366F1] text-white"
-                          : isCompleted
-                            ? "bg-[#EEF2FF] text-[#6366F1]"
-                            : "bg-[#F8FAFC] text-[#718096]"
+                        ${
+                          isActive
+                            ? "bg-[#6366F1] text-white"
+                            : isCompleted
+                              ? "bg-[#EEF2FF] text-[#6366F1]"
+                              : "bg-[#F8FAFC] text-[#718096]"
                         }
                       `}
                     >
@@ -1260,9 +1264,10 @@ function Builder() {
                 <div className="hidden shrink-0 rounded-lg bg-[#EEF2FF] px-2.5 py-1.5 text-[9px] font-bold text-[#6366F1] sm:block">
                   {isOptionalSection
                     ? "OPTIONAL"
-                    : `STEP ${currentStepIndex +
-                    1
-                    }`}
+                    : `STEP ${
+                        currentStepIndex +
+                        1
+                      }`}
                 </div>
 
               </div>
@@ -1332,14 +1337,15 @@ function Builder() {
                             transition-all
                             duration-300
 
-                            ${!isOptionalSection &&
+                            ${
+                              !isOptionalSection &&
                               index ===
-                              currentStepIndex
-                              ? "w-7 bg-[#6366F1]"
-                              : index <
                                 currentStepIndex
-                                ? "w-3 bg-[#6366F1]"
-                                : "w-3 bg-[#E2E8F0]"
+                                ? "w-7 bg-[#6366F1]"
+                                : index <
+                                    currentStepIndex
+                                  ? "w-3 bg-[#6366F1]"
+                                  : "w-3 bg-[#E2E8F0]"
                             }
                           `}
                         />
@@ -1348,52 +1354,59 @@ function Builder() {
 
                   </div>
 
-                  {/* CONTINUE / DOWNLOAD */}
+                  {/* CONTINUE */}
 
-                  {isOptionalSection &&
-                    OPTIONAL_SECTIONS.findIndex(
-                      (section) => section.id === activeStep
-                    ) === OPTIONAL_SECTIONS.length - 1 ? (
-                    <DownloadPDF
-                      previewId="resume-preview-desktop"
-                    />
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={goNext}
-                      className="
-      inline-flex
-      items-center
-      gap-2
-      rounded-xl
-      bg-[#6366F1]
-      min-h-11
-      px-4
-      py-2.5
-      text-sm
-      font-semibold
-      text-white
-      shadow-sm
-      shadow-[#6366F1]/20
-      transition-all
-      duration-200
-      hover:bg-[#4F46E5]
-      hover:shadow-md
-    "
-                    >
-                      <span>
-                        {!isOptionalSection &&
-                          currentStepIndex ===
-                          BUILDER_STEPS.length - 1
-                          ? "More Information"
-                          : "Continue"}
-                      </span>
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    disabled={
+                      isOptionalSection &&
+                      OPTIONAL_SECTIONS.findIndex(
+                        (section) =>
+                          section.id ===
+                          activeStep
+                      ) ===
+                        OPTIONAL_SECTIONS.length -
+                          1
+                    }
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      rounded-xl
+                      bg-[#6366F1]
+                      min-h-11
+                      px-4
+                      py-2.5
+                      text-sm
+                      font-semibold
+                      text-white
+                      shadow-sm
+                      shadow-[#6366F1]/20
+                      transition-all
+                      duration-200
+                      hover:bg-[#4F46E5]
+                      hover:shadow-md
+                      disabled:cursor-not-allowed
+                      disabled:opacity-40
+                      disabled:shadow-none
+                    "
+                  >
 
-                      <span aria-hidden="true">
-                        →
-                      </span>
-                    </button>
-                  )}
+                    <span>
+                      {!isOptionalSection &&
+                      currentStepIndex ===
+                        BUILDER_STEPS.length -
+                          1
+                        ? "More Information"
+                        : "Continue"}
+                    </span>
+
+                    <span aria-hidden="true">
+                      →
+                    </span>
+
+                  </button>
 
                 </div>
 
