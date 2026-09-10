@@ -982,22 +982,6 @@ function MinimalPreview() {
    REUSABLE COMPONENTS
 ========================================================= */
 
-function PreviewSectionTitle({ children }) {
-  return (
-    <h3
-      className="
-        text-[7px]
-        font-extrabold
-        uppercase
-        tracking-[0.14em]
-        text-buildcv-violet
-      "
-    >
-      {children}
-    </h3>
-  )
-}
-
 function SideTitle({ children }) {
   return (
     <h3
@@ -1014,41 +998,6 @@ function SideTitle({ children }) {
     >
       {children}
     </h3>
-  )
-}
-
-function ModernExperience({ title, company, date }) {
-  return (
-    <div>
-
-      <div className="flex items-start justify-between gap-2">
-
-        <div>
-
-          <p className="text-[7px] font-bold">
-            {title}
-          </p>
-
-          <p className="mt-0.5 text-[6px] text-slate-500">
-            {company}
-          </p>
-
-        </div>
-
-        <span className="shrink-0 text-[5.5px] text-slate-400">
-          {date}
-        </span>
-
-      </div>
-
-      <div className="mt-1.5 space-y-1">
-
-        <div className="h-1 w-full rounded bg-slate-100" />
-        <div className="h-1 w-4/5 rounded bg-slate-100" />
-
-      </div>
-
-    </div>
   )
 }
 
@@ -1082,48 +1031,6 @@ function ProfessionalJob({ title, company }) {
 
         <div className="h-1 w-full rounded bg-slate-100" />
         <div className="h-1 w-4/5 rounded bg-slate-100" />
-
-      </div>
-
-    </div>
-  )
-}
-
-function MinimalSection({ title, children }) {
-  return (
-    <section className="mt-4">
-
-      <h3 className="mb-2 text-[6.5px] font-extrabold uppercase tracking-[0.14em] text-slate-900">
-        {title}
-      </h3>
-
-      {children}
-
-    </section>
-  )
-}
-
-function MinimalExperience({ title, company, date }) {
-  return (
-    <div className="mb-3">
-
-      <div className="flex items-start justify-between gap-2">
-
-        <div>
-
-          <p className="text-[7px] font-bold">
-            {title}
-          </p>
-
-          <p className="mt-0.5 text-[6px] text-slate-500">
-            {company}
-          </p>
-
-        </div>
-
-        <span className="shrink-0 text-[5.5px] text-slate-400">
-          {date}
-        </span>
 
       </div>
 

@@ -633,7 +633,7 @@ function Testimonials() {
           </div>
 
           <Link
-            to="/templates"
+            to="/builder"
             className="
               group
               inline-flex

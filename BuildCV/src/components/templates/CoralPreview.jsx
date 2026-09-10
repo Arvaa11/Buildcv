@@ -1016,8 +1016,7 @@ function CoralPreview({
                   </>
                 )}
 
-                {personal.github &&
-                  personal.github}
+                {personal.github}
               </TinyText>
             </section>
           )}

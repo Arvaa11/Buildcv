@@ -519,10 +519,7 @@ if (!useSampleData) {
   // EXPERIENCE DESCRIPTION
   // =========================================================
 
-  const ResumeLines = ({
-    description,
-    count = 3,
-  }) => {
+  const ResumeLines = ({ description }) => {
     const lines = getDescriptionLines(description);
 
     if (lines.length === 0) {

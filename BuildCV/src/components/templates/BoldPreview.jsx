@@ -304,36 +304,6 @@ function BoldPreview({
     ? formData.projects
     : [];
 
-  // =========================================================
-  // OPTIONAL SECTION HELPER
-  // =========================================================
-
-  const getOptionalSection = (
-    formSection,
-    dataSection,
-    sampleItems
-  ) => {
-    if (formSection !== undefined) {
-      return formSection.enabled &&
-        Array.isArray(formSection.items)
-        ? formSection.items
-        : [];
-    }
-
-    if (!useSampleData) {
-      return [];
-    }
-
-    if (dataSection !== undefined) {
-      return dataSection.enabled &&
-        Array.isArray(dataSection.items)
-        ? dataSection.items
-        : [];
-    }
-
-    return sampleItems;
-  };
-
   const certifications = useSampleData
     ? formData.certifications?.enabled &&
       Array.isArray(formData.certifications.items) &&

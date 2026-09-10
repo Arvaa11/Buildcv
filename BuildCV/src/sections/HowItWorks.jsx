@@ -665,7 +665,7 @@ function HowItWorks() {
             {/* CTA */}
 
             <a
-              href="#templates"
+              href="builder"
               className="
                 group
                 relative

@@ -9,9 +9,8 @@ import {
   useNavigate,
 } from "react-router-dom"
 
-import BuilderSteps, {
-  BUILDER_STEPS,
-} from "../components/BuilderSteps"
+import BuilderSteps from "../components/BuilderSteps"
+import { BUILDER_STEPS } from "../data/builderSteps"
 
 import PersonalInfo from "../components/builder/PersonalInfo"
 import Education from "../components/builder/Education"
